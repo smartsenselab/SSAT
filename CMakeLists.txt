@@ -16,14 +16,15 @@ project(SSAT VERSION 1.0)
 # Set PROJECT_VERSION_PATCH and PROJECT_VERSION_TWEAK to 0 if not present, needed by add_project_meta
 fix_project_version()
 
-file(GLOB APP_SOURCE_FILES	"modules/app/*.cpp")
+file(GLOB APP_SOURCE_FILES "modules/app/*.cpp")
 
 add_project_meta(META_FILES_TO_INCLUDE)
 
 set(RESOURCE_FILES ssat.qrc)
 
 find_package(Qt5Widgets REQUIRED)
-find_package(OpenCV REQUIRED)
+find_package(OpenCV COMPONENTS opencv_core opencv_imgproc opencv_imgcodecs opencv_highgui REQUIRED)
+find_path(OpenCV_INCLUDE_DIR "opencv/cv.h" PATHS "${OpenCV_DIR}" PATH_SUFFIXES "include" DOC "")
 
 # If the package has been found, several variables will
 # be set, you can find the full list with descriptions
@@ -42,5 +43,6 @@ add_executable(${PROJECT_NAME} ${OS_BUNDLE} # Expands to WIN32 or MACOS_BUNDLE d
 )
 
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
+target_include_directories(${PROJECT_NAME} PUBLIC ${OpenCV_INCLUDE_DIR})
 
 qt5_use_modules(${PROJECT_NAME} Widgets)
