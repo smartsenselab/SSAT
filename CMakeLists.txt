@@ -17,6 +17,8 @@ project(SSAT VERSION 1.0)
 fix_project_version()
 
 file(GLOB APP_SOURCE_FILES "modules/app/*.cpp")
+file(GLOB CORE_SOURCE_FILES "modules/core/*.cpp")
+file(GLOB CORE_INCLUDE_FILES "modules/core/*.h")
 
 add_project_meta(META_FILES_TO_INCLUDE)
 
@@ -38,11 +40,17 @@ message(STATUS "    include path: ${OpenCV_INCLUDE_DIRS}")
 
 # source_group("UI Files" FILES ${UI_FILES})
 
+add_library(${PROJECT_NAME}_CORE ${CORE_SOURCE_FILES} ${CORE_INCLUDE_FILES})
+target_link_libraries(${PROJECT_NAME}_CORE ${OpenCV_LIBS})
+target_include_directories(${PROJECT_NAME}_CORE PUBLIC modules/core/)
+
 add_executable(${PROJECT_NAME} ${OS_BUNDLE} # Expands to WIN32 or MACOS_BUNDLE depending on OS
     ${APP_SOURCE_FILES} ${META_FILES_TO_INCLUDE} ${RESOURCE_FILES}
 )
 
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
+target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_CORE)
+
 target_include_directories(${PROJECT_NAME} PUBLIC ${OpenCV_INCLUDE_DIR})
 
 qt5_use_modules(${PROJECT_NAME} Widgets)
