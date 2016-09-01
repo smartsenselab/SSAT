@@ -1,0 +1,12 @@
+
+sudo: required
+
+services:
+    - docker
+
+before_install:
+    - docker pull victorhcm/opencv-qt5
+    - docker run --rm -v /tmp/.X11-unix/:/tmp/.X11-unix -e DISPLAY=unix$DISPLAY victorhcm/opencv-qt5 /bin/bash -c "cd /root; git clone https://github.com/victorhcm/mini-cmake-qt; cd mini-cmake-qt; mkdir build; cd build; cmake ..; make; ls; cd ..; ./build/example"
+
+# after_success:
+#     - 
