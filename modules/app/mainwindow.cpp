@@ -28,11 +28,47 @@ MainWindow::MainWindow(QWidget *parent)
                   this,
                   SLOT(slot_playVideo())
                   );
+
+    this->connect(ui->buttonRewindF,
+                  SIGNAL(pressed()),
+                  this,
+                  SLOT(slot_rewindButton())
+                  );
+
+    this->connect(ui->buttonRewind,
+                  SIGNAL(pressed()),
+                  this,
+                  SLOT(slot_backButton())
+                  );
+
+    this->connect(ui->buttonForward,
+                  SIGNAL(pressed()),
+                  this,
+                  SLOT(slot_forwardButton())
+                  );
+
+    this->connect(ui->buttonForwardF,
+                  SIGNAL(pressed()),
+                  this,
+                  SLOT(slot_fastfButton())
+                  );
 }
 
 MainWindow::~MainWindow()
 {
 
+}
+
+void MainWindow::updateFrame(const int _frameId)
+{
+    Mat frameMat = this->manager->getFrame(_frameId);
+    if(frameMat.data)
+    {
+        QImage frameQImage = this->manager->matToQimage(frameMat);
+        this->ui->sliderFrame->setValue(static_cast<int>(_frameId));
+        this->ui->labelFrameId->setText(QString::number(_frameId) + "/" + QString::number(this->totalFrames));
+        this->ui->labelFrameShow->setPixmap(QPixmap::fromImage(frameQImage));
+    }
 }
 
 void MainWindow::slot_displayFrame(const QImage _frame)
@@ -53,18 +89,21 @@ void MainWindow::slot_openFile()
     this->manager->loadVideo(videoName);
 
     this->loaded = true;
-    this->totalFrames = this->manager->getTotalFrames() - 2;
-
-    Mat frameMat = this->manager->getFrame(0.0);
-    QImage frameQImage = this->manager->matToQimage(frameMat);
+    this->totalFrames = std::round(+this->manager->getTotalFrames() - 2);
 
     this->ui->sliderFrame->setEnabled(true);
-    this->ui->sliderFrame->setRange(0, static_cast<int>(this->totalFrames));
-    this->ui->labelFrameId->setText(QString::number(0) + "/" + QString::number(this->totalFrames));
-    this->ui->labelFrameShow->setPixmap(QPixmap::fromImage(frameQImage));
+    this->ui->sliderFrame->setRange(1, static_cast<int>(this->totalFrames));
+
+    this->updateFrame(1);
 }
 
-void MainWindow::slot_playVideo()
+void MainWindow::slot_slideVideo(int _frameId)
+{
+    std::cout << _frameId << std::endl;
+    this->updateFrame(_frameId);
+}
+
+void MainWindow::slot_playButton()
 {
     bool currentStatus = this->manager->isPlaying();
     this->manager->isPlaying(!currentStatus);
@@ -77,16 +116,59 @@ void MainWindow::slot_playVideo()
     std::cout << "Button PLAY Pressed: " << this->manager->getFrameId() << std::endl;
 }
 
-void MainWindow::slot_slideVideo(int _frameId)
+void MainWindow::slot_rewindButton()
 {
-    double dFrame = static_cast<double>(_frameId);
+    int frameId = this->manager->getFrameId();
+    frameId -= std::round(+this->manager->getTotalFrames() / 100.0);
 
-    Mat frameMat = this->manager->getFrame(dFrame);
-    if(frameMat.data)
+    if(frameId < 1)
     {
-        QImage frameQImage = this->manager->matToQimage(frameMat);
-
-        this->ui->labelFrameShow->setPixmap(QPixmap::fromImage(frameQImage));
-        this->ui->labelFrameId->setText(QString::number(_frameId) + "/" + QString::number(this->totalFrames));
+        frameId = 1;
     }
+
+    this->updateFrame(frameId);
+}
+
+void MainWindow::slot_backButton()
+{
+    int frameId = this->manager->getFrameId();
+    frameId--;
+
+    if(frameId < 1)
+    {
+        frameId = 1;
+    }
+
+    this->updateFrame(frameId);
+}
+
+void MainWindow::slot_forwardButton()
+{
+    int frameId = this->manager->getFrameId();
+    frameId++;
+
+    if(frameId > this->manager->getTotalFrames() - 1)
+    {
+        frameId = this->manager->getTotalFrames() - 1;
+    }
+
+    this->updateFrame(frameId);
+}
+
+void MainWindow::slot_fastfButton()
+{
+    int frameId = this->manager->getFrameId();
+    frameId += std::round(+this->manager->getTotalFrames() / 100.0);
+
+    if(frameId > this->manager->getTotalFrames() - 1)
+    {
+        frameId = this->manager->getTotalFrames() - 1;
+    }
+
+    this->updateFrame(frameId);
+}
+
+void MainWindow::slot_stopButton()
+{
+
 }

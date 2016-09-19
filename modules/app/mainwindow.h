@@ -26,11 +26,20 @@ public:
     MainWindow(QWidget *parent = 0);
     virtual ~MainWindow();
 
+private:
+    void updateFrame(const int _frameId);
+
 public slots:
     void slot_displayFrame(const QImage _frame);
     void slot_openFile();
-    void slot_playVideo();
     void slot_slideVideo(int _frameId);
+
+    void slot_playButton();
+    void slot_rewindButton();
+    void slot_backButton();
+    void slot_forwardButton();
+    void slot_fastfButton();
+    void slot_stopButton();
 };
 
 #endif
