@@ -21,7 +21,7 @@ public:
     ~WorkerThread();
 
     Mat getFrame();
-    Mat getFrame(unsigned int _frame);
+    Mat getFrame(double _frame);
 
     double getTotalFrames();
     void loadVideo(QString _path);

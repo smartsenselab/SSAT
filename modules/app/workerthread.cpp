@@ -17,10 +17,11 @@ Mat WorkerThread::getFrame()
     return frame;
 }
 
-Mat WorkerThread::getFrame(unsigned int _frame)
+Mat WorkerThread::getFrame(double _frame)
 {
     Mat frame;
     this->video.set(CV_CAP_PROP_POS_FRAMES, _frame);
+    this->video >> frame;
     return frame;
 }
 

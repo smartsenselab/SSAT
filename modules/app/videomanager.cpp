@@ -19,7 +19,7 @@ Mat VideoManager::getFrame()
     return this->worker->getFrame();
 }
 
-Mat VideoManager::getFrame(unsigned int _frame)
+Mat VideoManager::getFrame(double _frame)
 {
     return this->worker->getFrame(_frame);
 }

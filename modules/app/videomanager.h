@@ -10,7 +10,7 @@ using cv::VideoCapture;
 
 #include "workerthread.h"
 
-class VideoManager
+class VideoManager : public QObject
 {
 private:
     QThread thread;
@@ -21,7 +21,7 @@ public:
     ~VideoManager();
 
     Mat getFrame();
-    Mat getFrame(unsigned int _frame);
+    Mat getFrame(double _frame);
 
     double getTotalFrames();
     void loadVideo(QString _path);

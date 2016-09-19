@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QScopedPointer>
 
+#include "videomanager.h"
+
 namespace Ui
 {
     class MainWindow;
@@ -12,12 +14,19 @@ namespace Ui
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
+private:
+    QScopedPointer<Ui::MainWindow> ui;
+
+    bool loaded;
+    VideoManager *manager;
+
 public:
     MainWindow(QWidget *parent = 0);
     virtual ~MainWindow();
 
-private:
-    QScopedPointer<Ui::MainWindow> ui;
+public slots:
+//    bool openFile();
+//    bool slideVideo(double _frame);
 };
 
 #endif
