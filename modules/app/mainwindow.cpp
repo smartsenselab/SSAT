@@ -42,11 +42,12 @@ void MainWindow::openFile()
     this->ui->labelFrameId->setText(QString::number(0) + "/" + QString::number(this->totalFrames));
 }
 
-void MainWindow::slideVideo(double _frame)
+void MainWindow::slideVideo(int _frame)
 {
+    double dFrame = static_cast<double>(_frame);
     std::cout << _frame << std::endl;
 
-    Mat frameMat = this->manager->getFrame(_frame);
+    Mat frameMat = this->manager->getFrame(dFrame);
     QImage frameQImage = this->manager->matToQimage(frameMat);
 
     this->ui->labelFrameShow->setPixmap(QPixmap::fromImage(frameQImage));

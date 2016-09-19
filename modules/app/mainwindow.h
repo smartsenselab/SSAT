@@ -28,7 +28,7 @@ public:
 
 public slots:
     void openFile();
-    void slideVideo(double _frame);
+    void slideVideo(int _frame);
 };
 
 #endif
