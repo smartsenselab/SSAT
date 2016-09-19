@@ -27,8 +27,10 @@ public:
     virtual ~MainWindow();
 
 public slots:
-    void openFile();
-    void slideVideo(int _frame);
+    void slot_displayFrame(const QImage _frame);
+    void slot_openFile();
+    void slot_playVideo();
+    void slot_slideVideo(int _frameId);
 };
 
 #endif

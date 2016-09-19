@@ -1,13 +1,6 @@
 #ifndef VIDEOMANAGER_H
 #define VIDEOMANAGER_H
 
-#include <QThread>
-
-#include <opencv2/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-using cv::Mat;
-using cv::VideoCapture;
-
 #include "workerthread.h"
 
 class VideoManager : public QObject
@@ -16,17 +9,26 @@ private:
     QThread thread;
     WorkerThread *worker;
 
+signals:
+    void signal_frameToDisplay(const QImage _frame);
+    void signal_positionToMove(const double _frameId);
+
 public:
     VideoManager();
     ~VideoManager();
 
     Mat getFrame();
-    Mat getFrame(double _frame);
-
+    Mat getFrame(double _frameId);
+    double getFrameId();
     double getTotalFrames();
-    void loadVideo(QString _path);
 
-    QImage matToQimage(const Mat &frame);
+    bool isPlaying();
+    void isPlaying(bool _condition);
+
+    void clearVideo();
+    void loadVideo(const QString _path);
+    void playVideo();
+    QImage matToQimage(const Mat &_frame);
 };
 
 #endif // VIDEOMANAGER_H

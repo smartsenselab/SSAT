@@ -9,6 +9,7 @@ VideoManager::VideoManager()
 
 VideoManager::~VideoManager()
 {
+    this->worker->clearVideo();
     this->thread.quit();
     this->thread.wait();
     delete(this->worker);
@@ -19,9 +20,14 @@ Mat VideoManager::getFrame()
     return this->worker->getFrame();
 }
 
-Mat VideoManager::getFrame(double _frame)
+Mat VideoManager::getFrame(double _frameId)
 {
-    return this->worker->getFrame(_frame);
+    return this->worker->getFrame(_frameId);
+}
+
+double VideoManager::getFrameId()
+{
+    return this->worker->getFrameId();
 }
 
 double VideoManager::getTotalFrames()
@@ -29,9 +35,29 @@ double VideoManager::getTotalFrames()
     return this->worker->getTotalFrames();
 }
 
+bool VideoManager::isPlaying()
+{
+    return this->worker->isPlaying();
+}
+
+void VideoManager::isPlaying(bool _condition)
+{
+    this->worker->isPlaying(_condition);
+}
+
+void VideoManager::clearVideo()
+{
+    this->worker->clearVideo();
+}
+
 void VideoManager::loadVideo(QString _path)
 {
     this->worker->loadVideo(_path);
+}
+
+void VideoManager::playVideo()
+{
+    this->worker->playVideo();
 }
 
 QImage VideoManager::matToQimage(const Mat &_frame)
