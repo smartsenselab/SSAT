@@ -9,9 +9,9 @@ VideoManager::VideoManager()
 
 VideoManager::~VideoManager()
 {
-    delete(this->worker);
     this->thread.quit();
     this->thread.wait();
+    delete(this->worker);
 }
 
 Mat VideoManager::getFrame()
@@ -32,4 +32,9 @@ double VideoManager::getTotalFrames()
 void VideoManager::loadVideo(QString _path)
 {
     this->worker->loadVideo(_path);
+}
+
+QImage VideoManager::matToQimage(const Mat &_frame)
+{
+    return this->worker->matToQimage(_frame);
 }

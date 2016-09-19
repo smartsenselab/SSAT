@@ -1,6 +1,7 @@
 #ifndef mainwindow_h
 #define mainwindow_h
 
+#include <QFileDialog>
 #include <QMainWindow>
 #include <QScopedPointer>
 
@@ -18,6 +19,7 @@ private:
     QScopedPointer<Ui::MainWindow> ui;
 
     bool loaded;
+    double totalFrames;
     VideoManager *manager;
 
 public:
@@ -25,8 +27,8 @@ public:
     virtual ~MainWindow();
 
 public slots:
-//    bool openFile();
-//    bool slideVideo(double _frame);
+    void openFile();
+    void slideVideo(double _frame);
 };
 
 #endif

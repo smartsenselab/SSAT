@@ -25,6 +25,8 @@ public:
 
     double getTotalFrames();
     void loadVideo(QString _path);
+
+    QImage matToQimage(const Mat &frame);
 };
 
 #endif // VIDEOMANAGER_H

@@ -1,6 +1,7 @@
 #ifndef VIDEOMANAGEMENT_H
 #define VIDEOMANAGEMENT_H
 
+#include <QImage>
 #include <QObject>
 #include <QThread>
 
@@ -25,6 +26,8 @@ public:
 
     double getTotalFrames();
     void loadVideo(QString _path);
+
+    QImage matToQimage(const Mat &_frame);
 };
 
 #endif // VIDEOMANAGEMENT_H

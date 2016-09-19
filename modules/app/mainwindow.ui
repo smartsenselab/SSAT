@@ -15,58 +15,15 @@
   </property>
   <widget class="QWidget" name="widget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="3" column="5">
-     <widget class="QLabel" name="label_2">
-      <property name="text">
-       <string>0/100000</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="6">
-     <widget class="QToolButton" name="toolButton">
+    <item row="3" column="12">
+     <widget class="QToolButton" name="buttonTool">
       <property name="text">
        <string>...</string>
       </property>
      </widget>
     </item>
-    <item row="3" column="3">
-     <widget class="QPushButton" name="pushButton_3">
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>Rewind</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1" colspan="6">
-     <widget class="QSlider" name="horizontalSlider">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="2">
-     <widget class="QPushButton" name="pushButton_2">
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>Stop</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1" colspan="6">
-     <widget class="QLabel" name="label">
+    <item row="0" column="1" colspan="12">
+     <widget class="QLabel" name="labelFrameShow">
       <property name="styleSheet">
        <string notr="true">background-color: black</string>
       </property>
@@ -75,8 +32,21 @@
       </property>
      </widget>
     </item>
+    <item row="1" column="1" colspan="12">
+     <widget class="QSlider" name="sliderFrame">
+      <property name="singleStep">
+       <number>1</number>
+      </property>
+      <property name="value">
+       <number>0</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
     <item row="3" column="1">
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="buttonPlay">
       <property name="font">
        <font>
         <weight>75</weight>
@@ -88,8 +58,18 @@
       </property>
      </widget>
     </item>
+    <item row="3" column="11">
+     <widget class="QLabel" name="labelFrameId">
+      <property name="text">
+       <string>0/000000</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
     <item row="3" column="4">
-     <widget class="QPushButton" name="pushButton_4">
+     <widget class="QPushButton" name="buttonForward">
       <property name="font">
        <font>
         <weight>75</weight>
@@ -97,7 +77,59 @@
        </font>
       </property>
       <property name="text">
-       <string>Forward</string>
+       <string>&gt;</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="3">
+     <widget class="QPushButton" name="buttonRewind">
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>&lt;</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="6">
+     <widget class="QPushButton" name="buttonStop">
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Stop</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="2">
+     <widget class="QPushButton" name="buttonRewindF">
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>&lt;&lt;</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="5">
+     <widget class="QPushButton" name="buttonForwardF">
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>&gt;&gt;</string>
       </property>
      </widget>
     </item>
@@ -109,7 +141,7 @@
      <x>0</x>
      <y>0</y>
      <width>658</width>
-     <height>22</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
