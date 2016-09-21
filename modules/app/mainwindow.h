@@ -4,6 +4,7 @@
 #include <QFileDialog>
 #include <QMainWindow>
 #include <QScopedPointer>
+#include <QTimer>
 
 #include "videomanager.h"
 
@@ -20,6 +21,7 @@ private:
 
     bool loaded;
     double totalFrames;
+    QTimer *playerTime;
     VideoManager *manager;
 
 public:
@@ -40,6 +42,8 @@ public slots:
     void slot_forwardButton();
     void slot_fastfButton();
     void slot_stopButton();
+
+    void slot_keepVideoRunning();
 };
 
 #endif

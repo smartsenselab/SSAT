@@ -35,6 +35,11 @@ double WorkerThread::getTotalFrames()
     return this->video.get(CV_CAP_PROP_FRAME_COUNT);
 }
 
+double WorkerThread::getVideoFPS()
+{
+    return this->video.get(CV_CAP_PROP_FPS);
+}
+
 bool WorkerThread::isPlaying()
 {
     return this->playing;

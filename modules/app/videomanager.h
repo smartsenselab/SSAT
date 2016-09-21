@@ -21,6 +21,7 @@ public:
     Mat getFrame(double _frameId);
     double getFrameId();
     double getTotalFrames();
+    double getVideoFPS();
 
     bool isPlaying();
     void isPlaying(bool _condition);

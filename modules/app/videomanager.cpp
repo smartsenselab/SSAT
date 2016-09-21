@@ -35,6 +35,11 @@ double VideoManager::getTotalFrames()
     return this->worker->getTotalFrames();
 }
 
+double VideoManager::getVideoFPS()
+{
+    return this->worker->getVideoFPS();
+}
+
 bool VideoManager::isPlaying()
 {
     return this->worker->isPlaying();

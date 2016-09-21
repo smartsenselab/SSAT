@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->connect(ui->buttonPlay,
                   SIGNAL(pressed()),
                   this,
-                  SLOT(slot_playVideo())
+                  SLOT(slot_playButton())
                   );
 
     this->connect(ui->buttonRewindF,
@@ -105,20 +105,37 @@ void MainWindow::slot_slideVideo(int _frameId)
 
 void MainWindow::slot_playButton()
 {
-    bool currentStatus = this->manager->isPlaying();
-    this->manager->isPlaying(!currentStatus);
+    this->playerTime = new QTimer;
 
-    if(this->manager->isPlaying())
-    {
-        this->manager->playVideo();
-    }
+    double frameRate = this->manager->getVideoFPS();
+    int interval = static_cast<int>(1000/frameRate);
+
+    this->playerTime->setInterval(interval);
+    this->playerTime->setSingleShot(false);
+
+    connect(this->playerTime,
+            SIGNAL(timeout()),
+            this,
+            SLOT(slot_keepVideoRunning())
+            );
+
+    this->playerTime->start();
+
+
+//    bool currentStatus = this->manager->isPlaying();
+//    this->manager->isPlaying(!currentStatus);
+
+//    if(this->manager->isPlaying())
+//    {
+//        this->manager->playVideo();
+//    }
 
     std::cout << "Button PLAY Pressed: " << this->manager->getFrameId() << std::endl;
 }
 
 void MainWindow::slot_rewindButton()
 {
-    int frameId = this->manager->getFrameId();
+    int frameId = static_cast<int>(this->manager->getFrameId());
     frameId -= std::round(+this->manager->getTotalFrames() / 100.0);
 
     if(frameId < 1)
@@ -131,7 +148,7 @@ void MainWindow::slot_rewindButton()
 
 void MainWindow::slot_backButton()
 {
-    int frameId = this->manager->getFrameId();
+    int frameId = static_cast<int>(this->manager->getFrameId());
     frameId--;
 
     if(frameId < 1)
@@ -144,12 +161,12 @@ void MainWindow::slot_backButton()
 
 void MainWindow::slot_forwardButton()
 {
-    int frameId = this->manager->getFrameId();
+    int frameId = static_cast<int>(this->manager->getFrameId());
     frameId++;
 
-    if(frameId > this->manager->getTotalFrames() - 1)
+    if(frameId > (this->manager->getTotalFrames() - 1))
     {
-        frameId = this->manager->getTotalFrames() - 1;
+        frameId = static_cast<int>(this->manager->getTotalFrames() - 1);
     }
 
     this->updateFrame(frameId);
@@ -157,12 +174,12 @@ void MainWindow::slot_forwardButton()
 
 void MainWindow::slot_fastfButton()
 {
-    int frameId = this->manager->getFrameId();
+    int frameId = static_cast<int>(this->manager->getFrameId());
     frameId += std::round(+this->manager->getTotalFrames() / 100.0);
 
     if(frameId > this->manager->getTotalFrames() - 1)
     {
-        frameId = this->manager->getTotalFrames() - 1;
+        frameId = static_cast<int>(this->manager->getTotalFrames() - 1);
     }
 
     this->updateFrame(frameId);
@@ -170,5 +187,20 @@ void MainWindow::slot_fastfButton()
 
 void MainWindow::slot_stopButton()
 {
+    emit(this->playerTime->stop());
+    delete this->playerTime;
+}
 
+void MainWindow::slot_keepVideoRunning()
+{
+    int frameId = static_cast<int>(this->manager->getFrameId());
+
+    if(frameId == static_cast<int>(this->totalFrames))
+    {
+        emit(this->slot_stopButton());
+    }
+    else
+    {
+        this->updateFrame(frameId);
+    }
 }
