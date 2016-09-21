@@ -104,6 +104,7 @@ void MainWindow::enableWidgets(const bool _enable)
 
     this->ui->labelFrameId->setEnabled(_enable);
     this->ui->sliderFrame->setEnabled(_enable);
+    this->ui->spinBoxSpeed->setEnabled(_enable);
 }
 
 void MainWindow::changeSpeed(const int _speed)
@@ -226,7 +227,6 @@ void MainWindow::slot_playButton()
         this->isPlaying(false);
         this->pauseVideo();
     }
-
 }
 
 void MainWindow::slot_rewindButton()
