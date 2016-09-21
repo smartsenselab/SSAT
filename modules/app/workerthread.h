@@ -19,6 +19,7 @@ class WorkerThread : public QObject
 private:
     bool playing;
     VideoCapture video;
+
 public:
     WorkerThread();
     ~WorkerThread();

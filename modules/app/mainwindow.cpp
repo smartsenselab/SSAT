@@ -8,9 +8,11 @@ MainWindow::MainWindow(QWidget *parent)
 {
     this->ui->setupUi(this);
 
-    this->enableWidgets(false);
     this->loaded = false;
     this->manager = new VideoManager;
+    this->playing = false;
+
+    this->enableWidgets(false);
 
     this->connect(ui->actionOpen,
                   &QAction::triggered,
@@ -59,11 +61,36 @@ MainWindow::MainWindow(QWidget *parent)
                   this,
                   SLOT(slot_stopButton())
                   );
+
+    this->connect(ui->spinBoxSpeed,
+                  SIGNAL(valueChanged(int)),
+                  this,
+                  SLOT(slot_spinBoxSpeed(int))
+                  );
 }
 
 MainWindow::~MainWindow()
 {
+    delete(this->manager);
+    delete(this->playerTime);
+}
 
+bool MainWindow::isPlaying()
+{
+    return this->playing;
+}
+
+void MainWindow::isPlaying(const bool _enable)
+{
+    this->playing = _enable;
+    if(_enable)
+    {
+        this->ui->buttonPlay->setText("Pause");
+    }
+    else
+    {
+        this->ui->buttonPlay->setText("Play");
+    }
 }
 
 void MainWindow::enableWidgets(const bool _enable)
@@ -77,6 +104,66 @@ void MainWindow::enableWidgets(const bool _enable)
 
     this->ui->labelFrameId->setEnabled(_enable);
     this->ui->sliderFrame->setEnabled(_enable);
+}
+
+void MainWindow::changeSpeed(const int _speed)
+{
+    if (this->playerTime != NULL)
+    {
+        double frameRate = this->manager->getVideoFPS();
+        int interval = static_cast<int>(1000/(_speed * frameRate));
+
+        this->playerTime->stop();
+        this->playerTime->setInterval(interval);
+        this->playerTime->start();
+    }
+}
+
+void MainWindow::pauseVideo()
+{
+    if (this->playerTime != NULL)
+    {
+        this->playerTime->stop();
+
+        delete(this->playerTime);
+        this->playerTime = NULL;
+    }
+}
+
+void MainWindow::playVideo()
+{
+    if (this->playerTime == NULL)
+    {
+        this->playerTime = new QTimer;
+    }
+
+    double frameRate = this->manager->getVideoFPS();
+    int speed = this->ui->spinBoxSpeed->value();
+    int interval = static_cast<int>(1000/(speed * frameRate));
+
+    this->playerTime->setInterval(interval);
+    this->playerTime->setSingleShot(false);
+
+    connect(this->playerTime,
+            SIGNAL(timeout()),
+            this,
+            SLOT(slot_keepVideoRunning())
+            );
+
+    this->playerTime->start();
+}
+
+void MainWindow::stopVideo()
+{
+    this->updateFrame(1);
+
+    if (this->playerTime != NULL)
+    {
+        this->playerTime->stop();
+
+        delete(this->playerTime);
+        this->playerTime = NULL;
+    }
 }
 
 void MainWindow::updateFrame(const int _frameId)
@@ -129,26 +216,17 @@ void MainWindow::slot_slideVideo(int _frameId)
 
 void MainWindow::slot_playButton()
 {
-    if (this->playerTime == NULL)
+    if(!this->playing)
     {
-        this->playerTime = new QTimer;
-
-        double frameRate = this->manager->getVideoFPS();
-        int interval = static_cast<int>(100/frameRate);
-
-        this->playerTime->setInterval(interval);
-        this->playerTime->setSingleShot(false);
-
-        connect(this->playerTime,
-                SIGNAL(timeout()),
-                this,
-                SLOT(slot_keepVideoRunning())
-                );
-
-        this->playerTime->start();
-
-//        std::cout << "Button PLAY pressed: " << this->manager->getFrameId() << std::endl;
+        this->isPlaying(true);
+        this->playVideo();
     }
+    else
+    {
+        this->isPlaying(false);
+        this->pauseVideo();
+    }
+
 }
 
 void MainWindow::slot_rewindButton()
@@ -205,15 +283,13 @@ void MainWindow::slot_fastfButton()
 
 void MainWindow::slot_stopButton()
 {
-    this->updateFrame(1);
+    this->isPlaying(false);
+    this->stopVideo();
+}
 
-    if (this->playerTime != NULL)
-    {
-        this->playerTime->stop();
-
-        delete(this->playerTime);
-        this->playerTime = NULL;
-    }
+void MainWindow::slot_spinBoxSpeed(int _value)
+{
+    this->changeSpeed(_value);
 }
 
 void MainWindow::slot_keepVideoRunning()
