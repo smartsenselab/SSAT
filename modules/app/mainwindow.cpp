@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     this->ui->setupUi(this);
 
+    this->enableWidgets(false);
     this->loaded = false;
     this->manager = new VideoManager;
 
@@ -52,11 +53,30 @@ MainWindow::MainWindow(QWidget *parent)
                   this,
                   SLOT(slot_fastfButton())
                   );
+
+    this->connect(ui->buttonStop,
+                  SIGNAL(pressed()),
+                  this,
+                  SLOT(slot_stopButton())
+                  );
 }
 
 MainWindow::~MainWindow()
 {
 
+}
+
+void MainWindow::enableWidgets(const bool _enable)
+{
+    this->ui->buttonForward->setEnabled(_enable);
+    this->ui->buttonForwardF->setEnabled(_enable);
+    this->ui->buttonPlay->setEnabled(_enable);
+    this->ui->buttonRewind->setEnabled(_enable);
+    this->ui->buttonRewindF->setEnabled(_enable);
+    this->ui->buttonStop->setEnabled(_enable);
+
+    this->ui->labelFrameId->setEnabled(_enable);
+    this->ui->sliderFrame->setEnabled(_enable);
 }
 
 void MainWindow::updateFrame(const int _frameId)
@@ -86,15 +106,19 @@ void MainWindow::slot_openFile()
                                                      tr("/home"),
                                                      tr("Video Files (*.avi *.mp4 *.mov)"));
 
-    this->manager->loadVideo(videoName);
+    if(!videoName.isEmpty())
+    {
+        this->manager->loadVideo(videoName);
 
-    this->loaded = true;
-    this->totalFrames = std::round(+this->manager->getTotalFrames() - 2);
+        this->loaded = true;
+        this->totalFrames = std::round(+this->manager->getTotalFrames() - 2);
 
-    this->ui->sliderFrame->setEnabled(true);
-    this->ui->sliderFrame->setRange(1, static_cast<int>(this->totalFrames));
+        this->ui->sliderFrame->setEnabled(true);
+        this->ui->sliderFrame->setRange(1, static_cast<int>(this->totalFrames));
 
-    this->updateFrame(1);
+        this->enableWidgets(true);
+        this->updateFrame(1);
+    }
 }
 
 void MainWindow::slot_slideVideo(int _frameId)
@@ -105,32 +129,26 @@ void MainWindow::slot_slideVideo(int _frameId)
 
 void MainWindow::slot_playButton()
 {
-    this->playerTime = new QTimer;
+    if (this->playerTime == NULL)
+    {
+        this->playerTime = new QTimer;
 
-    double frameRate = this->manager->getVideoFPS();
-    int interval = static_cast<int>(1000/frameRate);
+        double frameRate = this->manager->getVideoFPS();
+        int interval = static_cast<int>(100/frameRate);
 
-    this->playerTime->setInterval(interval);
-    this->playerTime->setSingleShot(false);
+        this->playerTime->setInterval(interval);
+        this->playerTime->setSingleShot(false);
 
-    connect(this->playerTime,
-            SIGNAL(timeout()),
-            this,
-            SLOT(slot_keepVideoRunning())
-            );
+        connect(this->playerTime,
+                SIGNAL(timeout()),
+                this,
+                SLOT(slot_keepVideoRunning())
+                );
 
-    this->playerTime->start();
+        this->playerTime->start();
 
-
-//    bool currentStatus = this->manager->isPlaying();
-//    this->manager->isPlaying(!currentStatus);
-
-//    if(this->manager->isPlaying())
-//    {
-//        this->manager->playVideo();
-//    }
-
-    std::cout << "Button PLAY Pressed: " << this->manager->getFrameId() << std::endl;
+//        std::cout << "Button PLAY pressed: " << this->manager->getFrameId() << std::endl;
+    }
 }
 
 void MainWindow::slot_rewindButton()
@@ -187,8 +205,15 @@ void MainWindow::slot_fastfButton()
 
 void MainWindow::slot_stopButton()
 {
-    emit(this->playerTime->stop());
-    delete this->playerTime;
+    this->updateFrame(1);
+
+    if (this->playerTime != NULL)
+    {
+        this->playerTime->stop();
+
+        delete(this->playerTime);
+        this->playerTime = NULL;
+    }
 }
 
 void MainWindow::slot_keepVideoRunning()
@@ -197,7 +222,7 @@ void MainWindow::slot_keepVideoRunning()
 
     if(frameId == static_cast<int>(this->totalFrames))
     {
-        emit(this->slot_stopButton());
+        this->slot_stopButton();
     }
     else
     {

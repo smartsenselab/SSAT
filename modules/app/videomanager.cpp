@@ -60,11 +60,6 @@ void VideoManager::loadVideo(QString _path)
     this->worker->loadVideo(_path);
 }
 
-void VideoManager::playVideo()
-{
-    this->worker->playVideo();
-}
-
 QImage VideoManager::matToQimage(const Mat &_frame)
 {
     return this->worker->matToQimage(_frame);

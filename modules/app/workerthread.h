@@ -34,7 +34,6 @@ public:
 
     void clearVideo();
     void loadVideo(QString _path);
-    void playVideo();
     QImage matToQimage(const Mat &_frame);
 };
 

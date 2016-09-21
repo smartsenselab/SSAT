@@ -60,17 +60,6 @@ void WorkerThread::loadVideo(QString _path)
     this->video.open(_path.toStdString());
 }
 
-void WorkerThread::playVideo()
-{
-    while(this->playing)
-    {
-         Mat frameMat = this->getFrame();
-         std::cout << this->getFrameId() << std::endl;
-//         const QImage frameQImage = this->matToQimage(frameMat);
-//         emit signal_frameToDisplay(frameQImage);
-    }
-}
-
 QImage WorkerThread::matToQimage(const Mat &_frameId)
 {
     if (_frameId.type() == CV_8UC3)

@@ -29,6 +29,7 @@ public:
     virtual ~MainWindow();
 
 private:
+    void enableWidgets(const bool _enable);
     void updateFrame(const int _frameId);
 
 public slots:
