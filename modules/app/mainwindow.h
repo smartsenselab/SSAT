@@ -4,6 +4,7 @@
 #include <QFileDialog>
 #include <QMainWindow>
 #include <QScopedPointer>
+#include <QTimer>
 
 #include "videomanager.h"
 
@@ -19,7 +20,10 @@ private:
     QScopedPointer<Ui::MainWindow> ui;
 
     bool loaded;
+    bool playing;
     double totalFrames;
+
+    QTimer *playerTime;
     VideoManager *manager;
 
 public:
@@ -27,6 +31,15 @@ public:
     virtual ~MainWindow();
 
 private:
+    void enableWidgets(const bool _enable);
+
+    bool isPlaying();
+    void isPlaying(const bool _enable);
+
+    void changeSpeed(const int _speed);
+    void pauseVideo();
+    void playVideo();
+    void stopVideo();
     void updateFrame(const int _frameId);
 
 public slots:
@@ -40,6 +53,9 @@ public slots:
     void slot_forwardButton();
     void slot_fastfButton();
     void slot_stopButton();
+    void slot_spinBoxSpeed(int _value);
+
+    void slot_keepVideoRunning();
 };
 
 #endif

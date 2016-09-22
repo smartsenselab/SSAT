@@ -5,12 +5,12 @@ cmake_minimum_required(VERSION 3.0)
 # Add folder where are supportive functions
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_CXX_STANDARD 11)
 
 # Include qt basic functions
 include(QtCommon)
 
 # Basic info about project
-
 project(SSAT VERSION 1.0)
 
 # Set PROJECT_VERSION_PATCH and PROJECT_VERSION_TWEAK to 0 if not present, needed by add_project_meta
@@ -39,7 +39,6 @@ message(STATUS "    include path: ${OpenCV_INCLUDE_DIRS}")
 
 
 # source_group("UI Files" FILES ${UI_FILES})
-
 add_library(${PROJECT_NAME}_CORE ${CORE_SOURCE_FILES} ${CORE_INCLUDE_FILES})
 target_link_libraries(${PROJECT_NAME}_CORE ${OpenCV_LIBS})
 target_include_directories(${PROJECT_NAME}_CORE PUBLIC modules/core/)

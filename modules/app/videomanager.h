@@ -21,13 +21,13 @@ public:
     Mat getFrame(double _frameId);
     double getFrameId();
     double getTotalFrames();
+    double getVideoFPS();
 
     bool isPlaying();
     void isPlaying(bool _condition);
 
     void clearVideo();
     void loadVideo(const QString _path);
-    void playVideo();
     QImage matToQimage(const Mat &_frame);
 };
 

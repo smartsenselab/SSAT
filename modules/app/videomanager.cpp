@@ -35,6 +35,11 @@ double VideoManager::getTotalFrames()
     return this->worker->getTotalFrames();
 }
 
+double VideoManager::getVideoFPS()
+{
+    return this->worker->getVideoFPS();
+}
+
 bool VideoManager::isPlaying()
 {
     return this->worker->isPlaying();
@@ -53,11 +58,6 @@ void VideoManager::clearVideo()
 void VideoManager::loadVideo(QString _path)
 {
     this->worker->loadVideo(_path);
-}
-
-void VideoManager::playVideo()
-{
-    this->worker->playVideo();
 }
 
 QImage VideoManager::matToQimage(const Mat &_frame)

@@ -35,6 +35,11 @@ double WorkerThread::getTotalFrames()
     return this->video.get(CV_CAP_PROP_FRAME_COUNT);
 }
 
+double WorkerThread::getVideoFPS()
+{
+    return this->video.get(CV_CAP_PROP_FPS);
+}
+
 bool WorkerThread::isPlaying()
 {
     return this->playing;
@@ -53,17 +58,6 @@ void WorkerThread::clearVideo()
 void WorkerThread::loadVideo(QString _path)
 {
     this->video.open(_path.toStdString());
-}
-
-void WorkerThread::playVideo()
-{
-    while(this->playing)
-    {
-         Mat frameMat = this->getFrame();
-         std::cout << this->getFrameId() << std::endl;
-//         const QImage frameQImage = this->matToQimage(frameMat);
-//         emit signal_frameToDisplay(frameQImage);
-    }
 }
 
 QImage WorkerThread::matToQimage(const Mat &_frameId)
