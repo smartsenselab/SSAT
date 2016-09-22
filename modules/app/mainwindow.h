@@ -46,6 +46,7 @@ public slots:
     void slot_displayFrame(const QImage _frame);
     void slot_openFile();
     void slot_slideVideo(int _frameId);
+    void slot_contextMenu(const QPoint &_point);
 
     void slot_playButton();
     void slot_rewindButton();

@@ -14,55 +14,64 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->enableWidgets(false);
 
-    this->connect(ui->actionOpen,
+    // Adding context menu to labelFrameShow
+    this->ui->labelFrameShow->setContextMenuPolicy(Qt::CustomContextMenu);
+    this->connect(this->ui->labelFrameShow,
+                  SIGNAL(customContextMenuRequested(QPoint)),
+                  this,
+                  SLOT(slot_contextMenu(QPoint))
+                  );
+
+    // Connecting SIGNALS to SLOTS
+    this->connect(this->ui->actionOpen,
                   &QAction::triggered,
                   this,
                   &MainWindow::slot_openFile
                   );
 
-    this->connect(ui->sliderFrame,
+    this->connect(this->ui->sliderFrame,
                   SIGNAL(sliderMoved(int)),
                   this,
                   SLOT(slot_slideVideo(int))
                   );
 
-    this->connect(ui->buttonPlay,
+    this->connect(this->ui->buttonPlay,
                   SIGNAL(pressed()),
                   this,
                   SLOT(slot_playButton())
                   );
 
-    this->connect(ui->buttonRewindF,
+    this->connect(this->ui->buttonRewindF,
                   SIGNAL(pressed()),
                   this,
                   SLOT(slot_rewindButton())
                   );
 
-    this->connect(ui->buttonRewind,
+    this->connect(this->ui->buttonRewind,
                   SIGNAL(pressed()),
                   this,
                   SLOT(slot_backButton())
                   );
 
-    this->connect(ui->buttonForward,
+    this->connect(this->ui->buttonForward,
                   SIGNAL(pressed()),
                   this,
                   SLOT(slot_forwardButton())
                   );
 
-    this->connect(ui->buttonForwardF,
+    this->connect(this->ui->buttonForwardF,
                   SIGNAL(pressed()),
                   this,
                   SLOT(slot_fastfButton())
                   );
 
-    this->connect(ui->buttonStop,
+    this->connect(this->ui->buttonStop,
                   SIGNAL(pressed()),
                   this,
                   SLOT(slot_stopButton())
                   );
 
-    this->connect(ui->spinBoxSpeed,
+    this->connect(this->ui->spinBoxSpeed,
                   SIGNAL(valueChanged(int)),
                   this,
                   SLOT(slot_spinBoxSpeed(int))
@@ -103,6 +112,7 @@ void MainWindow::enableWidgets(const bool _enable)
     this->ui->buttonStop->setEnabled(_enable);
 
     this->ui->labelFrameId->setEnabled(_enable);
+    this->ui->labelFrameShow->setEnabled(_enable);
     this->ui->sliderFrame->setEnabled(_enable);
     this->ui->spinBoxSpeed->setEnabled(_enable);
 }
@@ -213,6 +223,18 @@ void MainWindow::slot_slideVideo(int _frameId)
 {
     std::cout << _frameId << std::endl;
     this->updateFrame(_frameId);
+}
+
+void MainWindow::slot_contextMenu(const QPoint &_point)
+{
+    QPoint position = this->ui->labelFrameShow->mapToGlobal(_point);
+
+    QMenu contextMenu;
+    contextMenu.addAction("New Bbox");
+    contextMenu.addAction("Adjust Bbox");
+    contextMenu.addAction("Remove Bbox");
+
+    contextMenu.exec(position);
 }
 
 void MainWindow::slot_playButton()
