@@ -82,6 +82,7 @@ MainWindow::~MainWindow()
 {
     delete(this->manager);
     delete(this->playerTime);
+    delete(this);
 }
 
 bool MainWindow::isPlaying()
@@ -197,6 +198,20 @@ void MainWindow::slot_displayFrame(const QImage _frame)
     }
 }
 
+void MainWindow::slot_keepVideoRunning()
+{
+    int frameId = static_cast<int>(this->manager->getFrameId());
+
+    if(frameId == static_cast<int>(this->totalFrames))
+    {
+        this->slot_stopButton();
+    }
+    else
+    {
+        this->updateFrame(frameId);
+    }
+}
+
 void MainWindow::slot_openFile()
 {
     QString videoName = QFileDialog::getOpenFileName(this,
@@ -230,7 +245,7 @@ void MainWindow::slot_contextMenu(const QPoint &_point)
     QPoint position = this->ui->labelFrameShow->mapToGlobal(_point);
 
     QMenu contextMenu;
-    contextMenu.addAction("New Bbox");
+    contextMenu.addAction("New Bbox", this, SLOT(slot_newBox()));
     contextMenu.addAction("Adjust Bbox");
     contextMenu.addAction("Remove Bbox");
 
@@ -314,16 +329,7 @@ void MainWindow::slot_spinBoxSpeed(int _value)
     this->changeSpeed(_value);
 }
 
-void MainWindow::slot_keepVideoRunning()
+void MainWindow::slot_newBox()
 {
-    int frameId = static_cast<int>(this->manager->getFrameId());
-
-    if(frameId == static_cast<int>(this->totalFrames))
-    {
-        this->slot_stopButton();
-    }
-    else
-    {
-        this->updateFrame(frameId);
-    }
+    std::cout << "Invoking void MainWindow::slot_newBox()" << std::endl;
 }
