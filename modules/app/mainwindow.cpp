@@ -8,12 +8,56 @@ MainWindow::MainWindow(QWidget *parent)
 {
     this->ui->setupUi(this);
 
+//    this->frameScene = QGraphicsScene(this);
     this->loaded = false;
     this->manager = new VideoManager;
     this->playing = false;
 
     this->enableWidgets(false);
+    this->connectSignalSlots();
+}
 
+MainWindow::~MainWindow()
+{
+    delete(this->manager);
+    delete(this->playerTime);
+}
+
+bool MainWindow::isPlaying()
+{
+    return this->playing;
+}
+
+void MainWindow::isPlaying(const bool _enable)
+{
+    this->playing = _enable;
+    if(_enable)
+    {
+        this->ui->buttonPlay->setText("Pause");
+    }
+    else
+    {
+        this->ui->buttonPlay->setText("Play");
+    }
+}
+
+void MainWindow::enableWidgets(const bool _enable)
+{
+    this->ui->buttonForward->setEnabled(_enable);
+    this->ui->buttonForwardF->setEnabled(_enable);
+    this->ui->buttonPlay->setEnabled(_enable);
+    this->ui->buttonRewind->setEnabled(_enable);
+    this->ui->buttonRewindF->setEnabled(_enable);
+    this->ui->buttonStop->setEnabled(_enable);
+
+    this->ui->labelFrameId->setEnabled(_enable);
+    this->ui->sliderFrame->setEnabled(_enable);
+    this->ui->spinBoxSpeed->setEnabled(_enable);
+    this->ui->viewFrame->setEnabled(_enable);
+}
+
+void MainWindow::connectSignalSlots()
+{
     this->connect(ui->actionOpen,
                   &QAction::triggered,
                   this,
@@ -67,44 +111,6 @@ MainWindow::MainWindow(QWidget *parent)
                   this,
                   SLOT(slot_spinBoxSpeed(int))
                   );
-}
-
-MainWindow::~MainWindow()
-{
-    delete(this->manager);
-    delete(this->playerTime);
-}
-
-bool MainWindow::isPlaying()
-{
-    return this->playing;
-}
-
-void MainWindow::isPlaying(const bool _enable)
-{
-    this->playing = _enable;
-    if(_enable)
-    {
-        this->ui->buttonPlay->setText("Pause");
-    }
-    else
-    {
-        this->ui->buttonPlay->setText("Play");
-    }
-}
-
-void MainWindow::enableWidgets(const bool _enable)
-{
-    this->ui->buttonForward->setEnabled(_enable);
-    this->ui->buttonForwardF->setEnabled(_enable);
-    this->ui->buttonPlay->setEnabled(_enable);
-    this->ui->buttonRewind->setEnabled(_enable);
-    this->ui->buttonRewindF->setEnabled(_enable);
-    this->ui->buttonStop->setEnabled(_enable);
-
-    this->ui->labelFrameId->setEnabled(_enable);
-    this->ui->sliderFrame->setEnabled(_enable);
-    this->ui->spinBoxSpeed->setEnabled(_enable);
 }
 
 void MainWindow::changeSpeed(const int _speed)
@@ -175,7 +181,7 @@ void MainWindow::updateFrame(const int _frameId)
         QImage frameQImage = this->manager->matToQimage(frameMat);
         this->ui->sliderFrame->setValue(static_cast<int>(_frameId));
         this->ui->labelFrameId->setText(QString::number(_frameId) + "/" + QString::number(this->totalFrames));
-        this->ui->labelFrameShow->setPixmap(QPixmap::fromImage(frameQImage));
+//        this->ui->labelFrameShow->setPixmap(QPixmap::fromImage(frameQImage));
     }
 }
 
@@ -183,7 +189,7 @@ void MainWindow::slot_displayFrame(const QImage _frame)
 {
     if(!_frame.isNull())
     {
-        this->ui->labelFrameShow->setPixmap(QPixmap::fromImage(_frame));
+//        this->ui->labelFrameShow->setPixmap(QPixmap::fromImage(_frame));
     }
 }
 
