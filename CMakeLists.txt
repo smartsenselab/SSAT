@@ -24,6 +24,7 @@ add_project_meta(META_FILES_TO_INCLUDE)
 
 set(RESOURCE_FILES ssat.qrc)
 
+find_package( OpenCV REQUIRED )
 find_package(Qt5Widgets REQUIRED)
 find_package(OpenCV COMPONENTS opencv_core opencv_imgproc opencv_imgcodecs opencv_highgui REQUIRED)
 find_path(OpenCV_INCLUDE_DIR "opencv/cv.h" PATHS "${OpenCV_DIR}" PATH_SUFFIXES "include" DOC "")
