@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->loaded = false;
     this->manager = new VideoManager;
     this->playing = false;
+    this->speed = 0;
 
     this->enableWidgets(false);
     this->connectSignalSlots();
@@ -125,12 +126,7 @@ void MainWindow::changeSpeed(const int _speed)
 {
     if (this->playerTime != NULL)
     {
-        double frameRate = this->manager->getVideoFPS();
-        int interval = static_cast<int>(1000/(_speed * frameRate));
-
-        this->playerTime->stop();
-        this->playerTime->setInterval(interval);
-        this->playerTime->start();
+        this->speed = _speed - 1;
     }
 }
 
@@ -153,8 +149,7 @@ void MainWindow::playVideo()
     }
 
     double frameRate = this->manager->getVideoFPS();
-    int speed = this->ui->spinBoxSpeed->value();
-    int interval = static_cast<int>(1000/(speed * frameRate));
+    int interval = static_cast<int>(frameRate);
 
     this->playerTime->setInterval(interval);
     this->playerTime->setSingleShot(false);
@@ -183,7 +178,7 @@ void MainWindow::stopVideo()
 
 void MainWindow::updateFrame(const int _frameId)
 {
-    Mat frameMat = this->manager->getFrame(_frameId);
+    Mat frameMat = this->manager->getFrame(_frameId + this->speed);
     if(frameMat.data)
     {
         this->ui->sliderFrame->setValue(static_cast<int>(_frameId));

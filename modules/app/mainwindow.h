@@ -23,6 +23,7 @@ private:
     bool loaded;
     bool playing;
     double totalFrames;
+    int speed;
 
     QGraphicsScene frameScene;
     QGraphicsRectItem *rectangle;
