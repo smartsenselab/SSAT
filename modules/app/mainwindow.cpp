@@ -57,6 +57,15 @@ void MainWindow::enableWidgets(const bool _enable)
 
 void MainWindow::connectSignalSlots()
 {
+    // Adding context menu to labelFrameShow
+    this->ui->viewFrame->setContextMenuPolicy(Qt::CustomContextMenu);
+    this->connect(this->ui->viewFrame,
+                  SIGNAL(customContextMenuRequested(QPoint)),
+                  this,
+                  SLOT(slot_contextMenu(QPoint))
+                  );
+
+    // Connecting SIGNALS to SLOTS
     this->connect(ui->actionOpen,
                   &QAction::triggered,
                   this,
@@ -224,6 +233,18 @@ void MainWindow::slot_slideVideo(int _frameId)
     this->updateFrame(_frameId);
 }
 
+void MainWindow::slot_contextMenu(const QPoint &_point)
+{
+    QPoint position = this->ui->viewFrame->mapToGlobal(_point);
+
+    QMenu contextMenu;
+    contextMenu.addAction("New Bbox", this, SLOT(slot_newBox()));
+    contextMenu.addAction("Adjust Bbox");
+    contextMenu.addAction("Remove Bbox");
+
+    contextMenu.exec(position);
+}
+
 void MainWindow::slot_playButton()
 {
     if(!this->playing)
@@ -313,4 +334,15 @@ void MainWindow::slot_keepVideoRunning()
     {
         this->updateFrame(frameId);
     }
+}
+
+void MainWindow::slot_newBox()
+{
+    QPen bluePen(Qt::blue);
+    this->rectangle = this->frameScene.addRect(10,
+                                               10,
+                                               100,
+                                               100,
+                                               bluePen
+                                               );
 }
