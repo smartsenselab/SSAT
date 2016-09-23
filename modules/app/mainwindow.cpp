@@ -8,7 +8,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     this->ui->setupUi(this);
 
-//    this->frameScene = QGraphicsScene(this);
     this->loaded = false;
     this->manager = new VideoManager;
     this->playing = false;
@@ -178,10 +177,13 @@ void MainWindow::updateFrame(const int _frameId)
     Mat frameMat = this->manager->getFrame(_frameId);
     if(frameMat.data)
     {
-        QImage frameQImage = this->manager->matToQimage(frameMat);
         this->ui->sliderFrame->setValue(static_cast<int>(_frameId));
         this->ui->labelFrameId->setText(QString::number(_frameId) + "/" + QString::number(this->totalFrames));
-//        this->ui->labelFrameShow->setPixmap(QPixmap::fromImage(frameQImage));
+
+        QImage frameQImage = this->manager->matToQimage(frameMat);
+
+        this->frameScene.addPixmap(QPixmap::fromImage(frameQImage));
+        this->ui->viewFrame->setScene(&(this->frameScene));
     }
 }
 
@@ -189,7 +191,8 @@ void MainWindow::slot_displayFrame(const QImage _frame)
 {
     if(!_frame.isNull())
     {
-//        this->ui->labelFrameShow->setPixmap(QPixmap::fromImage(_frame));
+        this->frameScene.addPixmap(QPixmap::fromImage(_frame));
+        this->ui->viewFrame->setScene(&(this->frameScene));
     }
 }
 
