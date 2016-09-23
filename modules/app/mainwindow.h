@@ -2,6 +2,7 @@
 #define mainwindow_h
 
 #include <QFileDialog>
+#include <QGraphicsScene>
 #include <QMainWindow>
 #include <QScopedPointer>
 #include <QTimer>
@@ -22,8 +23,12 @@ private:
     bool loaded;
     bool playing;
     double totalFrames;
+    int speed;
 
+    QGraphicsScene frameScene;
+    QGraphicsRectItem *rectangle;
     QTimer *playerTime;
+
     VideoManager *manager;
 
 public:
@@ -32,6 +37,7 @@ public:
 
 private:
     void enableWidgets(const bool _enable);
+    void connectSignalSlots();
 
     bool isPlaying();
     void isPlaying(const bool _enable);
