@@ -8,7 +8,6 @@ WorkerThread::WorkerThread()
 WorkerThread::~WorkerThread()
 {
     this->clearVideo();
-    delete(this);
 }
 
 Mat WorkerThread::getFrame()

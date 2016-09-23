@@ -50,7 +50,6 @@ private:
 
 public slots:
     void slot_displayFrame(const QImage _frame);
-    void slot_keepVideoRunning();
     void slot_openFile();
     void slot_slideVideo(int _frameId);
     void slot_contextMenu(const QPoint &_point);
@@ -62,6 +61,8 @@ public slots:
     void slot_fastfButton();
     void slot_stopButton();
     void slot_spinBoxSpeed(int _value);
+
+    void slot_keepVideoRunning();
 
     void slot_newBox();
 };

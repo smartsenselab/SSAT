@@ -73,49 +73,49 @@ void MainWindow::connectSignalSlots()
                   &MainWindow::slot_openFile
                   );
 
-    this->connect(this->ui->sliderFrame,
+    this->connect(ui->sliderFrame,
                   SIGNAL(sliderMoved(int)),
                   this,
                   SLOT(slot_slideVideo(int))
                   );
 
-    this->connect(this->ui->buttonPlay,
+    this->connect(ui->buttonPlay,
                   SIGNAL(pressed()),
                   this,
                   SLOT(slot_playButton())
                   );
 
-    this->connect(this->ui->buttonRewindF,
+    this->connect(ui->buttonRewindF,
                   SIGNAL(pressed()),
                   this,
                   SLOT(slot_rewindButton())
                   );
 
-    this->connect(this->ui->buttonRewind,
+    this->connect(ui->buttonRewind,
                   SIGNAL(pressed()),
                   this,
                   SLOT(slot_backButton())
                   );
 
-    this->connect(this->ui->buttonForward,
+    this->connect(ui->buttonForward,
                   SIGNAL(pressed()),
                   this,
                   SLOT(slot_forwardButton())
                   );
 
-    this->connect(this->ui->buttonForwardF,
+    this->connect(ui->buttonForwardF,
                   SIGNAL(pressed()),
                   this,
                   SLOT(slot_fastfButton())
                   );
 
-    this->connect(this->ui->buttonStop,
+    this->connect(ui->buttonStop,
                   SIGNAL(pressed()),
                   this,
                   SLOT(slot_stopButton())
                   );
 
-    this->connect(this->ui->spinBoxSpeed,
+    this->connect(ui->spinBoxSpeed,
                   SIGNAL(valueChanged(int)),
                   this,
                   SLOT(slot_spinBoxSpeed(int))
@@ -197,20 +197,6 @@ void MainWindow::slot_displayFrame(const QImage _frame)
     {
         this->frameScene.addPixmap(QPixmap::fromImage(_frame));
         this->ui->viewFrame->setScene(&(this->frameScene));
-    }
-}
-
-void MainWindow::slot_keepVideoRunning()
-{
-    int frameId = static_cast<int>(this->manager->getFrameId());
-
-    if(frameId == static_cast<int>(this->totalFrames))
-    {
-        this->slot_stopButton();
-    }
-    else
-    {
-        this->updateFrame(frameId);
     }
 }
 
@@ -329,6 +315,20 @@ void MainWindow::slot_stopButton()
 void MainWindow::slot_spinBoxSpeed(int _value)
 {
     this->changeSpeed(_value);
+}
+
+void MainWindow::slot_keepVideoRunning()
+{
+    int frameId = static_cast<int>(this->manager->getFrameId());
+
+    if(frameId == static_cast<int>(this->totalFrames))
+    {
+        this->slot_stopButton();
+    }
+    else
+    {
+        this->updateFrame(frameId);
+    }
 }
 
 void MainWindow::slot_newBox()

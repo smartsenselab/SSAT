@@ -13,7 +13,6 @@ VideoManager::~VideoManager()
     this->thread.quit();
     this->thread.wait();
     delete(this->worker);
-    delete(this);
 }
 
 Mat VideoManager::getFrame()

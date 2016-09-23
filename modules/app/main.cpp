@@ -13,6 +13,8 @@
 
 int main(int argc, char *argv[])
 {
+    teste(100);
+
     QApplication app(argc, argv);
 
     MainWindow mainWindow;
