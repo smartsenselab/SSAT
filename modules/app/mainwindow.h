@@ -25,10 +25,10 @@ private:
     double totalFrames;
     int speed;
 
-    BoundingBox *bbox;
-    QGraphicsScene frameScene;
-    QGraphicsRectItem *rectangle;
-    QTimer *playerTime;
+//    BoundingBox *bbox;
+    BoundingBox frameScene;
+    QGraphicsRectItem *rectangle = NULL;
+    QTimer *playerTime = NULL;
 
     VideoManager *manager;
 
