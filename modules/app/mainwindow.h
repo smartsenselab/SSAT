@@ -6,7 +6,7 @@
 #include <QMainWindow>
 #include <QScopedPointer>
 #include <QTimer>
-
+#include "BoundingBox.h"
 #include "videomanager.h"
 
 namespace Ui
@@ -25,6 +25,7 @@ private:
     double totalFrames;
     int speed;
 
+    BoundingBox *bbox;
     QGraphicsScene frameScene;
     QGraphicsRectItem *rectangle;
     QTimer *playerTime;

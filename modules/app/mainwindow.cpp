@@ -13,6 +13,8 @@ MainWindow::MainWindow(QWidget *parent)
     this->playing = false;
     this->speed = 0;
 
+    this->bbox = new BoundingBox(this);
+
     this->enableWidgets(false);
     this->connectSignalSlots();
 }
