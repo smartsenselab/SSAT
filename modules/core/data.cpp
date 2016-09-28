@@ -5,28 +5,50 @@ Data::Data()
 
 }
 
-Data::Data(const string &_id, const string &_label)
+Data::Data(const unsigned int &_id, const string &_label)
 {
     this->setId(_id);
-    this->setLabel(_label);
+    this->setName(_label);
 }
 
-string Data::getId() const
+unsigned int Data::getId() const
 {
     return this->id;
 }
 
-string Data::getLabel() const
+string Data::getLabels(const unsigned int _index) const
 {
-    return this->label;
+    return this->labels.at(_index);
 }
 
-void Data::setId(const string &_id)
+vector<string> Data::getLabels() const
+{
+    return this->labels;
+}
+
+string Data::getName() const
+{
+    return this->name;
+}
+
+void Data::setId(const unsigned int &_id)
 {
     this->id = _id;
 }
 
-void Data::setLabel(const string &_label)
+void Data::setLabels(const string &_label)
 {
-    this->label = _label;
+    this->labels.push_back(_label);
+}
+
+void Data::setName(const string &_name)
+{
+    this->name = _name;
+}
+
+void Data::operator=(const Data &_data)
+{
+    this->id = _data.id;
+    this->labels = _data.labels;
+    this->name = _data.name;
 }

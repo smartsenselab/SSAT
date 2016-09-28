@@ -3,25 +3,31 @@
 
 #include <iostream>
 #include <string>
-
-using namespace std;
+#include <vector>
+using std::string;
+using std::vector;
 
 class Data
 {
 public:
     Data();
-    Data(const string &_id, const string &_label);
+    Data(const unsigned int &_id, const string &_name);
 
-    string getId() const;
-    string getLabel() const;
+    unsigned int getId() const;
+    string getLabels(const unsigned int _index) const;
+    vector<string> getLabels() const;
+    string getName() const;
 
-    void setId(const string &_id);
-    void setLabel(const string &_label);
+    void setId(const unsigned int &_id);
+    void setLabels(const string &_label);
+    void setName(const string &_name);
+
+    void operator=(const Data &_data);
 
 protected:
-    unsigned int frameId;
-    string id;
-    string label;
+    unsigned int id;
+    vector<string> labels;
+    string name;
 };
 
 #endif // DATA_H
