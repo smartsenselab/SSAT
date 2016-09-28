@@ -10,9 +10,16 @@ class Data
 {
 public:
     Data();
+    Data(const string &_id, const string &_label);
 
-private:
-    int frameId;
+    string getId() const;
+    string getLabel() const;
+
+    void setId(const string &_id);
+    void setLabel(const string &_label);
+
+protected:
+    unsigned int frameId;
     string id;
     string label;
 };
