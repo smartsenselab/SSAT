@@ -1,7 +1,9 @@
-#include "BoundingBox.h"
+#include <QtMath>
+
 #include <cstdlib>
 #include <iostream>
-#include <QtMath>
+
+#include "boundingbox.h"
 
 BoundingBox::BoundingBox(QObject* parent): QGraphicsScene(parent)
 {

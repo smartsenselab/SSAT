@@ -6,7 +6,8 @@
 #include <QMainWindow>
 #include <QScopedPointer>
 #include <QTimer>
-#include "BoundingBox.h"
+
+#include "boundingbox.h"
 #include "videomanager.h"
 
 namespace Ui

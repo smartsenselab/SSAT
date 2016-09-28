@@ -1,10 +1,10 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include <QAction>
+#include <QGraphicsLineItem>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
-#include <QGraphicsLineItem>
-#include <QAction>
 #include <QGraphicsView>
 #include <QKeyEvent>
 
@@ -12,10 +12,12 @@ class BoundingBox : public QGraphicsScene
 {
 public:
     BoundingBox(QObject* parent = 0);
+
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+
 private:
     qreal origPoint, origPoint2;
     qreal endPoint, endPoint2;
