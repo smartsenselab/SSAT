@@ -8,10 +8,10 @@
 #include <QGraphicsView>
 #include <QKeyEvent>
 
-class BoundingBox : public QGraphicsScene
+class QBoundingBox : public QGraphicsScene
 {
 public:
-    BoundingBox(QObject* parent = 0);
+    QBoundingBox(QObject* parent = 0);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);

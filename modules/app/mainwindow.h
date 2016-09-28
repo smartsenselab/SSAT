@@ -7,7 +7,7 @@
 #include <QScopedPointer>
 #include <QTimer>
 
-#include "boundingbox.h"
+#include "qboundingbox.h"
 #include "videomanager.h"
 
 namespace Ui
@@ -27,7 +27,7 @@ private:
     int speed;
 
 //    BoundingBox *bbox;
-    BoundingBox frameScene;
+    QBoundingBox frameScene;
     QGraphicsRectItem *rectangle = NULL;
     QTimer *playerTime = NULL;
 

@@ -3,19 +3,19 @@
 #include <cstdlib>
 #include <iostream>
 
-#include "boundingbox.h"
+#include "qboundingbox.h"
 
-BoundingBox::BoundingBox(QObject* parent): QGraphicsScene(parent)
+QBoundingBox::QBoundingBox(QObject* parent): QGraphicsScene(parent)
 {
     itemToDraw = 0;
 }
 
-void BoundingBox::mousePressEvent(QGraphicsSceneMouseEvent *event){
+void QBoundingBox::mousePressEvent(QGraphicsSceneMouseEvent *event){
     origPoint = event->scenePos().x();
     endPoint = event->scenePos().y();
 }
 
-void BoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
+void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     //delete itemToDraw;
     if( itemToDraw == 0){
         itemToDraw = new QGraphicsRectItem;
@@ -45,7 +45,7 @@ void BoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     }
 }
 
-void BoundingBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
+void QBoundingBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
     itemToDraw = 0;
     QGraphicsScene::mouseReleaseEvent(event);
 }
