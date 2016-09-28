@@ -27,22 +27,22 @@ BoundingBox::BoundingBox(const int _x, const int _y,
     this->setH(_h);
 }
 
-int BoundingBox::getX()
+int BoundingBox::getX() const
 {
     return this->coordinates.x;
 }
 
-int BoundingBox::getY()
+int BoundingBox::getY() const
 {
     return this->coordinates.y;
 }
 
-int BoundingBox::getW()
+int BoundingBox::getW() const
 {
     return this->coordinates.width;
 }
 
-int BoundingBox::getH()
+int BoundingBox::getH() const
 {
     return this->coordinates.height;
 }

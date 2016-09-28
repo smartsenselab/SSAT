@@ -22,10 +22,10 @@ public:
     BoundingBox(const int _x, const int _y,
                 const int _w, const int _h);
 
-    int getX();
-    int getY();
-    int getW();
-    int getH();
+    int getX() const;
+    int getY() const;
+    int getW() const;
+    int getH() const;
 
     void setX(const int _x);
     void setY(const int _y);
