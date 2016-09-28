@@ -18,7 +18,8 @@ BoundingBox::BoundingBox(const Rect &_coordinates)
     this->coordinates = _coordinates;
 }
 
-BoundingBox::BoundingBox(const int _x, const int _y, const int _w, const int _h)
+BoundingBox::BoundingBox(const int _x, const int _y,
+                         const int _w, const int _h)
 {
     this->setX(_x);
     this->setY(_y);

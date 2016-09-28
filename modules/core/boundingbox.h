@@ -19,7 +19,8 @@ public:
     BoundingBox();
     BoundingBox(const BoundingBox &_box);
     BoundingBox(const Rect &_box);
-    BoundingBox(const int _x, const int _y, const int _w, const int _h);
+    BoundingBox(const int _x, const int _y,
+                const int _w, const int _h);
 
     int getX();
     int getY();
@@ -35,11 +36,6 @@ public:
 
 private:
     Rect coordinates;
-
-//  Attributes from superclass
-//    unsigned int id;
-//    vector<string> labels;
-//    string name;
 };
 
 #endif // BOUNDINGBOX_H

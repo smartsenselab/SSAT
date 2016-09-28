@@ -26,7 +26,6 @@ private:
     double totalFrames;
     int speed;
 
-//    BoundingBox *bbox;
     QBoundingBox frameScene;
     QGraphicsRectItem *rectangle = NULL;
     QTimer *playerTime = NULL;
