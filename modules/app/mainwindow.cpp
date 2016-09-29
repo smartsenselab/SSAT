@@ -190,6 +190,7 @@ void MainWindow::updateFrame(const int _frameId)
 
         this->frameScene.addPixmap(QPixmap::fromImage(frameQImage));
         this->ui->viewFrame->setScene(&(this->frameScene));
+        this->ui->viewFrame->fitInView(this->frameScene.sceneRect(),Qt::KeepAspectRatio);
     }
 }
 
