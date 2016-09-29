@@ -18,6 +18,9 @@ namespace Ui
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
+protected:
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+
 private:
     QScopedPointer<Ui::MainWindow> ui;
 

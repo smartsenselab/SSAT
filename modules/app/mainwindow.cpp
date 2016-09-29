@@ -344,3 +344,9 @@ void MainWindow::slot_newBox()
                                                bluePen
                                                );
 }
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    QMainWindow::resizeEvent(event);
+    this->ui->viewFrame->fitInView(this->frameScene.sceneRect(),Qt::KeepAspectRatio);
+}
