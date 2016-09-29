@@ -15,7 +15,6 @@ Mat WorkerThread::getFrame()
     Mat frame;
     this->video >> frame;
     return frame;
-
 }
 
 Mat WorkerThread::getFrame(double _frameId)

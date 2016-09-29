@@ -28,6 +28,7 @@ private:
 
     QBoundingBox frameScene;
     QGraphicsRectItem *rectangle = NULL;
+    QImage frameQImage;
     QTimer *playerTime = NULL;
 
     VideoManager *manager;
@@ -47,6 +48,7 @@ private:
     void pauseVideo();
     void playVideo();
     void stopVideo();
+    void updateFrame();
     void updateFrame(const int _frameId);
 
 public slots:
