@@ -28,6 +28,8 @@ public:
     static Core* getInstance(unsigned int _frames);
     static Core* getInstance(unsigned int _frames, unsigned int _cores);
 
+    void reset(const unsigned int _frames);
+    void reset(const unsigned int _frames, unsigned int _cores);
     void runTracker(const string  &_videoName, const unsigned int _frameId,
                     const string &_boxName, int identifier, int status);
 };

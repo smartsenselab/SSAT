@@ -9,13 +9,9 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include "core.h"
-
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-
-    Core *singleton = Core::getInstance(2);
 
     MainWindow mainWindow;
     mainWindow.show();

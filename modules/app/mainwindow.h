@@ -28,7 +28,7 @@ private:
     double totalFrames;
     int speed;
 
-//    Core *singleton = NULL;
+    Core *singleton = NULL;
 
     QBoundingBox frameScene;
     QGraphicsRectItem *rectangle = NULL;

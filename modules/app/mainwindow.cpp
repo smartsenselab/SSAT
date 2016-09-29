@@ -232,8 +232,14 @@ void MainWindow::slot_openFile()
         this->loaded = true;
         this->totalFrames = std::round(+this->manager->getTotalFrames());
 
-//        this->singleton->createCore(static_cast<unsigned int>(this->totalFrames));
-//        Core *singleton2 = Core::createCore(static_cast<unsigned int>(this->totalFrames));
+        if(this->singleton == NULL)
+        {
+            this->singleton = Core::getInstance(static_cast<unsigned int>(this->totalFrames));
+        }
+        else
+        {
+            this->singleton->reset(static_cast<unsigned int>(this->totalFrames));
+        }
 
         this->ui->sliderFrame->setEnabled(true);
         this->ui->sliderFrame->setRange(1, static_cast<int>(this->totalFrames));
