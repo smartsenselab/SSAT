@@ -13,7 +13,6 @@ using std::vector;
 using cv::Rect;
 
 #include "boundingbox.h"
-#include "data.h"
 
 class Frame : public Data
 {

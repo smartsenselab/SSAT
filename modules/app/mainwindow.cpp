@@ -288,7 +288,7 @@ void MainWindow::slot_rewindButton()
 void MainWindow::slot_backButton()
 {
     int frameId = static_cast<int>(this->manager->getFrameId());
-    frameId--;
+    frameId -= 2;
 
     if(frameId < 1)
     {
@@ -301,11 +301,11 @@ void MainWindow::slot_backButton()
 void MainWindow::slot_forwardButton()
 {
     int frameId = static_cast<int>(this->manager->getFrameId());
-    frameId++;
+    frameId += 2;
 
-    if(frameId > (this->manager->getTotalFrames() - 1))
+    if(frameId > (this->manager->getTotalFrames()))
     {
-        frameId = static_cast<int>(this->manager->getTotalFrames() - 1);
+        frameId = static_cast<int>(this->manager->getTotalFrames());
     }
 
     this->updateFrame(frameId);
@@ -316,9 +316,9 @@ void MainWindow::slot_fastfButton()
     int frameId = static_cast<int>(this->manager->getFrameId());
     frameId += std::round(+this->manager->getTotalFrames() / 100.0);
 
-    if(frameId > this->manager->getTotalFrames() - 1)
+    if(frameId > this->manager->getTotalFrames())
     {
-        frameId = static_cast<int>(this->manager->getTotalFrames() - 1);
+        frameId = static_cast<int>(this->manager->getTotalFrames());
     }
 
     this->updateFrame(frameId);
