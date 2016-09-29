@@ -23,9 +23,11 @@ private:
     qreal endPoint, endPoint2;
     qreal weigth;
     qreal heigth;
-
+    bool drawEnabled;
     QGraphicsRectItem* itemToDraw;
     void makeItemsControllable(bool areControllable);
+public slots:
+    void enableDraw();
 };
 
 #endif // SCENE_H

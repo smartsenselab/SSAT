@@ -70,6 +70,8 @@ public slots:
     void slot_keepVideoRunning();
 
     void slot_newBox();
+signals:
+    void drawBox();
 };
 
 #endif

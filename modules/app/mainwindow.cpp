@@ -336,13 +336,7 @@ void MainWindow::slot_keepVideoRunning()
 
 void MainWindow::slot_newBox()
 {
-    QPen bluePen(Qt::blue);
-    this->rectangle = this->frameScene.addRect(10,
-                                               10,
-                                               100,
-                                               100,
-                                               bluePen
-                                               );
+    this->frameScene.enableDraw();
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
