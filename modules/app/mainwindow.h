@@ -10,6 +10,8 @@
 #include "qboundingbox.h"
 #include "videomanager.h"
 
+#include "core.h"
+
 namespace Ui
 {
     class MainWindow;

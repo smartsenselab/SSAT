@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "core.h"
 
 Core::Core(unsigned int _frames, unsigned int _cores)

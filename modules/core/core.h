@@ -1,3 +1,6 @@
+#ifndef CORE_H
+#define CORE_H
+
 #include <thread>
 #include <vector>
 
@@ -5,7 +8,6 @@
 #include <opencv2/opencv.hpp>
 using cv::Rect;
 using cv::VideoCapture;
-
 
 #include "frame.h"
 #include "threadpool.h"
@@ -53,3 +55,5 @@ public:
     void runTracker(const string  &_videoName, const unsigned int _frameId,
                     const string &_boxName, int identifier, int status);
 };
+
+#endif // CORE_H
