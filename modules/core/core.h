@@ -18,8 +18,6 @@ using cv::VideoCapture;
 
 class Core {
 private:
-    static Core *instance;
-
     ThreadPool *pool;
     vector<Frame> frames;
 
@@ -27,33 +25,12 @@ private:
     ~Core();
 
 public:
-    static Core* createCore(unsigned int _frames)
-    {
-        unsigned int cores = std::thread::hardware_concurrency();
-        if(!instance)
-        {
-            instance = new Core(_frames, cores);
-        }
-        return instance;
-    }
+    static Core* getInstance(unsigned int _frames);
+    static Core* getInstance(unsigned int _frames, unsigned int _cores);
 
-    static Core* createCore(unsigned int _frames, unsigned int _cores)
-    {
-        if(!instance)
-        {
-            instance = new Core(_frames, _cores);
-        }
-        return instance;
-    }
-
-    static Core* getCore()
-    {
-        return instance;
-    }
-
-public:
     void runTracker(const string  &_videoName, const unsigned int _frameId,
                     const string &_boxName, int identifier, int status);
 };
+
 
 #endif // CORE_H
