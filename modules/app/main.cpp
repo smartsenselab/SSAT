@@ -9,12 +9,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include <core.h>
-
 int main(int argc, char *argv[])
 {
-    teste(100);
-
     QApplication app(argc, argv);
 
     MainWindow mainWindow;

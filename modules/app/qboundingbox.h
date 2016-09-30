@@ -9,24 +9,28 @@
 #include <QKeyEvent>
 #include "draggablerectitem.h"
 
-class BoundingBox : public QGraphicsScene
+class QBoundingBox : public QGraphicsScene
 {
 public:
-    BoundingBox(QObject* parent = 0);
-    void setMode();
+    QBoundingBox(QObject* parent = 0);
+
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 private:
+    bool drawEnabled;
+    
+    DraggableRectItem* itemToDraw;
+    
     qreal origPoint, origPoint2;
     qreal endPoint, endPoint2;
     qreal weigth;
     qreal heigth;
-    bool drawEnabled;
-    DraggableRectItem* itemToDraw;
+    
     void makeItemsControllable(bool areControllable);
+    
 public slots:
     void enableDraw();
 };

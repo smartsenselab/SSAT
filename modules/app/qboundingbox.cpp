@@ -3,29 +3,20 @@
 #include <cstdlib>
 #include <iostream>
 
-#include "boundingbox.h"
+#include "qboundingbox.h"
 
-BoundingBox::BoundingBox(QObject* parent): QGraphicsScene(parent)
+QBoundingBox::QBoundingBox(QObject* parent): QGraphicsScene(parent)
 {
     itemToDraw = 0;
     this->drawEnabled = false;
 }
 
-void BoundingBox::setMode(){
-    //makeItemsControllable(true);
-//    QGraphicsView::DragMode vMode;
-//    vMode = QGraphicsView::RubberBandDrag;
-//    QGraphicsView* mView = views().at(0);
-//    if(mView)
-//       mView->setDragMode(vMode);
-}
-
-void BoundingBox::mousePressEvent(QGraphicsSceneMouseEvent *event){
+void QBoundingBox::mousePressEvent(QGraphicsSceneMouseEvent *event){
     origPoint = event->scenePos().x();
     endPoint = event->scenePos().y();
 }
 
-void BoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
+void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     if(this->drawEnabled){
     //delete itemToDraw;
         if( itemToDraw == 0){
@@ -59,13 +50,13 @@ void BoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     }
 }
 
-void BoundingBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
+void QBoundingBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
     itemToDraw = 0;
     this->drawEnabled = false;
     QGraphicsScene::mouseReleaseEvent(event);
 }
 
-void BoundingBox::enableDraw()
+void QBoundingBox::enableDraw()
 {
     this->drawEnabled = true;
 }

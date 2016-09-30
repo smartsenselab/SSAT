@@ -133,7 +133,7 @@ void MainWindow::changeSpeed(const int _speed)
 {
     if (this->playerTime != NULL)
     {
-        this->speed = _speed - 1;
+        this->speed = (_speed - 1) * 5;
     }
 }
 
@@ -183,6 +183,23 @@ void MainWindow::stopVideo()
     }
 }
 
+void MainWindow::updateFrame()
+{
+    Mat frameMat = this->manager->getFrame();
+    if(frameMat.data)
+    {
+        int currentFrame = this->ui->sliderFrame->value() + 1;
+        this->ui->sliderFrame->setValue(static_cast<int>(currentFrame));
+        this->ui->labelFrameId->setText(QString::number(currentFrame) + "/" + QString::number(this->totalFrames));
+
+        this->frameScene.clear();
+
+        this->frameQImage = this->manager->matToQimage(frameMat);
+        this->frameScene.addPixmap(QPixmap::fromImage(frameQImage));
+        this->ui->viewFrame->setScene(&(this->frameScene));
+    }
+}
+
 void MainWindow::updateFrame(const int _frameId)
 {
     Mat frameMat = this->manager->getFrame(_frameId + this->speed);
@@ -191,8 +208,9 @@ void MainWindow::updateFrame(const int _frameId)
         this->ui->sliderFrame->setValue(static_cast<int>(_frameId));
         this->ui->labelFrameId->setText(QString::number(_frameId) + "/" + QString::number(this->totalFrames));
 
-        QImage frameQImage = this->manager->matToQimage(frameMat);
+        this->frameScene.clear();
 
+        this->frameQImage = this->manager->matToQimage(frameMat);
         this->frameScene.addPixmap(QPixmap::fromImage(frameQImage));
         this->ui->viewFrame->setScene(&(this->frameScene));
         this->ui->viewFrame->fitInView(this->frameScene.sceneRect(),Qt::KeepAspectRatio);
@@ -220,7 +238,16 @@ void MainWindow::slot_openFile()
         this->manager->loadVideo(videoName);
 
         this->loaded = true;
-        this->totalFrames = std::round(+this->manager->getTotalFrames() - 2);
+        this->totalFrames = std::round(+this->manager->getTotalFrames());
+
+        if(this->singleton == NULL)
+        {
+            this->singleton = Core::getInstance(static_cast<unsigned int>(this->totalFrames));
+        }
+        else
+        {
+            this->singleton->reset(static_cast<unsigned int>(this->totalFrames));
+        }
 
         this->ui->sliderFrame->setEnabled(true);
         this->ui->sliderFrame->setRange(1, static_cast<int>(this->totalFrames));
@@ -278,7 +305,7 @@ void MainWindow::slot_rewindButton()
 void MainWindow::slot_backButton()
 {
     int frameId = static_cast<int>(this->manager->getFrameId());
-    frameId--;
+    frameId -= 2;
 
     if(frameId < 1)
     {
@@ -291,11 +318,11 @@ void MainWindow::slot_backButton()
 void MainWindow::slot_forwardButton()
 {
     int frameId = static_cast<int>(this->manager->getFrameId());
-    frameId++;
+    frameId += 2;
 
-    if(frameId > (this->manager->getTotalFrames() - 1))
+    if(frameId > (this->manager->getTotalFrames()))
     {
-        frameId = static_cast<int>(this->manager->getTotalFrames() - 1);
+        frameId = static_cast<int>(this->manager->getTotalFrames());
     }
 
     this->updateFrame(frameId);
@@ -306,9 +333,9 @@ void MainWindow::slot_fastfButton()
     int frameId = static_cast<int>(this->manager->getFrameId());
     frameId += std::round(+this->manager->getTotalFrames() / 100.0);
 
-    if(frameId > this->manager->getTotalFrames() - 1)
+    if(frameId > this->manager->getTotalFrames())
     {
-        frameId = static_cast<int>(this->manager->getTotalFrames() - 1);
+        frameId = static_cast<int>(this->manager->getTotalFrames());
     }
 
     this->updateFrame(frameId);
@@ -335,7 +362,14 @@ void MainWindow::slot_keepVideoRunning()
     }
     else
     {
-        this->updateFrame(frameId);
+        if(this->speed == 0)
+        {
+            this->updateFrame();
+        }
+        else
+        {
+            this->updateFrame(frameId);
+        }
     }
 }
 
