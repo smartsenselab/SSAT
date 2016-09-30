@@ -1,9 +1,9 @@
 #include <QtMath>
-
 #include <cstdlib>
 #include <iostream>
 
 #include "qboundingbox.h"
+#include "boundingbox.h"
 
 QBoundingBox::QBoundingBox(QObject* parent): QGraphicsScene(parent)
 {
@@ -12,22 +12,27 @@ QBoundingBox::QBoundingBox(QObject* parent): QGraphicsScene(parent)
 }
 
 void QBoundingBox::mousePressEvent(QGraphicsSceneMouseEvent *event){
-    origPoint = event->scenePos().x();
-    endPoint = event->scenePos().y();
+    if(drawEnabled == 1){
+        origPoint = event->scenePos().x();
+        endPoint = event->scenePos().y();
+    }
+    else{
+        QGraphicsScene::mousePressEvent(event);
+    }
 }
 
 void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     if(this->drawEnabled){
-    //delete itemToDraw;
-        if( itemToDraw == 0){
-            itemToDraw = new DraggableRectItem;
+        delete itemToDraw;
+        //if(itemToDraw == 0){
+            itemToDraw = new QGraphicsRectItem;
             this->addItem(itemToDraw);
             itemToDraw->setPen(QPen(Qt::black, 3, Qt::SolidLine));
-        }
-        origPoint2 = event->scenePos().x();
-        endPoint2 = event->scenePos().y();
-        weigth = origPoint2 - origPoint;
-        heigth = endPoint2 - endPoint;
+        //}
+        this->origPoint2 = event->scenePos().x();
+        this->endPoint2 = event->scenePos().y();
+        this->weigth = origPoint2 - origPoint;
+        this->heigth = endPoint2 - endPoint;
 
         if( weigth < 0 && heigth < 0){
             weigth = origPoint - origPoint2;
@@ -45,18 +50,24 @@ void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
             heigth = endPoint - endPoint2;
             itemToDraw->setRect(origPoint, endPoint2, weigth, heigth);
         }
-        //this->itemToDraw->setPos(30,100);
-        this->itemToDraw->setAnchorPoint(itemToDraw->pos());
+    }
+    else{
+        QGraphicsScene::mouseMoveEvent(event);
     }
 }
 
 void QBoundingBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
-    itemToDraw = 0;
+    //itemToDraw = 0;
     this->drawEnabled = false;
+
+    itemToDraw->setFlag(QGraphicsItem::ItemIsSelectable, true);
+    itemToDraw->setFlag(QGraphicsItem::ItemIsMovable, true);
+
     QGraphicsScene::mouseReleaseEvent(event);
 }
 
 void QBoundingBox::enableDraw()
 {
+    itemToDraw = 0;
     this->drawEnabled = true;
 }
