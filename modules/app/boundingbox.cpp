@@ -11,6 +11,15 @@ BoundingBox::BoundingBox(QObject* parent): QGraphicsScene(parent)
     this->drawEnabled = false;
 }
 
+void BoundingBox::setMode(){
+    //makeItemsControllable(true);
+//    QGraphicsView::DragMode vMode;
+//    vMode = QGraphicsView::RubberBandDrag;
+//    QGraphicsView* mView = views().at(0);
+//    if(mView)
+//       mView->setDragMode(vMode);
+}
+
 void BoundingBox::mousePressEvent(QGraphicsSceneMouseEvent *event){
     origPoint = event->scenePos().x();
     endPoint = event->scenePos().y();
@@ -20,7 +29,7 @@ void BoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     if(this->drawEnabled){
     //delete itemToDraw;
         if( itemToDraw == 0){
-            itemToDraw = new QGraphicsRectItem;
+            itemToDraw = new DraggableRectItem;
             this->addItem(itemToDraw);
             itemToDraw->setPen(QPen(Qt::black, 3, Qt::SolidLine));
         }
@@ -45,6 +54,8 @@ void BoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
             heigth = endPoint - endPoint2;
             itemToDraw->setRect(origPoint, endPoint2, weigth, heigth);
         }
+        //this->itemToDraw->setPos(30,100);
+        this->itemToDraw->setAnchorPoint(itemToDraw->pos());
     }
 }
 

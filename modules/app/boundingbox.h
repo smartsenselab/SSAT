@@ -7,12 +7,13 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsView>
 #include <QKeyEvent>
+#include "draggablerectitem.h"
 
 class BoundingBox : public QGraphicsScene
 {
 public:
     BoundingBox(QObject* parent = 0);
-
+    void setMode();
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
@@ -24,7 +25,7 @@ private:
     qreal weigth;
     qreal heigth;
     bool drawEnabled;
-    QGraphicsRectItem* itemToDraw;
+    DraggableRectItem* itemToDraw;
     void makeItemsControllable(bool areControllable);
 public slots:
     void enableDraw();

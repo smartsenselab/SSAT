@@ -13,7 +13,12 @@ MainWindow::MainWindow(QWidget *parent)
     this->playing = false;
     this->speed = 0;
 
-//    this->bbox = new BoundingBox(this);
+    this->ui->tableWidget->setColumnCount(4);
+    QStringList headerLabels;
+    headerLabels << "Tracker" << "Ini" << "End" << "Cancel";
+    this->ui->tableWidget->setHorizontalHeaderLabels(headerLabels);
+    QHeaderView* header = ui->tableWidget->horizontalHeader();
+    header->setSectionResizeMode(QHeaderView::Stretch);
 
     this->enableWidgets(false);
     this->connectSignalSlots();
@@ -238,7 +243,7 @@ void MainWindow::slot_contextMenu(const QPoint &_point)
     QMenu contextMenu;
     contextMenu.addAction("New Bbox", this, SLOT(slot_newBox()));
     contextMenu.addAction("Adjust Bbox");
-    contextMenu.addAction("Remove Bbox");
+    contextMenu.addAction("Remove Bbox", this, SLOT(slot_removeBox()));
 
     contextMenu.exec(position);
 }
@@ -337,10 +342,28 @@ void MainWindow::slot_keepVideoRunning()
 void MainWindow::slot_newBox()
 {
     this->frameScene.enableDraw();
+    this->ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+    //CheckBox
+    QTableWidgetItem *checkBoxItem = new QTableWidgetItem();
+    checkBoxItem->setCheckState(Qt::Unchecked);
+    this->ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 0, checkBoxItem);
+
+    //Cancel Button
+    QPushButton* btn_cancel = new QPushButton();
+    btn_cancel = new QPushButton();
+    btn_cancel->setText("Cancel");
+    //btn_cancel->setIcon(QIcon("https://t4.ftcdn.net/jpg/00/08/30/29/500_F_8302961_GVoPsXWcNsfvVygwE2sri9m9aISpJgYQ.jpg"));
+    int row = this->ui->tableWidget->rowCount()-1;
+    this->ui->tableWidget->setCellWidget(row,3,btn_cancel);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     QMainWindow::resizeEvent(event);
     this->ui->viewFrame->fitInView(this->frameScene.sceneRect(),Qt::KeepAspectRatio);
+}
+
+
+void MainWindow::slot_removeBox(){
+
 }
