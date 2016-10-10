@@ -1,27 +1,35 @@
-#include "draggablerectitem.h"
+#include "qdraggablerectitem.h"
 
-DraggableRectItem::DraggableRectItem(QGraphicsItem* parent):
+QDraggableRectItem::QDraggableRectItem(QGraphicsItem* parent):
     QGraphicsRectItem(parent), m_dragged(false)
 {
     setFlags(QGraphicsItem::ItemIsSelectable|
              QGraphicsItem::ItemIsMovable);
 }
 
-void DraggableRectItem::setAnchorPoint(const QPointF &anchorPoint){
+void QDraggableRectItem::setAnchorPoint(const QPointF &anchorPoint)
+{
     this->anchorPoint = anchorPoint;
 }
 
-void DraggableRectItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
+void QDraggableRectItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
     m_dragged = true;
     QGraphicsRectItem::mouseMoveEvent(event);
 }
 
-void DraggableRectItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
-    if(m_dragged){
+void QDraggableRectItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    if(m_dragged)
+    {
         QList<QGraphicsItem*> colItems = collidingItems();
+
         if(colItems.isEmpty())
+        {
             this->setPos(anchorPoint);
-        else {
+        }
+        else
+        {
             QGraphicsItem* closestItem = colItems.at(0);
             qreal shortestDist = 100000;
             foreach(QGraphicsItem* item, colItems){

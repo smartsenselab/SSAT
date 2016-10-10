@@ -19,11 +19,13 @@ void QBoundingBox::mousePressEvent(QGraphicsSceneMouseEvent *event){
 void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     if(this->drawEnabled){
     //delete itemToDraw;
-        if( itemToDraw == 0){
-            itemToDraw = new DraggableRectItem;
+        if( itemToDraw == 0)
+        {
+            itemToDraw = new QDraggableRectItem;
             this->addItem(itemToDraw);
             itemToDraw->setPen(QPen(Qt::black, 3, Qt::SolidLine));
         }
+
         origPoint2 = event->scenePos().x();
         endPoint2 = event->scenePos().y();
         weigth = origPoint2 - origPoint;

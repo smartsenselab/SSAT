@@ -7,7 +7,8 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsView>
 #include <QKeyEvent>
-#include "draggablerectitem.h"
+
+#include "qdraggablerectitem.h"
 
 class QBoundingBox : public QGraphicsScene
 {
@@ -22,7 +23,7 @@ protected:
 private:
     bool drawEnabled;
     
-    DraggableRectItem* itemToDraw;
+    QDraggableRectItem* itemToDraw;
     
     qreal origPoint, origPoint2;
     qreal endPoint, endPoint2;

@@ -4,10 +4,10 @@
 #include <QGraphicsRectItem>
 #include <QGraphicsSceneMouseEvent>
 
-class DraggableRectItem : public QGraphicsRectItem
+class QDraggableRectItem : public QGraphicsRectItem
 {
 public:
-    DraggableRectItem(QGraphicsItem* parent = 0);
+    QDraggableRectItem(QGraphicsItem* parent = 0);
     void setAnchorPoint(const QPointF &anchorPoint);
 
 protected:
