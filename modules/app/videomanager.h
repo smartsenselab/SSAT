@@ -22,6 +22,8 @@ public:
     double getFrameId();
     double getTotalFrames();
     double getVideoFPS();
+    double getPercentage();
+    int getTime();
 
     bool isPlaying();
     void isPlaying(bool _condition);

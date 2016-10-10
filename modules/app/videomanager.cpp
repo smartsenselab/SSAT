@@ -40,6 +40,14 @@ double VideoManager::getVideoFPS()
     return this->worker->getVideoFPS();
 }
 
+double VideoManager::getPercentage(){
+    return this->worker->getFrameId() / this->worker->getTotalFrames();
+}
+
+int VideoManager::getTime(){
+    return static_cast<int>((this->worker->getTotalFrames() / this->worker->getVideoFPS()) * this->getPercentage());
+}
+
 bool VideoManager::isPlaying()
 {
     return this->worker->isPlaying();

@@ -5,6 +5,7 @@
 #include <QGraphicsScene>
 #include <QMainWindow>
 #include <QScopedPointer>
+#include <QTime>
 #include <QTimer>
 
 #include "qboundingbox.h"

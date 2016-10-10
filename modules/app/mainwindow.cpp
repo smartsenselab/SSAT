@@ -58,6 +58,7 @@ void MainWindow::enableWidgets(const bool _enable)
     this->ui->buttonStop->setEnabled(_enable);
 
     this->ui->labelFrameId->setEnabled(_enable);
+    this->ui->labelTime->setEnabled(_enable);
     this->ui->sliderFrame->setEnabled(_enable);
     this->ui->spinBoxSpeed->setEnabled(_enable);
     this->ui->viewFrame->setEnabled(_enable);
@@ -194,9 +195,16 @@ void MainWindow::updateFrame()
 
         this->frameScene.clear();
 
+        qint64 current = this->manager->getTime();
+        QTime currentTime((current/3600)%60, (current/60)%60, current%60, (current*1000)%1000);
+        QString s = currentTime.toString("hh:mm:ss");
+        this->ui->labelTime->setText(s);
+
         this->frameQImage = this->manager->matToQimage(frameMat);
         this->frameScene.addPixmap(QPixmap::fromImage(frameQImage));
+
         this->ui->viewFrame->setScene(&(this->frameScene));
+        this->ui->viewFrame->fitInView(this->frameScene.sceneRect(), Qt::KeepAspectRatio);
     }
 }
 
@@ -210,10 +218,16 @@ void MainWindow::updateFrame(const int _frameId)
 
         this->frameScene.clear();
 
+        qint64 current = this->manager->getTime();
+        QTime currentTime((current/3600)%60, (current/60)%60, current%60, (current*1000)%1000);
+        QString s = currentTime.toString("hh:mm:ss");
+        this->ui->labelTime->setText(s);
+
         this->frameQImage = this->manager->matToQimage(frameMat);
         this->frameScene.addPixmap(QPixmap::fromImage(frameQImage));
+
         this->ui->viewFrame->setScene(&(this->frameScene));
-        this->ui->viewFrame->fitInView(this->frameScene.sceneRect(),Qt::KeepAspectRatio);
+        this->ui->viewFrame->fitInView(this->frameScene.sceneRect(), Qt::KeepAspectRatio);
     }
 }
 
@@ -394,7 +408,7 @@ void MainWindow::slot_newBox()
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     QMainWindow::resizeEvent(event);
-    this->ui->viewFrame->fitInView(this->frameScene.sceneRect(),Qt::KeepAspectRatio);
+    this->ui->viewFrame->fitInView(this->frameScene.sceneRect(), Qt::KeepAspectRatio);
 }
 
 
