@@ -10,6 +10,11 @@ set(CMAKE_CXX_STANDARD 11)
 # Include qt basic functions
 include(QtCommon)
 
+# Include qt current directories in order to use promoted objects
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/modules/app)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/modules/cores)
+
 # Basic info about project
 project(SSAT VERSION 1.0)
 
