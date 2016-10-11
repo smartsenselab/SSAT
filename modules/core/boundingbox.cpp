@@ -82,7 +82,10 @@ void BoundingBox::setH(const int _h)
 void BoundingBox::operator=(const BoundingBox &_box)
 {
     this->coordinates = _box.coordinates;
+
+    this->attributes = _box.attributes;
     this->id = _box.id;
-    this->labels = _box.labels;
+    this->info = _box.info;
+    this->label = _box.label;
     this->name = _box.name;
 }

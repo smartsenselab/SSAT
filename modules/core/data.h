@@ -2,8 +2,10 @@
 #define DATA_H
 
 #include <iostream>
+#include <map>
 #include <string>
 #include <vector>
+using std::multimap;
 using std::string;
 using std::vector;
 
@@ -14,19 +16,29 @@ public:
     Data(const unsigned int &_id, const string &_name);
 
     unsigned int getId() const;
-    string getLabels(const unsigned int _index) const;
-    vector<string> getLabels() const;
+    vector<string> getAttributes(const string &_key) const;
+    vector<string> getInfo() const;
+    string getLabel() const;
     string getName() const;
 
+    void addAttributes(const string &_key, const string &_attr);
+    void delAttributes(const string &_key);
+    void delAttributes();
+    void addInfo(const string &_info);
+    void delInfo(const unsigned int _index);
+    void delInfo();
+
     void setId(const unsigned int &_id);
-    void setLabels(const string &_label);
+    void setLabel(const string &_label);
     void setName(const string &_name);
 
     void operator=(const Data &_data);
 
 protected:
     unsigned int id;
-    vector<string> labels;
+    multimap<string, string> attributes;
+    vector<string> info;
+    string label;
     string name;
 };
 

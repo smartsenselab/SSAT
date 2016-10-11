@@ -49,7 +49,10 @@ void Frame::setBox(const map<string, BoundingBox> &_boxes)
 void Frame::operator=(const Frame &_frame)
 {
     this->boxes = _frame.boxes;
+
+    this->attributes = _frame.attributes;
     this->id = _frame.id;
-    this->labels = _frame.labels;
+    this->info = _frame.info;
+    this->label = _frame.label;
     this->name = _frame.name;
 }
