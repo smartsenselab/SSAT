@@ -1,7 +1,3 @@
-#include <QtMath>
-#include <cstdlib>
-#include <iostream>
-
 #include "qboundingbox.h"
 #include "boundingbox.h"
 
