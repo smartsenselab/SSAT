@@ -2,13 +2,16 @@
 #define SCENE_H
 
 #include <QAction>
-#include <QGraphicsLineItem>
 #include <QGraphicsScene>
+#include <QGraphicsLineItem>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsView>
 #include <QKeyEvent>
+#include <QtMath>
+#include <QToolBar>
 
-#include "qdraggablerectitem.h"
+#include <cstdlib>
+#include <iostream>
 
 class QBoundingBox : public QGraphicsScene
 {
@@ -21,17 +24,16 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 private:
-    bool drawEnabled;
-    
-    QDraggableRectItem* itemToDraw;
-    
-    qreal origPoint, origPoint2;
-    qreal endPoint, endPoint2;
-    qreal weigth;
-    qreal heigth;
-    
     void makeItemsControllable(bool areControllable);
-    
+
+    bool drawEnabled, moveEnabled;
+
+    QGraphicsRectItem* itemToDraw;
+    qreal heigth;
+    qreal pointXa, pointXb;
+    qreal pointYa, pointYb;
+    qreal weigth;
+
 public slots:
     void enableDraw();
 };

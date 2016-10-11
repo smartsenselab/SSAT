@@ -30,4 +30,10 @@ protected:
     string name;
 };
 
+/*
+ * trocar labels por info
+ * string labels
+ * multimap<string> attributes
+ */
+
 #endif // DATA_H
