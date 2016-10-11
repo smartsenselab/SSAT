@@ -19,15 +19,16 @@ protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 private:
-   QGraphicsRectItem* itemToDraw;
+    QGraphicsRectItem* itemToDraw;
 
-    qreal origPoint, origPoint2;
-    qreal endPoint, endPoint2;
+    qreal pointXa, pointXb;
+    qreal pointYa, pointYb;
     qreal weigth;
     qreal heigth;
     void makeItemsControllable(bool areControllable);
 
-    bool drawEnabled;
+    bool drawEnabled, moveEnabled;
+
 public slots:
     void enableDraw();
 };
