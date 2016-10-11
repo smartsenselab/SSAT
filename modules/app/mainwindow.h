@@ -48,6 +48,7 @@ public:
 private:
     void enableWidgets(const bool _enable);
     void connectSignalSlots();
+    void setTable();
 
     bool isPlaying();
     void isPlaying(const bool _enable);

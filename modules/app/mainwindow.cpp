@@ -13,15 +13,9 @@ MainWindow::MainWindow(QWidget *parent)
     this->playing = false;
     this->speed = 0;
 
-    this->ui->tableWidget->setColumnCount(4);
-    QStringList headerLabels;
-    headerLabels << "Tracker" << "Ini" << "End" << "Cancel";
-    this->ui->tableWidget->setHorizontalHeaderLabels(headerLabels);
-    QHeaderView* header = ui->tableWidget->horizontalHeader();
-    header->setSectionResizeMode(QHeaderView::Stretch);
-
     this->enableWidgets(false);
     this->connectSignalSlots();
+    this->setTable();
 }
 
 MainWindow::~MainWindow()
@@ -130,6 +124,18 @@ void MainWindow::connectSignalSlots()
                   );
 }
 
+void MainWindow::setTable()
+{
+    QStringList headerLabels;
+    QHeaderView* header = ui->tableWidget->horizontalHeader();
+
+    headerLabels << "Tracker" << "Ini" << "End" << "Cancel";
+    header->setSectionResizeMode(QHeaderView::Stretch);
+
+    this->ui->tableWidget->setColumnCount(4);
+    this->ui->tableWidget->setHorizontalHeaderLabels(headerLabels);
+}
+
 void MainWindow::changeSpeed(const int _speed)
 {
     if (this->playerTime != NULL)
@@ -197,8 +203,8 @@ void MainWindow::updateFrame()
 
         qint64 current = this->manager->getTime();
         QTime currentTime((current/3600)%60, (current/60)%60, current%60, (current*1000)%1000);
-        QString s = currentTime.toString("hh:mm:ss");
-        this->ui->labelTime->setText(s);
+        QString stringTime = currentTime.toString("hh:mm:ss");
+        this->ui->labelTime->setText(stringTime);
 
         this->frameQImage = this->manager->matToQimage(frameMat);
         this->frameScene.addPixmap(QPixmap::fromImage(frameQImage));
@@ -220,8 +226,8 @@ void MainWindow::updateFrame(const int _frameId)
 
         qint64 current = this->manager->getTime();
         QTime currentTime((current/3600)%60, (current/60)%60, current%60, (current*1000)%1000);
-        QString s = currentTime.toString("hh:mm:ss");
-        this->ui->labelTime->setText(s);
+        QString stringTime = currentTime.toString("hh:mm:ss");
+        this->ui->labelTime->setText(stringTime);
 
         this->frameQImage = this->manager->matToQimage(frameMat);
         this->frameScene.addPixmap(QPixmap::fromImage(frameQImage));
@@ -390,19 +396,22 @@ void MainWindow::slot_keepVideoRunning()
 void MainWindow::slot_newBox()
 {
     this->frameScene.enableDraw();
-    this->ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-    //CheckBox
+
+    // CheckBox
     QTableWidgetItem *checkBoxItem = new QTableWidgetItem();
     checkBoxItem->setCheckState(Qt::Unchecked);
     this->ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 0, checkBoxItem);
 
-    //Cancel Button
+    // Cancel Button
     QPushButton* btn_cancel = new QPushButton();
     btn_cancel = new QPushButton();
     btn_cancel->setText("Cancel");
     //btn_cancel->setIcon(QIcon("https://t4.ftcdn.net/jpg/00/08/30/29/500_F_8302961_GVoPsXWcNsfvVygwE2sri9m9aISpJgYQ.jpg"));
-    int row = this->ui->tableWidget->rowCount()-1;
-    this->ui->tableWidget->setCellWidget(row,3,btn_cancel);
+
+    // Table row
+    this->ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+    int row = this->ui->tableWidget->rowCount() - 1;
+    this->ui->tableWidget->setCellWidget(row, 3, btn_cancel);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
@@ -412,6 +421,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 }
 
 
-void MainWindow::slot_removeBox(){
+void MainWindow::slot_removeBox()
+{
 
 }
