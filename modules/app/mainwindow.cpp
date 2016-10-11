@@ -400,7 +400,6 @@ void MainWindow::slot_newBox()
     // CheckBox
     QTableWidgetItem *checkBoxItem = new QTableWidgetItem();
     checkBoxItem->setCheckState(Qt::Unchecked);
-    this->ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 0, checkBoxItem);
 
     // Cancel Button
     QPushButton* btn_cancel = new QPushButton();
@@ -409,8 +408,9 @@ void MainWindow::slot_newBox()
     //btn_cancel->setIcon(QIcon("https://t4.ftcdn.net/jpg/00/08/30/29/500_F_8302961_GVoPsXWcNsfvVygwE2sri9m9aISpJgYQ.jpg"));
 
     // Table row
-    this->ui->tableWidget->insertRow(ui->tableWidget->rowCount());
     int row = this->ui->tableWidget->rowCount() - 1;
+    this->ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+    this->ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 0, checkBoxItem);
     this->ui->tableWidget->setCellWidget(row, 3, btn_cancel);
 }
 
