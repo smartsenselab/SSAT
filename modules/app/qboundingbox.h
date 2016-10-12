@@ -13,8 +13,13 @@
 #include <cstdlib>
 #include <iostream>
 
+#include <opencv2/core.hpp>
+using cv::Rect;
+
 class QBoundingBox : public QGraphicsScene
 {
+    Q_OBJECT
+
 public:
     QBoundingBox(QObject* parent = 0);
 
@@ -29,10 +34,15 @@ private:
     bool drawEnabled, moveEnabled;
 
     QGraphicsRectItem* itemToDraw;
-    qreal heigth;
+    qreal height;
     qreal pointXa, pointXb;
     qreal pointYa, pointYb;
-    qreal weigth;
+    qreal width;
+
+    Rect box;
+
+signals:
+    void newBoundingBox(const int newBox);
 
 public slots:
     void enableDraw();

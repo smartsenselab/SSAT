@@ -30,49 +30,63 @@ void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
 
         this->pointXb = event->scenePos().x();
         this->pointYb = event->scenePos().y();
-        this->weigth = this->pointXb - this->pointXa;
-        this->heigth = this->pointYb - this->pointYa;
+        this->width = this->pointXb - this->pointXa;
+        this->height = this->pointYb - this->pointYa;
 
-        std::cout << pointXa << "-" << pointYa << " = " << pointXb << "-" << pointYb << std::endl;
-
-        if((this->weigth < 0) && (this->heigth < 0))
+        if((this->width < 0) && (this->height < 0))
         {
-            this->weigth = this->pointXa - this->pointXb;
-            this->heigth = this->pointYa - this->pointYb;
+            this->width = this->pointXa - this->pointXb;
+            this->height = this->pointYa - this->pointYb;
             this->itemToDraw->setRect(
                         this->pointXb,
                         this->pointYb,
-                        this->weigth,
-                        this->heigth
+                        this->width,
+                        this->height
                         );
+            this->box.x = this->pointXb;
+            this->box.y = this->pointYb;
+            this->box.width = this->width;
+            this->box.height = this->height;
         }
-        else if((this->weigth > 0) && (this->heigth > 0))
+        else if((this->width > 0) && (this->height > 0))
         {
             this->itemToDraw->setRect(
                         this->pointXa,
                         this->pointYa,
-                        this->weigth,
-                        this->heigth);
+                        this->width,
+                        this->height);
+            this->box.x = this->pointXa;
+            this->box.y = this->pointYa;
+            this->box.width = this->width;
+            this->box.height = this->height;
         }
-        else if((this->weigth < 0) && (this->heigth > 0))
+        else if((this->width < 0) && (this->height > 0))
         {
-            this->weigth = this->pointXa - this->pointXb;
+            this->width = this->pointXa - this->pointXb;
             this->itemToDraw->setRect(
                         this->pointXb,
                         this->pointYa,
-                        this->weigth,
-                        this->heigth
+                        this->width,
+                        this->height
                         );
+            this->box.x = this->pointXb;
+            this->box.y = this->pointYa;
+            this->box.width = this->width;
+            this->box.height = this->height;
         }
         else
         {
-            this->heigth = this->pointYa - this->pointYb;
+            this->height = this->pointYa - this->pointYb;
             this->itemToDraw->setRect(
                         this->pointXa,
                         this->pointYb,
-                        this->weigth,
-                        this->heigth
+                        this->width,
+                        this->height
                         );
+            this->box.x = this->pointXa;
+            this->box.y = this->pointYb;
+            this->box.width = this->width;
+            this->box.height = this->height;
         }
     }
     else
@@ -87,6 +101,10 @@ void QBoundingBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
         this->drawEnabled = false;
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsSelectable, true);
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsMovable, true);
+
+        emit this->newBoundingBox(0);
+        std::cout << pointXa << "-" << pointYa << " = " << pointXb << "-" << pointYb << std::endl;
+        std::cout << box.x << "-" << box.y << " = " << box.width << "-" << box.height << std::endl;
     }
 
     QGraphicsScene::mouseReleaseEvent(event);
