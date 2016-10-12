@@ -24,6 +24,12 @@ MainWindow::~MainWindow()
     delete(this->playerTime);
 }
 
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    QMainWindow::resizeEvent(event);
+    this->ui->viewFrame->fitInView(this->frameScene.sceneRect(), Qt::KeepAspectRatio);
+}
+
 bool MainWindow::isPlaying()
 {
     return this->playing;
@@ -288,9 +294,9 @@ void MainWindow::slot_contextMenu(const QPoint &_point)
     QPoint position = this->ui->viewFrame->mapToGlobal(_point);
 
     QMenu contextMenu;
-    contextMenu.addAction("New Bbox", this, SLOT(slot_newBox()));
+    contextMenu.addAction("New Bbox", this, SLOT(slot_newBoxMenu()));
     contextMenu.addAction("Adjust Bbox");
-    contextMenu.addAction("Remove Bbox", this, SLOT(slot_removeBox()));
+    contextMenu.addAction("Remove Bbox", this, SLOT(slot_removeBoxMenu()));
 
     contextMenu.exec(position);
 }
@@ -393,7 +399,7 @@ void MainWindow::slot_keepVideoRunning()
     }
 }
 
-void MainWindow::slot_newBox()
+void MainWindow::slot_newBoxMenu()
 {
     this->frameScene.enableDraw();
 
@@ -414,14 +420,12 @@ void MainWindow::slot_newBox()
     this->ui->tableWidget->setCellWidget(row, 3, btn_cancel);
 }
 
-void MainWindow::resizeEvent(QResizeEvent *event)
+void MainWindow::slot_removeBoxMenu()
 {
-    QMainWindow::resizeEvent(event);
-    this->ui->viewFrame->fitInView(this->frameScene.sceneRect(), Qt::KeepAspectRatio);
+
 }
 
-
-void MainWindow::slot_removeBox()
+void MainWindow::slot_newBoundingBox(const Rect box)
 {
-
+//    this->singleton->frames.
 }

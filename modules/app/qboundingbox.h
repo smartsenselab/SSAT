@@ -42,7 +42,7 @@ private:
     Rect box;
 
 signals:
-    void newBoundingBox(const int newBox);
+    void newBoundingBox(const Rect newBox);
 
 public slots:
     void enableDraw();

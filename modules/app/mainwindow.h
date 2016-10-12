@@ -21,9 +21,6 @@ namespace Ui
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
-protected:
-    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
-
 private:
     QScopedPointer<Ui::MainWindow> ui;
 
@@ -44,6 +41,9 @@ private:
 public:
     MainWindow(QWidget *parent = 0);
     virtual ~MainWindow();
+
+protected:
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private:
     void enableWidgets(const bool _enable);
@@ -76,9 +76,10 @@ public slots:
 
     void slot_keepVideoRunning();
 
-    void slot_newBox();
+    void slot_newBoxMenu();
+    void slot_removeBoxMenu();
 
-    void slot_removeBox();
+    void slot_newBoundingBox(const Rect box);
 signals:
     void drawBox();
 };

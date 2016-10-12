@@ -102,9 +102,9 @@ void QBoundingBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsSelectable, true);
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsMovable, true);
 
-        emit this->newBoundingBox(0);
-        std::cout << pointXa << "-" << pointYa << " = " << pointXb << "-" << pointYb << std::endl;
-        std::cout << box.x << "-" << box.y << " = " << box.width << "-" << box.height << std::endl;
+        emit this->newBoundingBox(this->box);
+//        std::cout << pointXa << "-" << pointYa << " = " << pointXb << "-" << pointYb << std::endl;
+//        std::cout << box.x << "-" << box.y << " = " << box.width << "-" << box.height << std::endl;
     }
 
     QGraphicsScene::mouseReleaseEvent(event);
