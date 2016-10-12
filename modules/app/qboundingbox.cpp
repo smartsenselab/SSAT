@@ -35,47 +35,44 @@ void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
 
         std::cout << pointXa << "-" << pointYa << " = " << pointXb << "-" << pointYb << std::endl;
 
-        if((static_cast<int>(this->weigth) != 0) && (static_cast<int>(this->heigth) != 0))
+        if((this->weigth < 0) && (this->heigth < 0))
         {
-            if((this->weigth < 0) && (this->heigth < 0))
-            {
-                this->weigth = this->pointXa - this->pointXb;
-                this->heigth = this->pointYa - this->pointYb;
-                this->itemToDraw->setRect(
-                            this->pointXb,
-                            this->pointYb,
-                            this->weigth,
-                            this->heigth
-                            );
-            }
-            else if((this->weigth > 0) && (this->heigth > 0))
-            {
-                this->itemToDraw->setRect(
-                            this->pointXa,
-                            this->pointYa,
-                            this->weigth,
-                            this->heigth);
-            }
-            else if((this->weigth < 0) && (this->heigth > 0))
-            {
-                this->weigth = this->pointXa - this->pointXb;
-                this->itemToDraw->setRect(
-                            this->pointXb,
-                            this->pointYa,
-                            this->weigth,
-                            this->heigth
-                            );
-            }
-            else
-            {
-                this->heigth = this->pointYa - this->pointYb;
-                this->itemToDraw->setRect(
-                            this->pointXa,
-                            this->pointYb,
-                            this->weigth,
-                            this->heigth
-                            );
-            }
+            this->weigth = this->pointXa - this->pointXb;
+            this->heigth = this->pointYa - this->pointYb;
+            this->itemToDraw->setRect(
+                        this->pointXb,
+                        this->pointYb,
+                        this->weigth,
+                        this->heigth
+                        );
+        }
+        else if((this->weigth > 0) && (this->heigth > 0))
+        {
+            this->itemToDraw->setRect(
+                        this->pointXa,
+                        this->pointYa,
+                        this->weigth,
+                        this->heigth);
+        }
+        else if((this->weigth < 0) && (this->heigth > 0))
+        {
+            this->weigth = this->pointXa - this->pointXb;
+            this->itemToDraw->setRect(
+                        this->pointXb,
+                        this->pointYa,
+                        this->weigth,
+                        this->heigth
+                        );
+        }
+        else
+        {
+            this->heigth = this->pointYa - this->pointYb;
+            this->itemToDraw->setRect(
+                        this->pointXa,
+                        this->pointYb,
+                        this->weigth,
+                        this->heigth
+                        );
         }
     }
     else
