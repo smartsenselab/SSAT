@@ -210,7 +210,7 @@ void MainWindow::stopVideo()
 void MainWindow::updateFrame()
 {
     Mat frameMat = this->manager->getFrame();
-    unsigned long frameId = static_cast<unsigned long>(this->manager->getFrameId());
+    unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
 
     if(frameMat.data)
     {
@@ -231,15 +231,14 @@ void MainWindow::updateFrame()
         this->ui->viewFrame->setScene(&(this->frameScene));
         this->ui->viewFrame->fitInView(this->frameScene.sceneRect(), Qt::KeepAspectRatio);
 
-        emit signal_drawFrameBboxes(this->singleton->frames[frameId]);
+        emit signal_drawFrameBboxes(this->singleton->frames[nextFrameId - 1]);
     }
 }
 
 void MainWindow::updateFrame(const int _frameId)
 {
     Mat frameMat = this->manager->getFrame(_frameId + this->speed);
-    std::cout << _frameId << " - " << _frameId + this->speed << std::endl;
-//    unsigned long frameId = static_cast<unsigned long>(this->manager->getFrameId());
+    unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
 
     if(frameMat.data)
     {
@@ -259,7 +258,7 @@ void MainWindow::updateFrame(const int _frameId)
         this->ui->viewFrame->setScene(&(this->frameScene));
         this->ui->viewFrame->fitInView(this->frameScene.sceneRect(), Qt::KeepAspectRatio);
 
-        emit signal_drawFrameBboxes(this->singleton->frames[static_cast<unsigned long>(_frameId)]);
+        emit signal_drawFrameBboxes(this->singleton->frames[static_cast<unsigned long>(nextFrameId - 1)]);
     }
 }
 
@@ -337,54 +336,53 @@ void MainWindow::slot_playButton()
 
 void MainWindow::slot_rewindButton()
 {
-    int frameId = static_cast<int>(this->manager->getFrameId());
-    frameId -= std::round(+this->manager->getTotalFrames() / 100.0);
+    int nextFrameId = static_cast<int>(this->manager->getFrameId());
+    nextFrameId -= std::round(+this->manager->getTotalFrames() / 100.0);
 
-    if(frameId < 1)
+    if(nextFrameId < 1)
     {
-        frameId = 1;
+        nextFrameId = 1;
     }
 
-    this->updateFrame(frameId);
+    this->updateFrame(nextFrameId);
 }
 
 void MainWindow::slot_backButton()
 {
-    int frameId = static_cast<int>(this->manager->getFrameId());
-    frameId -= 2;
+    int nextFrameId = static_cast<int>(this->manager->getFrameId());
+    nextFrameId -= 2;
 
-    if(frameId < 1)
+    if(nextFrameId < 1)
     {
-        frameId = 1;
+        nextFrameId = 1;
     }
 
-    this->updateFrame(frameId);
+    this->updateFrame(nextFrameId);
 }
 
 void MainWindow::slot_forwardButton()
 {
-    int frameId = static_cast<int>(this->manager->getFrameId());
-    frameId++;
+    int nextFrameId = static_cast<int>(this->manager->getFrameId());
 
-    if(frameId > (this->manager->getTotalFrames()))
+    if(nextFrameId > (this->manager->getTotalFrames()))
     {
-        frameId = static_cast<int>(this->manager->getTotalFrames());
+        nextFrameId = static_cast<int>(this->manager->getTotalFrames());
     }
 
-    this->updateFrame(frameId);
+    this->updateFrame(nextFrameId);
 }
 
 void MainWindow::slot_fastfButton()
 {
-    int frameId = static_cast<int>(this->manager->getFrameId());
-    frameId += std::round(+this->manager->getTotalFrames() / 100.0);
+    int nextFrameId = static_cast<int>(this->manager->getFrameId());
+    nextFrameId += std::round(+this->manager->getTotalFrames() / 100.0);
 
-    if(frameId > this->manager->getTotalFrames())
+    if(nextFrameId > this->manager->getTotalFrames())
     {
-        frameId = static_cast<int>(this->manager->getTotalFrames());
+        nextFrameId = static_cast<int>(this->manager->getTotalFrames());
     }
 
-    this->updateFrame(frameId);
+    this->updateFrame(nextFrameId);
 }
 
 void MainWindow::slot_stopButton()
@@ -400,9 +398,9 @@ void MainWindow::slot_spinBoxSpeed(int _value)
 
 void MainWindow::slot_keepVideoRunning()
 {
-    int frameId = static_cast<int>(this->manager->getFrameId());
+    int nextFrameId = static_cast<int>(this->manager->getFrameId());
 
-    if(frameId == static_cast<int>(this->totalFrames))
+    if(nextFrameId == static_cast<int>(this->totalFrames))
     {
         this->slot_stopButton();
     }
@@ -414,7 +412,7 @@ void MainWindow::slot_keepVideoRunning()
         }
         else
         {
-            this->updateFrame(frameId);
+            this->updateFrame(nextFrameId);
         }
     }
 }
@@ -447,11 +445,11 @@ void MainWindow::slot_removeBoxMenu()
 
 void MainWindow::slot_addFrameBbox(Rect _box)
 {
-    unsigned long frameId = static_cast<unsigned long>(this->manager->getFrameId());
-    unsigned long num_bboxes = this->singleton->frames[frameId].getBoxes().size();
+    unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
+    unsigned long num_bboxes = this->singleton->frames[nextFrameId - 1].getBoxes().size();
 
-    string temp_id = "frame" + std::to_string(frameId);
+    string temp_id = "frame" + std::to_string(nextFrameId - 1);
     string temp_key = "bbox" + std::to_string(num_bboxes);
 
-    this->singleton->frames[frameId].addBox(temp_id + "_" + temp_key, _box);
+    this->singleton->frames[nextFrameId - 1].addBox(temp_id + "_" + temp_key, _box);
 }
