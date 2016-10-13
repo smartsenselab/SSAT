@@ -1,8 +1,8 @@
 #ifndef CMTHREAD_H
 #define CMTHREAD_H
 
-#include <QtCore>
-#include <QTextStream>
+//#include <QtCore>
+//#include <QTextStream>
 
 #include <fstream>
 

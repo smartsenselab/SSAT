@@ -1,9 +1,9 @@
-#include <QCoreApplication>
+//#include <QCoreApplication>
 
 #include <iostream>
 
 #include "cmt.h"
-#include "cmthread.h"
+//#include "cmthread.h"
 #include "gui.h"
 
 using namespace cmt;
@@ -31,9 +31,9 @@ int display(Mat im, CMT & cmt)
     return cv::waitKey(1);
 }
 
-int main(int argc, char *argv[])
+int dmain(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
+//    QCoreApplication a(argc, argv);
 
     //Create a CMT object
     CMT cmt;
@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
     return a.exec();
 }
 
-int dmain(int argc, char *argv[])
+int ddmain(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
