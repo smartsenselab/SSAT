@@ -101,8 +101,6 @@ void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void QBoundingBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    std::cout << this->items().size() << std::endl;
-
     if((this->drawEnabled) && (this->itemToDraw != NULL))
     {
         this->drawEnabled = false;
