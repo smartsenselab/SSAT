@@ -120,7 +120,8 @@ void QBoundingBox::slot_drawFrameBboxes(const Frame _frame)
     for(map<string, BoundingBox>::iterator it = bboxes.begin(); it != bboxes.end(); it++)
     {
         this->itemToDraw = new QGraphicsRectItem;
-        this->itemToDraw->setPen(QPen(Qt::black, 3, Qt::SolidLine));
+        this->itemToDraw->setPen(QPen(Qt::yellow, 3, Qt::SolidLine));
+        this->itemToDraw->setBrush(QBrush(QColor(255, 255, 0, 50)));
         this->addItem(this->itemToDraw);
         this->itemToDraw->setRect(it->second.getX(),
                                   it->second.getY(),

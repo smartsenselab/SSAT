@@ -25,6 +25,8 @@ fix_project_version()
 file(GLOB APP_SOURCE_FILES "modules/app/*.cpp")
 file(GLOB CORE_SOURCE_FILES "modules/core/*.cpp")
 file(GLOB CORE_INCLUDE_FILES "modules/core/*.h")
+file(GLOB CMT_SOURCE_FILES "modules/tracker/*.cpp")
+file(GLOB CMT_INCLUDE_FILES "modules/tracker/*.h")
 
 add_project_meta(META_FILES_TO_INCLUDE)
 
@@ -50,12 +52,17 @@ add_library(${PROJECT_NAME}_CORE ${CORE_SOURCE_FILES} ${CORE_INCLUDE_FILES})
 target_link_libraries(${PROJECT_NAME}_CORE ${OpenCV_LIBS})
 target_include_directories(${PROJECT_NAME}_CORE PUBLIC modules/core/)
 
+add_library(${PROJECT_NAME}_CMT ${CORE_SOURCE_FILES} ${CMT_INCLUDE_FILES})
+target_link_libraries(${PROJECT_NAME}_CMT ${OpenCV_LIBS})
+target_include_directories(${PROJECT_NAME}_CMT PUBLIC modules/tracker/)
+
 add_executable(${PROJECT_NAME} ${OS_BUNDLE} # Expands to WIN32 or MACOS_BUNDLE depending on OS
     ${APP_SOURCE_FILES} ${META_FILES_TO_INCLUDE} ${RESOURCE_FILES}
 )
 
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
 target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_CORE)
+target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_CMT)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${OpenCV_INCLUDE_DIR})
 
