@@ -9,14 +9,6 @@ QBoundingBox::QBoundingBox(QObject* parent): QGraphicsScene(parent)
     this->drawEnabled = false;
 }
 
-QBoundingBox::~QBoundingBox()
-{
-//    if(this->itemToDraw != NULL)
-//    {
-//        delete(this->itemToDraw);
-//    }
-}
-
 void QBoundingBox::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if(this->drawEnabled)
@@ -125,11 +117,6 @@ void QBoundingBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 void QBoundingBox::slot_drawFrameBboxes(const Frame _frame)
 {
-//    if(this->itemToDraw != NULL)
-//    {
-//        delete this->itemToDraw;
-//    }
-
     map<string, BoundingBox> bboxes = _frame.getBoxes();
     for(map<string, BoundingBox>::iterator it = bboxes.begin(); it != bboxes.end(); it++)
     {

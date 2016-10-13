@@ -24,7 +24,6 @@ class QBoundingBox : public QGraphicsScene
 
 public:
     QBoundingBox(QObject* parent = 0);
-    ~QBoundingBox();
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
