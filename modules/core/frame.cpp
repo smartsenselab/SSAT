@@ -8,7 +8,7 @@ bool Frame::addBox(const string &_key, const BoundingBox &_box)
 {
     if(this->boxes.find(_key) == this->boxes.end())
     {
-       this->boxes.insert(pair<string, BoundingBox>(_key, _box));
+        this->boxes.insert(pair<string, BoundingBox>(_key, _box));
         return true;
     }
 
@@ -19,7 +19,9 @@ bool Frame::addBox(const string &_key, const Rect &_box)
 {
     if(this->boxes.find(_key) == this->boxes.end())
     {
-//       this->boxes.insert(pair<string, BoundingBox>(_key, _box));
+        BoundingBox bbox(_box);
+        this->boxes.insert(pair<string, BoundingBox>(_key, bbox));
+
         return true;
     }
 
@@ -49,7 +51,10 @@ void Frame::setBox(const map<string, BoundingBox> &_boxes)
 void Frame::operator=(const Frame &_frame)
 {
     this->boxes = _frame.boxes;
+
+    this->attributes = _frame.attributes;
     this->id = _frame.id;
-    this->labels = _frame.labels;
+    this->info = _frame.info;
+    this->label = _frame.label;
     this->name = _frame.name;
 }

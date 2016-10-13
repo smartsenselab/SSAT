@@ -24,6 +24,12 @@ MainWindow::~MainWindow()
     delete(this->playerTime);
 }
 
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    QMainWindow::resizeEvent(event);
+    this->ui->viewFrame->fitInView(this->frameScene.sceneRect(), Qt::KeepAspectRatio);
+}
+
 bool MainWindow::isPlaying()
 {
     return this->playing;
@@ -69,59 +75,73 @@ void MainWindow::connectSignalSlots()
                   );
 
     // Connecting SIGNALS to SLOTS
-    this->connect(ui->actionOpen,
+    this->connect(this->ui->actionOpen,
                   &QAction::triggered,
                   this,
                   &MainWindow::slot_openFile
                   );
 
-    this->connect(ui->sliderFrame,
+    this->connect(this->ui->sliderFrame,
                   SIGNAL(sliderMoved(int)),
                   this,
                   SLOT(slot_slideVideo(int))
                   );
 
-    this->connect(ui->buttonPlay,
+    this->connect(this->ui->buttonPlay,
                   SIGNAL(pressed()),
                   this,
                   SLOT(slot_playButton())
                   );
 
-    this->connect(ui->buttonRewindF,
+    this->connect(this->ui->buttonRewindF,
                   SIGNAL(pressed()),
                   this,
                   SLOT(slot_rewindButton())
                   );
 
-    this->connect(ui->buttonRewind,
+    this->connect(this->ui->buttonRewind,
                   SIGNAL(pressed()),
                   this,
                   SLOT(slot_backButton())
                   );
 
-    this->connect(ui->buttonForward,
+    this->connect(this->ui->buttonForward,
                   SIGNAL(pressed()),
                   this,
                   SLOT(slot_forwardButton())
                   );
 
-    this->connect(ui->buttonForwardF,
+    this->connect(this->ui->buttonForwardF,
                   SIGNAL(pressed()),
                   this,
                   SLOT(slot_fastfButton())
                   );
 
-    this->connect(ui->buttonStop,
+    this->connect(this->ui->buttonStop,
                   SIGNAL(pressed()),
                   this,
                   SLOT(slot_stopButton())
                   );
 
-    this->connect(ui->spinBoxSpeed,
+    this->connect(this->ui->spinBoxSpeed,
                   SIGNAL(valueChanged(int)),
                   this,
                   SLOT(slot_spinBoxSpeed(int))
                   );
+
+    // Connecting custom SIGNALS to SLOTS
+    this->connect(&(this->frameScene),
+                  SIGNAL(signal_addFrameBbox(Rect)),
+                  this,
+                  SLOT(slot_addFrameBbox(Rect))
+                  );
+
+    this->connect(this,
+                  SIGNAL(signal_drawFrameBboxes(const Frame)),
+                  &(this->frameScene),
+                  SLOT(slot_drawFrameBboxes(const Frame))
+                  );
+
 }
 
 void MainWindow::setTable()
@@ -138,10 +158,7 @@ void MainWindow::setTable()
 
 void MainWindow::changeSpeed(const int _speed)
 {
-    if (this->playerTime != NULL)
-    {
-        this->speed = (_speed - 1) * 5;
-    }
+    this->speed = (_speed - 1) * 5;
 }
 
 void MainWindow::pauseVideo()
@@ -193,6 +210,8 @@ void MainWindow::stopVideo()
 void MainWindow::updateFrame()
 {
     Mat frameMat = this->manager->getFrame();
+    unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
+
     if(frameMat.data)
     {
         int currentFrame = this->ui->sliderFrame->value() + 1;
@@ -211,12 +230,16 @@ void MainWindow::updateFrame()
 
         this->ui->viewFrame->setScene(&(this->frameScene));
         this->ui->viewFrame->fitInView(this->frameScene.sceneRect(), Qt::KeepAspectRatio);
+
+        emit signal_drawFrameBboxes(this->singleton->frames[nextFrameId - 1]);
     }
 }
 
 void MainWindow::updateFrame(const int _frameId)
 {
     Mat frameMat = this->manager->getFrame(_frameId + this->speed);
+    unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
+
     if(frameMat.data)
     {
         this->ui->sliderFrame->setValue(static_cast<int>(_frameId));
@@ -234,6 +257,8 @@ void MainWindow::updateFrame(const int _frameId)
 
         this->ui->viewFrame->setScene(&(this->frameScene));
         this->ui->viewFrame->fitInView(this->frameScene.sceneRect(), Qt::KeepAspectRatio);
+
+        emit signal_drawFrameBboxes(this->singleton->frames[static_cast<unsigned long>(nextFrameId - 1)]);
     }
 }
 
@@ -288,9 +313,9 @@ void MainWindow::slot_contextMenu(const QPoint &_point)
     QPoint position = this->ui->viewFrame->mapToGlobal(_point);
 
     QMenu contextMenu;
-    contextMenu.addAction("New Bbox", this, SLOT(slot_newBox()));
+    contextMenu.addAction("New Bbox", this, SLOT(slot_newBoxMenu()));
     contextMenu.addAction("Adjust Bbox");
-    contextMenu.addAction("Remove Bbox", this, SLOT(slot_removeBox()));
+    contextMenu.addAction("Remove Bbox", this, SLOT(slot_removeBoxMenu()));
 
     contextMenu.exec(position);
 }
@@ -311,54 +336,53 @@ void MainWindow::slot_playButton()
 
 void MainWindow::slot_rewindButton()
 {
-    int frameId = static_cast<int>(this->manager->getFrameId());
-    frameId -= std::round(+this->manager->getTotalFrames() / 100.0);
+    int nextFrameId = static_cast<int>(this->manager->getFrameId());
+    nextFrameId -= std::round(+this->manager->getTotalFrames() / 100.0);
 
-    if(frameId < 1)
+    if(nextFrameId < 1)
     {
-        frameId = 1;
+        nextFrameId = 1;
     }
 
-    this->updateFrame(frameId);
+    this->updateFrame(nextFrameId);
 }
 
 void MainWindow::slot_backButton()
 {
-    int frameId = static_cast<int>(this->manager->getFrameId());
-    frameId -= 2;
+    int nextFrameId = static_cast<int>(this->manager->getFrameId());
+    nextFrameId -= 2;
 
-    if(frameId < 1)
+    if(nextFrameId < 1)
     {
-        frameId = 1;
+        nextFrameId = 1;
     }
 
-    this->updateFrame(frameId);
+    this->updateFrame(nextFrameId);
 }
 
 void MainWindow::slot_forwardButton()
 {
-    int frameId = static_cast<int>(this->manager->getFrameId());
-    frameId += 2;
+    int nextFrameId = static_cast<int>(this->manager->getFrameId());
 
-    if(frameId > (this->manager->getTotalFrames()))
+    if(nextFrameId > (this->manager->getTotalFrames()))
     {
-        frameId = static_cast<int>(this->manager->getTotalFrames());
+        nextFrameId = static_cast<int>(this->manager->getTotalFrames());
     }
 
-    this->updateFrame(frameId);
+    this->updateFrame(nextFrameId);
 }
 
 void MainWindow::slot_fastfButton()
 {
-    int frameId = static_cast<int>(this->manager->getFrameId());
-    frameId += std::round(+this->manager->getTotalFrames() / 100.0);
+    int nextFrameId = static_cast<int>(this->manager->getFrameId());
+    nextFrameId += std::round(+this->manager->getTotalFrames() / 100.0);
 
-    if(frameId > this->manager->getTotalFrames())
+    if(nextFrameId > this->manager->getTotalFrames())
     {
-        frameId = static_cast<int>(this->manager->getTotalFrames());
+        nextFrameId = static_cast<int>(this->manager->getTotalFrames());
     }
 
-    this->updateFrame(frameId);
+    this->updateFrame(nextFrameId);
 }
 
 void MainWindow::slot_stopButton()
@@ -374,9 +398,9 @@ void MainWindow::slot_spinBoxSpeed(int _value)
 
 void MainWindow::slot_keepVideoRunning()
 {
-    int frameId = static_cast<int>(this->manager->getFrameId());
+    int nextFrameId = static_cast<int>(this->manager->getFrameId());
 
-    if(frameId == static_cast<int>(this->totalFrames))
+    if(nextFrameId == static_cast<int>(this->totalFrames))
     {
         this->slot_stopButton();
     }
@@ -388,14 +412,14 @@ void MainWindow::slot_keepVideoRunning()
         }
         else
         {
-            this->updateFrame(frameId);
+            this->updateFrame(nextFrameId);
         }
     }
 }
 
-void MainWindow::slot_newBox()
+void MainWindow::slot_newBoxMenu()
 {
-    this->frameScene.enableDraw();
+    this->frameScene.slot_enableDraw();
 
     // CheckBox
     QTableWidgetItem *checkBoxItem = new QTableWidgetItem();
@@ -414,14 +438,18 @@ void MainWindow::slot_newBox()
     this->ui->tableWidget->setCellWidget(row, 3, btn_cancel);
 }
 
-void MainWindow::resizeEvent(QResizeEvent *event)
+void MainWindow::slot_removeBoxMenu()
 {
-    QMainWindow::resizeEvent(event);
-    this->ui->viewFrame->fitInView(this->frameScene.sceneRect(), Qt::KeepAspectRatio);
+
 }
 
-
-void MainWindow::slot_removeBox()
+void MainWindow::slot_addFrameBbox(Rect _box)
 {
+    unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
+    unsigned long num_bboxes = this->singleton->frames[nextFrameId - 1].getBoxes().size();
 
+    string temp_id = "frame" + std::to_string(nextFrameId - 1);
+    string temp_key = "bbox" + std::to_string(num_bboxes);
+
+    this->singleton->frames[nextFrameId - 1].addBox(temp_id + "_" + temp_key, _box);
 }

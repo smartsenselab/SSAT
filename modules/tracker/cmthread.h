@@ -1,0 +1,35 @@
+#ifndef CMTHREAD_H
+#define CMTHREAD_H
+
+#include <QtCore>
+#include <QTextStream>
+
+#include <fstream>
+
+#include "cmt.h"
+
+namespace cmt
+{
+
+class CMThread : public QThread
+{
+public:
+    CMThread(VideoCapture _video, Rect _rectangle, string _name, int _frame = 0);
+
+    int display(Mat image, CMT &cmt);
+
+    void cmtSetup(VideoCapture _video, Rect _rectangle, int _frame = 0);
+    void run() Q_DECL_OVERRIDE;
+
+private:
+    int frame;
+    string name;
+
+    CMT cmt;
+    Rect rectangle;
+    VideoCapture video;
+};
+
+}
+
+#endif // CMTHREAD_H
