@@ -3,13 +3,23 @@
 
 QBoundingBox::QBoundingBox(QObject* parent): QGraphicsScene(parent)
 {
+    std::cout << this->items().size() << std::endl;
     this->itemToDraw = 0;
     this->moveEnabled = false;
     this->drawEnabled = false;
 }
 
-void QBoundingBox::mousePressEvent(QGraphicsSceneMouseEvent *event){
-    if(this->drawEnabled == 1)
+QBoundingBox::~QBoundingBox()
+{
+//    if(this->itemToDraw != NULL)
+//    {
+//        delete(this->itemToDraw);
+//    }
+}
+
+void QBoundingBox::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    if(this->drawEnabled)
     {
         this->pointXa = event->scenePos().x();
         this->pointYa = event->scenePos().y();
@@ -20,13 +30,15 @@ void QBoundingBox::mousePressEvent(QGraphicsSceneMouseEvent *event){
     }
 }
 
-void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
+void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
     if(this->drawEnabled){
-        delete this->itemToDraw;
+        delete(this->itemToDraw);
+        this->itemToDraw = NULL;
 
         this->itemToDraw = new QGraphicsRectItem;
         this->itemToDraw->setPen(QPen(Qt::black, 3, Qt::SolidLine));
-        this->addItem(itemToDraw);
+        this->addItem(this->itemToDraw);
 
         this->pointXb = event->scenePos().x();
         this->pointYb = event->scenePos().y();
@@ -95,22 +107,43 @@ void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     }
 }
 
-void QBoundingBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
+void QBoundingBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    std::cout << this->items().size() << std::endl;
+
     if((this->drawEnabled) && (this->itemToDraw != NULL))
     {
         this->drawEnabled = false;
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsSelectable, true);
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsMovable, true);
 
-        emit this->signal_newBoundingBox(this->box);
-//        std::cout << pointXa << "-" << pointYa << " = " << pointXb << "-" << pointYb << std::endl;
-//        std::cout << box.x << "-" << box.y << " = " << box.width << "-" << box.height << std::endl;
+        emit this->signal_addFrameBbox(this->box);
     }
 
     QGraphicsScene::mouseReleaseEvent(event);
 }
 
-void QBoundingBox::enableDraw()
+void QBoundingBox::slot_drawFrameBboxes(const Frame _frame)
+{
+//    if(this->itemToDraw != NULL)
+//    {
+//        delete this->itemToDraw;
+//    }
+
+    map<string, BoundingBox> bboxes = _frame.getBoxes();
+    for(map<string, BoundingBox>::iterator it = bboxes.begin(); it != bboxes.end(); it++)
+    {
+        this->itemToDraw = new QGraphicsRectItem;
+        this->itemToDraw->setPen(QPen(Qt::black, 3, Qt::SolidLine));
+        this->addItem(this->itemToDraw);
+        this->itemToDraw->setRect(it->second.getX(),
+                                  it->second.getY(),
+                                  it->second.getW(),
+                                  it->second.getH());
+    }
+}
+
+void QBoundingBox::slot_enableDraw()
 {
     this->itemToDraw = 0;
     this->drawEnabled = true;

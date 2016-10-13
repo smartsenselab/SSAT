@@ -131,9 +131,15 @@ void MainWindow::connectSignalSlots()
 
     // Connecting custom SIGNALS to SLOTS
     this->connect(&(this->frameScene),
-                  SIGNAL(signal_newBoundingBox(Rect)),
+                  SIGNAL(signal_addFrameBbox(Rect)),
                   this,
-                  SLOT(slot_newBoundingBoxCreated(Rect))
+                  SLOT(slot_addFrameBbox(Rect))
+                  );
+
+    this->connect(this,
+                  SIGNAL(signal_drawFrameBboxes(const Frame)),
+                  &(this->frameScene),
+                  SLOT(slot_drawFrameBboxes(const Frame))
                   );
 
 }
@@ -152,10 +158,7 @@ void MainWindow::setTable()
 
 void MainWindow::changeSpeed(const int _speed)
 {
-    if (this->playerTime != NULL)
-    {
-        this->speed = (_speed - 1) * 5;
-    }
+    this->speed = (_speed - 1) * 5;
 }
 
 void MainWindow::pauseVideo()
@@ -207,6 +210,8 @@ void MainWindow::stopVideo()
 void MainWindow::updateFrame()
 {
     Mat frameMat = this->manager->getFrame();
+    unsigned long frameId = static_cast<unsigned long>(this->manager->getFrameId());
+
     if(frameMat.data)
     {
         int currentFrame = this->ui->sliderFrame->value() + 1;
@@ -225,12 +230,17 @@ void MainWindow::updateFrame()
 
         this->ui->viewFrame->setScene(&(this->frameScene));
         this->ui->viewFrame->fitInView(this->frameScene.sceneRect(), Qt::KeepAspectRatio);
+
+        emit signal_drawFrameBboxes(this->singleton->frames[frameId]);
     }
 }
 
 void MainWindow::updateFrame(const int _frameId)
 {
     Mat frameMat = this->manager->getFrame(_frameId + this->speed);
+    std::cout << _frameId << " - " << _frameId + this->speed << std::endl;
+//    unsigned long frameId = static_cast<unsigned long>(this->manager->getFrameId());
+
     if(frameMat.data)
     {
         this->ui->sliderFrame->setValue(static_cast<int>(_frameId));
@@ -248,6 +258,8 @@ void MainWindow::updateFrame(const int _frameId)
 
         this->ui->viewFrame->setScene(&(this->frameScene));
         this->ui->viewFrame->fitInView(this->frameScene.sceneRect(), Qt::KeepAspectRatio);
+
+        emit signal_drawFrameBboxes(this->singleton->frames[static_cast<unsigned long>(_frameId)]);
     }
 }
 
@@ -352,7 +364,7 @@ void MainWindow::slot_backButton()
 void MainWindow::slot_forwardButton()
 {
     int frameId = static_cast<int>(this->manager->getFrameId());
-    frameId += 2;
+    frameId++;
 
     if(frameId > (this->manager->getTotalFrames()))
     {
@@ -409,7 +421,7 @@ void MainWindow::slot_keepVideoRunning()
 
 void MainWindow::slot_newBoxMenu()
 {
-    this->frameScene.enableDraw();
+    this->frameScene.slot_enableDraw();
 
     // CheckBox
     QTableWidgetItem *checkBoxItem = new QTableWidgetItem();
@@ -433,8 +445,13 @@ void MainWindow::slot_removeBoxMenu()
 
 }
 
-void MainWindow::slot_newBoundingBoxCreated(Rect _box)
+void MainWindow::slot_addFrameBbox(Rect _box)
 {
-    unsigned int frameId = static_cast<unsigned int>(this->manager->getFrameId());
-    this->singleton->frames[frameId].addBox("test", _box);
+    unsigned long frameId = static_cast<unsigned long>(this->manager->getFrameId());
+    unsigned long num_bboxes = this->singleton->frames[frameId].getBoxes().size();
+
+    string temp_id = "frame" + std::to_string(frameId);
+    string temp_key = "bbox" + std::to_string(num_bboxes);
+
+    this->singleton->frames[frameId].addBox(temp_id + "_" + temp_key, _box);
 }

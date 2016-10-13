@@ -13,6 +13,7 @@ public:
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+
 private:
     QPointF anchorPoint;
     bool m_dragged;

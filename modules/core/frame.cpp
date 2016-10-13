@@ -8,7 +8,7 @@ bool Frame::addBox(const string &_key, const BoundingBox &_box)
 {
     if(this->boxes.find(_key) == this->boxes.end())
     {
-       this->boxes.insert(pair<string, BoundingBox>(_key, _box));
+        this->boxes.insert(pair<string, BoundingBox>(_key, _box));
         return true;
     }
 

@@ -16,12 +16,15 @@
 #include <opencv2/core.hpp>
 using cv::Rect;
 
+#include "frame.h"
+
 class QBoundingBox : public QGraphicsScene
 {
     Q_OBJECT
 
 public:
     QBoundingBox(QObject* parent = 0);
+    ~QBoundingBox();
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -33,7 +36,7 @@ private:
 
     bool drawEnabled, moveEnabled;
 
-    QGraphicsRectItem* itemToDraw;
+    QGraphicsRectItem* itemToDraw = NULL;
     qreal height;
     qreal pointXa, pointXb;
     qreal pointYa, pointYb;
@@ -42,10 +45,11 @@ private:
     Rect box;
 
 signals:
-    void signal_newBoundingBox(Rect newBox);
+    void signal_addFrameBbox(Rect newBox);
 
 public slots:
-    void enableDraw();
+    void slot_drawFrameBboxes(const Frame _frame);
+    void slot_enableDraw();
 };
 
 #endif // SCENE_H

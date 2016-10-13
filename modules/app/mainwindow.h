@@ -79,9 +79,10 @@ public slots:
     void slot_newBoxMenu();
     void slot_removeBoxMenu();
 
-    void slot_newBoundingBoxCreated(Rect _box);
+    void slot_addFrameBbox(Rect _box);
+
 signals:
-    void drawBox();
+    void signal_drawFrameBboxes(const Frame _frame);
 };
 
 #endif
