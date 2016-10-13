@@ -19,7 +19,9 @@ bool Frame::addBox(const string &_key, const Rect &_box)
 {
     if(this->boxes.find(_key) == this->boxes.end())
     {
-//       this->boxes.insert(pair<string, BoundingBox>(_key, _box));
+        BoundingBox bbox(_box);
+        this->boxes.insert(pair<string, BoundingBox>(_key, bbox));
+
         return true;
     }
 

@@ -43,10 +43,10 @@ void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
                         this->width,
                         this->height
                         );
-            this->box.x = this->pointXb;
-            this->box.y = this->pointYb;
-            this->box.width = this->width;
-            this->box.height = this->height;
+            this->box.x = static_cast<int>(this->pointXb);
+            this->box.y = static_cast<int>(this->pointYb);
+            this->box.width = static_cast<int>(this->width);
+            this->box.height = static_cast<int>(this->height);
         }
         else if((this->width > 0) && (this->height > 0))
         {
@@ -55,10 +55,10 @@ void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
                         this->pointYa,
                         this->width,
                         this->height);
-            this->box.x = this->pointXa;
-            this->box.y = this->pointYa;
-            this->box.width = this->width;
-            this->box.height = this->height;
+            this->box.x = static_cast<int>(this->pointXa);
+            this->box.y = static_cast<int>(this->pointYa);
+            this->box.width = static_cast<int>(this->width);
+            this->box.height = static_cast<int>(this->height);
         }
         else if((this->width < 0) && (this->height > 0))
         {
@@ -69,10 +69,10 @@ void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
                         this->width,
                         this->height
                         );
-            this->box.x = this->pointXb;
-            this->box.y = this->pointYa;
-            this->box.width = this->width;
-            this->box.height = this->height;
+            this->box.x = static_cast<int>(this->pointXb);
+            this->box.y = static_cast<int>(this->pointYa);
+            this->box.width = static_cast<int>(this->width);
+            this->box.height = static_cast<int>(this->height);
         }
         else
         {
@@ -83,10 +83,10 @@ void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
                         this->width,
                         this->height
                         );
-            this->box.x = this->pointXa;
-            this->box.y = this->pointYb;
-            this->box.width = this->width;
-            this->box.height = this->height;
+            this->box.x = static_cast<int>(this->pointXa);
+            this->box.y = static_cast<int>(this->pointYb);
+            this->box.width = static_cast<int>(this->width);
+            this->box.height = static_cast<int>(this->height);
         }
     }
     else
@@ -102,7 +102,7 @@ void QBoundingBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsSelectable, true);
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsMovable, true);
 
-        emit this->newBoundingBox(this->box);
+        emit this->signal_newBoundingBox(this->box);
 //        std::cout << pointXa << "-" << pointYa << " = " << pointXb << "-" << pointYb << std::endl;
 //        std::cout << box.x << "-" << box.y << " = " << box.width << "-" << box.height << std::endl;
     }

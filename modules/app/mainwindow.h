@@ -79,7 +79,7 @@ public slots:
     void slot_newBoxMenu();
     void slot_removeBoxMenu();
 
-    void slot_newBoundingBox(const Rect box);
+    void slot_newBoundingBoxCreated(Rect _box);
 signals:
     void drawBox();
 };
