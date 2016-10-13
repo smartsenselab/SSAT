@@ -52,7 +52,7 @@ add_library(${PROJECT_NAME}_CORE ${CORE_SOURCE_FILES} ${CORE_INCLUDE_FILES})
 target_link_libraries(${PROJECT_NAME}_CORE ${OpenCV_LIBS})
 target_include_directories(${PROJECT_NAME}_CORE PUBLIC modules/core/)
 
-add_library(${PROJECT_NAME}_CMT ${CORE_SOURCE_FILES} ${CMT_INCLUDE_FILES})
+add_library(${PROJECT_NAME}_CMT ${CMT_SOURCE_FILES} ${CMT_INCLUDE_FILES})
 target_link_libraries(${PROJECT_NAME}_CMT ${OpenCV_LIBS})
 target_include_directories(${PROJECT_NAME}_CMT PUBLIC modules/tracker/)
 
