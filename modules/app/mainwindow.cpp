@@ -440,9 +440,13 @@ void MainWindow::slot_newBoxMenu()
 
 void MainWindow::slot_newFrameMenu()
 {
-    std::cout << "Adding frame-based annotation" << std::endl;
     this->frameDialog = new DialogFrameBased(this);
     this->frameDialog->show();
+
+    int nextFrameId = static_cast<int>(this->manager->getFrameId());
+    int totalFrames = static_cast<int>(this->manager->getTotalFrames());
+
+    this->frameDialog->slot_initializeDialog(totalFrames, nextFrameId);
 }
 
 void MainWindow::slot_removeBoxMenu()

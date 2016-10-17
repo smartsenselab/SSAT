@@ -8,8 +8,8 @@
 #include <QTime>
 #include <QTimer>
 
-#include "qboundingbox.h"
 #include "dialogframebased.h"
+#include "qboundingbox.h"
 #include "videomanager.h"
 
 #include "core.h"

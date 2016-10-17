@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>DialogFrameBased</class>
  <widget class="QDialog" name="DialogFrameBased">
@@ -5,18 +6,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>320</width>
-    <height>240</height>
+    <width>394</width>
+    <height>147</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Frame-based annotation</string>
   </property>
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>200</y>
+     <x>80</x>
+     <y>110</y>
      <width>301</width>
      <height>32</height>
     </rect>
@@ -28,6 +29,170 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>25</x>
+     <y>40</y>
+     <width>350</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QLabel" name="labelInitialFrame">
+      <property name="text">
+       <string>Initial Frame: </string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSpinBox" name="spinBoxInitialFrame">
+      <property name="maximum">
+       <number>999999999</number>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="labelFinalFrame">
+      <property name="text">
+       <string>Final Frame: </string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSpinBox" name="spinBoxFinalFrame">
+      <property name="maximum">
+       <number>999999999</number>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>25</x>
+     <y>10</y>
+     <width>172</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Name: </string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="lineEdit"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>205</x>
+     <y>10</y>
+     <width>142</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item>
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Category: </string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QComboBox" name="comboBox"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>70</y>
+     <width>337</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_4">
+    <item>
+     <widget class="QPushButton" name="buttonRewindF">
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>&lt;&lt;</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="buttonRewind">
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>&lt;</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="buttonForward">
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>&gt;</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="buttonForwardF">
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>&gt;&gt;</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <zorder>buttonBox</zorder>
+  <zorder>layoutWidget</zorder>
+  <zorder>layoutWidget</zorder>
+  <zorder>labelInitialFrame</zorder>
+  <zorder>spinBoxFinalFrame</zorder>
+  <zorder>labelInitialFrame</zorder>
+  <zorder>label</zorder>
+  <zorder>label_2</zorder>
+  <zorder>lineEdit</zorder>
+  <zorder>lineEdit_2</zorder>
+  <zorder>label_2</zorder>
+  <zorder>comboBox</zorder>
+  <zorder>buttonRewindF</zorder>
+  <zorder>buttonRewind</zorder>
+  <zorder>buttonForward</zorder>
+  <zorder>buttonForwardF</zorder>
  </widget>
  <resources/>
  <connections>
