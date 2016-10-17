@@ -313,8 +313,8 @@ void MainWindow::slot_contextMenu(const QPoint &_point)
     QPoint position = this->ui->viewFrame->mapToGlobal(_point);
 
     QMenu contextMenu;
-    contextMenu.addAction("New Bbox", this, SLOT(slot_newBoxMenu()));
-    contextMenu.addAction("Adjust Bbox");
+    contextMenu.addAction("New Bounding box", this, SLOT(slot_newBoxMenu()));
+    contextMenu.addAction("New Frame box", this, SLOT(slot_newFrameMenu()));
     contextMenu.addAction("Remove Bbox", this, SLOT(slot_removeBoxMenu()));
 
     contextMenu.exec(position);
@@ -436,6 +436,13 @@ void MainWindow::slot_newBoxMenu()
     this->ui->tableWidget->insertRow(ui->tableWidget->rowCount());
     this->ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 0, checkBoxItem);
     this->ui->tableWidget->setCellWidget(row, 3, btn_cancel);
+}
+
+void MainWindow::slot_newFrameMenu()
+{
+    std::cout << "Adding frame-based annotation" << std::endl;
+    this->frameDialog = new DialogFrameBased(this);
+    this->frameDialog->show();
 }
 
 void MainWindow::slot_removeBoxMenu()

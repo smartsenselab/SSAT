@@ -9,6 +9,7 @@
 #include <QTimer>
 
 #include "qboundingbox.h"
+#include "dialogframebased.h"
 #include "videomanager.h"
 
 #include "core.h"
@@ -35,6 +36,7 @@ private:
     QGraphicsRectItem *rectangle = NULL;
     QImage frameQImage;
     QTimer *playerTime = NULL;
+    DialogFrameBased *frameDialog = NULL;
 
     VideoManager *manager;
 
@@ -77,6 +79,7 @@ public slots:
     void slot_keepVideoRunning();
 
     void slot_newBoxMenu();
+    void slot_newFrameMenu();
     void slot_removeBoxMenu();
 
     void slot_addFrameBbox(Rect _box);
