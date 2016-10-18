@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -441,6 +439,32 @@ void MainWindow::slot_newBoxMenu()
 void MainWindow::slot_newFrameMenu()
 {
     this->frameDialog = new DialogFrameBased(this);
+
+    this->connect(this->frameDialog,
+                  SIGNAL(signal_rewindButtonPressed()),
+                  this,
+                  SLOT(slot_rewindButton())
+                  );
+
+    this->connect(this->frameDialog,
+                  SIGNAL(signal_backButtonPressed()),
+                  this,
+                  SLOT(slot_backButton())
+                  );
+
+    this->connect(this->frameDialog,
+                  SIGNAL(signal_forwardButtonPressed()),
+                  this,
+                  SLOT(slot_forwardButton())
+                  );
+
+    this->connect(this->frameDialog,
+                  SIGNAL(signal_fastfButtonPressed()),
+                  this,
+                  SLOT(slot_fastfButton())
+                  );
+
+    this->frameDialog->setModal(true);
     this->frameDialog->show();
 
     int nextFrameId = static_cast<int>(this->manager->getFrameId());

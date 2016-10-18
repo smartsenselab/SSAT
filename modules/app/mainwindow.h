@@ -1,6 +1,8 @@
 #ifndef mainwindow_h
 #define mainwindow_h
 
+#include <iostream>
+
 #include <QFileDialog>
 #include <QGraphicsScene>
 #include <QMainWindow>

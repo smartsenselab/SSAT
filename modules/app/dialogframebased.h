@@ -1,9 +1,9 @@
 #ifndef DIALOGFRAMEBASED_H
 #define DIALOGFRAMEBASED_H
 
-#include <QDialog>
+#include <iostream>
 
-//#include "mainwindow.h"
+#include <QDialog>
 
 namespace Ui {
     class DialogFrameBased;
@@ -16,7 +16,6 @@ class DialogFrameBased : public QDialog
 private:
     Ui::DialogFrameBased *ui;
 
-    QMainWindow *typedParent = NULL;
     int totalFrames;
 
 public:
@@ -29,10 +28,17 @@ private:
 public slots:
     void slot_initializeDialog(int _totalFrames, int _frameId);
 
-    void slot_rewindButton();
-    void slot_backButton();
-    void slot_forwardButton();
-    void slot_fastfButton();
+    void slot_rewindButtonPressed();
+    void slot_backButtonPressed();
+    void slot_forwardButtonPressed();
+    void slot_fastfButtonPressed();
+
+signals:
+    void signal_rewindButtonPressed();
+    void signal_backButtonPressed();
+    void signal_forwardButtonPressed();
+    void signal_fastfButtonPressed();
+
 };
 
 #endif // DIALOGFRAMEBASED_H
