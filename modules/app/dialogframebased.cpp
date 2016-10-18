@@ -44,34 +44,63 @@ void DialogFrameBased::connectSignalSlots()
 
 void DialogFrameBased::slot_initializeDialog(int _totalFrames, int _frameId)
 {
+    this->frameId = _frameId - 1;
     this->totalFrames = _totalFrames;
 
     this->ui->spinBoxInitialFrame->setMaximum(this->totalFrames);
     this->ui->spinBoxInitialFrame->setValue(_frameId - 1);
     this->ui->spinBoxFinalFrame->setMaximum(this->totalFrames);
-    this->ui->spinBoxFinalFrame->setValue(_frameId);
+    this->ui->spinBoxFinalFrame->setValue(_frameId - 1);
 }
 
 void DialogFrameBased::slot_rewindButtonPressed()
 {
-    std::cout << "emit this->signal_rewindButtonPressed();" << std::endl;
+    int nextFrameId = static_cast<int>((this->frameId + 1) - std::round(+this->totalFrames / 100.0));
+    if(nextFrameId < 1)
+    {
+        nextFrameId = 1;
+    }
+
+    this->frameId = nextFrameId;
+    this->ui->spinBoxFinalFrame->setValue(this->frameId);
     emit this->signal_rewindButtonPressed();
 }
 
 void DialogFrameBased::slot_backButtonPressed()
 {
-    std::cout << "emit this->signal_backButtonPressed();" << std::endl;
+    int nextFrameId = (this->frameId + 1) - 2;
+    if(nextFrameId < 1)
+    {
+        nextFrameId = 1;
+    }
+
+    this->frameId = nextFrameId;
+    this->ui->spinBoxFinalFrame->setValue(this->frameId);
     emit this->signal_backButtonPressed();
 }
 
 void DialogFrameBased::slot_forwardButtonPressed()
 {
-    std::cout << "emit this->signal_forwardButtonPressed();" << std::endl;
+    int nextFrameId = (this->frameId + 1);
+    if(nextFrameId > this->totalFrames)
+    {
+        nextFrameId = this->totalFrames;
+    }
+
+    this->frameId = nextFrameId;
+    this->ui->spinBoxFinalFrame->setValue(this->frameId);
     emit this->signal_forwardButtonPressed();
 }
 
 void DialogFrameBased::slot_fastfButtonPressed()
 {
-    std::cout << "emit this->signal_fastfButtonPressed();" << std::endl;
+    int nextFrameId = static_cast<int>((this->frameId + 1) + std::round(+this->totalFrames / 100.0));
+    if(nextFrameId > this->totalFrames)
+    {
+        nextFrameId = this->totalFrames;
+    }
+
+    this->frameId = nextFrameId;
+    this->ui->spinBoxFinalFrame->setValue(this->frameId);
     emit this->signal_fastfButtonPressed();
 }

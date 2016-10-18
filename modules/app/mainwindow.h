@@ -71,10 +71,15 @@ public slots:
     void slot_contextMenu(const QPoint &_point);
 
     void slot_playButton();
+
     void slot_rewindButton();
+    void slot_rewindButton(const int _frameId);
     void slot_backButton();
+    void slot_backButton(const int _frameId);
     void slot_forwardButton();
+    void slot_forwardButton(const int _frameId);
     void slot_fastfButton();
+    void slot_fastfButton(const int _frameId);
     void slot_stopButton();
     void slot_spinBoxSpeed(int _value);
 

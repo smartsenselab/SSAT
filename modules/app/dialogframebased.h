@@ -16,7 +16,7 @@ class DialogFrameBased : public QDialog
 private:
     Ui::DialogFrameBased *ui;
 
-    int totalFrames;
+    int frameId, totalFrames;
 
 public:
     explicit DialogFrameBased(QWidget *parent = 0);
