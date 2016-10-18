@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>394</width>
-    <height>179</height>
+    <height>182</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,10 +16,10 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>140</y>
-     <width>301</width>
-     <height>32</height>
+     <x>219</x>
+     <y>150</y>
+     <width>165</width>
+     <height>21</height>
     </rect>
    </property>
    <property name="orientation">
@@ -29,7 +29,7 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>25</x>
@@ -38,7 +38,7 @@
      <height>23</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QHBoxLayout" name="horizontalLayout_1">
     <item>
      <widget class="QLabel" name="labelInitialFrame">
       <property name="text">
@@ -69,7 +69,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -133,7 +133,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>25</x>
@@ -165,7 +165,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>26</x>
@@ -187,24 +187,11 @@
     </item>
    </layout>
   </widget>
+  <zorder>layoutWidget</zorder>
+  <zorder>layoutWidget</zorder>
   <zorder>buttonBox</zorder>
   <zorder>layoutWidget</zorder>
   <zorder>layoutWidget</zorder>
-  <zorder>labelInitialFrame</zorder>
-  <zorder>spinBoxFinalFrame</zorder>
-  <zorder>labelInitialFrame</zorder>
-  <zorder>label</zorder>
-  <zorder>label_2</zorder>
-  <zorder>lineEdit</zorder>
-  <zorder>lineEdit_2</zorder>
-  <zorder>labelCategory</zorder>
-  <zorder>comboBoxCategory</zorder>
-  <zorder>buttonRewindF</zorder>
-  <zorder>buttonRewind</zorder>
-  <zorder>buttonForward</zorder>
-  <zorder>buttonForwardF</zorder>
-  <zorder>labelLabel</zorder>
-  <zorder>comboBoxLabel</zorder>
  </widget>
  <resources/>
  <connections>

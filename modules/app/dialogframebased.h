@@ -33,6 +33,9 @@ public slots:
     void slot_forwardButtonPressed();
     void slot_fastfButtonPressed();
 
+    void slot_accept();
+    void slot_reject();
+
 signals:
     void signal_rewindButtonPressed();
     void signal_backButtonPressed();
