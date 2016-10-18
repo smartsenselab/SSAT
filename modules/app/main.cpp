@@ -11,6 +11,12 @@
 
 int main(int argc, char *argv[])
 {
+    /*
+     * Category* [combobox]
+     * Label* [combobox]
+     * Name [linetext]
+     */
+
     QApplication app(argc, argv);
 
     MainWindow mainWindow;

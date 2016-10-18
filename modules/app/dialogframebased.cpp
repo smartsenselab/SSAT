@@ -7,6 +7,7 @@ DialogFrameBased::DialogFrameBased(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    this->setFixedSize(this->width(), this->height());
     this->connectSignalSlots();
 }
 
@@ -47,8 +48,11 @@ void DialogFrameBased::slot_initializeDialog(int _totalFrames, int _frameId)
     this->frameId = _frameId - 1;
     this->totalFrames = _totalFrames;
 
+    this->ui->spinBoxInitialFrame->setMinimum(1);
     this->ui->spinBoxInitialFrame->setMaximum(this->totalFrames);
     this->ui->spinBoxInitialFrame->setValue(_frameId - 1);
+
+    this->ui->spinBoxFinalFrame->setMinimum(1);
     this->ui->spinBoxFinalFrame->setMaximum(this->totalFrames);
     this->ui->spinBoxFinalFrame->setValue(_frameId - 1);
 }
