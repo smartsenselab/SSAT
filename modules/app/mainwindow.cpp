@@ -88,43 +88,43 @@ void MainWindow::connectSignalSlots()
     this->connect(this->ui->buttonPlay,
                   SIGNAL(pressed()),
                   this,
-                  SLOT(slot_playButton())
+                  SLOT(slot_playButtonPressed())
                   );
 
     this->connect(this->ui->buttonRewindF,
                   SIGNAL(pressed()),
                   this,
-                  SLOT(slot_rewindButton())
+                  SLOT(slot_rewindButtonPressed())
                   );
 
     this->connect(this->ui->buttonRewind,
                   SIGNAL(pressed()),
                   this,
-                  SLOT(slot_backButton())
+                  SLOT(slot_backButtonPressed())
                   );
 
     this->connect(this->ui->buttonForward,
                   SIGNAL(pressed()),
                   this,
-                  SLOT(slot_forwardButton())
+                  SLOT(slot_forwardButtonPressed())
                   );
 
     this->connect(this->ui->buttonForwardF,
                   SIGNAL(pressed()),
                   this,
-                  SLOT(slot_fastfButton())
+                  SLOT(slot_fastfButtonPressed())
                   );
 
     this->connect(this->ui->buttonStop,
                   SIGNAL(pressed()),
                   this,
-                  SLOT(slot_stopButton())
+                  SLOT(slot_stopButtonPressed())
                   );
 
     this->connect(this->ui->spinBoxSpeed,
                   SIGNAL(valueChanged(int)),
                   this,
-                  SLOT(slot_spinBoxSpeed(int))
+                  SLOT(slot_spinBoxSpeedValueChanged(int))
                   );
 
     // Connecting custom SIGNALS to SLOTS
@@ -139,7 +139,6 @@ void MainWindow::connectSignalSlots()
                   &(this->frameScene),
                   SLOT(slot_drawFrameBboxes(const Frame))
                   );
-
 }
 
 void MainWindow::setTable()
@@ -318,7 +317,7 @@ void MainWindow::slot_contextMenu(const QPoint &_point)
     contextMenu.exec(position);
 }
 
-void MainWindow::slot_playButton()
+void MainWindow::slot_playButtonPressed()
 {
     if(!this->playing)
     {
@@ -332,13 +331,13 @@ void MainWindow::slot_playButton()
     }
 }
 
-void MainWindow::slot_rewindButton()
+void MainWindow::slot_rewindButtonPressed()
 {
     int nextFrameId = static_cast<int>(this->manager->getFrameId());
-    this->slot_rewindButton(nextFrameId);
+    this->slot_rewindButtonPressed(nextFrameId);
 }
 
-void MainWindow::slot_rewindButton(const int _frameId)
+void MainWindow::slot_rewindButtonPressed(const int _frameId)
 {
     int nextFrameId = static_cast<int>(_frameId - std::round(+this->manager->getTotalFrames() / 100.0));
     if(nextFrameId < 1)
@@ -349,13 +348,13 @@ void MainWindow::slot_rewindButton(const int _frameId)
     this->updateFrame(nextFrameId);
 }
 
-void MainWindow::slot_backButton()
+void MainWindow::slot_backButtonPressed()
 {
     int nextFrameId = static_cast<int>(this->manager->getFrameId());
-    this->slot_backButton(nextFrameId);
+    this->slot_backButtonPressed(nextFrameId);
 }
 
-void MainWindow::slot_backButton(const int _frameId)
+void MainWindow::slot_backButtonPressed(const int _frameId)
 {
     int nextFrameId = _frameId - 2;
     if(nextFrameId < 1)
@@ -366,13 +365,13 @@ void MainWindow::slot_backButton(const int _frameId)
     this->updateFrame(nextFrameId);
 }
 
-void MainWindow::slot_forwardButton()
+void MainWindow::slot_forwardButtonPressed()
 {
     int nextFrameId = static_cast<int>(this->manager->getFrameId());
-    this->slot_forwardButton(nextFrameId);
+    this->slot_forwardButtonPressed(nextFrameId);
 }
 
-void MainWindow::slot_forwardButton(const int _frameId)
+void MainWindow::slot_forwardButtonPressed(const int _frameId)
 {
     int nextFrameId = _frameId;
     if(nextFrameId > (this->manager->getTotalFrames()))
@@ -383,13 +382,13 @@ void MainWindow::slot_forwardButton(const int _frameId)
     this->updateFrame(nextFrameId);
 }
 
-void MainWindow::slot_fastfButton()
+void MainWindow::slot_fastfButtonPressed()
 {
     int nextFrameId = static_cast<int>(this->manager->getFrameId());
-    this->slot_fastfButton(nextFrameId);
+    this->slot_fastfButtonPressed(nextFrameId);
 }
 
-void MainWindow::slot_fastfButton(const int _frameId)
+void MainWindow::slot_fastfButtonPressed(const int _frameId)
 {
     int nextFrameId = static_cast<int>(_frameId + std::round(+this->manager->getTotalFrames() / 100.0));
     if(nextFrameId > this->manager->getTotalFrames())
@@ -400,13 +399,13 @@ void MainWindow::slot_fastfButton(const int _frameId)
     this->updateFrame(nextFrameId);
 }
 
-void MainWindow::slot_stopButton()
+void MainWindow::slot_stopButtonPressed()
 {
     this->isPlaying(false);
     this->stopVideo();
 }
 
-void MainWindow::slot_spinBoxSpeed(int _value)
+void MainWindow::slot_spinBoxSpeedValueChanged(int _value)
 {
     this->changeSpeed(_value);
 }
@@ -417,7 +416,7 @@ void MainWindow::slot_keepVideoRunning()
 
     if(nextFrameId == static_cast<int>(this->totalFrames))
     {
-        this->slot_stopButton();
+        this->slot_stopButtonPressed();
     }
     else
     {
@@ -460,25 +459,25 @@ void MainWindow::slot_newFrameMenu()
     this->connect(this->frameDialog,
                   SIGNAL(signal_rewindButtonPressed()),
                   this,
-                  SLOT(slot_rewindButton())
+                  SLOT(slot_rewindButtonPressed())
                   );
 
     this->connect(this->frameDialog,
                   SIGNAL(signal_backButtonPressed()),
                   this,
-                  SLOT(slot_backButton())
+                  SLOT(slot_backButtonPressed())
                   );
 
     this->connect(this->frameDialog,
                   SIGNAL(signal_forwardButtonPressed()),
                   this,
-                  SLOT(slot_forwardButton())
+                  SLOT(slot_forwardButtonPressed())
                   );
 
     this->connect(this->frameDialog,
                   SIGNAL(signal_fastfButtonPressed()),
                   this,
-                  SLOT(slot_fastfButton())
+                  SLOT(slot_fastfButtonPressed())
                   );
 
     this->frameDialog->setModal(true);

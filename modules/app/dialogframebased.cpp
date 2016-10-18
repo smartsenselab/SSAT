@@ -123,10 +123,14 @@ void DialogFrameBased::slot_fastfButtonPressed()
 
 void DialogFrameBased::slot_accept()
 {
-    std::cout << "Pressing OK\n";
+    std::cout << "Pressing OK" << std::endl;
+    //add code here
+    this->accept();
 }
 
 void DialogFrameBased::slot_reject()
 {
-    std::cout << "Pressing Cancel\n";
+    std::cout << "Pressing Cancel" << std::endl;
+    //add code here
+    this->reject();
 }

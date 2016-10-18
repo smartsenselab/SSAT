@@ -70,18 +70,18 @@ public slots:
     void slot_slideVideo(int _frameId);
     void slot_contextMenu(const QPoint &_point);
 
-    void slot_playButton();
+    void slot_playButtonPressed();
 
-    void slot_rewindButton();
-    void slot_rewindButton(const int _frameId);
-    void slot_backButton();
-    void slot_backButton(const int _frameId);
-    void slot_forwardButton();
-    void slot_forwardButton(const int _frameId);
-    void slot_fastfButton();
-    void slot_fastfButton(const int _frameId);
-    void slot_stopButton();
-    void slot_spinBoxSpeed(int _value);
+    void slot_rewindButtonPressed();
+    void slot_rewindButtonPressed(const int _frameId);
+    void slot_backButtonPressed();
+    void slot_backButtonPressed(const int _frameId);
+    void slot_forwardButtonPressed();
+    void slot_forwardButtonPressed(const int _frameId);
+    void slot_fastfButtonPressed();
+    void slot_fastfButtonPressed(const int _frameId);
+    void slot_stopButtonPressed();
+    void slot_spinBoxSpeedValueChanged(int _value);
 
     void slot_keepVideoRunning();
 
