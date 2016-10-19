@@ -81,8 +81,7 @@ void WorkerThread::allotFrameBasedSegment(Core &_singleton, const FrameBasedData
     {
         unsigned long longFrameId = static_cast<unsigned long>(frameId);
         _singleton.frames[longFrameId].setName(_data.getName());
-        _singleton.frames[longFrameId].addAttributes(_data.getCategory(), _data.getLabel());
-
-
+        _singleton.frames[longFrameId].addAttributes("_data.getCategory()", "_data.getLabel()");
+//        _singleton.frames[longFrameId].addAttributes(_data.getCategory(), _data.getLabel());
     }
 }

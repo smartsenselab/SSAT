@@ -36,9 +36,9 @@ public:
     void operator=(const Data &_data);
 
 protected:
-    unsigned int id;
     multimap<string, string> attributes;
     vector<string> comments;
+    unsigned int id;
     string name;
 };
 
