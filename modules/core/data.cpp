@@ -1,14 +1,17 @@
 #include "data.h"
 
 Data::Data()
-{
+{ }
 
+Data::Data(const string &_name)
+{
+    this->setName(_name);
 }
 
-Data::Data(const unsigned int &_id, const string &_label)
+Data::Data(const unsigned int &_id, const string &_name)
 {
     this->setId(_id);
-    this->setName(_label);
+    this->setName(_name);
 }
 
 unsigned int Data::getId() const
@@ -35,14 +38,9 @@ vector<string> Data::getAttributes(const string &_key) const
     return attributeVector;
 }
 
-vector<string> Data::getInfo() const
+vector<string> Data::getComments() const
 {
-    return this->info;
-}
-
-string Data::getLabel() const
-{
-    return this->label;
+    return this->comments;
 }
 
 string Data::getName() const
@@ -65,29 +63,24 @@ void Data::delAttributes()
     this->attributes.clear();
 }
 
-void Data::addInfo(const string &_info)
+void Data::addComments(const string &_info)
 {
-    this->info.push_back(_info);
+    this->comments.push_back(_info);
 }
 
-void Data::delInfo(const unsigned int _index)
+void Data::delComments(const unsigned int _index)
 {
-    this->info.erase(this->info.begin() + _index);
+    this->comments.erase(this->comments.begin() + _index);
 }
 
-void Data::delInfo()
+void Data::delComments()
 {
-    this->info.clear();
+    this->comments.clear();
 }
 
 void Data::setId(const unsigned int &_id)
 {
     this->id = _id;
-}
-
-void Data::setLabel(const string &_label)
-{
-    this->label = _label;
 }
 
 void Data::setName(const string &_name)
@@ -99,7 +92,6 @@ void Data::operator=(const Data &_data)
 {
     this->attributes = _data.attributes;
     this->id = _data.id;
-    this->info = _data.info;
-    this->label = _data.label;
+    this->comments = _data.comments;
     this->name = _data.name;
 }

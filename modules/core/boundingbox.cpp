@@ -84,8 +84,7 @@ void BoundingBox::operator=(const BoundingBox &_box)
     this->coordinates = _box.coordinates;
 
     this->attributes = _box.attributes;
+    this->comments = _box.comments;
     this->id = _box.id;
-    this->info = _box.info;
-    this->label = _box.label;
     this->name = _box.name;
 }

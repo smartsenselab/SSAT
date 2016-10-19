@@ -185,11 +185,29 @@
     </property>
     <addaction name="actionOpen"/>
    </widget>
+   <widget class="QMenu" name="menuAnnotation">
+    <property name="title">
+     <string>Annotation</string>
+    </property>
+    <addaction name="actionCategories"/>
+    <addaction name="actionLabels"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuAnnotation"/>
   </widget>
   <action name="actionOpen">
    <property name="text">
     <string>Open</string>
+   </property>
+  </action>
+  <action name="actionCategories">
+   <property name="text">
+    <string>Categories</string>
+   </property>
+  </action>
+  <action name="actionLabels">
+   <property name="text">
+    <string>Labels</string>
    </property>
   </action>
  </widget>

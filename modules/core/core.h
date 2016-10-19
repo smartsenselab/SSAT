@@ -1,8 +1,10 @@
 #ifndef CORE_H
 #define CORE_H
 
-#include <thread>
+#include <set>
 #include <vector>
+using std::set;
+using std::vector;
 
 #include <opencv2/core.hpp>
 #include <opencv2/opencv.hpp>
@@ -32,8 +34,11 @@ public:
 
 public:
     ThreadPool *pool;
+
+//    set<string> categories;
+//    set<string> labels;
+
     vector<Frame> frames;
 };
-
 
 #endif // CORE_H
