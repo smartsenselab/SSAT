@@ -45,8 +45,8 @@ signals:
     void signal_forwardButtonPressed();
     void signal_fastfButtonPressed();
 
-    void signal_okButtonPressed(const FrameBasedData &_data);
-    void signal_cancelButtonPressed();
+    void signal_frameBasedOkButtonPressed(const FrameBasedData _data);
+    void signal_frameBasedCancelButtonPressed();
 };
 
 #endif // DIALOGFRAMEBASED_H

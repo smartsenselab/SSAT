@@ -129,9 +129,9 @@ void MainWindow::connectSignalSlots()
 
     // Connecting custom SIGNALS to SLOTS
     this->connect(&(this->frameScene),
-                  SIGNAL(signal_addFrameBbox(Rect)),
+                  SIGNAL(signal_addBoundingBoxToCore(Rect)),
                   this,
-                  SLOT(slot_addFrameBbox(Rect))
+                  SLOT(slot_addBoundingBoxToCore(Rect))
                   );
 
     this->connect(this,
@@ -480,6 +480,12 @@ void MainWindow::slot_newFrameMenu()
                   SLOT(slot_fastfButtonPressed())
                   );
 
+    this->connect(this->frameDialog,
+                  SIGNAL(signal_frameBasedOkButtonPressed(const FrameBasedData)),
+                  this,
+                  SLOT(slot_frameBasedOkButtonPressed(const FrameBasedData))
+                  );
+
     this->frameDialog->setModal(true);
     this->frameDialog->show();
 
@@ -494,7 +500,12 @@ void MainWindow::slot_removeBoxMenu()
 
 }
 
-void MainWindow::slot_addFrameBbox(Rect _box)
+void MainWindow::slot_frameBasedOkButtonPressed(const FrameBasedData _data)
+{
+    this->manager->allotFrameBasedSegment(*(this->singleton), _data);
+}
+
+void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
 {
     unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
     unsigned long num_bboxes = this->singleton->frames[nextFrameId - 1].getBoxes().size();

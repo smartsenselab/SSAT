@@ -128,7 +128,7 @@ void DialogFrameBased::slot_accept()
                                          this->ui->comboBoxCategory->currentText().toStdString(),
                                          this->ui->comboBoxLabel->currentText().toStdString(),
                                          this->ui->lineEditName->text().toStdString());
-    emit this->signal_okButtonPressed(data);
+    emit this->signal_frameBasedOkButtonPressed(data);
     this->accept();
 }
 

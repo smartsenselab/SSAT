@@ -90,7 +90,9 @@ public slots:
     void slot_newFrameMenu();
     void slot_removeBoxMenu();
 
-    void slot_addFrameBbox(Rect _box);
+    void slot_frameBasedOkButtonPressed(const FrameBasedData _data);
+
+    void slot_addBoundingBoxToCore(const Rect _box);
 
 signals:
     void signal_drawFrameBboxes(const Frame _frame);

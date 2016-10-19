@@ -9,20 +9,18 @@ private:
     QThread thread;
     WorkerThread *worker;
 
-signals:
-    void signal_frameToDisplay(const QImage _frame);
-    void signal_positionToMove(const double _frameId);
-
 public:
     VideoManager();
     ~VideoManager();
 
     Mat getFrame();
     Mat getFrame(double _frameId);
+
     double getFrameId();
     double getTotalFrames();
     double getVideoFPS();
     double getPercentage();
+
     int getTime();
 
     bool isPlaying();
@@ -30,7 +28,14 @@ public:
 
     void clearVideo();
     void loadVideo(const QString _path);
+
     QImage matToQimage(const Mat &_frame);
+
+    void allotFrameBasedSegment(Core &_singleton, const FrameBasedData &_data);
+
+signals:
+    void signal_frameToDisplay(const QImage _frame);
+    void signal_positionToMove(const double _frameId);
 };
 
 #endif // VIDEOMANAGER_H

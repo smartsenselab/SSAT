@@ -74,3 +74,11 @@ QImage WorkerThread::matToQimage(const Mat &_frameId)
         return QImage();
     }
 }
+
+void WorkerThread::allotFrameBasedSegment(Core &_singleton, const FrameBasedData &_data)
+{
+    for(int frameId = _data.getInitialFrameId(); frameId <= _data.getFinalFrameId(); frameId++)
+    {
+
+    }
+}
