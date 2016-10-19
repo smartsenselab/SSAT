@@ -1,9 +1,12 @@
 #ifndef DIALOGFRAMEBASED_H
 #define DIALOGFRAMEBASED_H
 
+#include <cmath>
 #include <iostream>
 
 #include <QDialog>
+
+#include "framebaseddata.h"
 
 namespace Ui {
     class DialogFrameBased;
@@ -42,6 +45,8 @@ signals:
     void signal_forwardButtonPressed();
     void signal_fastfButtonPressed();
 
+    void signal_okButtonPressed(const FrameBasedData &_data);
+    void signal_cancelButtonPressed();
 };
 
 #endif // DIALOGFRAMEBASED_H

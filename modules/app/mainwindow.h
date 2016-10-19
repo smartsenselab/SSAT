@@ -11,6 +11,7 @@
 #include <QTimer>
 
 #include "dialogframebased.h"
+#include "framebaseddata.h"
 #include "qboundingbox.h"
 #include "videomanager.h"
 

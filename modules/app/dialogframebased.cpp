@@ -123,14 +123,17 @@ void DialogFrameBased::slot_fastfButtonPressed()
 
 void DialogFrameBased::slot_accept()
 {
-    std::cout << "Pressing OK" << std::endl;
-    //add code here
+    FrameBasedData data = FrameBasedData(this->ui->spinBoxInitialFrame->value(),
+                                         this->ui->spinBoxFinalFrame->value(),
+                                         this->ui->comboBoxCategory->currentText().toStdString(),
+                                         this->ui->comboBoxLabel->currentText().toStdString(),
+                                         this->ui->lineEditName->text().toStdString());
+    emit this->signal_okButtonPressed(data);
     this->accept();
 }
 
 void DialogFrameBased::slot_reject()
 {
     std::cout << "Pressing Cancel" << std::endl;
-    //add code here
     this->reject();
 }
