@@ -22,6 +22,7 @@ project(SSAT VERSION 1.0)
 # Set PROJECT_VERSION_PATCH and PROJECT_VERSION_TWEAK to 0 if not present, needed by add_project_meta
 fix_project_version()
 
+file(GLOB APP_GUI_FILES "modules/app/*.ui")
 file(GLOB APP_SOURCE_FILES "modules/app/*.cpp")
 file(GLOB CORE_SOURCE_FILES "modules/core/*.cpp")
 file(GLOB CORE_INCLUDE_FILES "modules/core/*.h")
@@ -57,7 +58,7 @@ target_link_libraries(${PROJECT_NAME}_CMT ${OpenCV_LIBS})
 target_include_directories(${PROJECT_NAME}_CMT PUBLIC modules/tracker/)
 
 add_executable(${PROJECT_NAME} ${OS_BUNDLE} # Expands to WIN32 or MACOS_BUNDLE depending on OS
-    ${APP_SOURCE_FILES} ${META_FILES_TO_INCLUDE} ${RESOURCE_FILES}
+    ${APP_GUI_FILES} ${APP_SOURCE_FILES} ${META_FILES_TO_INCLUDE} ${RESOURCE_FILES}
 )
 
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
