@@ -10,6 +10,7 @@
 #include <QTime>
 #include <QTimer>
 
+#include "dialogannotation.h"
 #include "dialogframebased.h"
 #include "framebaseddata.h"
 #include "qboundingbox.h"
@@ -39,6 +40,7 @@ private:
     QGraphicsRectItem *rectangle = NULL;
     QImage frameQImage;
     QTimer *playerTime = NULL;
+    DialogAnnotation *annotationDialog = NULL;
     DialogFrameBased *frameDialog = NULL;
 
     VideoManager *manager;
@@ -68,6 +70,7 @@ private:
 public slots:
     void slot_displayFrame(const QImage _frame);
     void slot_openFile();
+    void slot_openAttributes();
     void slot_slideVideo(int _frameId);
     void slot_contextMenu(const QPoint &_point);
 

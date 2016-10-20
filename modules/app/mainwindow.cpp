@@ -72,13 +72,20 @@ void MainWindow::connectSignalSlots()
                   SLOT(slot_contextMenu(QPoint))
                   );
 
-    // Connecting SIGNALS to SLOTS
+    // Connecting ACTIONS to SLOTS
     this->connect(this->ui->actionOpen,
                   &QAction::triggered,
                   this,
                   &MainWindow::slot_openFile
                   );
 
+    this->connect(this->ui->actionAttributes,
+                  &QAction::triggered,
+                  this,
+                  &MainWindow::slot_openAttributes
+                  );
+
+    // Connecting SIGNALS to SLOTS
     this->connect(this->ui->sliderFrame,
                   SIGNAL(sliderMoved(int)),
                   this,
@@ -297,6 +304,13 @@ void MainWindow::slot_openFile()
         this->enableWidgets(true);
         this->updateFrame(1);
     }
+}
+
+void MainWindow::slot_openAttributes()
+{
+    this->annotationDialog = new DialogAnnotation(this);
+    this->annotationDialog->setModal(true);
+    this->annotationDialog->show();
 }
 
 void MainWindow::slot_slideVideo(int _frameId)

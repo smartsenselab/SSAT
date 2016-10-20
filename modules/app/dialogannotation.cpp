@@ -12,3 +12,18 @@ DialogAnnotation::~DialogAnnotation()
 {
     delete ui;
 }
+
+void DialogAnnotation::insertChild(QTreeWidgetItem *parent, string _name)
+{
+
+}
+
+void DialogAnnotation::insertRow(string _name)
+{
+
+}
+
+void DialogAnnotation::removeRow()
+{
+
+}

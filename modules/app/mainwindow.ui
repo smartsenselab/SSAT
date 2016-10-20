@@ -189,7 +189,7 @@
     <property name="title">
      <string>Annotation</string>
     </property>
-    <addaction name="actionCategories"/>
+    <addaction name="actionAttributes"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuAnnotation"/>
@@ -199,14 +199,9 @@
     <string>Open</string>
    </property>
   </action>
-  <action name="actionCategories">
+  <action name="actionAttributes">
    <property name="text">
     <string>Attributes</string>
-   </property>
-  </action>
-  <action name="actionLabels">
-   <property name="text">
-    <string>Labels</string>
    </property>
   </action>
  </widget>

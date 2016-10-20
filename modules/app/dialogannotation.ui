@@ -32,72 +32,49 @@
   <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>10</x>
      <y>10</y>
-     <width>601</width>
-     <height>381</height>
+     <width>621</width>
+     <height>421</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout">
+     <widget class="QTreeWidget" name="treeWidgetAttributes">
+      <property name="columnCount">
+       <number>1</number>
+      </property>
+      <column>
+       <property name="text">
+        <string>Attributes</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QLabel" name="labelCategories">
+       <widget class="QPushButton" name="pushButtonInsertCategory">
         <property name="text">
-         <string>Categories</string>
+         <string>Insert Category</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QListView" name="listViewCategories"/>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <widget class="QLabel" name="labelLabels">
+       <widget class="QPushButton" name="pushButtonInsertLabel">
         <property name="text">
-         <string>Labels</string>
+         <string>Insert Label</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QListView" name="listViewLabels"/>
+       <widget class="QPushButton" name="pushButtonRemoveRow">
+        <property name="text">
+         <string>Remove Row</string>
+        </property>
+       </widget>
       </item>
      </layout>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>400</y>
-     <width>601</width>
-     <height>24</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
-    <item>
-     <widget class="QLineEdit" name="lineEdit"/>
-    </item>
-    <item>
-     <widget class="QPushButton" name="pushButton">
-      <property name="text">
-       <string>Add Category</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLineEdit" name="lineEdit_2"/>
-    </item>
-    <item>
-     <widget class="QPushButton" name="pushButton_2">
-      <property name="text">
-       <string>Add Label</string>
-      </property>
-     </widget>
     </item>
    </layout>
   </widget>
