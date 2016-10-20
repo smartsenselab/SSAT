@@ -310,12 +310,6 @@ void MainWindow::slot_openFile()
 
 void MainWindow::slot_openAttributes()
 {
-//    multimap<string, string> attributes;
-//    attributes.insert(std::pair<string, string>("Object_recognition", "Table"));
-//    attributes.insert(std::pair<string, string>("Object_recognition", "Tennis"));
-//    attributes.insert(std::pair<string, string>("Object_recognition", "Desk"));
-//    attributes.insert(std::pair<string, string>("Object_recognition", "Television"));
-
     this->singleton->attributes.insert(std::pair<string, string>("Object_recognition", "Table"));
     this->singleton->attributes.insert(std::pair<string, string>("Object_recognition", "Tennis"));
     this->singleton->attributes.insert(std::pair<string, string>("Object_recognition", "Desk"));

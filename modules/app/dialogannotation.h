@@ -30,11 +30,14 @@ public:
 private:
     void connectSignalSlots();
     void enableWidgets(const bool _enable);
+    void updateWidgets();
 
 private:
     Ui::DialogAnnotation *ui;
     QStringListModel *categoriesModel;
     QStringListModel *labelsModel;
+
+    Core *singleton = NULL;
 
 public slots:
     void slot_initializeDialog(Core &_singleton);
