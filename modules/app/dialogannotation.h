@@ -10,6 +10,8 @@ using std::string;
 #include <QtGui>
 #include <QTreeWidget>
 
+#include "treemodel.h"
+
 namespace Ui {
     class DialogAnnotation;
 }
@@ -33,6 +35,13 @@ private:
 
 public slots:
     void slot_initializeDialog();
+
+private slots:
+    void slot_insertChild();
+    bool slot_insertColumn();
+    void slot_insertRow();
+    bool slot_removeColumn();
+    void slot_removeRow();
 };
 
 #endif // DIALOGANNOTATION_H
