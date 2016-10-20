@@ -30,6 +30,7 @@ public:
 private:
     void connectSignalSlots();
     void enableWidgets(const bool _enable);
+    void updateCoreContent();
     void updateWidgets();
 
 private:

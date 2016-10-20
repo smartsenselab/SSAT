@@ -184,6 +184,11 @@
      <string>File</string>
     </property>
     <addaction name="actionOpen"/>
+    <addaction name="separator"/>
+    <addaction name="actionImport_JSON"/>
+    <addaction name="actionExport_JSON"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuAnnotation">
     <property name="title">
@@ -202,6 +207,21 @@
   <action name="actionAttributes">
    <property name="text">
     <string>Attributes</string>
+   </property>
+  </action>
+  <action name="actionExport_JSON">
+   <property name="text">
+    <string>Export JSON</string>
+   </property>
+  </action>
+  <action name="actionImport_JSON">
+   <property name="text">
+    <string>Import JSON</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
    </property>
   </action>
  </widget>

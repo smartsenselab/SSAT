@@ -69,6 +69,14 @@ void DialogAnnotation::enableWidgets(const bool _enable)
     this->ui->pushButtonRemoveLabel->setEnabled(_enable);
 }
 
+void DialogAnnotation::updateCoreContent()
+{
+    QStringList tempC = this->categoriesModel->stringList();
+    QStringList tempL = this->labelsModel->stringList();
+
+    return;
+}
+
 void DialogAnnotation::updateWidgets()
 {
     if(this->categoriesModel->rowCount() == 0)
@@ -95,8 +103,6 @@ void DialogAnnotation::updateWidgets()
         this->ui->pushButtonInsertLabel->setEnabled(true);
         this->ui->pushButtonRemoveLabel->setEnabled(true);
     }
-
-    std::cout << this->categoriesModel->rowCount() << " : " << this->labelsModel->rowCount() << std::endl;
 }
 
 void DialogAnnotation::slot_initializeDialog(Core &_singleton)
@@ -114,10 +120,12 @@ void DialogAnnotation::slot_initializeDialog(Core &_singleton)
     QStringList qCategories(qAttributes.uniqueKeys());
 
     this->categoriesModel = new QStringListModel(this);
-    this->labelsModel = new QStringListModel(this);
-
     this->categoriesModel->setStringList(qCategories);
     this->ui->listViewCategories->setModel(this->categoriesModel);
+
+    this->labelsModel = new QStringListModel(this);
+
+    this->updateCoreContent();
 }
 
 void DialogAnnotation::slot_listViewCategoriesClicked(QModelIndex _index)
@@ -144,7 +152,6 @@ void DialogAnnotation::slot_listViewCategoriesClicked(QModelIndex _index)
 
 void DialogAnnotation::slot_listViewLabelsClicked(QModelIndex _index)
 {
-    std::cout << "void DialogAnnotation::slot_listViewLabelsClicked()" << std::endl;
     this->ui->pushButtonInsertLabel->setEnabled(true);
     this->ui->pushButtonRemoveLabel->setEnabled(true);
 
@@ -165,8 +172,6 @@ void DialogAnnotation::slot_insertCategoryPressed()
 
 void DialogAnnotation::slot_insertLabelPressed()
 {
-    std::cout << "void DialogAnnotation::slot_insertLabelPressed()" << std::endl;
-
     int row = this->labelsModel->rowCount();
     this->labelsModel->insertRows(row, 1);
 
