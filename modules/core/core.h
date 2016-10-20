@@ -35,9 +35,7 @@ public:
 public:
     ThreadPool *pool;
 
-//    set<string> categories;
-//    set<string> labels;
-
+    multimap<string, string> attributes;
     vector<Frame> frames;
 };
 

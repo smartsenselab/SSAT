@@ -73,6 +73,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="pushButtonRemoveCategory">
+        <property name="text">
+         <string>Remove Category</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="pushButtonInsertLabel">
         <property name="text">
          <string>Insert Label</string>
@@ -80,9 +87,9 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButtonRemoveRow">
+       <widget class="QPushButton" name="pushButtonRemoveLabel">
         <property name="text">
-         <string>Remove Row</string>
+         <string>Remove Label</string>
         </property>
        </widget>
       </item>

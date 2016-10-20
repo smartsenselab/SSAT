@@ -48,6 +48,8 @@ void MainWindow::isPlaying(const bool _enable)
 
 void MainWindow::enableWidgets(const bool _enable)
 {
+    this->ui->actionAttributes->setEnabled(_enable);
+
     this->ui->buttonForward->setEnabled(_enable);
     this->ui->buttonForwardF->setEnabled(_enable);
     this->ui->buttonPlay->setEnabled(_enable);
@@ -308,7 +310,24 @@ void MainWindow::slot_openFile()
 
 void MainWindow::slot_openAttributes()
 {
+//    multimap<string, string> attributes;
+//    attributes.insert(std::pair<string, string>("Object_recognition", "Table"));
+//    attributes.insert(std::pair<string, string>("Object_recognition", "Tennis"));
+//    attributes.insert(std::pair<string, string>("Object_recognition", "Desk"));
+//    attributes.insert(std::pair<string, string>("Object_recognition", "Television"));
+
+    this->singleton->attributes.insert(std::pair<string, string>("Object_recognition", "Table"));
+    this->singleton->attributes.insert(std::pair<string, string>("Object_recognition", "Tennis"));
+    this->singleton->attributes.insert(std::pair<string, string>("Object_recognition", "Desk"));
+    this->singleton->attributes.insert(std::pair<string, string>("Object_recognition", "Television"));
+
+    this->singleton->attributes.insert(std::pair<string, string>("Person_identification", "Breno"));
+    this->singleton->attributes.insert(std::pair<string, string>("Person_identification", "Danilo"));
+    this->singleton->attributes.insert(std::pair<string, string>("Person_identification", "Davi"));
+    this->singleton->attributes.insert(std::pair<string, string>("Person_identification", "Rafael"));
+
     this->annotationDialog = new DialogAnnotation(this);
+    this->annotationDialog->slot_initializeDialog(*(this->singleton));
     this->annotationDialog->setModal(true);
     this->annotationDialog->show();
 }

@@ -3,12 +3,17 @@
 
 #include <iostream>
 #include <string>
+#include <map>
 using std::string;
+using std::multimap;
 
 #include <QDialog>
+#include <QModelIndex>
 #include <QtCore>
 #include <QtGui>
 #include <QTreeWidget>
+
+#include "core.h"
 
 namespace Ui {
     class DialogAnnotation;
@@ -22,25 +27,26 @@ public:
     explicit DialogAnnotation(QWidget *parent = 0);
     ~DialogAnnotation();
 
-    void insertCategory(QTreeWidgetItem *parent, string _name);
-    void insertLabel(string _name);
-    void removeRow();
-
 private:
-    void updateActions();
-
+    void connectSignalSlots();
+    void enableWidgets(const bool _enable);
 
 private:
     Ui::DialogAnnotation *ui;
-    QMultiMap<string, string> *treeContent;
+    QStringListModel *categoriesModel;
+    QStringListModel *labelsModel;
 
 public slots:
-    void slot_initializeDialog();
+    void slot_initializeDialog(Core &_singleton);
 
 private slots:
+    void slot_listViewCategoriesClicked(QModelIndex _index);
+    void slot_listViewLabelsClicked(QModelIndex _index);
+
     void slot_insertCategoryPressed();
     void slot_insertLabelPressed();
-    void slot_removeRowPressed();
+    void slot_removeCategoryPressed();
+    void slot_removeLabelPressed();
 };
 
 #endif // DIALOGANNOTATION_H
