@@ -148,10 +148,10 @@ void MainWindow::setTable()
     QStringList headerLabels;
     QHeaderView* header = ui->tableWidget->horizontalHeader();
 
-    headerLabels << "Tracker" << "Ini" << "End" << "Cancel";
+    headerLabels << "Name" << "Cat" << "Lab" << "Ini" << "End";
     header->setSectionResizeMode(QHeaderView::Stretch);
 
-    this->ui->tableWidget->setColumnCount(4);
+    this->ui->tableWidget->setColumnCount(5);
     this->ui->tableWidget->setHorizontalHeaderLabels(headerLabels);
 }
 
