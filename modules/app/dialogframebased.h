@@ -21,6 +21,9 @@ private:
 public:
     explicit DialogFrameBased(QWidget *parent = 0);
     ~DialogFrameBased();
+    int IniFrameValue();
+    int EndFrameValue();
+    QString NameValue();
 
 private:
     void connectSignalSlots();
@@ -32,12 +35,15 @@ public slots:
     void slot_backButtonPressed();
     void slot_forwardButtonPressed();
     void slot_fastfButtonPressed();
+    void slot_ButtonBoxAccepted();
+    void slot_ButtonBoxRejected();
 
 signals:
     void signal_rewindButtonPressed();
     void signal_backButtonPressed();
     void signal_forwardButtonPressed();
     void signal_fastfButtonPressed();
+    void signal_ButtonBoxAccepted();
 
 };
 

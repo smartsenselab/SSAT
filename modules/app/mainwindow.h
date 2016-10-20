@@ -42,6 +42,10 @@ private:
 
     VideoManager *manager;
 
+    QString nome;
+    int InitFrame;
+    int EndFrame;
+
 public:
     MainWindow(QWidget *parent = 0);
     virtual ~MainWindow();
@@ -80,6 +84,7 @@ public slots:
     void slot_forwardButton(const int _frameId);
     void slot_fastfButton();
     void slot_fastfButton(const int _frameId);
+    void slot_ButtonBox();
     void slot_stopButton();
     void slot_spinBoxSpeed(int _value);
 

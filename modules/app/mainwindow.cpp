@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "qdebug.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -481,6 +482,12 @@ void MainWindow::slot_newFrameMenu()
                   SLOT(slot_fastfButton())
                   );
 
+    this->connect(this->frameDialog,
+                  SIGNAL(signal_ButtonBoxAccepted()),
+                  this,
+                  SLOT(slot_ButtonBox())
+                  );
+
     this->frameDialog->setModal(true);
     this->frameDialog->show();
 
@@ -488,6 +495,24 @@ void MainWindow::slot_newFrameMenu()
     int totalFrames = static_cast<int>(this->manager->getTotalFrames());
 
     this->frameDialog->slot_initializeDialog(totalFrames, nextFrameId);
+}
+
+void MainWindow::slot_ButtonBox(){
+    //Table row
+    int row = this->ui->tableWidget->rowCount() - 1;
+    this->ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+
+    this->InitFrame = this->frameDialog->IniFrameValue();
+    this->EndFrame = this->frameDialog->EndFrameValue();
+    this->nome = this->frameDialog->NameValue();
+
+    qDebug() << " Value InitFrame = " << InitFrame;
+    qDebug() << " Value EndFrame = " << EndFrame;
+
+
+    this->ui->tableWidget->setItem(this->ui->tableWidget->rowCount() - 1, 0, new QTableWidgetItem(nome));
+    this->ui->tableWidget->setItem(this->ui->tableWidget->rowCount() - 1, 3, new QTableWidgetItem(QString::number(InitFrame)));
+    this->ui->tableWidget->setItem(this->ui->tableWidget->rowCount() - 1, 4, new QTableWidgetItem(QString::number(EndFrame)));
 }
 
 void MainWindow::slot_removeBoxMenu()

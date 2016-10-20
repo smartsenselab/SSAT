@@ -41,6 +41,18 @@ void DialogFrameBased::connectSignalSlots()
                   this,
                   SLOT(slot_fastfButtonPressed())
                   );
+
+    this->connect(this->ui->buttonBox,
+                  SIGNAL(accepted()),
+                  this,
+                  SLOT(slot_ButtonBoxAccepted())
+                  );
+
+    this->connect(this->ui->buttonBox,
+                  SIGNAL(rejected()),
+                  this,
+                  SLOT(slot_ButtonBoxRejected())
+                  );
 }
 
 void DialogFrameBased::slot_initializeDialog(int _totalFrames, int _frameId)
@@ -107,4 +119,25 @@ void DialogFrameBased::slot_fastfButtonPressed()
     this->frameId = nextFrameId;
     this->ui->spinBoxFinalFrame->setValue(this->frameId);
     emit this->signal_fastfButtonPressed();
+}
+
+void DialogFrameBased::slot_ButtonBoxAccepted(){
+    emit this->signal_ButtonBoxAccepted();
+    accept();
+}
+
+void DialogFrameBased::slot_ButtonBoxRejected(){
+    reject();
+}
+
+int DialogFrameBased::IniFrameValue(){
+    return this->ui->spinBoxInitialFrame->value();
+}
+
+int DialogFrameBased::EndFrameValue(){
+    return this->ui->spinBoxFinalFrame->value();
+}
+
+QString DialogFrameBased::NameValue(){
+    return this->ui->lineEdit->text();
 }
