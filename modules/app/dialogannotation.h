@@ -28,6 +28,9 @@ public:
     void insertLabel(string _name);
     void removeRow();
 
+private:
+    void updateActions();
+
 
 private:
     Ui::DialogAnnotation *ui;
@@ -37,11 +40,9 @@ public slots:
     void slot_initializeDialog();
 
 private slots:
-    void slot_insertChild();
-    bool slot_insertColumn();
-    void slot_insertRow();
-    bool slot_removeColumn();
-    void slot_removeRow();
+    void slot_insertCategoryPressed();
+    void slot_insertLabelPressed();
+    void slot_removeRowPressed();
 };
 
 #endif // DIALOGANNOTATION_H

@@ -5,7 +5,9 @@ TreeModel::TreeModel(const QStringList &headers, const QString &data, QObject *p
 {
     QVector<QVariant> rootData;
     foreach (QString header, headers)
+    {
         rootData << header;
+    }
 
     rootItem = new TreeItem(rootData);
     setupModelData(data.split(QString("\n")), rootItem);
