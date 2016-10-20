@@ -10,8 +10,6 @@ using std::string;
 #include <QtGui>
 #include <QTreeWidget>
 
-#include "treemodel.h"
-
 namespace Ui {
     class DialogAnnotation;
 }
