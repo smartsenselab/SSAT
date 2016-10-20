@@ -22,16 +22,17 @@ public:
     explicit DialogAnnotation(QWidget *parent = 0);
     ~DialogAnnotation();
 
-    void insertChild(QTreeWidgetItem *parent, string _name);
-    void insertRow(string _name);
+    void insertCategory(QTreeWidgetItem *parent, string _name);
+    void insertLabel(string _name);
     void removeRow();
 
 
 private:
     Ui::DialogAnnotation *ui;
+    QMultiMap<string, string> *treeContent;
 
-//public slots:
-//    void slot_initializeDialog();
+public slots:
+    void slot_initializeDialog();
 };
 
 #endif // DIALOGANNOTATION_H

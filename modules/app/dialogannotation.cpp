@@ -6,6 +6,9 @@ DialogAnnotation::DialogAnnotation(QWidget *parent) :
     ui(new Ui::DialogAnnotation)
 {
     ui->setupUi(this);
+
+    this->ui->treeWidgetAttributes->setEditTriggers(QAbstractItemView::AnyKeyPressed |
+                                                    QAbstractItemView::DoubleClicked);
 }
 
 DialogAnnotation::~DialogAnnotation()
@@ -13,17 +16,22 @@ DialogAnnotation::~DialogAnnotation()
     delete ui;
 }
 
-void DialogAnnotation::insertChild(QTreeWidgetItem *parent, string _name)
+void DialogAnnotation::insertCategory(QTreeWidgetItem *parent, string _name)
 {
 
 }
 
-void DialogAnnotation::insertRow(string _name)
+void DialogAnnotation::insertLabel(string _name)
 {
 
 }
 
 void DialogAnnotation::removeRow()
+{
+
+}
+
+void DialogAnnotation::slot_initializeDialog()
 {
 
 }

@@ -46,6 +46,7 @@ protected:
  * trocar labels por info
  * string labels
  * multimap<string> attributes
+ * vector<string> names;
  */
 
 #endif // DATA_H
