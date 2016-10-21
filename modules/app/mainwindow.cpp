@@ -54,6 +54,7 @@ void MainWindow::enableWidgets(const bool _enable)
     this->ui->buttonRewind->setEnabled(_enable);
     this->ui->buttonRewindF->setEnabled(_enable);
     this->ui->buttonStop->setEnabled(_enable);
+    this->ui->buttonNewBox->setEnabled(_enable);
 
     this->ui->labelFrameId->setEnabled(_enable);
     this->ui->labelTime->setEnabled(_enable);
@@ -89,6 +90,12 @@ void MainWindow::connectSignalSlots()
                   SIGNAL(pressed()),
                   this,
                   SLOT(slot_playButton())
+                  );
+
+    this->connect(this->ui->buttonNewBox,
+                  SIGNAL(pressed()),
+                  this,
+                  SLOT(slot_newBoxMenu())
                   );
 
     this->connect(this->ui->buttonRewindF,
@@ -147,10 +154,10 @@ void MainWindow::setTable()
     QStringList headerLabels;
     QHeaderView* header = ui->tableWidget->horizontalHeader();
 
-    headerLabels << "Tracker" << "Ini" << "End" << "Cancel";
+    headerLabels << "Name" << "Cat" << "Lab" << "Ini" << "End";
     header->setSectionResizeMode(QHeaderView::Stretch);
 
-    this->ui->tableWidget->setColumnCount(4);
+    this->ui->tableWidget->setColumnCount(5);
     this->ui->tableWidget->setHorizontalHeaderLabels(headerLabels);
 }
 
@@ -436,21 +443,21 @@ void MainWindow::slot_newBoxMenu()
 {
     this->frameScene.slot_enableDraw();
 
-    // CheckBox
-    QTableWidgetItem *checkBoxItem = new QTableWidgetItem();
-    checkBoxItem->setCheckState(Qt::Unchecked);
+//    // CheckBox
+//    QTableWidgetItem *checkBoxItem = new QTableWidgetItem();
+//    checkBoxItem->setCheckState(Qt::Unchecked);
 
-    // Cancel Button
-    QPushButton* btn_cancel = new QPushButton();
-    btn_cancel = new QPushButton();
-    btn_cancel->setText("Cancel");
-    //btn_cancel->setIcon(QIcon("https://t4.ftcdn.net/jpg/00/08/30/29/500_F_8302961_GVoPsXWcNsfvVygwE2sri9m9aISpJgYQ.jpg"));
+//    // Cancel Button
+//    QPushButton* btn_cancel = new QPushButton();
+//    btn_cancel = new QPushButton();
+//    btn_cancel->setText("Cancel");
+//    //btn_cancel->setIcon(QIcon("https://t4.ftcdn.net/jpg/00/08/30/29/500_F_8302961_GVoPsXWcNsfvVygwE2sri9m9aISpJgYQ.jpg"));
 
-    // Table row
-    int row = this->ui->tableWidget->rowCount() - 1;
-    this->ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-    this->ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 0, checkBoxItem);
-    this->ui->tableWidget->setCellWidget(row, 3, btn_cancel);
+//    // Table row
+//    int row = this->ui->tableWidget->rowCount() - 1;
+//    this->ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+//    this->ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 0, checkBoxItem);
+//    this->ui->tableWidget->setCellWidget(row, 3, btn_cancel);
 }
 
 void MainWindow::slot_newFrameMenu()
@@ -492,7 +499,7 @@ void MainWindow::slot_newFrameMenu()
 
 void MainWindow::slot_removeBoxMenu()
 {
-
+    this->frameScene.deleteBBox();
 }
 
 void MainWindow::slot_addFrameBbox(Rect _box)

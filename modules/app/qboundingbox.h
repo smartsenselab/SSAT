@@ -49,6 +49,7 @@ signals:
 public slots:
     void slot_drawFrameBboxes(const Frame _frame);
     void slot_enableDraw();
+    void deleteBBox();
 };
 
 #endif // SCENE_H

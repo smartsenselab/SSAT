@@ -127,6 +127,15 @@ void QBoundingBox::slot_drawFrameBboxes(const Frame _frame)
                                   it->second.getY(),
                                   it->second.getW(),
                                   it->second.getH());
+        this->itemToDraw->setFlag(QGraphicsItem::ItemIsSelectable, true);
+        this->itemToDraw->setFlag(QGraphicsItem::ItemIsMovable, true);
+    }
+}
+
+void QBoundingBox::deleteBBox(){
+    foreach(QGraphicsItem *item, selectedItems()){
+        removeItem(item);
+        delete item;
     }
 }
 
