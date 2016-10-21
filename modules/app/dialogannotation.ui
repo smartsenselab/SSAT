@@ -29,7 +29,7 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -56,10 +56,18 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QListView" name="listViewCategories"/>
+       <widget class="QListView" name="listViewCategories">
+        <property name="editTriggers">
+         <set>QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
+        </property>
+       </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QListView" name="listViewLabels"/>
+       <widget class="QListView" name="listViewLabels">
+        <property name="editTriggers">
+         <set>QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>

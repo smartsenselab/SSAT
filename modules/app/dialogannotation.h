@@ -35,8 +35,9 @@ private:
 
 private:
     Ui::DialogAnnotation *ui;
-    QStringListModel *categoriesModel;
-    QStringListModel *labelsModel;
+    QMultiMap<QString, QString> qAttributes;
+    QStringListModel *qCategoriesModel;
+    QStringListModel *qLabelsModel;
 
     Core *singleton = NULL;
 
@@ -46,6 +47,8 @@ public slots:
 private slots:
     void slot_listViewCategoriesClicked(QModelIndex _index);
     void slot_listViewLabelsClicked(QModelIndex _index);
+    void slot_listViewCategoryEntered(QModelIndex _index);
+    void slot_listViewLabelEntered(QModelIndex _index);
 
     void slot_insertCategoryPressed();
     void slot_insertLabelPressed();
