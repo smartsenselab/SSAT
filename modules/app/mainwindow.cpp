@@ -81,6 +81,24 @@ void MainWindow::connectSignalSlots()
                   &MainWindow::slot_openFile
                   );
 
+    this->connect(this->ui->actionImport_JSON,
+                  &QAction::triggered,
+                  this,
+                  &MainWindow::slot_importJson
+                  );
+
+    this->connect(this->ui->actionExport_JSON,
+                  &QAction::triggered,
+                  this,
+                  &MainWindow::slot_exportJson
+                  );
+
+    this->connect(this->ui->actionExit,
+                  &QAction::triggered,
+                  this,
+                  &MainWindow::slot_closeApplitacion
+                  );
+
     this->connect(this->ui->actionAttributes,
                   &QAction::triggered,
                   this,
@@ -306,6 +324,27 @@ void MainWindow::slot_openFile()
         this->enableWidgets(true);
         this->updateFrame(1);
     }
+}
+
+void MainWindow::slot_importJson()
+{
+    QString jsonName = QFileDialog::getOpenFileName(this,
+                                                    tr("Import JSON..."),
+                                                    tr("/home"),
+                                                    tr("JSON file (*.json)"));
+}
+
+void MainWindow::slot_exportJson()
+{
+    QString jsonName = QFileDialog::getSaveFileName(this,
+                                                    tr("Import JSON..."),
+                                                    tr("/home"),
+                                                    tr("JSON file (*.json)"));
+}
+
+void MainWindow::slot_closeApplitacion()
+{
+    QCoreApplication::quit();
 }
 
 void MainWindow::slot_openAttributes()
