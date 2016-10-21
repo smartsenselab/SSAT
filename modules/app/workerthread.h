@@ -12,6 +12,9 @@
 using cv::Mat;
 using cv::VideoCapture;
 
+#include "core.h"
+#include "framebaseddata.h"
+
 class WorkerThread : public QObject
 {
     Q_OBJECT
@@ -26,6 +29,7 @@ public:
 
     Mat getFrame();
     Mat getFrame(double _frameId);
+
     double getFrameId();
     double getTotalFrames();
     double getVideoFPS();
@@ -35,7 +39,10 @@ public:
 
     void clearVideo();
     void loadVideo(QString _path);
+
     QImage matToQimage(const Mat &_frame);
+
+    void allotFrameBasedSegment(Core &_singleton, const FrameBasedData &_data);
 };
 
 #endif // VIDEOMANAGEMENT_H

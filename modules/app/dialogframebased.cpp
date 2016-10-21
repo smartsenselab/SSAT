@@ -41,6 +41,18 @@ void DialogFrameBased::connectSignalSlots()
                   this,
                   SLOT(slot_fastfButtonPressed())
                   );
+
+    this->connect(this->ui->buttonBox,
+                  SIGNAL(accepted()),
+                  this,
+                  SLOT(slot_accept())
+                  );
+
+    this->connect(this->ui->buttonBox,
+                  SIGNAL(rejected()),
+                  this,
+                  SLOT(slot_reject())
+                  );
 }
 
 void DialogFrameBased::slot_initializeDialog(int _totalFrames, int _frameId)
@@ -107,4 +119,21 @@ void DialogFrameBased::slot_fastfButtonPressed()
     this->frameId = nextFrameId;
     this->ui->spinBoxFinalFrame->setValue(this->frameId);
     emit this->signal_fastfButtonPressed();
+}
+
+void DialogFrameBased::slot_accept()
+{
+    FrameBasedData data = FrameBasedData(this->ui->spinBoxInitialFrame->value(),
+                                         this->ui->spinBoxFinalFrame->value(),
+                                         this->ui->comboBoxCategory->currentText().toStdString(),
+                                         this->ui->comboBoxLabel->currentText().toStdString(),
+                                         this->ui->lineEditName->text().toStdString());
+    emit this->signal_frameBasedOkButtonPressed(data);
+    this->accept();
+}
+
+void DialogFrameBased::slot_reject()
+{
+    std::cout << "Pressing Cancel" << std::endl;
+    this->reject();
 }

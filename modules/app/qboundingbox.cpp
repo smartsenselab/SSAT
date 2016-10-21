@@ -35,7 +35,7 @@ void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     if(this->drawEnabled)
     {
         delete(this->itemToDraw);
-		this->itemToDraw = NULL;
+        this->itemToDraw = NULL;
 
         this->itemToDraw = new QGraphicsRectItem;
         this->itemToDraw->setPen(QPen(Qt::yellow, 3, Qt::SolidLine));
@@ -117,7 +117,7 @@ void QBoundingBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsSelectable, true);
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsMovable, true);
 
-        emit this->signal_addFrameBbox(this->box);
+        emit this->signal_addBoundingBoxToCore(this->box);
     }
 
     QGraphicsScene::mouseReleaseEvent(event);

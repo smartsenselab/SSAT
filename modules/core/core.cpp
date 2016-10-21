@@ -8,6 +8,7 @@ Core::Core(unsigned int _frames, unsigned int _cores)
 
 Core::~Core()
 {
+    this->attributes.clear();
     this->frames.clear();
     delete(this->pool);
 }

@@ -46,7 +46,7 @@ private:
     Rect box;
 
 signals:
-    void signal_addFrameBbox(Rect newBox);
+    void signal_addBoundingBoxToCore(Rect newBox);
 
 public slots:
     void slot_drawFrameBboxes(const Frame _frame);

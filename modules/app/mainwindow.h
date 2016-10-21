@@ -10,7 +10,9 @@
 #include <QTime>
 #include <QTimer>
 
+#include "dialogannotation.h"
 #include "dialogframebased.h"
+#include "framebaseddata.h"
 #include "qboundingbox.h"
 #include "videomanager.h"
 
@@ -38,6 +40,7 @@ private:
     QGraphicsRectItem *rectangle = NULL;
     QImage frameQImage;
     QTimer *playerTime = NULL;
+    DialogAnnotation *annotationDialog = NULL;
     DialogFrameBased *frameDialog = NULL;
 
     VideoManager *manager;
@@ -67,21 +70,25 @@ private:
 public slots:
     void slot_displayFrame(const QImage _frame);
     void slot_openFile();
+    void slot_importJson();
+    void slot_exportJson();
+    void slot_closeApplitacion();
+    void slot_openAttributes();
     void slot_slideVideo(int _frameId);
     void slot_contextMenu(const QPoint &_point);
 
-    void slot_playButton();
+    void slot_playButtonPressed();
 
-    void slot_rewindButton();
-    void slot_rewindButton(const int _frameId);
-    void slot_backButton();
-    void slot_backButton(const int _frameId);
-    void slot_forwardButton();
-    void slot_forwardButton(const int _frameId);
-    void slot_fastfButton();
-    void slot_fastfButton(const int _frameId);
-    void slot_stopButton();
-    void slot_spinBoxSpeed(int _value);
+    void slot_rewindButtonPressed();
+    void slot_rewindButtonPressed(const int _frameId);
+    void slot_backButtonPressed();
+    void slot_backButtonPressed(const int _frameId);
+    void slot_forwardButtonPressed();
+    void slot_forwardButtonPressed(const int _frameId);
+    void slot_fastfButtonPressed();
+    void slot_fastfButtonPressed(const int _frameId);
+    void slot_stopButtonPressed();
+    void slot_spinBoxSpeedValueChanged(int _value);
 
     void slot_keepVideoRunning();
 
@@ -89,7 +96,9 @@ public slots:
     void slot_newFrameMenu();
     void slot_removeBoxMenu();
 
-    void slot_addFrameBbox(Rect _box);
+    void slot_frameBasedOkButtonPressed(const FrameBasedData _data);
+
+    void slot_addBoundingBoxToCore(const Rect _box);
 
 signals:
     void signal_drawFrameBboxes(const Frame _frame);

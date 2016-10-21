@@ -72,3 +72,8 @@ QImage VideoManager::matToQimage(const Mat &_frame)
 {
     return this->worker->matToQimage(_frame);
 }
+
+void VideoManager::allotFrameBasedSegment(Core &_singleton, const FrameBasedData &_data)
+{
+    this->worker->allotFrameBasedSegment(_singleton, _data);
+}

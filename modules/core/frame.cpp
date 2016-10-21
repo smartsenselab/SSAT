@@ -53,8 +53,7 @@ void Frame::operator=(const Frame &_frame)
     this->boxes = _frame.boxes;
 
     this->attributes = _frame.attributes;
+    this->comments = _frame.comments;
     this->id = _frame.id;
-    this->info = _frame.info;
-    this->label = _frame.label;
     this->name = _frame.name;
 }
