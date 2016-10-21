@@ -356,16 +356,6 @@ void MainWindow::slot_closeApplitacion()
 
 void MainWindow::slot_openAttributes()
 {
-    this->singleton->attributes.insert(std::pair<string, string>("Object_recognition", "Table"));
-    this->singleton->attributes.insert(std::pair<string, string>("Object_recognition", "Tennis"));
-    this->singleton->attributes.insert(std::pair<string, string>("Object_recognition", "Desk"));
-    this->singleton->attributes.insert(std::pair<string, string>("Object_recognition", "Television"));
-
-    this->singleton->attributes.insert(std::pair<string, string>("Person_identification", "Breno"));
-    this->singleton->attributes.insert(std::pair<string, string>("Person_identification", "Danilo"));
-    this->singleton->attributes.insert(std::pair<string, string>("Person_identification", "Davi"));
-    this->singleton->attributes.insert(std::pair<string, string>("Person_identification", "Rafael"));
-
     this->annotationDialog = new DialogAnnotation(this);
     this->annotationDialog->slot_initializeDialog(*(this->singleton));
     this->annotationDialog->setModal(true);
