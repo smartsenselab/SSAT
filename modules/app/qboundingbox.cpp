@@ -9,6 +9,15 @@ QBoundingBox::QBoundingBox(QObject* parent): QGraphicsScene(parent)
     this->drawEnabled = false;
 }
 
+void QBoundingBox::deleteBBox()
+{
+    foreach(QGraphicsItem *item, selectedItems())
+    {
+        removeItem(item);
+        delete item;
+    }
+}
+
 void QBoundingBox::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if(this->drawEnabled)
@@ -129,13 +138,6 @@ void QBoundingBox::slot_drawFrameBboxes(const Frame _frame)
                                   it->second.getH());
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsSelectable, true);
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsMovable, true);
-    }
-}
-
-void QBoundingBox::deleteBBox(){
-    foreach(QGraphicsItem *item, selectedItems()){
-        removeItem(item);
-        delete item;
     }
 }
 
