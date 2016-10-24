@@ -86,9 +86,6 @@ void DialogAnnotation::updateCoreContent()
     QStringList qListC = this->qCategoriesModel->stringList();
     QStringList qListL = this->qLabelsModel->stringList();
 
-
-
-
     return;
 }
 
@@ -129,9 +126,13 @@ void DialogAnnotation::slot_initializeDialog(Core &_singleton)
 
     QStringList qCategories(this->qAttributes.uniqueKeys());
 
-    this->qCategoriesModel = new QStringListModel(this);
-    this->qCategoriesModel->setStringList(qCategories);
-    this->ui->listViewCategories->setModel(this->qCategoriesModel);
+//    this->qCategoriesModel = new QStringListModel(this);
+//    this->qCategoriesModel->setStringList(qCategories);
+//    this->ui->listViewCategories->setModel(this->qCategoriesModel);
+
+    this->qMapModelTest = new QMultiMapModel(this);
+    this->qMapModelTest->setMap(&(this->qAttributes));
+    this->ui->listViewCategories->setModel(this->qMapModelTest);
 
     this->qLabelsModel = new QStringListModel(this);
 }
@@ -141,6 +142,8 @@ void DialogAnnotation::slot_listViewCategoriesClicked(QModelIndex _index)
     QMultiMap<QString, QString>::iterator it, itLower, itUpper;
     QString clickedItem = _index.data().toString();
     QStringList qLabels;
+
+    this->selectedCategory = _index.data().toString();
 
     itLower = this->qAttributes.lowerBound(clickedItem);
     itUpper = this->qAttributes.upperBound(clickedItem);
@@ -152,16 +155,17 @@ void DialogAnnotation::slot_listViewCategoriesClicked(QModelIndex _index)
 
     this->qLabelsModel->setStringList(qLabels);
     this->ui->listViewLabels->setModel(this->qLabelsModel);
-    this->ui->pushButtonInsertCategory->setEnabled(true);
-    this->ui->pushButtonRemoveCategory->setEnabled(true);
+
+    std::cout << this->selectedCategory.toStdString() << std::endl;
 
     this->updateWidgets();
 }
 
 void DialogAnnotation::slot_listViewLabelsClicked(QModelIndex _index)
 {
-    this->ui->pushButtonInsertLabel->setEnabled(true);
-    this->ui->pushButtonRemoveLabel->setEnabled(true);
+    this->selectedLabel = _index.data().toString();
+
+    std::cout << this->selectedLabel.toStdString() << std::endl;
 
     this->updateWidgets();
 }
@@ -178,6 +182,8 @@ void DialogAnnotation::slot_listViewLabelEntered(QModelIndex _index)
 
 void DialogAnnotation::slot_insertCategoryPressed()
 {
+    QStringList temp = this->qCategoriesModel->stringList();
+
     int row = this->qCategoriesModel->rowCount();
     this->qCategoriesModel->insertRows(row, 1);
 

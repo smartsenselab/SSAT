@@ -14,6 +14,7 @@ using std::multimap;
 #include <QTreeWidget>
 
 #include "core.h"
+#include "qmultimapmodel.h"
 
 namespace Ui {
     class DialogAnnotation;
@@ -38,6 +39,11 @@ private:
     QMultiMap<QString, QString> qAttributes;
     QStringListModel *qCategoriesModel;
     QStringListModel *qLabelsModel;
+
+    QMultiMapModel *qMapModelTest;
+
+    QString selectedCategory;
+    QString selectedLabel;
 
     Core *singleton = NULL;
 
