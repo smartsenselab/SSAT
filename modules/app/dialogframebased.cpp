@@ -134,6 +134,5 @@ void DialogFrameBased::slot_accept()
 
 void DialogFrameBased::slot_reject()
 {
-    std::cout << "Pressing Cancel" << std::endl;
     this->reject();
 }

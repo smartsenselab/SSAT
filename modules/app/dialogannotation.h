@@ -11,7 +11,8 @@ using std::multimap;
 #include <QModelIndex>
 #include <QtCore>
 #include <QtGui>
-#include <QTreeWidget>
+#include <QStandardItem>
+#include <QStandardItemModel>
 
 #include "core.h"
 
@@ -31,13 +32,15 @@ private:
     void connectSignalSlots();
     void enableWidgets(const bool _enable);
     void updateCoreContent();
-    void updateWidgets();
 
 private:
     Ui::DialogAnnotation *ui;
     QMultiMap<QString, QString> qAttributes;
-    QStringListModel *qCategoriesModel;
-    QStringListModel *qLabelsModel;
+
+    QStandardItemModel *qStandardModel;
+
+    QString selectedCategory;
+    QString selectedLabel;
 
     Core *singleton = NULL;
 
@@ -45,15 +48,12 @@ public slots:
     void slot_initializeDialog(Core &_singleton);
 
 private slots:
-    void slot_listViewCategoriesClicked(QModelIndex _index);
-    void slot_listViewLabelsClicked(QModelIndex _index);
-    void slot_listViewCategoryEntered(QModelIndex _index);
-    void slot_listViewLabelEntered(QModelIndex _index);
-
     void slot_insertCategoryPressed();
     void slot_insertLabelPressed();
-    void slot_removeCategoryPressed();
-    void slot_removeLabelPressed();
+    void slot_removePressed();
+
+    void slot_accept();
+    void slot_reject();
 };
 
 #endif // DIALOGANNOTATION_H
