@@ -32,7 +32,6 @@ private:
     void connectSignalSlots();
     void enableWidgets(const bool _enable);
     void updateCoreContent();
-    void updateWidgets();
 
 private:
     Ui::DialogAnnotation *ui;
@@ -49,14 +48,12 @@ public slots:
     void slot_initializeDialog(Core &_singleton);
 
 private slots:
-    void slot_listViewCategoriesClicked(QModelIndex _index);
-    void slot_listViewLabelsClicked(QModelIndex _index);
-    void slot_listViewCategoryEntered(QModelIndex _index);
-    void slot_listViewLabelEntered(QModelIndex _index);
-
     void slot_insertCategoryPressed();
     void slot_insertLabelPressed();
     void slot_removePressed();
+
+    void slot_accept();
+    void slot_reject();
 };
 
 #endif // DIALOGANNOTATION_H

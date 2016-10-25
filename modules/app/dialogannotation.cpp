@@ -8,8 +8,10 @@ DialogAnnotation::DialogAnnotation(QWidget *parent) :
     ui->setupUi(this);
 
     this->connectSignalSlots();
-    this->enableWidgets(false);
+    this->enableWidgets(true);
     this->setFixedSize(this->width(), this->height());
+
+    this->ui->treeViewAttributes->setHeaderHidden(true);
 }
 
 DialogAnnotation::~DialogAnnotation()
@@ -36,45 +38,30 @@ void DialogAnnotation::connectSignalSlots()
                   this,
                   SLOT(slot_removePressed())
                   );
+
+    this->connect(this->ui->buttonBox,
+                  SIGNAL(accepted()),
+                  this,
+                  SLOT(slot_accept())
+                  );
+
+    this->connect(this->ui->buttonBox,
+                  SIGNAL(rejected()),
+                  this,
+                  SLOT(slot_reject())
+                  );
 }
 
 void DialogAnnotation::enableWidgets(const bool _enable)
 {
-    //this->ui->pushButtonInsertCategory->setEnabled(_enable);
-    //this->ui->pushButtonInsertLabel->setEnabled(_enable);
-    //this->ui->pushButtonRemoveCategory->setEnabled(_enable);
-    //this->ui->pushButtonRemoveLabel->setEnabled(_enable);
+    this->ui->pushButtonInsertCategory->setEnabled(_enable);
+    this->ui->pushButtonInsertLabel->setEnabled(_enable);
+    this->ui->pushButtonRemove->setEnabled(_enable);
 }
 
 void DialogAnnotation::updateCoreContent()
 {
     return;
-}
-
-void DialogAnnotation::updateWidgets()
-{
-    //    if(this->qCategoriesModel->rowCount() == 0)
-    //    {
-    //        this->ui->pushButtonInsertCategory->setEnabled(true);
-    //        this->ui->pushButtonInsertLabel->setEnabled(false);
-    //        this->ui->pushButtonRemoveCategory->setEnabled(false);
-    //        this->ui->pushButtonRemoveLabel->setEnabled(false);
-    //    }
-    //    else
-    //    {
-    //        this->ui->pushButtonRemoveCategory->setEnabled(true);
-    //        this->ui->pushButtonInsertLabel->setEnabled(true);
-    //    }
-
-    //    if(this->qLabelsModel->rowCount() == 0)
-    //    {
-    //        this->ui->pushButtonRemoveLabel->setEnabled(false);
-    //    }
-    //    else
-    //    {
-    //        this->ui->pushButtonInsertLabel->setEnabled(true);
-    //        this->ui->pushButtonRemoveLabel->setEnabled(true);
-    //    }
 }
 
 void DialogAnnotation::slot_initializeDialog(Core &_singleton)
@@ -102,87 +89,40 @@ void DialogAnnotation::slot_initializeDialog(Core &_singleton)
     this->ui->treeViewAttributes->setEditTriggers(QAbstractItemView::EditKeyPressed |
                                                   QAbstractItemView::DoubleClicked);
 
-}
-
-void DialogAnnotation::slot_listViewCategoriesClicked(QModelIndex _index)
-{
-    //    QMultiMap<QString, QString>::iterator it, itLower, itUpper;
-    //    QString clickedItem = _index.data().toString();
-    //    QStringList qLabels;
-
-    //    this->selectedCategory = _index.data().toString();
-
-    //    itLower = this->qAttributes.lowerBound(clickedItem);
-    //    itUpper = this->qAttributes.upperBound(clickedItem);
-
-    //    for(it = itLower; it != itUpper; it++)
-    //    {
-    //        qLabels.push_back(it.value());
-    //    }
-
-    //    this->qLabelsModel->setStringList(qLabels);
-    //    this->ui->columnViewAttributes->setModel(this->qLabelsModel);
-
-    //    std::cout << this->selectedCategory.toStdString() << std::endl;
-
-    //    this->updateWidgets();
-}
-
-void DialogAnnotation::slot_listViewLabelsClicked(QModelIndex _index)
-{
-    this->selectedLabel = _index.data().toString();
-
-    std::cout << this->selectedLabel.toStdString() << std::endl;
-
-    this->updateWidgets();
-}
-
-void DialogAnnotation::slot_listViewCategoryEntered(QModelIndex _index)
-{
-    std::cout << "void DialogAnnotation::slot_listViewCategoryEntered()" << std::endl;
-}
-
-void DialogAnnotation::slot_listViewLabelEntered(QModelIndex _index)
-{
-    std::cout << "void DialogAnnotation::slot_listViewLabelEntered()" << std::endl;
+    QModelIndex first = this->qStandardModel->index(0, 0, QModelIndex());
+    this->ui->treeViewAttributes->setCurrentIndex(first);
 }
 
 void DialogAnnotation::slot_insertCategoryPressed()
 {
+    int row = this->qStandardModel->rowCount();
+
     QStandardItem *category = new QStandardItem("New category");
     this->qStandardModel->appendRow(category);
 
-    int row = this->qStandardModel->rowCount();
     QModelIndex index = this->qStandardModel->index(row, 0);
-
     this->ui->treeViewAttributes->setCurrentIndex(index);
     this->ui->treeViewAttributes->edit(index);
-
-    this->updateWidgets();
 }
 
 void DialogAnnotation::slot_insertLabelPressed()
 {
     int currentRow = this->ui->treeViewAttributes->currentIndex().row();
+
     QStandardItem *parent = this->qStandardModel->item(currentRow);
 
     if(parent)
     {
-        this->ui->treeViewAttributes->expand(parent->index());
-
         QStandardItem *label = new QStandardItem("New label");
         parent->appendRow(label);
 
-        int row = parent->rowCount();
-        QModelIndex index = this->qStandardModel->index(currentRow + row, 1);
+        this->ui->treeViewAttributes->expand(parent->index());
 
-        std::cout << currentRow + row << " : " << parent->rowCount() << std::endl;
-
-        this->ui->treeViewAttributes->setCurrentIndex(index);
-        this->ui->treeViewAttributes->edit(index);
+        //int row = parent->rowCount();
+        //QModelIndex index = this->qStandardModel->index(currentRow + row, 1);
+        //this->ui->treeViewAttributes->setCurrentIndex(index);
+        //this->ui->treeViewAttributes->edit(index);
     }
-
-    this->updateWidgets();
 }
 
 void DialogAnnotation::slot_removePressed()
@@ -191,4 +131,29 @@ void DialogAnnotation::slot_removePressed()
     QModelIndex parent = this->ui->treeViewAttributes->currentIndex().parent();
 
     this->qStandardModel->removeRows(row, 1, parent);
+}
+
+void DialogAnnotation::slot_accept()
+{
+    multimap<string, string> newAttributes;
+
+    for(int outer = 0; outer < this->qStandardModel->rowCount(); outer++)
+    {
+        QModelIndex categoryIndex = this->qStandardModel->index(outer, 0);
+        QVariant categoryName = this->qStandardModel->data(categoryIndex);
+
+        for(int inner = 0; inner < this->qStandardModel->rowCount(categoryIndex); inner++)
+        {
+            QModelIndex labelIndex = this->qStandardModel->index(inner, 0, categoryIndex);
+            QVariant labelName = this->qStandardModel->data(labelIndex);
+            newAttributes.insert(pair<string, string>(categoryName.toString().toStdString(), labelName.toString().toStdString()));
+        }
+    }
+
+    this->singleton->attributes = newAttributes;
+}
+
+void DialogAnnotation::slot_reject()
+{
+   this->reject();
 }
