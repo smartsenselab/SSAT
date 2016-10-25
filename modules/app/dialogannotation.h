@@ -11,10 +11,10 @@ using std::multimap;
 #include <QModelIndex>
 #include <QtCore>
 #include <QtGui>
-#include <QTreeWidget>
+#include <QStandardItem>
+#include <QStandardItemModel>
 
 #include "core.h"
-#include "qmultimapmodel.h"
 
 namespace Ui {
     class DialogAnnotation;
@@ -39,8 +39,6 @@ private:
     QMultiMap<QString, QString> qAttributes;
     QStringListModel *qCategoriesModel;
     QStringListModel *qLabelsModel;
-
-    QMultiMapModel *qMapModelTest;
 
     QString selectedCategory;
     QString selectedLabel;

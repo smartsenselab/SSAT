@@ -11,10 +11,8 @@ DialogAnnotation::DialogAnnotation(QWidget *parent) :
     this->enableWidgets(false);
     this->setFixedSize(this->width(), this->height());
 
-    this->ui->listViewCategories->setEditTriggers(QAbstractItemView::EditKeyPressed |
+    this->ui->columnViewAttributes->setEditTriggers(QAbstractItemView::EditKeyPressed |
                                                   QAbstractItemView::DoubleClicked);
-    this->ui->listViewLabels->setEditTriggers(QAbstractItemView::EditKeyPressed |
-                                              QAbstractItemView::DoubleClicked);
 }
 
 DialogAnnotation::~DialogAnnotation()
@@ -24,30 +22,6 @@ DialogAnnotation::~DialogAnnotation()
 
 void DialogAnnotation::connectSignalSlots()
 {
-    this->connect(this->ui->listViewCategories,
-                  SIGNAL(clicked(QModelIndex)),
-                  this,
-                  SLOT(slot_listViewCategoriesClicked(QModelIndex))
-                  );
-
-    this->connect(this->ui->listViewLabels,
-                  SIGNAL(clicked(QModelIndex)),
-                  this,
-                  SLOT(slot_listViewLabelsClicked(QModelIndex))
-                  );
-
-    this->connect(this->ui->listViewCategories,
-                  SIGNAL(activated(QModelIndex)),
-                  this,
-                  SLOT(slot_listViewCategoryEntered(QModelIndex))
-                  );
-
-    this->connect(this->ui->listViewLabels,
-                  SIGNAL(activated(QModelIndex)),
-                  this,
-                  SLOT(slot_listViewLabelEntered(QModelIndex))
-                  );
-
     this->connect(this->ui->pushButtonInsertCategory,
                   SIGNAL(pressed()),
                   this,
@@ -126,39 +100,35 @@ void DialogAnnotation::slot_initializeDialog(Core &_singleton)
 
     QStringList qCategories(this->qAttributes.uniqueKeys());
 
-//    this->qCategoriesModel = new QStringListModel(this);
-//    this->qCategoriesModel->setStringList(qCategories);
-//    this->ui->listViewCategories->setModel(this->qCategoriesModel);
-
-    this->qMapModelTest = new QMultiMapModel(this);
-    this->qMapModelTest->setMap(&(this->qAttributes));
-    this->ui->listViewCategories->setModel(this->qMapModelTest);
+    this->qCategoriesModel = new QStringListModel(this);
+    this->qCategoriesModel->setStringList(qCategories);
+    this->ui->columnViewAttributes->setModel(this->qCategoriesModel);
 
     this->qLabelsModel = new QStringListModel(this);
 }
 
 void DialogAnnotation::slot_listViewCategoriesClicked(QModelIndex _index)
 {
-    QMultiMap<QString, QString>::iterator it, itLower, itUpper;
-    QString clickedItem = _index.data().toString();
-    QStringList qLabels;
+//    QMultiMap<QString, QString>::iterator it, itLower, itUpper;
+//    QString clickedItem = _index.data().toString();
+//    QStringList qLabels;
 
-    this->selectedCategory = _index.data().toString();
+//    this->selectedCategory = _index.data().toString();
 
-    itLower = this->qAttributes.lowerBound(clickedItem);
-    itUpper = this->qAttributes.upperBound(clickedItem);
+//    itLower = this->qAttributes.lowerBound(clickedItem);
+//    itUpper = this->qAttributes.upperBound(clickedItem);
 
-    for(it = itLower; it != itUpper; it++)
-    {
-        qLabels.push_back(it.value());
-    }
+//    for(it = itLower; it != itUpper; it++)
+//    {
+//        qLabels.push_back(it.value());
+//    }
 
-    this->qLabelsModel->setStringList(qLabels);
-    this->ui->listViewLabels->setModel(this->qLabelsModel);
+//    this->qLabelsModel->setStringList(qLabels);
+//    this->ui->columnViewAttributes->setModel(this->qLabelsModel);
 
-    std::cout << this->selectedCategory.toStdString() << std::endl;
+//    std::cout << this->selectedCategory.toStdString() << std::endl;
 
-    this->updateWidgets();
+//    this->updateWidgets();
 }
 
 void DialogAnnotation::slot_listViewLabelsClicked(QModelIndex _index)
@@ -182,52 +152,93 @@ void DialogAnnotation::slot_listViewLabelEntered(QModelIndex _index)
 
 void DialogAnnotation::slot_insertCategoryPressed()
 {
-    QStringList temp = this->qCategoriesModel->stringList();
+//    QStringList temp = this->qCategoriesModel->stringList();
 
-    int row = this->qCategoriesModel->rowCount();
-    this->qCategoriesModel->insertRows(row, 1);
+//    int row = this->qCategoriesModel->rowCount();
+//    this->qCategoriesModel->insertRows(row, 1);
 
-    QModelIndex index = this->qCategoriesModel->index(row);
-    this->ui->listViewCategories->setCurrentIndex(index);
-    this->ui->listViewCategories->edit(index);
+//    QModelIndex index = this->qCategoriesModel->index(row);
+//    this->ui->listViewCategories->setCurrentIndex(index);
+//    this->ui->listViewCategories->edit(index);
 
-    this->updateWidgets();
+//    this->updateWidgets();
 }
 
 void DialogAnnotation::slot_insertLabelPressed()
 {
-    int row = this->qLabelsModel->rowCount();
-    this->qLabelsModel->insertRows(row, 1);
+//    int row = this->qLabelsModel->rowCount();
+//    this->qLabelsModel->insertRows(row, 1);
 
-    QModelIndex index = this->qLabelsModel->index(row);
-    this->ui->listViewLabels->setCurrentIndex(index);
-    this->ui->listViewLabels->edit(index);
+//    QModelIndex index = this->qLabelsModel->index(row);
+//    this->ui->listViewLabels->setCurrentIndex(index);
+//    this->ui->listViewLabels->edit(index);
 
-    this->updateWidgets();
+//    this->updateWidgets();
 }
 
 void DialogAnnotation::slot_removeCategoryPressed()
 {
-    QString keyCategory = this->ui->listViewCategories->currentIndex().data().toString();
-    this->qAttributes.remove(keyCategory);
+//    QString keyCategory = this->ui->listViewCategories->currentIndex().data().toString();
+//    this->qAttributes.remove(keyCategory);
 
-    int rowL = this->qLabelsModel->rowCount();
-    int rowC = this->ui->listViewCategories->currentIndex().row();
+//    int rowL = this->qLabelsModel->rowCount();
+//    int rowC = this->ui->listViewCategories->currentIndex().row();
 
-    this->qLabelsModel->removeRows(0, rowL);
-    this->qCategoriesModel->removeRows(rowC, 1);
+//    this->qLabelsModel->removeRows(0, rowL);
+//    this->qCategoriesModel->removeRows(rowC, 1);
 
-    this->updateWidgets();
+//    this->updateWidgets();
 }
 
 void DialogAnnotation::slot_removeLabelPressed()
 {
-    QString keyCategory = this->ui->listViewCategories->currentIndex().data().toString();
-    QString keyLabel = this->ui->listViewLabels->currentIndex().data().toString();
-    this->qAttributes.remove(keyCategory, keyLabel);
+//    QString keyCategory = this->ui->listViewCategories->currentIndex().data().toString();
+//    QString keyLabel = this->ui->listViewLabels->currentIndex().data().toString();
+//    this->qAttributes.remove(keyCategory, keyLabel);
 
-    int rowL = this->ui->listViewLabels->currentIndex().row();
-    this->qLabelsModel->removeRows(rowL, 1);
+//    int rowL = this->ui->listViewLabels->currentIndex().row();
+//    this->qLabelsModel->removeRows(rowL, 1);
 
-    this->updateWidgets();
+//    this->updateWidgets();
 }
+
+
+/*
+#include "mainwindow.h"
+#include <QApplication>
+#include <QColumnView>
+#include <QStandardItem>
+#include <QStandardItemModel>
+
+int main(int argc, char **argv)
+{
+    QApplication app(argc, argv);
+    QMainWindow win;
+    QColumnView *cview = new QColumnView;
+    win.setCentralWidget(cview);
+
+    // Create the data model
+    QStandardItemModel model;
+
+    for (int groupnum = 0; groupnum < 3 ; ++groupnum)
+    {
+        // Create the phone groups as QStandardItems
+        QStandardItem *group = new QStandardItem(QString("Group %1").arg(groupnum));
+
+        // Append to each group 5 person as children
+        for (int personnum = 0; personnum < 5 ; ++personnum)
+        {
+            QStandardItem *child = new QStandardItem(QString("Person %1 (group %2)").arg(personnum).arg(groupnum));
+            // the appendRow function appends the child as new row
+            group->appendRow(child);
+        }
+        // append group as new row to the model. model takes the ownership of the item
+        model.appendRow(group);
+    }
+
+    cview->setModel(&model);
+
+    win.show();
+    return app.exec();
+}
+*/
