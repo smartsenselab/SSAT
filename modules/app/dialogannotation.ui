@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
+    <width>492</width>
     <height>480</height>
    </rect>
   </property>
@@ -18,7 +18,7 @@
     <rect>
      <x>10</x>
      <y>441</y>
-     <width>621</width>
+     <width>471</width>
      <height>31</height>
     </rect>
    </property>
@@ -32,15 +32,15 @@
   <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
-     <x>11</x>
-     <y>11</y>
-     <width>621</width>
+     <x>10</x>
+     <y>10</y>
+     <width>471</width>
      <height>431</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QColumnView" name="columnViewAttributes"/>
+     <widget class="QTreeView" name="treeViewAttributes"/>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
@@ -52,13 +52,6 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButtonRemoveCategory">
-        <property name="text">
-         <string>Remove Category</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QPushButton" name="pushButtonInsertLabel">
         <property name="text">
          <string>Insert Label</string>
@@ -66,9 +59,9 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButtonRemoveLabel">
+       <widget class="QPushButton" name="pushButtonRemove">
         <property name="text">
-         <string>Remove Label</string>
+         <string>Remove</string>
         </property>
        </widget>
       </item>

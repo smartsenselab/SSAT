@@ -37,8 +37,8 @@ private:
 private:
     Ui::DialogAnnotation *ui;
     QMultiMap<QString, QString> qAttributes;
-    QStringListModel *qCategoriesModel;
-    QStringListModel *qLabelsModel;
+
+    QStandardItemModel *qStandardModel;
 
     QString selectedCategory;
     QString selectedLabel;
@@ -56,8 +56,7 @@ private slots:
 
     void slot_insertCategoryPressed();
     void slot_insertLabelPressed();
-    void slot_removeCategoryPressed();
-    void slot_removeLabelPressed();
+    void slot_removePressed();
 };
 
 #endif // DIALOGANNOTATION_H
