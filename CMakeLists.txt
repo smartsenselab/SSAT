@@ -64,6 +64,7 @@ add_executable(${PROJECT_NAME} ${OS_BUNDLE} # Expands to WIN32 or MACOS_BUNDLE d
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
 target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_CORE)
 target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_CMT)
+target_link_libraries(${PROJECT_NAME} pthread)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${OpenCV_INCLUDE_DIR})
 
