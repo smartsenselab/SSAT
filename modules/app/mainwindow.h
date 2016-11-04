@@ -45,6 +45,10 @@ private:
 
     VideoManager *manager;
 
+    QString nome;
+    int InitFrame;
+    int EndFrame;
+
 public:
     MainWindow(QWidget *parent = 0);
     virtual ~MainWindow();
