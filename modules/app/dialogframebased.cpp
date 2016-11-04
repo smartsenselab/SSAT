@@ -16,6 +16,18 @@ DialogFrameBased::~DialogFrameBased()
     delete ui;
 }
 
+int DialogFrameBased::IniFrameValue(){
+    return this->ui->spinBoxInitialFrame->value();
+}
+
+int DialogFrameBased::EndFrameValue(){
+    return this->ui->spinBoxFinalFrame->value();
+}
+
+QString DialogFrameBased::NameValue(){
+    return this->ui->lineEditName->text();
+}
+
 void DialogFrameBased::connectSignalSlots()
 {
     this->connect(this->ui->buttonRewindF,
@@ -119,6 +131,15 @@ void DialogFrameBased::slot_fastfButtonPressed()
     this->frameId = nextFrameId;
     this->ui->spinBoxFinalFrame->setValue(this->frameId);
     emit this->signal_fastfButtonPressed();
+}
+
+void DialogFrameBased::slot_ButtonBoxAccepted(){
+    emit this->signal_ButtonBoxAccepted();
+    accept();
+}
+
+void DialogFrameBased::slot_ButtonBoxRejected(){
+    reject();
 }
 
 void DialogFrameBased::slot_accept()
