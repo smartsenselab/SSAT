@@ -29,6 +29,9 @@ public:
     void clearVideo();
     void loadVideo(const QString _path);
 
+    void exportJSON(const Core &_core);
+    void importJSON(Core &_core, const QString &_path);
+
     QImage matToQimage(const Mat &_frame);
 
     void allotFrameBasedSegment(Core &_singleton, const FrameBasedData &_data);

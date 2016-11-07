@@ -68,6 +68,16 @@ void VideoManager::loadVideo(QString _path)
     this->worker->loadVideo(_path);
 }
 
+void VideoManager::exportJSON(const Core &_core)
+{
+    this->worker->exportJSON(_core);
+}
+
+void VideoManager::importJSON(Core &_core, const QString &_path)
+{
+    this->worker->importJSON(_core, _path);
+}
+
 QImage VideoManager::matToQimage(const Mat &_frame)
 {
     return this->worker->matToQimage(_frame);

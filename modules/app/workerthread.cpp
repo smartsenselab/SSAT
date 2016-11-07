@@ -60,6 +60,16 @@ void WorkerThread::loadVideo(QString _path)
     this->video.open(_path.toStdString());
 }
 
+void WorkerThread::exportJSON(const Core &_core)
+{
+    //Breno e Danilo: adicioanar implementação aqui
+}
+
+void WorkerThread::importJSON(Core &_core, const QString &_path)
+{
+    //Breno e Danilo: adicioanar implementação aqui
+}
+
 QImage WorkerThread::matToQimage(const Mat &_frameId)
 {
     if (_frameId.type() == CV_8UC3)

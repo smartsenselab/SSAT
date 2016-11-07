@@ -6,6 +6,7 @@
 
 #include <QDialog>
 
+#include "core.h"
 #include "framebaseddata.h"
 
 namespace Ui {
@@ -21,6 +22,8 @@ private:
 
     int frameId, totalFrames;
 
+    Core *singleton = NULL;
+
 public:
     explicit DialogFrameBased(QWidget *parent = 0);
     ~DialogFrameBased();
@@ -32,7 +35,7 @@ private:
     void connectSignalSlots();
 
 public slots:
-    void slot_initializeDialog(int _totalFrames, int _frameId);
+    void slot_initializeDialog(const int _totalFrames, const int _frameId);
 
     void slot_rewindButtonPressed();
     void slot_backButtonPressed();

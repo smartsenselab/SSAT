@@ -16,15 +16,18 @@ DialogFrameBased::~DialogFrameBased()
     delete ui;
 }
 
-int DialogFrameBased::IniFrameValue(){
+int DialogFrameBased::IniFrameValue()
+{
     return this->ui->spinBoxInitialFrame->value();
 }
 
-int DialogFrameBased::EndFrameValue(){
+int DialogFrameBased::EndFrameValue()
+{
     return this->ui->spinBoxFinalFrame->value();
 }
 
-QString DialogFrameBased::NameValue(){
+QString DialogFrameBased::NameValue()
+{
     return this->ui->lineEditName->text();
 }
 
@@ -67,7 +70,7 @@ void DialogFrameBased::connectSignalSlots()
                   );
 }
 
-void DialogFrameBased::slot_initializeDialog(int _totalFrames, int _frameId)
+void DialogFrameBased::slot_initializeDialog(const int _totalFrames, const int _frameId)
 {
     this->frameId = _frameId - 1;
     this->totalFrames = _totalFrames;

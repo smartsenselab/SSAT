@@ -18,9 +18,10 @@ public:
     Data(const string &_name);
     Data(const unsigned int &_id, const string &_name);
 
-    unsigned int getId() const;
     vector<string> getAttributes(const string &_key) const;
     vector<string> getComments() const;
+    unsigned int getId() const;
+    vector<string> getKeys() const;
     string getName() const;
 
     void addAttributes(const string &_key, const string &_attr);
