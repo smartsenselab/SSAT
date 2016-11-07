@@ -14,11 +14,6 @@ Data::Data(const unsigned int &_id, const string &_name)
     this->setName(_name);
 }
 
-unsigned int Data::getId() const
-{
-    return this->id;
-}
-
 vector<string> Data::getAttributes(const string &_key) const
 {
     vector<string> attributeVector;
@@ -34,13 +29,29 @@ vector<string> Data::getAttributes(const string &_key) const
             attributeVector.push_back(it->second);
         }
     }
-
     return attributeVector;
 }
 
 vector<string> Data::getComments() const
 {
     return this->comments;
+}
+
+unsigned int Data::getId() const
+{
+    return this->id;
+}
+
+vector<string> Data::getKeys() const
+{
+    vector<string> keyVector;
+    multimap<string, string>::const_iterator it;
+
+    for(it = this->attributes.begin(); it != this->attributes.end(); it++)
+    {
+        keyVector.push_back(it->first);
+    }
+    return keyVector;
 }
 
 string Data::getName() const
