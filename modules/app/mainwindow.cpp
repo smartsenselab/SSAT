@@ -562,7 +562,7 @@ void MainWindow::slot_newFrameMenu()
     int nextFrameId = static_cast<int>(this->manager->getFrameId());
     int totalFrames = static_cast<int>(this->manager->getTotalFrames());
 
-    this->frameDialog->slot_initializeDialog(totalFrames, nextFrameId);
+    this->frameDialog->slot_initializeDialog(*(this->singleton), totalFrames, nextFrameId);
 }
 
 void MainWindow::slot_ButtonBox(){
@@ -576,7 +576,6 @@ void MainWindow::slot_ButtonBox(){
 
     qDebug() << " Value InitFrame = " << InitFrame;
     qDebug() << " Value EndFrame = " << EndFrame;
-
 
     this->ui->tableWidget->setItem(this->ui->tableWidget->rowCount() - 1, 0, new QTableWidgetItem(nome));
     this->ui->tableWidget->setItem(this->ui->tableWidget->rowCount() - 1, 3, new QTableWidgetItem(QString::number(InitFrame)));

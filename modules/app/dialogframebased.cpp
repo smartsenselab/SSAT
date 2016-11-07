@@ -70,9 +70,10 @@ void DialogFrameBased::connectSignalSlots()
                   );
 }
 
-void DialogFrameBased::slot_initializeDialog(const int _totalFrames, const int _frameId)
+void DialogFrameBased::slot_initializeDialog(Core &_singleton, const int _totalFrames, const int _frameId)
 {
     this->frameId = _frameId - 1;
+    this->singleton = &_singleton;
     this->totalFrames = _totalFrames;
 
     this->ui->spinBoxInitialFrame->setMinimum(1);
@@ -82,6 +83,12 @@ void DialogFrameBased::slot_initializeDialog(const int _totalFrames, const int _
     this->ui->spinBoxFinalFrame->setMinimum(1);
     this->ui->spinBoxFinalFrame->setMaximum(this->totalFrames);
     this->ui->spinBoxFinalFrame->setValue(_frameId - 1);
+
+}
+
+void DialogFrameBased::slot_comboBoxCategoryActivated()
+{
+
 }
 
 void DialogFrameBased::slot_rewindButtonPressed()
@@ -136,13 +143,13 @@ void DialogFrameBased::slot_fastfButtonPressed()
     emit this->signal_fastfButtonPressed();
 }
 
-void DialogFrameBased::slot_ButtonBoxAccepted(){
-    emit this->signal_ButtonBoxAccepted();
-    accept();
+void DialogFrameBased::slot_buttonBoxAccepted(){
+    emit this->signal_buttonBoxAccepted();
+    this->accept();
 }
 
-void DialogFrameBased::slot_ButtonBoxRejected(){
-    reject();
+void DialogFrameBased::slot_buttonBoxRejected(){
+    this->reject();
 }
 
 void DialogFrameBased::slot_accept()

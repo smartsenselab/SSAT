@@ -35,14 +35,15 @@ private:
     void connectSignalSlots();
 
 public slots:
-    void slot_initializeDialog(const int _totalFrames, const int _frameId);
+    void slot_initializeDialog(Core &_singleton, const int _totalFrames, const int _frameId);
+    void slot_comboBoxCategoryActivated();
 
     void slot_rewindButtonPressed();
     void slot_backButtonPressed();
     void slot_forwardButtonPressed();
     void slot_fastfButtonPressed();
-    void slot_ButtonBoxAccepted();
-    void slot_ButtonBoxRejected();
+    void slot_buttonBoxAccepted();
+    void slot_buttonBoxRejected();
 
     void slot_accept();
     void slot_reject();
@@ -52,7 +53,7 @@ signals:
     void signal_backButtonPressed();
     void signal_forwardButtonPressed();
     void signal_fastfButtonPressed();
-    void signal_ButtonBoxAccepted();
+    void signal_buttonBoxAccepted();
 
     void signal_frameBasedOkButtonPressed(const FrameBasedData _data);
     void signal_frameBasedCancelButtonPressed();
