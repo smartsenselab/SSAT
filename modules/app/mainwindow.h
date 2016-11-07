@@ -98,7 +98,6 @@ public slots:
 
     void slot_newBoxMenu();
     void slot_newFrameMenu();
-    void slot_ButtonBox();
     void slot_removeBoxMenu();
 
     void slot_frameBasedAccepted(const FrameBasedData _data);
