@@ -665,15 +665,9 @@ void MainWindow::slot_newFrameMenu()
                   );
 
     this->connect(this->frameDialog,
-                  SIGNAL(signal_frameBasedOkButtonPressed(const FrameBasedData)),
+                  SIGNAL(signal_frameBasedAccepted(const FrameBasedData)),
                   this,
-                  SLOT(slot_frameBasedOkButtonPressed(const FrameBasedData))
-                  );
-
-    this->connect(this->frameDialog,
-                  SIGNAL(signal_ButtonBoxAccepted()),
-                  this,
-                  SLOT(slot_ButtonBox())
+                  SLOT(slot_frameBasedAccepted(const FrameBasedData))
                   );
 
     this->frameDialog->setModal(true);
@@ -682,25 +676,7 @@ void MainWindow::slot_newFrameMenu()
     int nextFrameId = static_cast<int>(this->manager->getFrameId());
     int totalFrames = static_cast<int>(this->manager->getTotalFrames());
 
-    this->frameDialog->slot_initializeDialog(totalFrames, nextFrameId);
-}
-
-void MainWindow::slot_ButtonBox(){
-    //Table row
-    int row = this->ui->tableWidget->rowCount() - 1;
-    this->ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-
-    this->InitFrame = this->frameDialog->IniFrameValue();
-    this->EndFrame = this->frameDialog->EndFrameValue();
-    this->nome = this->frameDialog->NameValue();
-
-    qDebug() << " Value InitFrame = " << InitFrame;
-    qDebug() << " Value EndFrame = " << EndFrame;
-
-
-    this->ui->tableWidget->setItem(this->ui->tableWidget->rowCount() - 1, 0, new QTableWidgetItem(nome));
-    this->ui->tableWidget->setItem(this->ui->tableWidget->rowCount() - 1, 3, new QTableWidgetItem(QString::number(InitFrame)));
-    this->ui->tableWidget->setItem(this->ui->tableWidget->rowCount() - 1, 4, new QTableWidgetItem(QString::number(EndFrame)));
+    this->frameDialog->slot_initializeDialog(*(this->singleton), totalFrames, nextFrameId);
 }
 
 void MainWindow::slot_removeBoxMenu()
@@ -708,7 +684,7 @@ void MainWindow::slot_removeBoxMenu()
     this->frameScene.deleteBBox();
 }
 
-void MainWindow::slot_frameBasedOkButtonPressed(const FrameBasedData _data)
+void MainWindow::slot_frameBasedAccepted(const FrameBasedData _data)
 {
     this->manager->allotFrameBasedSegment(*(this->singleton), _data);
 }
