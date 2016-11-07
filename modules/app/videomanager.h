@@ -29,7 +29,7 @@ public:
     void clearVideo();
     void loadVideo(const QString _path);
 
-    void exportJSON(const Core &_core);
+    void slot_exportJson(Core &_singleton, QString jsonName);
     void importJSON(Core &_core, const QString &_path);
 
     QImage matToQimage(const Mat &_frame);

@@ -425,7 +425,7 @@ void MainWindow::slot_importJson()
             QJsonValue person_identification = obj2.value(QString("person_identification")).toArray();
             qDebug() << person_identification;
 
-            int size = person_identification.size();
+            //int size = person_identification.size();
 //            for(int i = 0; i < size; i++){
 //                QString answer = person_identification.at(i).toString();
 //                qDebug() << answer;
@@ -468,6 +468,7 @@ void MainWindow::slot_exportJson()
                                                     tr("Import JSON..."),
                                                     tr("/home"),
                                                     tr("JSON file (*.json)"));
+    this->manager->slot_exportJson(*(this->singleton),jsonName);
 }
 
 void MainWindow::slot_closeApplitacion()

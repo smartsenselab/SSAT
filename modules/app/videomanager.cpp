@@ -68,9 +68,10 @@ void VideoManager::loadVideo(QString _path)
     this->worker->loadVideo(_path);
 }
 
-void VideoManager::exportJSON(const Core &_core)
-{
-    this->worker->exportJSON(_core);
+void VideoManager::slot_exportJson(Core &_singleton,QString jsonName){
+
+    this->worker->slot_exportJson(_singleton,jsonName);
+
 }
 
 void VideoManager::importJSON(Core &_core, const QString &_path)
