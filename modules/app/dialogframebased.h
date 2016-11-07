@@ -5,6 +5,8 @@
 #include <iostream>
 
 #include <QDialog>
+#include <QtCore>
+#include <QtGui>
 
 #include "core.h"
 #include "framebaseddata.h"
@@ -21,8 +23,10 @@ private:
     Ui::DialogFrameBased *ui;
 
     int frameId, totalFrames;
-
     Core *singleton = NULL;
+
+    QStringListModel *categoryModel = NULL;
+    QStringListModel *labelModel = NULL;
 
 public:
     explicit DialogFrameBased(QWidget *parent = 0);
@@ -33,10 +37,11 @@ public:
 
 private:
     void connectSignalSlots();
+    void initializeComboboxes();
 
 public slots:
     void slot_initializeDialog(Core &_singleton, const int _totalFrames, const int _frameId);
-    void slot_comboBoxCategoryActivated();
+    void slot_comboBoxCategoryActivated(const QString &_text);
 
     void slot_rewindButtonPressed();
     void slot_backButtonPressed();
@@ -45,9 +50,6 @@ public slots:
     void slot_buttonBoxAccepted();
     void slot_buttonBoxRejected();
 
-    void slot_accept();
-    void slot_reject();
-
 signals:
     void signal_rewindButtonPressed();
     void signal_backButtonPressed();
@@ -55,8 +57,8 @@ signals:
     void signal_fastfButtonPressed();
     void signal_buttonBoxAccepted();
 
-    void signal_frameBasedOkButtonPressed(const FrameBasedData _data);
-    void signal_frameBasedCancelButtonPressed();
+    void signal_frameBasedAccepted(const FrameBasedData _data);
+    void signal_frameBasedRejected();
 };
 
 #endif // DIALOGFRAMEBASED_H

@@ -33,6 +33,12 @@ QString DialogFrameBased::NameValue()
 
 void DialogFrameBased::connectSignalSlots()
 {
+    this->connect(this->ui->comboBoxCategory,
+                  SIGNAL(activated(QString)),
+                  this,
+                  SLOT(slot_comboBoxCategoryActivated(QString))
+                  );
+
     this->connect(this->ui->buttonRewindF,
                   SIGNAL(pressed()),
                   this,
@@ -60,14 +66,44 @@ void DialogFrameBased::connectSignalSlots()
     this->connect(this->ui->buttonBox,
                   SIGNAL(accepted()),
                   this,
-                  SLOT(slot_accept())
+                  SLOT(slot_buttonBoxAccepted())
                   );
 
     this->connect(this->ui->buttonBox,
                   SIGNAL(rejected()),
                   this,
-                  SLOT(slot_reject())
+                  SLOT(slot_buttonBoxRejected())
                   );
+}
+
+void DialogFrameBased::initializeComboboxes()
+{
+    QStringList categoryList, labelList;
+    QSet<QString> categorySet, labelSet;
+
+    // populate comboBoxCategory
+    multimap<string, string>::iterator it;
+    for(it = this->singleton->attributes.begin(); it != this->singleton->attributes.end(); it++)
+    {
+        categorySet.insert(QString::fromStdString(it->first));
+    }
+    categoryList.append(categorySet.toList());
+
+    this->categoryModel = new QStringListModel(this);
+    this->categoryModel->setStringList(categoryList);
+    this->ui->comboBoxCategory->setModel(this->categoryModel);
+
+    // populate comboBoxLabel
+    string category = this->ui->comboBoxCategory->currentText().toStdString();
+    for(it = this->singleton->attributes.lower_bound(category); it != this->singleton->attributes.upper_bound(category); it++)
+    {
+        labelSet.insert(QString::fromStdString(it->second));
+    }
+    labelList.append(labelSet.toList());
+
+    this->labelModel = new QStringListModel(this);
+    this->labelModel->setStringList(labelList);
+    this->ui->comboBoxLabel->setModel(this->labelModel);
 }
 
 void DialogFrameBased::slot_initializeDialog(Core &_singleton, const int _totalFrames, const int _frameId)
@@ -84,11 +120,26 @@ void DialogFrameBased::slot_initializeDialog(Core &_singleton, const int _totalF
     this->ui->spinBoxFinalFrame->setMaximum(this->totalFrames);
     this->ui->spinBoxFinalFrame->setValue(_frameId - 1);
 
+    this->initializeComboboxes();
+
 }
 
-void DialogFrameBased::slot_comboBoxCategoryActivated()
+void DialogFrameBased::slot_comboBoxCategoryActivated(const QString &_text)
 {
+    QStringList labelList;
+    QSet<QString> labelSet;
 
+    // populate comboBoxLabel
+    string category = _text.toStdString();
+    multimap<string, string>::iterator it;
+    for(it = this->singleton->attributes.lower_bound(category); it != this->singleton->attributes.upper_bound(category); it++)
+    {
+        labelSet.insert(QString::fromStdString(it->second));
+    }
+    labelList.append(labelSet.toList());
+
+    this->labelModel->setStringList(labelList);
+    this->ui->comboBoxLabel->setModel(this->labelModel);
 }
 
 void DialogFrameBased::slot_rewindButtonPressed()
@@ -143,27 +194,18 @@ void DialogFrameBased::slot_fastfButtonPressed()
     emit this->signal_fastfButtonPressed();
 }
 
-void DialogFrameBased::slot_buttonBoxAccepted(){
-    emit this->signal_buttonBoxAccepted();
-    this->accept();
-}
-
-void DialogFrameBased::slot_buttonBoxRejected(){
-    this->reject();
-}
-
-void DialogFrameBased::slot_accept()
+void DialogFrameBased::slot_buttonBoxAccepted()
 {
     FrameBasedData data = FrameBasedData(this->ui->spinBoxInitialFrame->value(),
                                          this->ui->spinBoxFinalFrame->value(),
                                          this->ui->comboBoxCategory->currentText().toStdString(),
                                          this->ui->comboBoxLabel->currentText().toStdString(),
                                          this->ui->lineEditName->text().toStdString());
-    emit this->signal_frameBasedOkButtonPressed(data);
+    emit this->signal_frameBasedAccepted(data);
     this->accept();
 }
 
-void DialogFrameBased::slot_reject()
+void DialogFrameBased::slot_buttonBoxRejected()
 {
     this->reject();
 }

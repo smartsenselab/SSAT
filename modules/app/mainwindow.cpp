@@ -545,13 +545,13 @@ void MainWindow::slot_newFrameMenu()
                   );
 
     this->connect(this->frameDialog,
-                  SIGNAL(signal_frameBasedOkButtonPressed(const FrameBasedData)),
+                  SIGNAL(signal_frameBasedAccepted(const FrameBasedData)),
                   this,
-                  SLOT(slot_frameBasedOkButtonPressed(const FrameBasedData))
+                  SLOT(slot_frameBasedAccepted(const FrameBasedData))
                   );
 
     this->connect(this->frameDialog,
-                  SIGNAL(signal_ButtonBoxAccepted()),
+                  SIGNAL(signal_buttonBoxAccepted()),
                   this,
                   SLOT(slot_ButtonBox())
                   );
@@ -587,7 +587,7 @@ void MainWindow::slot_removeBoxMenu()
     this->frameScene.deleteBBox();
 }
 
-void MainWindow::slot_frameBasedOkButtonPressed(const FrameBasedData _data)
+void MainWindow::slot_frameBasedAccepted(const FrameBasedData _data)
 {
     this->manager->allotFrameBasedSegment(*(this->singleton), _data);
 }

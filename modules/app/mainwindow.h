@@ -101,7 +101,7 @@ public slots:
     void slot_ButtonBox();
     void slot_removeBoxMenu();
 
-    void slot_frameBasedOkButtonPressed(const FrameBasedData _data);
+    void slot_frameBasedAccepted(const FrameBasedData _data);
 
     void slot_addBoundingBoxToCore(const Rect _box);
 
