@@ -404,37 +404,33 @@ void MainWindow::slot_importJson()
         //QJsonValue attributs = obj.value("attributes");
         //qDebug() << attributs;
 
-        QJsonValue attributs = obj.value("attributes");
-        qDebug() << attributs;
-        QJsonObject attributs2 =  attributs.toObject();
-        qDebug() << attributs2;
-
+//        QJsonArray attributs = obj.value("attributes").toArray();
+//        qDebug() << attributs;
 //        size = attributs.size();
 //            for(int i = 0; i < size; i++){
 //                QJsonObject answer = attributs.at(i).toObject();
 //                qDebug() << answer;
 //                QJsonValue answer2 = answer["person_identification"];
-//                qDebug() << answer2;
+//                qDebug() << answer2.toString();
 //            }
 
 
-//        QJsonArray attributs = json_Value2.toArray();
-//        qDebug() << attributs;
-//        foreach (const QJsonValue & value2, attributs) {
-//            QJsonObject obj2 = value2.toObject();
-//            qDebug() << obj2;
+        QJsonArray attributs = obj.value("attributes").toArray();
+        qDebug() << attributs;
+        foreach (const QJsonValue & value2, attributs) {
+            QJsonObject obj2 = value2.toObject();
+            qDebug() << obj2;
 
-//            // PERSON IDENTIFICATION
-//            QJsonValue person_identification = obj2.value(QString("person_identification"));
-//            qDebug() << person_identification;
+            // PERSON IDENTIFICATION
+            QJsonValue person_identification = obj2.value(QString("person_identification")).toArray();
+            qDebug() << person_identification;
 
-//            //qDebug() << person_identification;
-//            /*int size = person_identification.size();
+            int size = person_identification.size();
 //            for(int i = 0; i < size; i++){
 //                QString answer = person_identification.at(i).toString();
 //                qDebug() << answer;
-//            }*/
-//        }
+//            }
+        }
 
         // Coments
         /*QJsonArray comments = obj.value("comments").toArray();
@@ -452,6 +448,18 @@ void MainWindow::slot_importJson()
             qDebug() << value2;
         }*/
     }
+
+    /* Sem objeto dentro de objeto
+     *
+     * QJsonObject s = d.object();
+     * QJsonValue value = s.value(QString("attributes"));
+     * qDebug() << value;
+     * QJsonObject item =  value.toObject();
+     * qDebug() << item;
+     * QJsonValue subobj = item["tracker"];
+     * qDebug() << subobj.toString();
+     *
+     */
 }
 
 void MainWindow::slot_exportJson()
