@@ -132,14 +132,14 @@ void WorkerThread::exportJSON(Core &_singleton, const QString &_jsonName){
     file.write(out.toJson());
 }
 
-void WorkerThread::importJSON(Core &_core, const QString &_path)
+void WorkerThread::importJSON(Core &_singleton, const QString &_jsonName)
 {
-    _core.frameData.clear();
-    _core.attributes.clear();
+    _singleton.frameData.clear();
+    _singleton.attributes.clear();
 
     QString val;
     QFile file;
-    file.setFileName(_path);
+    file.setFileName(_jsonName);
     file.open(QIODevice::ReadOnly | QIODevice::Text);
     val = file.readAll();
     file.close();
@@ -171,7 +171,7 @@ void WorkerThread::importJSON(Core &_core, const QString &_path)
         label = obj.value("label").toString();
         labelString = label.toString().toUtf8().constData();
 
-        _core.attributes.insert(std::pair<string, string>(categoryString, labelString));
+        _singleton.attributes.insert(std::pair<string, string>(categoryString, labelString));
     }
 
     // FRAMETABLE
@@ -204,7 +204,7 @@ void WorkerThread::importJSON(Core &_core, const QString &_path)
         int end = std::stoi(endframeString);
 
         frameData = FrameBasedData(init, end, categoryString, labelString, nameString);
-        _core.frameData.push_back(frameData);
+        _singleton.frameData.push_back(frameData);
     }
 }
 

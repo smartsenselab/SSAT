@@ -73,9 +73,9 @@ void VideoManager::exportJSON(Core &_singleton, const QString &_jsonName)
     this->worker->exportJSON(_singleton, _jsonName);
 }
 
-void VideoManager::importJSON(Core &_core, const QString &_jsonName)
+void VideoManager::importJSON(Core &_singleton, const QString &_jsonName)
 {
-    this->worker->importJSON(_core, _jsonName);
+    this->worker->importJSON(_singleton, _jsonName);
 }
 
 QImage VideoManager::matToQimage(const Mat &_frame)
