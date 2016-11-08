@@ -67,7 +67,78 @@ void WorkerThread::exportJSON(const Core &_core)
 
 void WorkerThread::importJSON(Core &_core, const QString &_path)
 {
-    //Breno e Danilo: adicioanar implementação aqui
+    _core.frameData.clear();
+    _core.attributes.clear();
+
+    QString val;
+    QFile file;
+    file.setFileName(_path);
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    val = file.readAll();
+    file.close();
+
+    QJsonDocument json_Doc = QJsonDocument::fromJson(val.toUtf8());
+    QJsonObject json_Obj = json_Doc.object();
+
+    FrameBasedData frameData;
+    QJsonValue label, category, name, iniframe, endframe;
+    std::string labelString, categoryString, nameString, iniframeString, endframeString;
+
+    //HEADER
+    QJsonValue json_Value = json_Obj.value(QString("Header"));
+    QJsonObject item =  json_Value.toObject();
+    QJsonValue tracker = item["tracker"];
+    QJsonValue version = item["version"];
+    QJsonValue date = item["date"];
+
+    // ATTRIBUTES
+    QJsonArray attributes = json_Obj["Attributes"].toArray();
+    foreach (const QJsonValue & value, attributes) {
+        QJsonObject obj = value.toObject();
+
+        // CATEGORY
+        category = obj.value("Category").toString();
+        categoryString = category.toString().toUtf8().constData();
+
+        // LABEL
+        label = obj.value("label").toString();
+        labelString = label.toString().toUtf8().constData();
+
+        _core.attributes.insert(std::pair<string, string>(categoryString, labelString));
+    }
+
+    // FRAMETABLE
+    int flag = 1;
+    QJsonArray FrameTable = json_Obj["FrameTable"].toArray();
+    foreach (const QJsonValue & value, FrameTable) {
+        QJsonObject obj = value.toObject();
+
+        // NAME
+        name = obj.value("Name").toString();
+        nameString = name.toString().toUtf8().constData();
+
+        // CATEGORY
+        category = obj.value("Category").toString();
+        categoryString = category.toString().toUtf8().constData();
+
+        // LABEL
+        label = obj.value("label").toString();
+        labelString = label.toString().toUtf8().constData();
+
+        // INIFRAME
+        iniframe = obj.value("IniFrame").toString();
+        iniframeString = iniframe.toString().toUtf8().constData();
+
+        // ENDFRAME
+        endframe = obj.value("EndFrame").toString();
+        endframeString = endframe.toString().toUtf8().constData();
+
+        int init = std::stoi(iniframeString);
+        int end = std::stoi(endframeString);
+
+        frameData = FrameBasedData(init, end, categoryString, labelString, nameString);
+        _core.frameData.push_back(frameData);
+    }
 }
 
 QImage WorkerThread::matToQimage(const Mat &_frameId)
@@ -92,6 +163,6 @@ void WorkerThread::allotFrameBasedSegment(Core &_singleton, const FrameBasedData
         unsigned long longFrameId = static_cast<unsigned long>(frameId);
         _singleton.frames[longFrameId].setName(_data.getName());
         _singleton.frames[longFrameId].addAttributes("_data.getCategory()", "_data.getLabel()");
-//        _singleton.frames[longFrameId].addAttributes(_data.getCategory(), _data.getLabel());
+        //        _singleton.frames[longFrameId].addAttributes(_data.getCategory(), _data.getLabel());
     }
 }

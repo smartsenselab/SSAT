@@ -1,6 +1,8 @@
 #ifndef VIDEOMANAGEMENT_H
 #define VIDEOMANAGEMENT_H
 
+#include <QtCore>
+
 #include <QImage>
 #include <QObject>
 #include <QThread>

@@ -12,6 +12,7 @@ using cv::Rect;
 using cv::VideoCapture;
 
 #include "frame.h"
+#include "framebaseddata.h"
 #include "threadpool.h"
 
 /*
@@ -36,6 +37,7 @@ public:
     ThreadPool *pool;
 
     multimap<string, string> attributes;
+    vector<FrameBasedData> frameData;
     vector<Frame> frames;
 };
 
