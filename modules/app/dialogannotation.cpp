@@ -107,21 +107,22 @@ void DialogAnnotation::slot_insertCategoryPressed()
 
 void DialogAnnotation::slot_insertLabelPressed()
 {
-    int currentRow = this->ui->treeViewAttributes->currentIndex().row();
+    QStandardItem *parent = this->qStandardModel->itemFromIndex(ui->treeViewAttributes->currentIndex());
 
-    QStandardItem *parent = this->qStandardModel->item(currentRow);
+    QStandardItem *parent2 = parent->parent();
 
-    if(parent)
+    if(parent2)
     {
+        QStandardItem *label = new QStandardItem("New label");
+        parent2->appendRow(label);
+
+        this->ui->treeViewAttributes->expand(parent->index());
+    }
+    else if( !parent2 ){
         QStandardItem *label = new QStandardItem("New label");
         parent->appendRow(label);
 
         this->ui->treeViewAttributes->expand(parent->index());
-
-        //int row = parent->rowCount();
-        //QModelIndex index = this->qStandardModel->index(currentRow + row, 1);
-        //this->ui->treeViewAttributes->setCurrentIndex(index);
-        //this->ui->treeViewAttributes->edit(index);
     }
 }
 
