@@ -4,6 +4,11 @@
 #include <QImage>
 #include <QObject>
 #include <QThread>
+#include <QFile>
+#include<QJsonArray>
+#include<QJsonDocument>
+#include <QJsonObject>
+#include <QDate>
 
 #include <iostream>
 
@@ -40,8 +45,8 @@ public:
     void clearVideo();
     void loadVideo(QString _path);
 
-    void exportJSON(const Core &_core);
-    void importJSON(Core &_core, const QString &_path);
+    void exportJSON(Core &_singleton, const QString &_jsonName);
+    void importJSON(Core &_singleton, const QString &_jsonName);
 
     QImage matToQimage(const Mat &_frame);
 

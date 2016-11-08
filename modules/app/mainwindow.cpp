@@ -425,11 +425,11 @@ void MainWindow::slot_importJson()
             QJsonValue person_identification = obj2.value(QString("person_identification")).toArray();
             qDebug() << person_identification;
 
-//            int size = person_identification.size();
-//            for(int i = 0; i < size; i++){
-//                QString answer = person_identification.at(i).toString();
-//                qDebug() << answer;
-//            }
+            //int size = person_identification.size();
+            //            for(int i = 0; i < size; i++){
+            //                QString answer = person_identification.at(i).toString();
+            //                qDebug() << answer;
+            //            }
         }
 
         // Coments
@@ -468,6 +468,7 @@ void MainWindow::slot_exportJson()
                                                     tr("Import JSON..."),
                                                     tr("/home"),
                                                     tr("JSON file (*.json)"));
+    this->manager->exportJSON(*(this->singleton), jsonName);
 }
 
 void MainWindow::slot_closeApplitacion()
@@ -619,21 +620,21 @@ void MainWindow::slot_newBoxMenu()
 {
     this->frameScene.slot_enableDraw();
 
-//    // CheckBox
-//    QTableWidgetItem *checkBoxItem = new QTableWidgetItem();
-//    checkBoxItem->setCheckState(Qt::Unchecked);
+    //    // CheckBox
+    //    QTableWidgetItem *checkBoxItem = new QTableWidgetItem();
+    //    checkBoxItem->setCheckState(Qt::Unchecked);
 
-//    // Cancel Button
-//    QPushButton* btn_cancel = new QPushButton();
-//    btn_cancel = new QPushButton();
-//    btn_cancel->setText("Cancel");
-//    //btn_cancel->setIcon(QIcon("https://t4.ftcdn.net/jpg/00/08/30/29/500_F_8302961_GVoPsXWcNsfvVygwE2sri9m9aISpJgYQ.jpg"));
+    //    // Cancel Button
+    //    QPushButton* btn_cancel = new QPushButton();
+    //    btn_cancel = new QPushButton();
+    //    btn_cancel->setText("Cancel");
+    //    //btn_cancel->setIcon(QIcon("https://t4.ftcdn.net/jpg/00/08/30/29/500_F_8302961_GVoPsXWcNsfvVygwE2sri9m9aISpJgYQ.jpg"));
 
-//    // Table row
-//    int row = this->ui->tableWidget->rowCount() - 1;
-//    this->ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-//    this->ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 0, checkBoxItem);
-//    this->ui->tableWidget->setCellWidget(row, 3, btn_cancel);
+    //    // Table row
+    //    int row = this->ui->tableWidget->rowCount() - 1;
+    //    this->ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+    //    this->ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 0, checkBoxItem);
+    //    this->ui->tableWidget->setCellWidget(row, 3, btn_cancel);
 }
 
 void MainWindow::slot_newFrameMenu()
