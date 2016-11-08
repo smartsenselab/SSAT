@@ -309,7 +309,6 @@ void MainWindow::slot_openFile()
                                                      tr("Open Video..."),
                                                      tr("/home"),
                                                      tr("Video Files (*.avi *.mp4 *.mov)"));
-
     if(!videoName.isEmpty())
     {
         this->manager->loadVideo(videoName);
@@ -329,6 +328,8 @@ void MainWindow::slot_openFile()
         this->ui->sliderFrame->setEnabled(true);
         this->ui->sliderFrame->setRange(1, static_cast<int>(this->totalFrames));
 
+        this->tableModel.setFrameBasedData(this->singleton->frameData);
+
         this->enableWidgets(true);
         this->updateFrame(1);
     }
@@ -341,6 +342,7 @@ void MainWindow::slot_importJson()
                                                     tr("/home"),
                                                     tr("JSON file (*.json)"));
     this->manager->importJSON(*(this->singleton), jsonName);
+    this->tableModel.setFrameBasedData(this->singleton->frameData);
 }
 
 void MainWindow::slot_exportJson()

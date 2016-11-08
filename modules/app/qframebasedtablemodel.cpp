@@ -29,8 +29,36 @@ QVariant QFrameBasedTableModel::data(const QModelIndex &_index, int _role) const
     {
         return QVariant();
     }
+    else if(_role == Qt::TextAlignmentRole)
+    {
+        return int(Qt::AlignRight | Qt::AlignVCenter);
+    }
+    else if(_role == Qt::DisplayRole)
+    {
+        switch(_index.column())
+        {
+        case 0:
+            return QString::fromStdString(this->frameData[_index.row()].getName());
+            break;
+        case 1:
+            return QString::fromStdString(this->frameData[_index.row()].getCategory());
+            break;
+        case 2:
+            return QString::fromStdString(this->frameData[_index.row()].getLabel());
+            break;
+        case 3:
+            return this->frameData[_index.row()].getInitialFrameId();
+            break;
+        case 4:
+            return this->frameData[_index.row()].getFinalFrameId();
+            break;
+        }
+    }
+    else if(_role == Qt::EditRole)
+    {
 
-    // FIXME: Implement me!
+    }
+
     return QVariant();
 }
 
@@ -58,4 +86,9 @@ Qt::ItemFlags QFrameBasedTableModel::flags(const QModelIndex &_index) const
 void QFrameBasedTableModel::setFrameBasedData(const vector<FrameBasedData> &_frameBasedData)
 {
     this->frameData = _frameBasedData;
+}
+
+vector<FrameBasedData> QFrameBasedTableModel::getFrameBasedData()
+{
+    return this->frameData;
 }

@@ -19,6 +19,7 @@ Core::Core(unsigned int _frames, unsigned int _cores)
 Core::~Core()
 {
     this->attributes.clear();
+    this->frameData.clear();
     this->frames.clear();
     delete(this->pool);
 }
@@ -38,12 +39,14 @@ Core* Core::getInstance(unsigned int _frames, unsigned int _cores)
 
 void Core::reset(const unsigned int _frames)
 {
+    this->frameData.clear();
     this->frames.clear();
     this->frames.resize(_frames);
 }
 
 void Core::reset(const unsigned int _frames, unsigned int _cores)
 {
+    this->frameData.clear();
     this->frames.clear();
     this->frames.resize(_frames);
 

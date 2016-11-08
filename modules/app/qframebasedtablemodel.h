@@ -18,7 +18,6 @@ public:
     // Basic functionality:
     int rowCount(const QModelIndex &_parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &_parent = QModelIndex()) const override;
-
     QVariant data(const QModelIndex &_index, int _role = Qt::DisplayRole) const override;
 
     // Editable:
@@ -27,6 +26,7 @@ public:
 
     // Custom methods:
     void setFrameBasedData(const vector<FrameBasedData> &_frameBasedData);
+    vector<FrameBasedData> getFrameBasedData();
 
 private:
     vector<FrameBasedData> frameData;
