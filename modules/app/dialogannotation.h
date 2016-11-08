@@ -11,7 +11,6 @@ using std::multimap;
 #include <QModelIndex>
 #include <QtCore>
 #include <QtGui>
-#include <QStandardItem>
 #include <QStandardItemModel>
 
 #include "core.h"

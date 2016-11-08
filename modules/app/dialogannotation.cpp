@@ -110,7 +110,6 @@ void DialogAnnotation::slot_insertLabelPressed()
     QStandardItem *node = this->qStandardModel->itemFromIndex(ui->treeViewAttributes->currentIndex());
     QStandardItem *parent = node->parent();
 
-
     QStandardItem *label = new QStandardItem("New label");
     if(parent)
     {
@@ -152,6 +151,7 @@ void DialogAnnotation::slot_accept()
     }
 
     this->singleton->attributes = newAttributes;
+    this->accept();
 }
 
 void DialogAnnotation::slot_reject()
