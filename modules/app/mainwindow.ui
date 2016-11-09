@@ -41,9 +41,6 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="12" colspan="6">
-     <widget class="QTableWidget" name="tableWidget"/>
-    </item>
     <item row="5" column="7">
      <widget class="QPushButton" name="buttonNewBox">
       <property name="text">
@@ -202,6 +199,9 @@
        <number>1</number>
       </property>
      </widget>
+    </item>
+    <item row="1" column="12" colspan="6">
+     <widget class="QTableView" name="tableViewFrame"/>
     </item>
    </layout>
   </widget>

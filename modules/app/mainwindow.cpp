@@ -178,14 +178,18 @@ void MainWindow::connectSignalSlots()
 
 void MainWindow::setTable()
 {
-    QStringList headerLabels;
-    QHeaderView* header = ui->tableWidget->horizontalHeader();
+    this->tableModel = new QFrameBasedTableModel(this);
+    this->ui->tableViewFrame->setModel(this->tableModel);
+    this->ui->tableViewFrame->reset();
 
-    headerLabels << "Name" << "Cat" << "Lab" << "Ini" << "End";
-    header->setSectionResizeMode(QHeaderView::Stretch);
+//    QStringList headerLabels;
+//    QHeaderView* header = ui->tableWidget->horizontalHeader();
 
-    this->ui->tableWidget->setColumnCount(5);
-    this->ui->tableWidget->setHorizontalHeaderLabels(headerLabels);
+//    headerLabels << "Name" << "Cat" << "Lab" << "Ini" << "End";
+//    header->setSectionResizeMode(QHeaderView::Stretch);
+
+//    this->ui->tableWidget->setColumnCount(5);
+//    this->ui->tableWidget->setHorizontalHeaderLabels(headerLabels);
 }
 
 void MainWindow::changeSpeed(const int _speed)
@@ -328,7 +332,8 @@ void MainWindow::slot_openFile()
         this->ui->sliderFrame->setEnabled(true);
         this->ui->sliderFrame->setRange(1, static_cast<int>(this->totalFrames));
 
-        this->tableModel.setFrameBasedData(this->singleton->frameData);
+        this->tableModel->setFrameBasedData(this->singleton->frameData);
+        this->ui->tableViewFrame->setModel(this->tableModel);
 
         this->enableWidgets(true);
         this->updateFrame(1);
@@ -342,7 +347,8 @@ void MainWindow::slot_importJson()
                                                     tr("/home"),
                                                     tr("JSON file (*.json)"));
     this->manager->importJSON(*(this->singleton), jsonName);
-    this->tableModel.setFrameBasedData(this->singleton->frameData);
+    this->tableModel->setFrameBasedData(this->singleton->frameData);
+    this->ui->tableViewFrame->setModel(this->tableModel);
 }
 
 void MainWindow::slot_exportJson()

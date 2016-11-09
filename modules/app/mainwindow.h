@@ -44,7 +44,7 @@ private:
     DialogFrameBased *frameDialog = NULL;
 
     QBoundingBox frameScene;
-    QFrameBasedTableModel tableModel;
+    QFrameBasedTableModel *tableModel = NULL;
     QGraphicsRectItem *rectangle = NULL;
 
     VideoManager *manager;
