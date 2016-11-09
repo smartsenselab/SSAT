@@ -231,12 +231,13 @@ QImage WorkerThread::matToQimage(const Mat &_frameId)
 
 void WorkerThread::allotFrameBasedSegment(Core &_singleton, const FrameBasedData &_data)
 {
-    for(int frameId = _data.getInitialFrameId(); frameId <= _data.getFinalFrameId(); frameId++)
-    {
-        unsigned long longFrameId = static_cast<unsigned long>(frameId);
-        _singleton.frames[longFrameId].setName(_data.getName());
-        _singleton.frames[longFrameId].addAttributes("_data.getCategory()", "_data.getLabel()");
-        //        _singleton.frames[longFrameId].addAttributes(_data.getCategory(), _data.getLabel());
-    }
+//    for(int frameId = _data.getInitialFrameId(); frameId <= _data.getFinalFrameId(); frameId++)
+//    {
+//        unsigned long longFrameId = static_cast<unsigned long>(frameId);
+//        _singleton.frames[longFrameId].setName(_data.getName());
+//        _singleton.frames[longFrameId].addAttributes("_data.getCategory()", "_data.getLabel()");
+//        //_singleton.frames[longFrameId].addAttributes(_data.getCategory(), _data.getLabel());
+//    }
+    _singleton.frameData.push_back(_data);
 }
 
