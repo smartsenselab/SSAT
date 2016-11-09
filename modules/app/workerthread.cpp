@@ -62,10 +62,10 @@ void WorkerThread::loadVideo(QString _path)
 }
 
 void WorkerThread::exportJSON(Core &_singleton, const QString &_jsonName){
-    QJsonDocument out;
+    QJsonDocument output;
     QFile file;
-    QJsonArray Array1, Array2, Array3, Array4, Array5, Array6;
-    QJsonObject obj1, obj2, obj3, obj4, obj5, teste;
+    QJsonArray Array1, Array2;
+    QJsonObject obj1, obj2, obj3,Final;
 
     map<string, BoundingBox> x;
     multimap<string, string> map1 = _singleton.attributes;
@@ -76,7 +76,7 @@ void WorkerThread::exportJSON(Core &_singleton, const QString &_jsonName){
     obj2["tracker"] = QString::fromStdString("CMT");
     obj2["version"] = QString::fromStdString("1.0.1");
     obj2["date"] =QDate::currentDate().toString();
-    teste["Header"] = obj2;
+    Final["Header"] = obj2;
 
     while( i != map1.end() ){
         obj1["Category"] = QString::fromStdString(i->first);
@@ -84,53 +84,20 @@ void WorkerThread::exportJSON(Core &_singleton, const QString &_jsonName){
         Array1.append(obj1);
         i++;
     }
-    teste["Attributes"] = Array1;
-    int frame_num = 0;
-    while(j!=_singleton.frames.end()){
-        string a = std::to_string(j->getId());
-        string c = j->getName();
-        vector<string> frame_obj = j->getAttributes("Object_recognition");
-        vector<string> person = j->getAttributes("Person_identification");
-        for(auto elemen:frame_obj){
-            Array5.append(QString::fromStdString(elemen));
-        }
-        for(auto elemen: person){
-            Array6.append(QString::fromStdString(elemen));
-        }
-        obj5["Object_regognition"] = Array5;
-        obj5["Person_identification"] = Array6;
-        obj3["Attributes"] = obj5;
-        obj3["ID"] = QString::fromStdString(a);
-        obj3["Name"] = QString::fromStdString(c);
-        obj3["numero_frame"] = frame_num;
-        if(j->getBoxes().empty()==false){
-            x = j->getBoxes();
-            for (auto elemen:x){
-                obj4["cat_id"] = QString::fromStdString(elemen.first);
-                obj4["X"] = elemen.second.getX();
-                obj4["Y"] = elemen.second.getY();
-                obj4["W"] = elemen.second.getW();
-                obj4["H"] = elemen.second.getH();
-                Array3.append(obj4);
-            }
-        }
-        obj3["boxes"] = Array3;
-        for(auto elemen:j->getComments()){
-            Array4.append(QString::fromStdString(elemen));
-        }
-        obj3["comment"] = Array4;
-        for(int j=0;j<4;j++){
-            Array3.removeFirst();
-        }
+    Final["Attributes"] = Array1;
+    for(auto iter:_singleton.frameData){
+        obj3["Name"] = QString ::fromStdString(iter.getName());
+        obj3["Category"] = QString::fromStdString(iter.getCategory());
+        obj3["label"] = QString::fromStdString(iter.getLabel());
+        obj3["IniFrame"] = QString::fromStdString(std::to_string(iter.getInitialFrameId()));
+        obj3["EndFrame"] = QString::fromStdString(std::to_string(iter.getFinalFrameId()));
         Array2.append(obj3);
-        j++;
-        frame_num++;
     }
-    teste["Frames"] = Array2;
-    out.setObject(teste);
+    Final["FrameTable"] = Array2;
+    output.setObject(Final);
     file.setFileName(_jsonName);
     file.open(QIODevice::WriteOnly);
-    file.write(out.toJson());
+    file.write(output.toJson());
 }
 
 void WorkerThread::importJSON(Core &_singleton, const QString &_jsonName)
