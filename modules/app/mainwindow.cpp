@@ -178,10 +178,50 @@ void MainWindow::connectSignalSlots()
 
 void MainWindow::setTable()
 {
-    this->tableModel = new QFrameBasedTableModel(this);
-    this->ui->tableViewFrame->setModel(this->tableModel);
-    this->ui->tableViewFrame->reset();
+/// ORIGINAL EXAMPLE
+//    this->tableModel = new QFrameBasedTableModel(this);
+//    this->ui->tableViewFrame->setModel(this->tableModel);
+//    this->ui->tableViewFrame->reset();
 
+
+/// MY LAST ATTEMPT
+    QFrameBasedTableModel *model = new QFrameBasedTableModel(this);
+    vector<FrameBasedData> frameData;
+
+    for(int index = 0; index < 3; index++)
+    {
+        string sIndex = std::to_string(index);
+        FrameBasedData temp = FrameBasedData(index,
+                                             index * 4,
+                                             "Category " + sIndex,
+                                             "Label " + sIndex,
+                                             "Name " + sIndex
+                                             );
+        frameData.push_back(temp);
+    }
+
+    model->setFrameBasedData(frameData);
+    this->ui->tableViewFrame->setModel(model);
+    this->ui->tableViewFrame->setAlternatingRowColors(true);
+
+/// ONE THAT WORKS
+//    QStandardItemModel *model = new QStandardItemModel(2,3, this);
+//    model->setHorizontalHeaderItem(0, new QStandardItem(QString("Header 1")));
+//    model->setHorizontalHeaderItem(1, new QStandardItem(QString("Header 2")));
+//    model->setHorizontalHeaderItem(2, new QStandardItem(QString("Header 3")));
+//    this->ui->tableViewFrame->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+//    this->ui->tableViewFrame->setModel(model);
+//    this->ui->tableViewFrame->setAlternatingRowColors(true);
+
+//    QStandardItem *firstRow = new QStandardItem(QString("ColumnValue"));
+//    QStandardItem *secondRow = new QStandardItem(QString("ColumnValue"));
+//    model->setItem(0,0,firstRow);
+//    model->setItem(1,0,secondRow);
+//    model->setItem(2,0,firstRow);
+
+
+/// THE ONDE DAVI MADE
 //    QStringList headerLabels;
 //    QHeaderView* header = ui->tableWidget->horizontalHeader();
 
@@ -332,8 +372,8 @@ void MainWindow::slot_openFile()
         this->ui->sliderFrame->setEnabled(true);
         this->ui->sliderFrame->setRange(1, static_cast<int>(this->totalFrames));
 
-        this->tableModel->setFrameBasedData(this->singleton->frameData);
-        this->ui->tableViewFrame->setModel(this->tableModel);
+//        this->tableModel->setFrameBasedData(this->singleton->frameData);
+//        this->ui->tableViewFrame->setModel(this->tableModel);
 
         this->enableWidgets(true);
         this->updateFrame(1);
@@ -347,8 +387,8 @@ void MainWindow::slot_importJson()
                                                     tr("/home"),
                                                     tr("JSON file (*.json)"));
     this->manager->importJSON(*(this->singleton), jsonName);
-    this->tableModel->setFrameBasedData(this->singleton->frameData);
-    this->ui->tableViewFrame->setModel(this->tableModel);
+//    this->tableModel->setFrameBasedData(this->singleton->frameData);
+//    this->ui->tableViewFrame->setModel(this->tableModel);
 }
 
 void MainWindow::slot_exportJson()

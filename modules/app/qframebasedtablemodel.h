@@ -20,6 +20,7 @@ public:
     int rowCount(const QModelIndex &_parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &_parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &_index, int _role = Qt::DisplayRole) const override;
+    QVariant headerData(int _section, Qt::Orientation _orientation, int _role) const override;
 
     // Editable:
     bool setData(const QModelIndex &_index, const QVariant &_value, int _role = Qt::EditRole) override;
