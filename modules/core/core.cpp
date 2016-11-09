@@ -14,11 +14,19 @@ Core::Core(unsigned int _frames, unsigned int _cores)
     this->attributes.insert(std::pair<string, string>("Person_identification", "Danilo"));
     this->attributes.insert(std::pair<string, string>("Person_identification", "Davi"));
     this->attributes.insert(std::pair<string, string>("Person_identification", "Rafael"));
+
+    for(int index = 0; index < 10; index++)
+    {
+        string sIndex = std::to_string(index);
+        FrameBasedData temp = FrameBasedData(index, index * 4, "Cat " + sIndex, "La " + sIndex, "Name " + sIndex);
+        this->frameData.push_back(temp);
+    }
 }
 
 Core::~Core()
 {
     this->attributes.clear();
+    this->frameData.clear();
     this->frames.clear();
     delete(this->pool);
 }
@@ -38,12 +46,14 @@ Core* Core::getInstance(unsigned int _frames, unsigned int _cores)
 
 void Core::reset(const unsigned int _frames)
 {
+    this->frameData.clear();
     this->frames.clear();
     this->frames.resize(_frames);
 }
 
 void Core::reset(const unsigned int _frames, unsigned int _cores)
 {
+    this->frameData.clear();
     this->frames.clear();
     this->frames.resize(_frames);
 

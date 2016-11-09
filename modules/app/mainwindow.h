@@ -14,6 +14,7 @@
 #include "dialogframebased.h"
 #include "framebaseddata.h"
 #include "qboundingbox.h"
+#include "qframebasedtablemodel.h"
 #include "videomanager.h"
 
 #include "core.h"
@@ -34,14 +35,17 @@ private:
     double totalFrames;
     int speed;
 
-    Core *singleton = NULL;
-
-    QBoundingBox frameScene;
-    QGraphicsRectItem *rectangle = NULL;
     QImage frameQImage;
     QTimer *playerTime = NULL;
+
+    Core *singleton = NULL;
+
     DialogAnnotation *annotationDialog = NULL;
     DialogFrameBased *frameDialog = NULL;
+
+    QBoundingBox frameScene;
+    QFrameBasedTableModel *tableModel = NULL;
+    QGraphicsRectItem *rectangle = NULL;
 
     VideoManager *manager;
 
@@ -59,7 +63,7 @@ protected:
 private:
     void enableWidgets(const bool _enable);
     void connectSignalSlots();
-    void setTable();
+    void setTableModel();
 
     bool isPlaying();
     void isPlaying(const bool _enable);

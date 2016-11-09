@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->enableWidgets(false);
     this->connectSignalSlots();
-    this->setTable();
+    this->setTableModel();
 }
 
 MainWindow::~MainWindow()
@@ -50,6 +50,8 @@ void MainWindow::isPlaying(const bool _enable)
 void MainWindow::enableWidgets(const bool _enable)
 {
     this->ui->actionAttributes->setEnabled(_enable);
+    this->ui->actionExport_JSON->setEnabled(_enable);
+    this->ui->actionImport_JSON->setEnabled(_enable);
 
     this->ui->buttonForward->setEnabled(_enable);
     this->ui->buttonForwardF->setEnabled(_enable);
@@ -176,16 +178,11 @@ void MainWindow::connectSignalSlots()
                   );
 }
 
-void MainWindow::setTable()
+void MainWindow::setTableModel()
 {
-    QStringList headerLabels;
-    QHeaderView* header = ui->tableWidget->horizontalHeader();
-
-    headerLabels << "Name" << "Cat" << "Lab" << "Ini" << "End";
-    header->setSectionResizeMode(QHeaderView::Stretch);
-
-    this->ui->tableWidget->setColumnCount(5);
-    this->ui->tableWidget->setHorizontalHeaderLabels(headerLabels);
+    this->tableModel = new QFrameBasedTableModel(this);
+    this->ui->tableViewFrame->setAlternatingRowColors(true);
+    this->ui->tableViewFrame->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
 void MainWindow::changeSpeed(const int _speed)
@@ -309,7 +306,6 @@ void MainWindow::slot_openFile()
                                                      tr("Open Video..."),
                                                      tr("/home"),
                                                      tr("Video Files (*.avi *.mp4 *.mov)"));
-
     if(!videoName.isEmpty())
     {
         this->manager->loadVideo(videoName);
@@ -326,8 +322,9 @@ void MainWindow::slot_openFile()
             this->singleton->reset(static_cast<unsigned int>(this->totalFrames));
         }
 
-        this->ui->sliderFrame->setEnabled(true);
+        this->tableModel->setFrameBasedData(this->singleton->frameData);
         this->ui->sliderFrame->setRange(1, static_cast<int>(this->totalFrames));
+        this->ui->tableViewFrame->setModel(this->tableModel);
 
         this->enableWidgets(true);
         this->updateFrame(1);

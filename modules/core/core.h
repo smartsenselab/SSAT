@@ -2,8 +2,10 @@
 #define CORE_H
 
 #include <set>
+#include <string>
 #include <vector>
 using std::set;
+using std::string;
 using std::vector;
 
 #include <opencv2/core.hpp>
