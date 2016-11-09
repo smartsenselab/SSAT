@@ -160,7 +160,7 @@ void WorkerThread::importJSON(Core &_singleton, const QString &_jsonName)
     QJsonValue tracker = item["tracker"];
     QJsonValue version = item["version"];
     QJsonValue date = item["date"];
-    percent += 3; // 3 values - 1 for each ^
+    percent += 3; // 3 values -> 1 for each ^
 
     // ATTRIBUTES
     QJsonArray attributes = json_Obj["Attributes"].toArray();
@@ -176,7 +176,7 @@ void WorkerThread::importJSON(Core &_singleton, const QString &_jsonName)
         label = obj.value("label").toString();
         labelString = label.toString().toUtf8().constData();
 
-        //_singleton.attributes.insert(std::pair<string, string>(categoryString, labelString));
+        _singleton.attributes.insert(std::pair<string, string>(categoryString, labelString));
     }
 
     // FRAMETABLE
@@ -210,7 +210,7 @@ void WorkerThread::importJSON(Core &_singleton, const QString &_jsonName)
         int end = std::stoi(endframeString);
 
         frameData = FrameBasedData(init, end, categoryString, labelString, nameString);
-        //_singleton.frameData.push_back(frameData);
+        _singleton.frameData.push_back(frameData);
     }
 }
 
