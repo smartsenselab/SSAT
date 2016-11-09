@@ -63,7 +63,7 @@ protected:
 private:
     void enableWidgets(const bool _enable);
     void connectSignalSlots();
-    void setTable();
+    void setTableModel();
 
     bool isPlaying();
     void isPlaying(const bool _enable);

@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->enableWidgets(false);
     this->connectSignalSlots();
-    this->setTable();
+    this->setTableModel();
 }
 
 MainWindow::~MainWindow()
@@ -50,6 +50,8 @@ void MainWindow::isPlaying(const bool _enable)
 void MainWindow::enableWidgets(const bool _enable)
 {
     this->ui->actionAttributes->setEnabled(_enable);
+    this->ui->actionExport_JSON->setEnabled(_enable);
+    this->ui->actionImport_JSON->setEnabled(_enable);
 
     this->ui->buttonForward->setEnabled(_enable);
     this->ui->buttonForwardF->setEnabled(_enable);
@@ -176,60 +178,11 @@ void MainWindow::connectSignalSlots()
                   );
 }
 
-void MainWindow::setTable()
+void MainWindow::setTableModel()
 {
-/// ORIGINAL EXAMPLE
-//    this->tableModel = new QFrameBasedTableModel(this);
-//    this->ui->tableViewFrame->setModel(this->tableModel);
-//    this->ui->tableViewFrame->reset();
-
-
-/// MY LAST ATTEMPT
-    QFrameBasedTableModel *model = new QFrameBasedTableModel(this);
-    vector<FrameBasedData> frameData;
-
-    for(int index = 0; index < 3; index++)
-    {
-        string sIndex = std::to_string(index);
-        FrameBasedData temp = FrameBasedData(index,
-                                             index * 4,
-                                             "Category " + sIndex,
-                                             "Label " + sIndex,
-                                             "Name " + sIndex
-                                             );
-        frameData.push_back(temp);
-    }
-
-    model->setFrameBasedData(frameData);
-    this->ui->tableViewFrame->setModel(model);
+    this->tableModel = new QFrameBasedTableModel(this);
     this->ui->tableViewFrame->setAlternatingRowColors(true);
-
-/// ONE THAT WORKS
-//    QStandardItemModel *model = new QStandardItemModel(2,3, this);
-//    model->setHorizontalHeaderItem(0, new QStandardItem(QString("Header 1")));
-//    model->setHorizontalHeaderItem(1, new QStandardItem(QString("Header 2")));
-//    model->setHorizontalHeaderItem(2, new QStandardItem(QString("Header 3")));
-//    this->ui->tableViewFrame->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-
-//    this->ui->tableViewFrame->setModel(model);
-//    this->ui->tableViewFrame->setAlternatingRowColors(true);
-
-//    QStandardItem *firstRow = new QStandardItem(QString("ColumnValue"));
-//    QStandardItem *secondRow = new QStandardItem(QString("ColumnValue"));
-//    model->setItem(0,0,firstRow);
-//    model->setItem(1,0,secondRow);
-//    model->setItem(2,0,firstRow);
-
-
-/// THE ONDE DAVI MADE
-//    QStringList headerLabels;
-//    QHeaderView* header = ui->tableWidget->horizontalHeader();
-
-//    headerLabels << "Name" << "Cat" << "Lab" << "Ini" << "End";
-//    header->setSectionResizeMode(QHeaderView::Stretch);
-
-//    this->ui->tableWidget->setColumnCount(5);
-//    this->ui->tableWidget->setHorizontalHeaderLabels(headerLabels);
+    this->ui->tableViewFrame->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
 void MainWindow::changeSpeed(const int _speed)
@@ -369,11 +322,9 @@ void MainWindow::slot_openFile()
             this->singleton->reset(static_cast<unsigned int>(this->totalFrames));
         }
 
-        this->ui->sliderFrame->setEnabled(true);
+        this->tableModel->setFrameBasedData(this->singleton->frameData);
         this->ui->sliderFrame->setRange(1, static_cast<int>(this->totalFrames));
-
-//        this->tableModel->setFrameBasedData(this->singleton->frameData);
-//        this->ui->tableViewFrame->setModel(this->tableModel);
+        this->ui->tableViewFrame->setModel(this->tableModel);
 
         this->enableWidgets(true);
         this->updateFrame(1);
@@ -387,8 +338,6 @@ void MainWindow::slot_importJson()
                                                     tr("/home"),
                                                     tr("JSON file (*.json)"));
     this->manager->importJSON(*(this->singleton), jsonName);
-//    this->tableModel->setFrameBasedData(this->singleton->frameData);
-//    this->ui->tableViewFrame->setModel(this->tableModel);
 }
 
 void MainWindow::slot_exportJson()

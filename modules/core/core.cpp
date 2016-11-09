@@ -18,7 +18,7 @@ Core::Core(unsigned int _frames, unsigned int _cores)
     for(int index = 0; index < 10; index++)
     {
         string sIndex = std::to_string(index);
-        FrameBasedData temp = FrameBasedData(index, index * 4, "Category " + sIndex, "Label " + sIndex, "Name " + sIndex);
+        FrameBasedData temp = FrameBasedData(index, index * 4, "Cat " + sIndex, "La " + sIndex, "Name " + sIndex);
         this->frameData.push_back(temp);
     }
 }
@@ -46,14 +46,14 @@ Core* Core::getInstance(unsigned int _frames, unsigned int _cores)
 
 void Core::reset(const unsigned int _frames)
 {
-//    this->frameData.clear();
+    this->frameData.clear();
     this->frames.clear();
     this->frames.resize(_frames);
 }
 
 void Core::reset(const unsigned int _frames, unsigned int _cores)
 {
-//    this->frameData.clear();
+    this->frameData.clear();
     this->frames.clear();
     this->frames.resize(_frames);
 

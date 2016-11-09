@@ -11,6 +11,7 @@ using std::vector;
 class QFrameBasedTableModel : public QAbstractTableModel
 {
     Q_OBJECT
+/// https://doc.qt.io/archives/4.6/itemviews-addressbook.html
 
 public:
     explicit QFrameBasedTableModel(QObject *_parent = 0);

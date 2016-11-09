@@ -25,13 +25,12 @@ int QFrameBasedTableModel::columnCount(const QModelIndex &_parent) const
 
 QVariant QFrameBasedTableModel::data(const QModelIndex &_index, int _role) const
 {
-    std::cout << "Entrou no DATA" << std::endl;
     if(!_index.isValid())
     {
         return QVariant();
     }
 
-    if((_index.row() >= this->frameData->size()) || (_index.row() < 0))
+    if((_index.row() >= static_cast<int>(this->frameData->size())) || (_index.row() < 0))
     {
         return QVariant();
     }
@@ -44,46 +43,39 @@ QVariant QFrameBasedTableModel::data(const QModelIndex &_index, int _role) const
     {
         switch(_index.column())
         {
-        //        case 0:
-        //            return QString::fromStdString(this->frameData->at(static_cast<unsigned long>(_index.row())).getName());
-        //        case 1:
-        //            return QString::fromStdString(this->frameData->at(static_cast<unsigned long>(_index.row())).getCategory());
-        //        case 2:
-        //            return QString::fromStdString(this->frameData->at(static_cast<unsigned long>(_index.row())).getLabel());
-        //        case 3:
-        //            return this->frameData->at(static_cast<unsigned long>(_index.row())).getInitialFrameId();
-        //        case 4:
-        //            return this->frameData->at(static_cast<unsigned long>(_index.row())).getFinalFrameId();
         case 0:
-            return QString("Column 1");
+            return QString::fromStdString(this->frameData->at(
+                                              static_cast<unsigned long>(_index.row())).getName());
         case 1:
-            return QString("Column 2");
+            return QString::fromStdString(this->frameData->at(
+                                              static_cast<unsigned long>(_index.row())).getCategory());
         case 2:
-            return QString("Column 3");
+            return QString::fromStdString(this->frameData->at(
+                                              static_cast<unsigned long>(_index.row())).getLabel());
         case 3:
-            return QString("Column 4");
+            return this->frameData->at(static_cast<unsigned long>(_index.row())).getInitialFrameId();
         case 4:
-            return QString("Column 5");
+            return this->frameData->at(static_cast<unsigned long>(_index.row())).getFinalFrameId();
         default:
-            return QString("Column Error");
+            return QString("Error");
         }
     }
-//    else if(_role == Qt::EditRole)
-//    {
-//        switch(_index.column())
-//        {
-//        case 0:
-//            return QString::fromStdString(this->frameData->at(static_cast<unsigned long>(_index.row())).getName());
-//        case 1:
-//            return QString::fromStdString(this->frameData->at(static_cast<unsigned long>(_index.row())).getCategory());
-//        case 2:
-//            return QString::fromStdString(this->frameData->at(static_cast<unsigned long>(_index.row())).getLabel());
-//        case 3:
-//            return this->frameData->at(static_cast<unsigned long>(_index.row())).getInitialFrameId();
-//        case 4:
-//            return this->frameData->at(static_cast<unsigned long>(_index.row())).getFinalFrameId();
-//        }
-//    }
+    //    else if(_role == Qt::EditRole)
+    //    {
+    //        switch(_index.column())
+    //        {
+    //        case 0:
+    //            return QString::fromStdString(this->frameData->at(static_cast<unsigned long>(_index.row())).getName());
+    //        case 1:
+    //            return QString::fromStdString(this->frameData->at(static_cast<unsigned long>(_index.row())).getCategory());
+    //        case 2:
+    //            return QString::fromStdString(this->frameData->at(static_cast<unsigned long>(_index.row())).getLabel());
+    //        case 3:
+    //            return this->frameData->at(static_cast<unsigned long>(_index.row())).getInitialFrameId();
+    //        case 4:
+    //            return this->frameData->at(static_cast<unsigned long>(_index.row())).getFinalFrameId();
+    //        }
+    //    }
 
     return QVariant();
 }
@@ -94,11 +86,25 @@ QVariant QFrameBasedTableModel::headerData(int _section, Qt::Orientation _orient
     {
         if(_orientation == Qt::Horizontal)
         {
-            return QString("H_" + QString::fromStdString(std::to_string(_section)));
+            switch(_section)
+            {
+            case 0:
+                return tr("Name");
+            case 1:
+                return tr("Category");
+            case 2:
+                return tr("Label");
+            case 3:
+                return tr("Ini Frame");
+            case 4:
+                return tr("End Frame");
+            default:
+                return tr("ERROR");
+            }
         }
         else if(_orientation == Qt::Vertical)
         {
-            return QString("V_" + QString::fromStdString(std::to_string(_section)));
+            return _section + 1;
         }
     }
 
@@ -142,18 +148,12 @@ bool QFrameBasedTableModel::setData(const QModelIndex &_index, const QVariant &_
                     .setFinalFrameId(_value.toInt());
             break;
         }
+
         emit this->dataChanged(_index, _index, QVector<int>() << _role);
         return true;
     }
-    return false;
 
-    //    if(data(_index, _role) != _value)
-    //    {
-    //        // FIXME: Implement me!
-    //        emit this->dataChanged(_index, _index, QVector<int>() << _role);
-    //        return true;
-    //    }
-    //    return false;
+    return false;
 }
 
 Qt::ItemFlags QFrameBasedTableModel::flags(const QModelIndex &_index) const
@@ -163,8 +163,6 @@ Qt::ItemFlags QFrameBasedTableModel::flags(const QModelIndex &_index) const
         return Qt::NoItemFlags;
     }
 
-    //    return Qt::ItemIsEditable; // FIXME: Implement me!
-
     Qt::ItemFlags flags = QAbstractItemModel::flags(_index);
     flags |= (Qt::ItemIsEditable
               |Qt::ItemIsSelectable
@@ -172,6 +170,7 @@ Qt::ItemFlags QFrameBasedTableModel::flags(const QModelIndex &_index) const
               |Qt::ItemIsEnabled
               |Qt::ItemIsDragEnabled
               |Qt::ItemIsDropEnabled);
+
     return flags;
 }
 
