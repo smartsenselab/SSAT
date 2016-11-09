@@ -1,4 +1,5 @@
 #include "workerthread.h"
+#include "qdebug.h"
 
 WorkerThread::WorkerThread()
 {
@@ -151,15 +152,19 @@ void WorkerThread::importJSON(Core &_singleton, const QString &_jsonName)
     QJsonValue label, category, name, iniframe, endframe;
     std::string labelString, categoryString, nameString, iniframeString, endframeString;
 
+    int percent = 0; // Percent = 100% of the ImportProgressBar
+
     //HEADER
     QJsonValue json_Value = json_Obj.value(QString("Header"));
     QJsonObject item =  json_Value.toObject();
     QJsonValue tracker = item["tracker"];
     QJsonValue version = item["version"];
     QJsonValue date = item["date"];
+    percent += 3; // 3 values -> 1 for each ^
 
     // ATTRIBUTES
     QJsonArray attributes = json_Obj["Attributes"].toArray();
+    percent += attributes.size()*2; // 2 values per each attributes
     foreach (const QJsonValue & value, attributes) {
         QJsonObject obj = value.toObject();
 
@@ -177,6 +182,7 @@ void WorkerThread::importJSON(Core &_singleton, const QString &_jsonName)
     // FRAMETABLE
     int flag = 1;
     QJsonArray FrameTable = json_Obj["FrameTable"].toArray();
+    percent += FrameTable.size()*5; // 5 values per each FrameTable
     foreach (const QJsonValue & value, FrameTable) {
         QJsonObject obj = value.toObject();
 
