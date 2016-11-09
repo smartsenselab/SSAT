@@ -75,6 +75,7 @@ public slots:
     void slot_displayFrame(const QImage _frame);
     void slot_openFile();
     void slot_importJson();
+    void slot_importProgressBar();
     void slot_exportJson();
     void slot_closeApplitacion();
     void slot_openAttributes();

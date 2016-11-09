@@ -343,6 +343,12 @@ void MainWindow::slot_importJson()
     this->manager->importJSON(*(this->singleton), jsonName);
 }
 
+void MainWindow::slot_importProgressBar()
+{
+
+
+}
+
 void MainWindow::slot_exportJson()
 {
     QString jsonName = QFileDialog::getSaveFileName(this,
