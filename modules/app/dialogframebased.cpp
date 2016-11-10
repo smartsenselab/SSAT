@@ -39,6 +39,12 @@ void DialogFrameBased::connectSignalSlots()
                   SLOT(slot_comboBoxCategoryActivated(QString))
                   );
 
+    this->connect(this->ui->lineEditName,
+                  SIGNAL(textChanged(QString)),
+                  this,
+                  SLOT(slot_textChanged())
+                  );
+
     this->connect(this->ui->buttonRewindF,
                   SIGNAL(pressed()),
                   this,
@@ -74,6 +80,18 @@ void DialogFrameBased::connectSignalSlots()
                   this,
                   SLOT(slot_buttonBoxRejected())
                   );
+
+    this->connect(this->ui->spinBoxInitialFrame,
+                  SIGNAL(valueChanged(int)),
+                  this,
+                  SLOT(slot_valueChanged())
+                  );
+
+    this->connect(this->ui->spinBoxFinalFrame,
+                  SIGNAL(valueChanged(int)),
+                  this,
+                  SLOT(slot_valueChanged())
+                  );
 }
 
 void DialogFrameBased::initializeComboboxes()
@@ -104,6 +122,9 @@ void DialogFrameBased::initializeComboboxes()
     this->labelModel = new QStringListModel(this);
     this->labelModel->setStringList(labelList);
     this->ui->comboBoxLabel->setModel(this->labelModel);
+
+    this->ui->buttonBox->setEnabled(false);
+    this->nameFlag = 0;
 }
 
 void DialogFrameBased::slot_initializeDialog(Core &_singleton, const int _totalFrames, const int _frameId)
@@ -121,7 +142,6 @@ void DialogFrameBased::slot_initializeDialog(Core &_singleton, const int _totalF
     this->ui->spinBoxFinalFrame->setValue(_frameId - 1);
 
     this->initializeComboboxes();
-
 }
 
 void DialogFrameBased::slot_comboBoxCategoryActivated(const QString &_text)
@@ -152,6 +172,7 @@ void DialogFrameBased::slot_rewindButtonPressed()
 
     this->frameId = nextFrameId;
     this->ui->spinBoxFinalFrame->setValue(this->frameId);
+
     emit this->signal_rewindButtonPressed();
 }
 
@@ -165,6 +186,7 @@ void DialogFrameBased::slot_backButtonPressed()
 
     this->frameId = nextFrameId;
     this->ui->spinBoxFinalFrame->setValue(this->frameId);
+
     emit this->signal_backButtonPressed();
 }
 
@@ -178,6 +200,7 @@ void DialogFrameBased::slot_forwardButtonPressed()
 
     this->frameId = nextFrameId;
     this->ui->spinBoxFinalFrame->setValue(this->frameId);
+
     emit this->signal_forwardButtonPressed();
 }
 
@@ -191,7 +214,21 @@ void DialogFrameBased::slot_fastfButtonPressed()
 
     this->frameId = nextFrameId;
     this->ui->spinBoxFinalFrame->setValue(this->frameId);
+
     emit this->signal_fastfButtonPressed();
+}
+
+void DialogFrameBased::slot_valueChanged(){
+
+    int InitFrame = IniFrameValue();
+    int FinalFrame = EndFrameValue();
+
+    if(InitFrame >= FinalFrame || this->nameFlag == 0){
+        this->ui->buttonBox->setEnabled(false);
+    }
+    else if( InitFrame < FinalFrame && this->nameFlag == 1){
+        this->ui->buttonBox->setEnabled(true);
+    }
 }
 
 void DialogFrameBased::slot_buttonBoxAccepted()
@@ -204,6 +241,31 @@ void DialogFrameBased::slot_buttonBoxAccepted()
     emit this->signal_frameBasedAccepted(data);
     this->accept();
 }
+
+void DialogFrameBased::slot_textChanged(){
+
+    int InitFrame = IniFrameValue();
+    int EndFrame = EndFrameValue();
+
+    QString name2 = NameValue();
+    if(name2.length() == 0  && EndFrame <= InitFrame ){
+        this->nameFlag = 0;
+        this->ui->buttonBox->setEnabled(false);
+    }
+    else if( name2.length() != 0 && EndFrame > InitFrame ){
+        this->ui->buttonBox->setEnabled(true);
+        this->nameFlag = 1;
+    }
+    else if(name2.length() == 0 && EndFrame > InitFrame ){
+        this->nameFlag = 0;
+        this->ui->buttonBox->setEnabled(false);
+    }
+    else if(name2.length() != 0 && EndFrame <= InitFrame ){
+        this->nameFlag = 1;
+        this->ui->buttonBox->setEnabled(false);
+    }
+}
+
 
 void DialogFrameBased::slot_buttonBoxRejected()
 {
