@@ -84,7 +84,7 @@ void DialogFrameBased::connectSignalSlots()
     this->connect(this->ui->spinBoxInitialFrame,
                   SIGNAL(valueChanged(int)),
                   this,
-                  SLOT(slot_valueChanged())
+                  SLOT(slot_spinBoxValueChanged())
                   );
 
     this->connect(this->ui->spinBoxFinalFrame,
@@ -218,15 +218,20 @@ void DialogFrameBased::slot_fastfButtonPressed()
     emit this->signal_fastfButtonPressed();
 }
 
-void DialogFrameBased::slot_spinBoxValueChanged(){
-
+void DialogFrameBased::slot_spinBoxValueChanged()
+{
     int initFrame = this->getIniFrameValue();
     int finalFrame = this->getEndFrameValue();
 
-    if(initFrame >= finalFrame || this->nameFlag == 0){
+    // this->ui->spinBoxInitialFrame->setMaximum(finalFrame);
+    // this->ui->spinBoxFinalFrame->setMaximum(initFrame);
+
+    if(initFrame >= finalFrame || this->nameFlag == 0)
+    {
         this->ui->buttonBox->setEnabled(false);
     }
-    else if( initFrame < finalFrame && this->nameFlag == 1){
+    else if( initFrame < finalFrame && this->nameFlag == 1)
+    {
         this->ui->buttonBox->setEnabled(true);
     }
 }
