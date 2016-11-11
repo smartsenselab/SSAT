@@ -33,14 +33,13 @@ private:
 public:
     explicit DialogFrameBased(QWidget *parent = 0);
     ~DialogFrameBased();
-    int IniFrameValue();
-    int EndFrameValue();
-    QString NameValue();
+    int getIniFrameValue();
+    int getEndFrameValue();
+    QString getNameValue();
 
 private:
     void connectSignalSlots();
     void initializeComboboxes();
-    void showEvent(int);
 
 public slots:
     void slot_initializeDialog(Core &_singleton, const int _totalFrames, const int _frameId);
@@ -52,8 +51,8 @@ public slots:
     void slot_fastfButtonPressed();
     void slot_buttonBoxAccepted();
     void slot_buttonBoxRejected();
-    void slot_valueChanged();
-    void slot_textChanged();
+    void slot_spinBoxValueChanged();
+    void slot_lineEditNameChanged();
 
 signals:
     void signal_rewindButtonPressed();
