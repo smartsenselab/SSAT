@@ -164,8 +164,8 @@ Qt::ItemFlags QFrameBasedTableModel::flags(const QModelIndex &_index) const
     }
 
     Qt::ItemFlags flags = QAbstractItemModel::flags(_index);
-    flags |= (Qt::ItemIsEditable
-              |Qt::ItemIsSelectable
+    flags |= ( Qt::ItemIsSelectable
+              //|Qt::ItemIsEditable
               |Qt::ItemIsUserCheckable
               |Qt::ItemIsEnabled
               |Qt::ItemIsDragEnabled
