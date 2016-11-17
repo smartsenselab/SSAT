@@ -27,6 +27,7 @@ void QBoundingBox::mousePressEvent(QGraphicsSceneMouseEvent *event)
 }
 
 double w = 0, h = 0;
+double mouseMoveX, mouseMoveY;
 
 
 void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
@@ -117,8 +118,8 @@ void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     }
     else
     {
-        double mouseMoveX = this->pointXa - event->scenePos().x(); // Init position - End position  X - Deslocamento para a esquerda
-        double mouseMoveY = this->pointYa - event->scenePos().y(); // Init position - End position  Y
+        mouseMoveX = this->pointXa - event->scenePos().x(); // Init position - End position  X - Deslocamento para a esquerda
+        mouseMoveY = this->pointYa - event->scenePos().y(); // Init position - End position  Y
 
         qDebug() << "X = " << this->box.x - mouseMoveX << endl;
         qDebug() << "Y = " << this->box.y - mouseMoveY << endl;
@@ -140,8 +141,10 @@ void QBoundingBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsMovable, true);
         emit this->signal_addBoundingBoxToCore(this->box);
     }
-    else{
-
+    else
+    {
+//        this->box.x = static_cast<int>(this->box.x - mouseMoveX);
+//        this->box.y = static_cast<int>(this->box.y - mouseMoveY);
 
     }
 
