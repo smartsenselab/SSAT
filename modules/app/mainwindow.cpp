@@ -164,6 +164,12 @@ void MainWindow::connectSignalSlots()
                   SLOT(slot_spinBoxSpeedValueChanged(int))
                   );
 
+    this->connect(this->ui->tableViewFrame,
+                  SIGNAL(doubleClicked(QModelIndex)),
+                  this,
+                  SLOT(slot_tableViewFrameDoubleClicked(QModelIndex))
+                  );
+
     // Connecting custom SIGNALS to SLOTS
     this->connect(&(this->frameScene),
                   SIGNAL(signal_addBoundingBoxToCore(Rect)),
@@ -183,6 +189,7 @@ void MainWindow::setTableModel()
     this->tableModel = new QFrameBasedTableModel(this);
     this->ui->tableViewFrame->setAlternatingRowColors(true);
     this->ui->tableViewFrame->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    this->ui->tableViewFrame->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
 void MainWindow::changeSpeed(const int _speed)
@@ -291,6 +298,45 @@ void MainWindow::updateFrame(const int _frameId)
     }
 }
 
+void MainWindow::connectMainWindow2DialogFrameBased()
+{
+    this->connect(this->frameDialog,
+                  SIGNAL(signal_rewindButtonPressed()),
+                  this,
+                  SLOT(slot_rewindButtonPressed())
+                  );
+
+    this->connect(this->frameDialog,
+                  SIGNAL(signal_backButtonPressed()),
+                  this,
+                  SLOT(slot_backButtonPressed())
+                  );
+
+    this->connect(this->frameDialog,
+                  SIGNAL(signal_forwardButtonPressed()),
+                  this,
+                  SLOT(slot_forwardButtonPressed())
+                  );
+
+    this->connect(this->frameDialog,
+                  SIGNAL(signal_fastfButtonPressed()),
+                  this,
+                  SLOT(slot_fastfButtonPressed())
+                  );
+
+    this->connect(this->frameDialog,
+                  SIGNAL(signal_frameBasedInsertAccepted(const FrameBasedData)),
+                  this,
+                  SLOT(slot_frameBasedInsertAccepted(const FrameBasedData))
+                  );
+
+    this->connect(this->frameDialog,
+                  SIGNAL(signal_frameBasedAlterAccepted(const FrameBasedData, const int)),
+                  this,
+                  SLOT(slot_frameBasedAlterAccepted(const FrameBasedData, const int))
+                  );
+}
+
 void MainWindow::slot_displayFrame(const QImage _frame)
 {
     if(!_frame.isNull())
@@ -328,6 +374,8 @@ void MainWindow::slot_openFile()
 
         this->enableWidgets(true);
         this->updateFrame(1);
+
+        //this->tableModel->insertRows(0, 1, QModelIndex());
     }
 }
 
@@ -372,18 +420,6 @@ void MainWindow::slot_slideVideo(int _frameId)
 {
     std::cout << _frameId << std::endl;
     this->updateFrame(_frameId);
-}
-
-void MainWindow::slot_contextMenu(const QPoint &_point)
-{
-    QPoint position = this->ui->viewFrame->mapToGlobal(_point);
-
-    QMenu contextMenu;
-    contextMenu.addAction("New Bounding box", this, SLOT(slot_newBoxMenu()));
-    contextMenu.addAction("New Frame box", this, SLOT(slot_newFrameMenu()));
-    contextMenu.addAction("Remove Bbox", this, SLOT(slot_removeBoxMenu()));
-
-    contextMenu.exec(position);
 }
 
 void MainWindow::slot_playButtonPressed()
@@ -479,6 +515,19 @@ void MainWindow::slot_spinBoxSpeedValueChanged(int _value)
     this->changeSpeed(_value);
 }
 
+void MainWindow::slot_tableViewFrameDoubleClicked(const QModelIndex _index)
+{
+    std::cout << "Clique duplo: " << _index.row() << "-" << _index.column() << std::endl;
+
+    this->frameDialog = new DialogFrameBased(this);
+    this->connectMainWindow2DialogFrameBased();
+
+    this->frameDialog->setModal(true);
+    this->frameDialog->show();
+    this->frameDialog->slot_initializeDialog(*(this->singleton), _index);
+
+}
+
 void MainWindow::slot_keepVideoRunning()
 {
     int nextFrameId = static_cast<int>(this->manager->getFrameId());
@@ -498,6 +547,18 @@ void MainWindow::slot_keepVideoRunning()
             this->updateFrame(nextFrameId);
         }
     }
+}
+
+void MainWindow::slot_contextMenu(const QPoint &_point)
+{
+    QPoint position = this->ui->viewFrame->mapToGlobal(_point);
+
+    QMenu contextMenu;
+    contextMenu.addAction("New Bounding box", this, SLOT(slot_newBoxMenu()));
+    contextMenu.addAction("New Frame box", this, SLOT(slot_newFrameMenu()));
+    contextMenu.addAction("Remove Bbox", this, SLOT(slot_removeBoxMenu()));
+
+    contextMenu.exec(position);
 }
 
 void MainWindow::slot_newBoxMenu()
@@ -523,45 +584,14 @@ void MainWindow::slot_newBoxMenu()
 
 void MainWindow::slot_newFrameMenu()
 {
+    int nextFrameId = static_cast<int>(this->manager->getFrameId());
+
     this->frameDialog = new DialogFrameBased(this);
-
-    this->connect(this->frameDialog,
-                  SIGNAL(signal_rewindButtonPressed()),
-                  this,
-                  SLOT(slot_rewindButtonPressed())
-                  );
-
-    this->connect(this->frameDialog,
-                  SIGNAL(signal_backButtonPressed()),
-                  this,
-                  SLOT(slot_backButtonPressed())
-                  );
-
-    this->connect(this->frameDialog,
-                  SIGNAL(signal_forwardButtonPressed()),
-                  this,
-                  SLOT(slot_forwardButtonPressed())
-                  );
-
-    this->connect(this->frameDialog,
-                  SIGNAL(signal_fastfButtonPressed()),
-                  this,
-                  SLOT(slot_fastfButtonPressed())
-                  );
-
-    this->connect(this->frameDialog,
-                  SIGNAL(signal_frameBasedAccepted(const FrameBasedData)),
-                  this,
-                  SLOT(slot_frameBasedAccepted(const FrameBasedData))
-                  );
+    this->connectMainWindow2DialogFrameBased();
 
     this->frameDialog->setModal(true);
     this->frameDialog->show();
-
-    int nextFrameId = static_cast<int>(this->manager->getFrameId());
-    int totalFrames = static_cast<int>(this->manager->getTotalFrames());
-
-    this->frameDialog->slot_initializeDialog(*(this->singleton), totalFrames, nextFrameId);
+    this->frameDialog->slot_initializeDialog(*(this->singleton), nextFrameId);
 }
 
 void MainWindow::slot_removeBoxMenu()
@@ -569,9 +599,15 @@ void MainWindow::slot_removeBoxMenu()
     this->frameScene.deleteBBox();
 }
 
-void MainWindow::slot_frameBasedAccepted(const FrameBasedData _data)
+void MainWindow::slot_frameBasedInsertAccepted(const FrameBasedData _data)
 {
-    this->manager->allotFrameBasedSegment(*(this->singleton), _data);
+    this->manager->insertFrameBasedSegment(*(this->singleton), _data);
+    this->ui->tableViewFrame->repaint();
+}
+
+void MainWindow::slot_frameBasedAlterAccepted(const FrameBasedData _data, const int _index)
+{
+    this->manager->alterFrameBasedSegment(*(this->singleton), _data, _index);
 }
 
 void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
