@@ -14,6 +14,7 @@ QFrameBasedTableModel::QFrameBasedTableModel(vector<FrameBasedData> &_frameBased
 int QFrameBasedTableModel::rowCount(const QModelIndex &_parent) const
 {
     Q_UNUSED(_parent);
+    std::cout << "rowCount: " << this->frameData->size() << std::endl;
     return static_cast<int>(this->frameData->size());
 }
 
@@ -30,10 +31,10 @@ QVariant QFrameBasedTableModel::data(const QModelIndex &_index, int _role) const
         return QVariant();
     }
 
-    if((_index.row() >= static_cast<int>(this->frameData->size())) || (_index.row() < 0))
-    {
-        return QVariant();
-    }
+//    if((_index.row() >= static_cast<int>(this->frameData->size())) || (_index.row() < 0))
+//    {
+//        return QVariant();
+//    }
 
     if(_role == Qt::TextAlignmentRole)
     {
@@ -60,22 +61,25 @@ QVariant QFrameBasedTableModel::data(const QModelIndex &_index, int _role) const
             return QString("Error");
         }
     }
-    //    else if(_role == Qt::EditRole)
-    //    {
-    //        switch(_index.column())
-    //        {
-    //        case 0:
-    //            return QString::fromStdString(this->frameData->at(static_cast<unsigned long>(_index.row())).getName());
-    //        case 1:
-    //            return QString::fromStdString(this->frameData->at(static_cast<unsigned long>(_index.row())).getCategory());
-    //        case 2:
-    //            return QString::fromStdString(this->frameData->at(static_cast<unsigned long>(_index.row())).getLabel());
-    //        case 3:
-    //            return this->frameData->at(static_cast<unsigned long>(_index.row())).getInitialFrameId();
-    //        case 4:
-    //            return this->frameData->at(static_cast<unsigned long>(_index.row())).getFinalFrameId();
-    //        }
-    //    }
+//    else if(_role == Qt::EditRole)
+//    {
+//        switch(_index.column())
+//        {
+//        case 0:
+//            return QString::fromStdString(this->frameData->at(
+//                                              static_cast<unsigned long>(_index.row())).getName());
+//        case 1:
+//            return QString::fromStdString(this->frameData->at(
+//                                              static_cast<unsigned long>(_index.row())).getCategory());
+//        case 2:
+//            return QString::fromStdString(this->frameData->at(
+//                                              static_cast<unsigned long>(_index.row())).getLabel());
+//        case 3:
+//            return this->frameData->at(static_cast<unsigned long>(_index.row())).getInitialFrameId();
+//        case 4:
+//            return this->frameData->at(static_cast<unsigned long>(_index.row())).getFinalFrameId();
+//        }
+//    }
 
     return QVariant();
 }
@@ -113,22 +117,23 @@ QVariant QFrameBasedTableModel::headerData(int _section, Qt::Orientation _orient
 
 bool QFrameBasedTableModel::insertRows(int _row, int _count, const QModelIndex &_parent)
 {
+    std::cout << "insertRows" << std::endl;
+    FrameBasedData tempData = FrameBasedData();
+
     this->beginInsertRows(_parent, _row, _row + _count - 1);
-    for(int index = 0; index < _count; index++)
-    {
-        FrameBasedData tempData;
-        this->frameData->push_back(tempData);
-    }
+    this->frameData->push_back(tempData);
     this->endInsertRows();
-    emit this->dataChanged(_parent, _parent);
+
     return true;
 }
 
 bool QFrameBasedTableModel::removeRows(int _row, int _count, const QModelIndex &_parent)
 {
+    std::cout << "removeRows" << std::endl;
     this->beginRemoveRows(_parent, _row, _row + _count - 1);
     this->resetInternalData();
     this->endRemoveRows();
+
     return true;
 }
 
@@ -170,7 +175,7 @@ bool QFrameBasedTableModel::setData(const QModelIndex &_index, const QVariant &_
             break;
         }
 
-        emit this->dataChanged(_index, _index, QVector<int>() << _role);
+        emit this->dataChanged(_index, _index);
         return true;
     }
 

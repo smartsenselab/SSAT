@@ -374,6 +374,8 @@ void MainWindow::slot_openFile()
 
         this->enableWidgets(true);
         this->updateFrame(1);
+
+        //this->tableModel->insertRows(0, 1, QModelIndex());
     }
 }
 
@@ -600,6 +602,7 @@ void MainWindow::slot_removeBoxMenu()
 void MainWindow::slot_frameBasedInsertAccepted(const FrameBasedData _data)
 {
     this->manager->insertFrameBasedSegment(*(this->singleton), _data);
+    this->ui->tableViewFrame->repaint();
 }
 
 void MainWindow::slot_frameBasedAlterAccepted(const FrameBasedData _data, const int _index)

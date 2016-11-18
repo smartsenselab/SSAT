@@ -18,16 +18,16 @@ public:
     explicit QFrameBasedTableModel(vector<FrameBasedData> &_frameBasedData, QObject *_parent = 0);
 
     // Basic functionality:
-    int rowCount(const QModelIndex &_parent = QModelIndex()) const override;
-    int columnCount(const QModelIndex &_parent = QModelIndex()) const override;
-    QVariant data(const QModelIndex &_index, int _role = Qt::DisplayRole) const override;
-    QVariant headerData(int _section, Qt::Orientation _orientation, int _role) const override;
+    int rowCount(const QModelIndex &_parent = QModelIndex()) const Q_DECL_OVERRIDE;
+    int columnCount(const QModelIndex &_parent = QModelIndex()) const Q_DECL_OVERRIDE;
+    QVariant data(const QModelIndex &_index, int _role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+    QVariant headerData(int _section, Qt::Orientation _orientation, int _role) const Q_DECL_OVERRIDE;
 
     // Editable:
-    bool insertRows(int _row, int _count, const QModelIndex &_parent) override;
-    bool removeRows(int _row, int _count, const QModelIndex &_parent) override;
-    bool setData(const QModelIndex &_index, const QVariant &_value, int _role = Qt::EditRole) override;
-    Qt::ItemFlags flags(const QModelIndex &_index) const override;
+    bool insertRows(int _row, int _count, const QModelIndex &_parent) Q_DECL_OVERRIDE;
+    bool removeRows(int _row, int _count, const QModelIndex &_parent) Q_DECL_OVERRIDE;
+    bool setData(const QModelIndex &_index, const QVariant &_value, int _role = Qt::EditRole) Q_DECL_OVERRIDE;
+    Qt::ItemFlags flags(const QModelIndex &_index) const Q_DECL_OVERRIDE;
 
     // Custom methods:
     void setFrameBasedData(vector<FrameBasedData> &_frameBasedData);
