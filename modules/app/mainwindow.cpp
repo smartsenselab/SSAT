@@ -325,9 +325,15 @@ void MainWindow::connectMainWindow2DialogFrameBased()
                   );
 
     this->connect(this->frameDialog,
-                  SIGNAL(signal_frameBasedAccepted(const FrameBasedData)),
+                  SIGNAL(signal_frameBasedInsertAccepted(const FrameBasedData)),
                   this,
-                  SLOT(slot_frameBasedAccepted(const FrameBasedData))
+                  SLOT(slot_frameBasedInsertAccepted(const FrameBasedData))
+                  );
+
+    this->connect(this->frameDialog,
+                  SIGNAL(signal_frameBasedAlterAccepted(const FrameBasedData, const int)),
+                  this,
+                  SLOT(slot_frameBasedAlterAccepted(const FrameBasedData, const int))
                   );
 }
 
@@ -591,9 +597,14 @@ void MainWindow::slot_removeBoxMenu()
     this->frameScene.deleteBBox();
 }
 
-void MainWindow::slot_frameBasedAccepted(const FrameBasedData _data)
+void MainWindow::slot_frameBasedInsertAccepted(const FrameBasedData _data)
 {
-    this->manager->allotFrameBasedSegment(*(this->singleton), _data);
+    this->manager->insertFrameBasedSegment(*(this->singleton), _data);
+}
+
+void MainWindow::slot_frameBasedAlterAccepted(const FrameBasedData _data, const int _index)
+{
+    this->manager->alterFrameBasedSegment(*(this->singleton), _data, _index);
 }
 
 void MainWindow::slot_addBoundingBoxToCore(const Rect _box)

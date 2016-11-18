@@ -15,7 +15,8 @@ using std::multimap;
 
 #include "core.h"
 
-namespace Ui {
+namespace Ui
+{
     class DialogAnnotation;
 }
 

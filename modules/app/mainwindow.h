@@ -109,7 +109,8 @@ public slots:
     void slot_newFrameMenu();
     void slot_removeBoxMenu();
 
-    void slot_frameBasedAccepted(const FrameBasedData _data);
+    void slot_frameBasedInsertAccepted(const FrameBasedData _data);
+    void slot_frameBasedAlterAccepted(const FrameBasedData _data, const int _index);
 
     void slot_addBoundingBoxToCore(const Rect _box);
 

@@ -126,6 +126,8 @@ void DialogFrameBased::initializeComboboxes()
 
 void DialogFrameBased::slot_initializeDialog(Core &_singleton, const int _frameId)
 {
+    this->manipulation = mode::insert;
+
     this->frameId = _frameId - 1;
     this->nameFlag = 0;
     this->singleton = &_singleton;
@@ -135,17 +137,20 @@ void DialogFrameBased::slot_initializeDialog(Core &_singleton, const int _frameI
 
     this->ui->spinBoxInitialFrame->setMinimum(1);
     this->ui->spinBoxInitialFrame->setMaximum(this->totalFrames);
-    this->ui->spinBoxInitialFrame->setValue(this->frameId);
-
     this->ui->spinBoxFinalFrame->setMinimum(1);
     this->ui->spinBoxFinalFrame->setMaximum(this->totalFrames);
-    this->ui->spinBoxFinalFrame->setValue(this->frameId);
 
     this->initializeComboboxes();
+
+    this->ui->spinBoxInitialFrame->setValue(this->frameId);
+    this->ui->spinBoxFinalFrame->setValue(this->frameId);
 }
 
 void DialogFrameBased::slot_initializeDialog(Core &_singleton, const QModelIndex _index)
 {
+    this->manipulation = mode::alter;
+
+    this->indexId = _index.row();
     this->nameFlag = 0;
     this->singleton = &_singleton;
     this->totalFrames = this->singleton->frames.size();
@@ -265,7 +270,15 @@ void DialogFrameBased::slot_buttonBoxAccepted()
                                          this->ui->comboBoxCategory->currentText().toStdString(),
                                          this->ui->comboBoxLabel->currentText().toStdString(),
                                          this->ui->lineEditName->text().toStdString());
-    emit this->signal_frameBasedAccepted(data);
+
+    if(this->manipulation == mode::insert)
+    {
+        emit this->signal_frameBasedInsertAccepted(data);
+    }
+    else if(this->manipulation == mode::alter)
+    {
+        emit this->signal_frameBasedAlterAccepted(data, this->indexId);
+    }
     this->accept();
 }
 

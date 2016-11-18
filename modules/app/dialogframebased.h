@@ -11,7 +11,8 @@
 #include "core.h"
 #include "framebaseddata.h"
 
-namespace Ui {
+namespace Ui
+{
     class DialogFrameBased;
 }
 
@@ -24,7 +25,8 @@ private:
 
     Ui::DialogFrameBased *ui;
 
-    int frameId, totalFrames;
+    int frameId, indexId, totalFrames;
+    mode manipulation;
     Core *singleton = NULL;
 
     QStringListModel *categoryModel = NULL;
@@ -62,7 +64,8 @@ signals:
     void signal_fastfButtonPressed();
     void signal_buttonBoxAccepted();
 
-    void signal_frameBasedAccepted(const FrameBasedData _data);
+    void signal_frameBasedInsertAccepted(const FrameBasedData _data);
+    void signal_frameBasedAlterAccepted(const FrameBasedData _data, const int _index);
     void signal_frameBasedRejected();
 };
 

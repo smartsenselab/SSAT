@@ -83,7 +83,12 @@ QImage VideoManager::matToQimage(const Mat &_frame)
     return this->worker->matToQimage(_frame);
 }
 
-void VideoManager::allotFrameBasedSegment(Core &_singleton, const FrameBasedData &_data)
+void VideoManager::insertFrameBasedSegment(Core &_singleton, const FrameBasedData &_data)
 {
-    this->worker->allotFrameBasedSegment(_singleton, _data);
+    this->worker->insertFrameBasedSegment(_singleton, _data);
+}
+
+void VideoManager::alterFrameBasedSegment(Core &_singleton, const FrameBasedData &_data, const int _index)
+{
+    this->worker->alterFrameBasedSegment(_singleton, _data, _index);
 }

@@ -4,6 +4,13 @@
 #include <iostream>
 using std::string;
 
+enum mode
+{
+    insert,
+    alter,
+    discard
+};
+
 class FrameBasedData
 {
 public:

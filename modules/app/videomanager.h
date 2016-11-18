@@ -34,7 +34,8 @@ public:
 
     QImage matToQimage(const Mat &_frame);
 
-    void allotFrameBasedSegment(Core &_singleton, const FrameBasedData &_data);
+    void insertFrameBasedSegment(Core &_singleton, const FrameBasedData &_data);
+    void alterFrameBasedSegment(Core &_singleton, const FrameBasedData &_data, const int _index);
 
 signals:
     void signal_frameToDisplay(const QImage _frame);
