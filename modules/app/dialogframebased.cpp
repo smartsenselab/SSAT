@@ -124,24 +124,46 @@ void DialogFrameBased::initializeComboboxes()
     this->ui->comboBoxLabel->setModel(this->labelModel);
 }
 
-void DialogFrameBased::slot_initializeDialog(Core &_singleton, const int _totalFrames, const int _frameId)
+void DialogFrameBased::slot_initializeDialog(Core &_singleton, const int _frameId)
 {
     this->frameId = _frameId - 1;
     this->nameFlag = 0;
     this->singleton = &_singleton;
-    this->totalFrames = _totalFrames;
+    this->totalFrames = this->singleton->frames.size();
 
     this->ui->buttonBox->setEnabled(false);
 
     this->ui->spinBoxInitialFrame->setMinimum(1);
     this->ui->spinBoxInitialFrame->setMaximum(this->totalFrames);
-    this->ui->spinBoxInitialFrame->setValue(_frameId - 1);
+    this->ui->spinBoxInitialFrame->setValue(this->frameId);
 
     this->ui->spinBoxFinalFrame->setMinimum(1);
     this->ui->spinBoxFinalFrame->setMaximum(this->totalFrames);
-    this->ui->spinBoxFinalFrame->setValue(_frameId - 1);
+    this->ui->spinBoxFinalFrame->setValue(this->frameId);
 
     this->initializeComboboxes();
+}
+
+void DialogFrameBased::slot_initializeDialog(Core &_singleton, const QModelIndex _index)
+{
+    this->nameFlag = 0;
+    this->singleton = &_singleton;
+    this->totalFrames = this->singleton->frames.size();
+
+    FrameBasedData frameData = this->singleton->frameData.at(_index.row());
+
+    this->ui->spinBoxInitialFrame->setMinimum(1);
+    this->ui->spinBoxInitialFrame->setMaximum(this->totalFrames);
+    this->ui->spinBoxFinalFrame->setMinimum(1);
+    this->ui->spinBoxFinalFrame->setMaximum(this->totalFrames);
+
+    this->initializeComboboxes();
+
+    this->ui->lineEditName->setText(QString::fromStdString(frameData.getName()));
+    this->ui->comboBoxLabel->setCurrentText(QString::fromStdString(frameData.getLabel()));
+    this->ui->comboBoxCategory->setCurrentText(QString::fromStdString(frameData.getCategory()));
+    this->ui->spinBoxInitialFrame->setValue(frameData.getInitialFrameId());
+    this->ui->spinBoxFinalFrame->setValue(frameData.getFinalFrameId());
 }
 
 void DialogFrameBased::slot_comboBoxCategoryActivated(const QString &_text)

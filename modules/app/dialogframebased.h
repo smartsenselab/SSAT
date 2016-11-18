@@ -42,7 +42,8 @@ private:
     void initializeComboboxes();
 
 public slots:
-    void slot_initializeDialog(Core &_singleton, const int _totalFrames, const int _frameId);
+    void slot_initializeDialog(Core &_singleton, const int _frameId);
+    void slot_initializeDialog(Core &_singleton, const QModelIndex _index);
     void slot_comboBoxCategoryActivated(const QString &_text);
 
     void slot_rewindButtonPressed();
