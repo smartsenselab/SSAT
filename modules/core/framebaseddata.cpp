@@ -2,8 +2,8 @@
 
 FrameBasedData::FrameBasedData()
 {
-    this->setInitialFrameId(0);
-    this->setFinalFrameId(0);
+    this->setInitialFrameId(-1);
+    this->setFinalFrameId(-1);
 }
 
 FrameBasedData::FrameBasedData(const int _iniFrame,

@@ -24,6 +24,8 @@ public:
     QVariant headerData(int _section, Qt::Orientation _orientation, int _role) const override;
 
     // Editable:
+    bool insertRows(int _row, int _count, const QModelIndex &_parent) override;
+    bool removeRows(int _row, int _count, const QModelIndex &_parent) override;
     bool setData(const QModelIndex &_index, const QVariant &_value, int _role = Qt::EditRole) override;
     Qt::ItemFlags flags(const QModelIndex &_index) const override;
 

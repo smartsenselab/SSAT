@@ -111,6 +111,27 @@ QVariant QFrameBasedTableModel::headerData(int _section, Qt::Orientation _orient
     return QVariant::Invalid;
 }
 
+bool QFrameBasedTableModel::insertRows(int _row, int _count, const QModelIndex &_parent)
+{
+    this->beginInsertRows(_parent, _row, _row + _count - 1);
+    for(int index = 0; index < _count; index++)
+    {
+        FrameBasedData tempData;
+        this->frameData->push_back(tempData);
+    }
+    this->endInsertRows();
+    emit this->dataChanged(_parent, _parent);
+    return true;
+}
+
+bool QFrameBasedTableModel::removeRows(int _row, int _count, const QModelIndex &_parent)
+{
+    this->beginRemoveRows(_parent, _row, _row + _count - 1);
+    this->resetInternalData();
+    this->endRemoveRows();
+    return true;
+}
+
 bool QFrameBasedTableModel::setData(const QModelIndex &_index, const QVariant &_value, int _role)
 {
     if (_index.isValid() && _role == Qt::EditRole)
