@@ -121,10 +121,10 @@ void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
         mouseMoveX = this->pointXa - event->scenePos().x(); // Init position - End position  X - Deslocamento para a esquerda
         mouseMoveY = this->pointYa - event->scenePos().y(); // Init position - End position  Y
 
-        qDebug() << "X = " << this->box.x - mouseMoveX << endl;
-        qDebug() << "Y = " << this->box.y - mouseMoveY << endl;
-        qDebug() << "W = " << this->box.width << endl;
-        qDebug() << "H = " << this->box.height << endl;
+//        qDebug() << "X = " << this->box.x - mouseMoveX << endl;
+//        qDebug() << "Y = " << this->box.y - mouseMoveY << endl;
+//        qDebug() << "W = " << this->box.width << endl;
+//        qDebug() << "H = " << this->box.height << endl;
 
 
         QGraphicsScene::mouseMoveEvent(event);
