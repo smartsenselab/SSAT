@@ -15,11 +15,16 @@ Core::Core(unsigned int _frames, unsigned int _cores)
     this->attributes.insert(std::pair<string, string>("Person_identification", "Davi"));
     this->attributes.insert(std::pair<string, string>("Person_identification", "Rafael"));
 
-    for(int index = 0; index < 10; index++)
+
+    std::multimap<string,string>::iterator it;
+    for(it = this->attributes.begin(); it != this->attributes.end(); it++)
     {
-        string sIndex = std::to_string(index);
-        FrameBasedData temp = FrameBasedData(index, index * 4, "Cat " + sIndex, "La " + sIndex, "Name " + sIndex);
-        this->frameData.push_back(temp);
+        for(int index = 0; index < 10; index++)
+        {
+            string sIndex = std::to_string(index);
+            FrameBasedData temp = FrameBasedData(index, index * 4, it->first, it->second, it->second + " " + sIndex);
+            this->frameData.push_back(temp);
+        }
     }
 }
 
