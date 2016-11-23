@@ -6,24 +6,24 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>487</width>
-    <height>220</height>
+    <width>409</width>
+    <height>168</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Frame-based annotation</string>
   </property>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>471</width>
-     <height>201</height>
+     <width>385</width>
+     <height>147</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
        <widget class="QLabel" name="labelName">
@@ -37,7 +37,7 @@
       </item>
      </layout>
     </item>
-    <item>
+    <item row="1" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QLabel" name="labelCategory">
@@ -61,7 +61,7 @@
       </item>
      </layout>
     </item>
-    <item>
+    <item row="2" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout_1">
       <item>
        <widget class="QLabel" name="labelInitialFrame">
@@ -93,7 +93,7 @@
       </item>
      </layout>
     </item>
-    <item>
+    <item row="3" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
        <widget class="QPushButton" name="buttonRewindF">
@@ -149,18 +149,46 @@
       </item>
      </layout>
     </item>
-    <item>
-     <widget class="QDialogButtonBox" name="buttonBox">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="standardButtons">
-       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-      </property>
-     </widget>
+    <item row="4" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDialogButtonBox" name="buttonBox">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="standardButtons">
+         <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
+  <zorder>layoutWidget</zorder>
+  <zorder>buttonBox</zorder>
+  <zorder>lineEditName</zorder>
+  <zorder>label</zorder>
  </widget>
  <resources/>
  <connections/>

@@ -124,12 +124,49 @@ void DialogFrameBased::initializeComboboxes()
     this->ui->comboBoxLabel->setModel(this->labelModel);
 }
 
+
+QString name2;
+
+void DialogFrameBased::enableDisableButtonBox()
+{
+    this->ui->spinBoxFinalFrame->setMinimum(this->getIniFrameValue());
+
+    QPalette palette = this->ui->label->palette();
+    palette.setColor(ui->label->backgroundRole(), Qt::red);
+    palette.setColor(ui->label->foregroundRole(), Qt::red);
+    this->ui->label->setPalette(palette);
+
+    name2 = this->getNameValue();
+    if(name2.length() == 0)
+    {
+        this->ui->label->setText("Choose a new name");
+        this->ui->buttonBox->setEnabled(false);
+    }
+    else
+    {
+        std::string nameAux = name2.toUtf8().constData();
+        if(this->uniqueValues.find(nameAux) == this->uniqueValues.end())
+        {
+            this->ui->label->clear();
+            this->ui->buttonBox->setEnabled(true);
+        }
+        else
+        {
+            this->ui->label->setText("Name already used");
+            this->ui->buttonBox->setEnabled(false);
+        }
+    }
+
+    // this->ui->spinBoxInitialFrame->setMaximum(finalFrame);
+    // this->ui->spinBoxFinalFrame->setMaximum(initFrame);
+
+}
+
 void DialogFrameBased::slot_initializeDialog(Core &_singleton, const int _frameId)
 {
     this->manipulation = mode::insert;
 
     this->frameId = _frameId - 1;
-    this->nameFlag = 0;
     this->singleton = &_singleton;
     this->totalFrames = this->singleton->frames.size();
 
@@ -137,8 +174,13 @@ void DialogFrameBased::slot_initializeDialog(Core &_singleton, const int _frameI
 
     this->ui->spinBoxInitialFrame->setMinimum(1);
     this->ui->spinBoxInitialFrame->setMaximum(this->totalFrames);
-    this->ui->spinBoxFinalFrame->setMinimum(1);
+    this->ui->spinBoxFinalFrame->setMinimum(this->getIniFrameValue());
     this->ui->spinBoxFinalFrame->setMaximum(this->totalFrames);
+
+    for(int index = 0; index < this->singleton->frameData.size(); index++)
+    {
+        this->uniqueValues.insert(this->singleton->frameData.at(index).getName());
+    }
 
     this->initializeComboboxes();
 
@@ -247,24 +289,14 @@ void DialogFrameBased::slot_fastfButtonPressed()
 
 void DialogFrameBased::slot_spinBoxValueChanged()
 {
-    int initFrame = this->getIniFrameValue();
-    int finalFrame = this->getEndFrameValue();
-
-    // this->ui->spinBoxInitialFrame->setMaximum(finalFrame);
-    // this->ui->spinBoxFinalFrame->setMaximum(initFrame);
-
-    if(initFrame >= finalFrame || this->nameFlag == 0)
-    {
-        this->ui->buttonBox->setEnabled(false);
-    }
-    else if( initFrame < finalFrame && this->nameFlag == 1)
-    {
-        this->ui->buttonBox->setEnabled(true);
-    }
+    this->enableDisableButtonBox();
 }
 
 void DialogFrameBased::slot_buttonBoxAccepted()
 {
+    std::string nameAux = name2.toUtf8().constData();
+    this->uniqueValues.insert(nameAux);
+
     FrameBasedData data = FrameBasedData(this->ui->spinBoxInitialFrame->value(),
                                          this->ui->spinBoxFinalFrame->value(),
                                          this->ui->comboBoxCategory->currentText().toStdString(),
@@ -285,30 +317,7 @@ void DialogFrameBased::slot_buttonBoxAccepted()
 void DialogFrameBased::slot_lineEditNameChanged()
 {
 
-    int initFrame = this->getIniFrameValue();
-    int endFrame = this->getEndFrameValue();
-
-    QString name2 = this->getNameValue();
-    if(name2.length() == 0  && endFrame <= initFrame)
-    {
-        this->nameFlag = 0;
-        this->ui->buttonBox->setEnabled(false);
-    }
-    else if( name2.length() != 0 && endFrame > initFrame)
-    {
-        this->ui->buttonBox->setEnabled(true);
-        this->nameFlag = 1;
-    }
-    else if(name2.length() == 0 && endFrame > initFrame)
-    {
-        this->nameFlag = 0;
-        this->ui->buttonBox->setEnabled(false);
-    }
-    else if(name2.length() != 0 && endFrame <= initFrame)
-    {
-        this->nameFlag = 1;
-        this->ui->buttonBox->setEnabled(false);
-    }
+    this->enableDisableButtonBox();
 }
 
 
