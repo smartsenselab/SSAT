@@ -27,6 +27,7 @@ private:
 
     int frameId, indexId, totalFrames;
     mode manipulation;
+    set<string> uniqueValues;
     Core *singleton = NULL;
 
     QStringListModel *categoryModel = NULL;
@@ -42,6 +43,8 @@ public:
 private:
     void connectSignalSlots();
     void initializeComboboxes();
+
+    void enableDisableButtonBox();
 
 public slots:
     void slot_initializeDialog(Core &_singleton, const int _frameId);
