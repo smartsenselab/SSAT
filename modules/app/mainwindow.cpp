@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "qdebug.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -374,8 +373,6 @@ void MainWindow::slot_openFile()
 
         this->enableWidgets(true);
         this->updateFrame(1);
-
-        //this->tableModel->insertRows(0, 1, QModelIndex());
     }
 }
 
@@ -385,7 +382,7 @@ void MainWindow::slot_importJson()
                                                     tr("Import JSON..."),
                                                     tr("/home"),
                                                     tr("JSON file (*.json)"));
-    this->manager->importJSON(*(this->singleton), jsonName);
+    this->manager->importJSON(*(this->singleton), this->tableModel, jsonName);
 }
 
 void MainWindow::slot_importProgressBar()

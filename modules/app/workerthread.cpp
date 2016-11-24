@@ -100,7 +100,7 @@ void WorkerThread::exportJSON(Core &_singleton, const QString &_jsonName){
     file.write(output.toJson());
 }
 
-void WorkerThread::importJSON(Core &_singleton, const QString &_jsonName)
+void WorkerThread::importJSON(Core &_singleton, QFrameBasedTableModel *_tableModel, const QString &_jsonName)
 {
     _singleton.frameData.clear();
     _singleton.attributes.clear();
@@ -177,7 +177,7 @@ void WorkerThread::importJSON(Core &_singleton, const QString &_jsonName)
         int end = std::stoi(endframeString);
 
         frameData = FrameBasedData(init, end, categoryString, labelString, nameString);
-        _singleton.frameData.push_back(frameData);
+        _tableModel->insertRow(frameData);
     }
 }
 

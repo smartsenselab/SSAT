@@ -94,7 +94,10 @@ bool QFrameBasedTableModel::insertRows(int _row, int _count, const QModelIndex &
     FrameBasedData tempData = FrameBasedData();
 
     this->beginInsertRows(_parent, _row, _row + _count - 1);
-    this->frameData->push_back(tempData);
+    for(int index = 0; index < _count; index++)
+    {
+        this->frameData->push_back(tempData);
+    }
     this->endInsertRows();
 
     return true;
@@ -104,7 +107,7 @@ bool QFrameBasedTableModel::removeRows(int _row, int _count, const QModelIndex &
 {
     std::cout << "removeRows" << std::endl;
     this->beginRemoveRows(_parent, _row, _row + _count - 1);
-    this->resetInternalData();
+    this->frameData->erase(this->frameData->begin() + _row, this->frameData->begin() + _row + _count);
     this->endRemoveRows();
 
     return true;
@@ -189,6 +192,11 @@ bool QFrameBasedTableModel::changeRow(const FrameBasedData &_frameBasedData, con
 bool QFrameBasedTableModel::removeRow()
 {
     return false;
+}
+
+bool QFrameBasedTableModel::clear()
+{
+    return this->removeRows(0, this->rowCount(), QModelIndex());
 }
 
 void QFrameBasedTableModel::setFrameBasedData(vector<FrameBasedData> &_frameBasedData)

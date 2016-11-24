@@ -3,14 +3,16 @@
 
 #include <QtCore>
 
+#include <QDate>
+#include <QFile>
 #include <QImage>
 #include <QObject>
+#include <QTableView>
 #include <QThread>
-#include <QFile>
-#include<QJsonArray>
-#include<QJsonDocument>
+
+#include <QJsonArray>
+#include <QJsonDocument>
 #include <QJsonObject>
-#include <QDate>
 
 #include <iostream>
 
@@ -21,6 +23,7 @@ using cv::VideoCapture;
 
 #include "core.h"
 #include "framebaseddata.h"
+#include "qframebasedtablemodel.h"
 
 class WorkerThread : public QObject
 {
@@ -48,7 +51,7 @@ public:
     void loadVideo(QString _path);
 
     void exportJSON(Core &_singleton, const QString &_jsonName);
-    void importJSON(Core &_singleton, const QString &_jsonName);
+    void importJSON(Core &_singleton, QFrameBasedTableModel *_tableModel, const QString &_jsonName);
 
     QImage matToQimage(const Mat &_frame);
 
