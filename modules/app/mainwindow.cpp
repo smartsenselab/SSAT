@@ -601,13 +601,12 @@ void MainWindow::slot_removeBoxMenu()
 
 void MainWindow::slot_frameBasedInsertAccepted(const FrameBasedData _data)
 {
-    this->manager->insertFrameBasedSegment(*(this->singleton), _data);
-    this->ui->tableViewFrame->repaint();
+    this->tableModel->insertRow(_data);
 }
 
 void MainWindow::slot_frameBasedAlterAccepted(const FrameBasedData _data, const int _index)
 {
-    this->manager->alterFrameBasedSegment(*(this->singleton), _data, _index);
+    this->tableModel->changeRow(_data, _index);
 }
 
 void MainWindow::slot_addBoundingBoxToCore(const Rect _box)

@@ -207,8 +207,8 @@ void DialogFrameBased::slot_initializeDialog(Core &_singleton, const QModelIndex
     this->initializeComboboxes();
 
     this->ui->lineEditName->setText(QString::fromStdString(frameData.getName()));
-    this->ui->comboBoxLabel->setCurrentText(QString::fromStdString(frameData.getLabel()));
     this->ui->comboBoxCategory->setCurrentText(QString::fromStdString(frameData.getCategory()));
+    this->ui->comboBoxLabel->setCurrentText(QString::fromStdString(frameData.getLabel()));
     this->ui->spinBoxInitialFrame->setValue(frameData.getInitialFrameId());
     this->ui->spinBoxFinalFrame->setValue(frameData.getFinalFrameId());
 }

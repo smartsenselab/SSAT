@@ -2,8 +2,7 @@
 
 QFrameBasedTableModel::QFrameBasedTableModel(QObject *_parent)
     : QAbstractTableModel(_parent)
-{
-}
+{}
 
 QFrameBasedTableModel::QFrameBasedTableModel(vector<FrameBasedData> &_frameBasedData, QObject *_parent)
     : QAbstractTableModel(_parent)
@@ -14,7 +13,6 @@ QFrameBasedTableModel::QFrameBasedTableModel(vector<FrameBasedData> &_frameBased
 int QFrameBasedTableModel::rowCount(const QModelIndex &_parent) const
 {
     Q_UNUSED(_parent);
-    std::cout << "rowCount: " << this->frameData->size() << std::endl;
     return static_cast<int>(this->frameData->size());
 }
 
@@ -30,11 +28,6 @@ QVariant QFrameBasedTableModel::data(const QModelIndex &_index, int _role) const
     {
         return QVariant();
     }
-
-//    if((_index.row() >= static_cast<int>(this->frameData->size())) || (_index.row() < 0))
-//    {
-//        return QVariant();
-//    }
 
     if(_role == Qt::TextAlignmentRole)
     {
@@ -61,25 +54,6 @@ QVariant QFrameBasedTableModel::data(const QModelIndex &_index, int _role) const
             return QString("Error");
         }
     }
-//    else if(_role == Qt::EditRole)
-//    {
-//        switch(_index.column())
-//        {
-//        case 0:
-//            return QString::fromStdString(this->frameData->at(
-//                                              static_cast<unsigned long>(_index.row())).getName());
-//        case 1:
-//            return QString::fromStdString(this->frameData->at(
-//                                              static_cast<unsigned long>(_index.row())).getCategory());
-//        case 2:
-//            return QString::fromStdString(this->frameData->at(
-//                                              static_cast<unsigned long>(_index.row())).getLabel());
-//        case 3:
-//            return this->frameData->at(static_cast<unsigned long>(_index.row())).getInitialFrameId();
-//        case 4:
-//            return this->frameData->at(static_cast<unsigned long>(_index.row())).getFinalFrameId();
-//        }
-//    }
 
     return QVariant();
 }
@@ -117,7 +91,6 @@ QVariant QFrameBasedTableModel::headerData(int _section, Qt::Orientation _orient
 
 bool QFrameBasedTableModel::insertRows(int _row, int _count, const QModelIndex &_parent)
 {
-    std::cout << "insertRows" << std::endl;
     FrameBasedData tempData = FrameBasedData();
 
     this->beginInsertRows(_parent, _row, _row + _count - 1);
@@ -191,13 +164,31 @@ Qt::ItemFlags QFrameBasedTableModel::flags(const QModelIndex &_index) const
 
     Qt::ItemFlags flags = QAbstractItemModel::flags(_index);
     flags |= ( Qt::ItemIsSelectable
-              //|Qt::ItemIsEditable
-              |Qt::ItemIsUserCheckable
-              |Qt::ItemIsEnabled
-              |Qt::ItemIsDragEnabled
-              |Qt::ItemIsDropEnabled);
+              |Qt::ItemIsEditable
+              |Qt::ItemIsEnabled);
 
     return flags;
+}
+
+bool QFrameBasedTableModel::insertRow(const FrameBasedData &_frameBasedData)
+{
+    bool cond = this->insertRows(0, 1, QModelIndex());
+    if(cond)
+    {
+        this->frameData->back() = _frameBasedData;
+    }
+    return cond;
+}
+
+bool QFrameBasedTableModel::changeRow(const FrameBasedData &_frameBasedData, const int _index)
+{
+    this->frameData->at(static_cast<unsigned long>(_index)) = _frameBasedData;
+    return true;
+}
+
+bool QFrameBasedTableModel::removeRow()
+{
+    return false;
 }
 
 void QFrameBasedTableModel::setFrameBasedData(vector<FrameBasedData> &_frameBasedData)

@@ -203,6 +203,6 @@ void WorkerThread::insertFrameBasedSegment(Core &_singleton, const FrameBasedDat
 
 void WorkerThread::alterFrameBasedSegment(Core &_singleton, const FrameBasedData &_data, const int _index)
 {
-    _singleton.frameData[_index] = _data;
+    _singleton.frameData[static_cast<unsigned long>(_index)] = _data;
 }
 

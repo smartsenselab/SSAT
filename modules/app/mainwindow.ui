@@ -214,7 +214,11 @@
      </widget>
     </item>
     <item row="1" column="10" colspan="9">
-     <widget class="QTableView" name="tableViewFrame"/>
+     <widget class="QTableView" name="tableViewFrame">
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectItems</enum>
+      </property>
+     </widget>
     </item>
     <item row="5" column="8">
      <spacer name="horizontalSpacer_3">
@@ -237,7 +241,7 @@
      <x>0</x>
      <y>0</y>
      <width>921</width>
-     <height>22</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
