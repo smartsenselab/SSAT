@@ -64,17 +64,26 @@ void MainWindow::enableWidgets(const bool _enable)
     this->ui->labelTime->setEnabled(_enable);
     this->ui->sliderFrame->setEnabled(_enable);
     this->ui->spinBoxSpeed->setEnabled(_enable);
+    this->ui->tableViewFrame->setEnabled(_enable);
     this->ui->viewFrame->setEnabled(_enable);
 }
 
 void MainWindow::connectSignalSlots()
 {
-    // Adding context menu to labelFrameShow
+    // Adding context menu to viewFrame
     this->ui->viewFrame->setContextMenuPolicy(Qt::CustomContextMenu);
     this->connect(this->ui->viewFrame,
                   SIGNAL(customContextMenuRequested(QPoint)),
                   this,
-                  SLOT(slot_contextMenu(QPoint))
+                  SLOT(slot_viewFrameContextMenu(QPoint))
+                  );
+
+    // Adding context menu to tableViewFrame
+    this->ui->tableViewFrame->setContextMenuPolicy(Qt::CustomContextMenu);
+    this->connect(this->ui->tableViewFrame,
+                  SIGNAL(customContextMenuRequested(QPoint)),
+                  this,
+                  SLOT(slot_tableViewContextMenu(QPoint))
                   );
 
     // Connecting ACTIONS to SLOTS
@@ -124,7 +133,7 @@ void MainWindow::connectSignalSlots()
     this->connect(this->ui->buttonNewBox,
                   SIGNAL(pressed()),
                   this,
-                  SLOT(slot_newBoxMenu())
+                  SLOT(slot_viewFrameNewBoxMenu())
                   );
 
     this->connect(this->ui->buttonRewindF,
@@ -522,7 +531,6 @@ void MainWindow::slot_tableViewFrameDoubleClicked(const QModelIndex _index)
     this->frameDialog->setModal(true);
     this->frameDialog->show();
     this->frameDialog->slot_initializeDialog(*(this->singleton), _index);
-
 }
 
 void MainWindow::slot_keepVideoRunning()
@@ -546,19 +554,19 @@ void MainWindow::slot_keepVideoRunning()
     }
 }
 
-void MainWindow::slot_contextMenu(const QPoint &_point)
+void MainWindow::slot_viewFrameContextMenu(const QPoint &_point)
 {
     QPoint position = this->ui->viewFrame->mapToGlobal(_point);
 
     QMenu contextMenu;
-    contextMenu.addAction("New Bounding box", this, SLOT(slot_newBoxMenu()));
-    contextMenu.addAction("New Frame box", this, SLOT(slot_newFrameMenu()));
-    contextMenu.addAction("Remove Bbox", this, SLOT(slot_removeBoxMenu()));
+    contextMenu.addAction("New Bounding box", this, SLOT(slot_viewFrameNewBoxMenu()));
+    contextMenu.addAction("New Frame box", this, SLOT(slot_viewFrameNewFrameMenu()));
+    contextMenu.addAction("Remove Bbox", this, SLOT(slot_viewFrameRemoveBoxMenu()));
 
     contextMenu.exec(position);
 }
 
-void MainWindow::slot_newBoxMenu()
+void MainWindow::slot_viewFrameNewBoxMenu()
 {
     this->frameScene.slot_enableDraw();
 
@@ -579,7 +587,7 @@ void MainWindow::slot_newBoxMenu()
     //    this->ui->tableWidget->setCellWidget(row, 3, btn_cancel);
 }
 
-void MainWindow::slot_newFrameMenu()
+void MainWindow::slot_viewFrameNewFrameMenu()
 {
     int nextFrameId = static_cast<int>(this->manager->getFrameId());
 
@@ -591,9 +599,39 @@ void MainWindow::slot_newFrameMenu()
     this->frameDialog->slot_initializeDialog(*(this->singleton), nextFrameId);
 }
 
-void MainWindow::slot_removeBoxMenu()
+void MainWindow::slot_viewFrameRemoveBoxMenu()
 {
     this->frameScene.deleteBBox();
+}
+
+void MainWindow::slot_tableViewContextMenu(const QPoint &_point)
+{
+    if((this->tableModel) && (this->tableModel->rowCount() > 0))
+    {
+        QPoint tablePos = this->ui->tableViewFrame->mapTo(this->ui->tableViewFrame, _point);
+        QPoint windowPos = this->ui->tableViewFrame->mapToGlobal(_point);
+
+        QModelIndex index = this->ui->tableViewFrame->indexAt(tablePos);
+        std::cout << "indexAt: " << index.row() << " : " << index.column() << std::endl;
+
+        if((index.row() >= 0) && (index.row() < this->tableModel->rowCount()))
+        {
+            QMenu contextMenu;
+            contextMenu.addAction("Change Annotation", this, SLOT(slot_tableViewChangeAnnotation()));
+            contextMenu.addAction("Delete Annotation", this, SLOT(slot_tableViewRemoveAnnotation()));
+            contextMenu.exec(windowPos);
+        }
+    }
+}
+
+void MainWindow::slot_tableViewChangeAnnotation()
+{
+
+}
+
+void MainWindow::slot_tableViewRemoveAnnotation()
+{
+
 }
 
 void MainWindow::slot_frameBasedInsertAccepted(const FrameBasedData _data)
