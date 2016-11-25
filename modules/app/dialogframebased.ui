@@ -6,20 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>409</width>
-    <height>168</height>
+    <width>417</width>
+    <height>199</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Frame-based annotation</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>385</width>
-     <height>147</height>
+     <width>399</width>
+     <height>181</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -185,10 +185,6 @@
     </item>
    </layout>
   </widget>
-  <zorder>layoutWidget</zorder>
-  <zorder>buttonBox</zorder>
-  <zorder>lineEditName</zorder>
-  <zorder>label</zorder>
  </widget>
  <resources/>
  <connections/>

@@ -30,7 +30,7 @@ public:
     void loadVideo(const QString _path);
 
     void exportJSON(Core &_singleton, const QString &_jsonName);
-    void importJSON(Core &_singleton, const QString &_jsonName);
+    void importJSON(Core &_singleton, QFrameBasedTableModel *_tableModel, const QString &_jsonName);
 
     QImage matToQimage(const Mat &_frame);
 

@@ -14,8 +14,8 @@ class QFrameBasedTableModel : public QAbstractTableModel
 /// https://doc.qt.io/archives/4.6/itemviews-addressbook.html
 
 public:
-    explicit QFrameBasedTableModel(QObject *_parent = 0);
-    explicit QFrameBasedTableModel(vector<FrameBasedData> &_frameBasedData, QObject *_parent = 0);
+    explicit QFrameBasedTableModel(QObject* _parent = 0);
+    explicit QFrameBasedTableModel(vector<FrameBasedData> &_frameBasedData, QObject* _parent = 0);
 
     // Basic functionality:
     int rowCount(const QModelIndex &_parent = QModelIndex()) const Q_DECL_OVERRIDE;
@@ -30,6 +30,10 @@ public:
     Qt::ItemFlags flags(const QModelIndex &_index) const Q_DECL_OVERRIDE;
 
     // Custom methods:
+    bool insertRow(const FrameBasedData &_frameBasedData);
+    bool changeRow(const FrameBasedData &_frameBasedData, const int _index);
+    bool removeRow(const int _index);
+    bool clear();
     void setFrameBasedData(vector<FrameBasedData> &_frameBasedData);
     vector<FrameBasedData>* getFrameBasedData();
 

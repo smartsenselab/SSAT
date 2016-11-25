@@ -6,6 +6,7 @@
 #include <QFileDialog>
 #include <QGraphicsScene>
 #include <QMainWindow>
+#include <QMessageBox>
 #include <QScopedPointer>
 #include <QTime>
 #include <QTimer>
@@ -104,10 +105,13 @@ public slots:
 
     void slot_keepVideoRunning();
 
-    void slot_contextMenu(const QPoint &_point);
-    void slot_newBoxMenu();
-    void slot_newFrameMenu();
-    void slot_removeBoxMenu();
+    void slot_viewFrameContextMenu(const QPoint &_point);
+    void slot_viewFrameNewBoxMenu();
+    void slot_viewFrameNewFrameMenu();
+    void slot_viewFrameRemoveBoxMenu();
+    void slot_tableViewContextMenu(const QPoint &_point);
+    void slot_tableViewChangeAnnotation();
+    void slot_tableViewRemoveAnnotation();
 
     void slot_frameBasedInsertAccepted(const FrameBasedData _data);
     void slot_frameBasedAlterAccepted(const FrameBasedData _data, const int _index);

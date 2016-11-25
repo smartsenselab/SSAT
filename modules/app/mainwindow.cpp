@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "qdebug.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -65,17 +64,26 @@ void MainWindow::enableWidgets(const bool _enable)
     this->ui->labelTime->setEnabled(_enable);
     this->ui->sliderFrame->setEnabled(_enable);
     this->ui->spinBoxSpeed->setEnabled(_enable);
+    this->ui->tableViewFrame->setEnabled(_enable);
     this->ui->viewFrame->setEnabled(_enable);
 }
 
 void MainWindow::connectSignalSlots()
 {
-    // Adding context menu to labelFrameShow
+    // Adding context menu to viewFrame
     this->ui->viewFrame->setContextMenuPolicy(Qt::CustomContextMenu);
     this->connect(this->ui->viewFrame,
                   SIGNAL(customContextMenuRequested(QPoint)),
                   this,
-                  SLOT(slot_contextMenu(QPoint))
+                  SLOT(slot_viewFrameContextMenu(QPoint))
+                  );
+
+    // Adding context menu to tableViewFrame
+    this->ui->tableViewFrame->setContextMenuPolicy(Qt::CustomContextMenu);
+    this->connect(this->ui->tableViewFrame,
+                  SIGNAL(customContextMenuRequested(QPoint)),
+                  this,
+                  SLOT(slot_tableViewContextMenu(QPoint))
                   );
 
     // Connecting ACTIONS to SLOTS
@@ -125,7 +133,7 @@ void MainWindow::connectSignalSlots()
     this->connect(this->ui->buttonNewBox,
                   SIGNAL(pressed()),
                   this,
-                  SLOT(slot_newBoxMenu())
+                  SLOT(slot_viewFrameNewBoxMenu())
                   );
 
     this->connect(this->ui->buttonRewindF,
@@ -374,8 +382,6 @@ void MainWindow::slot_openFile()
 
         this->enableWidgets(true);
         this->updateFrame(1);
-
-        //this->tableModel->insertRows(0, 1, QModelIndex());
     }
 }
 
@@ -385,7 +391,7 @@ void MainWindow::slot_importJson()
                                                     tr("Import JSON..."),
                                                     tr("/home"),
                                                     tr("JSON file (*.json)"));
-    this->manager->importJSON(*(this->singleton), jsonName);
+    this->manager->importJSON(*(this->singleton), this->tableModel, jsonName);
 }
 
 void MainWindow::slot_importProgressBar()
@@ -517,15 +523,12 @@ void MainWindow::slot_spinBoxSpeedValueChanged(int _value)
 
 void MainWindow::slot_tableViewFrameDoubleClicked(const QModelIndex _index)
 {
-    std::cout << "Clique duplo: " << _index.row() << "-" << _index.column() << std::endl;
-
     this->frameDialog = new DialogFrameBased(this);
     this->connectMainWindow2DialogFrameBased();
 
     this->frameDialog->setModal(true);
     this->frameDialog->show();
     this->frameDialog->slot_initializeDialog(*(this->singleton), _index);
-
 }
 
 void MainWindow::slot_keepVideoRunning()
@@ -549,19 +552,19 @@ void MainWindow::slot_keepVideoRunning()
     }
 }
 
-void MainWindow::slot_contextMenu(const QPoint &_point)
+void MainWindow::slot_viewFrameContextMenu(const QPoint &_point)
 {
     QPoint position = this->ui->viewFrame->mapToGlobal(_point);
 
     QMenu contextMenu;
-    contextMenu.addAction("New Bounding box", this, SLOT(slot_newBoxMenu()));
-    contextMenu.addAction("New Frame box", this, SLOT(slot_newFrameMenu()));
-    contextMenu.addAction("Remove Bbox", this, SLOT(slot_removeBoxMenu()));
+    contextMenu.addAction("New Bounding box", this, SLOT(slot_viewFrameNewBoxMenu()));
+    contextMenu.addAction("New Frame box", this, SLOT(slot_viewFrameNewFrameMenu()));
+    contextMenu.addAction("Remove Bbox", this, SLOT(slot_viewFrameRemoveBoxMenu()));
 
     contextMenu.exec(position);
 }
 
-void MainWindow::slot_newBoxMenu()
+void MainWindow::slot_viewFrameNewBoxMenu()
 {
     this->frameScene.slot_enableDraw();
 
@@ -582,7 +585,7 @@ void MainWindow::slot_newBoxMenu()
     //    this->ui->tableWidget->setCellWidget(row, 3, btn_cancel);
 }
 
-void MainWindow::slot_newFrameMenu()
+void MainWindow::slot_viewFrameNewFrameMenu()
 {
     int nextFrameId = static_cast<int>(this->manager->getFrameId());
 
@@ -594,20 +597,65 @@ void MainWindow::slot_newFrameMenu()
     this->frameDialog->slot_initializeDialog(*(this->singleton), nextFrameId);
 }
 
-void MainWindow::slot_removeBoxMenu()
+void MainWindow::slot_viewFrameRemoveBoxMenu()
 {
     this->frameScene.deleteBBox();
 }
 
+void MainWindow::slot_tableViewContextMenu(const QPoint &_point)
+{
+    if((this->tableModel) && (this->tableModel->rowCount() > 0))
+    {
+        QPoint tablePos = this->ui->tableViewFrame->mapTo(this->ui->tableViewFrame, _point);
+        QPoint windowPos = this->ui->tableViewFrame->mapToGlobal(_point);
+        QModelIndex index = this->ui->tableViewFrame->indexAt(tablePos);
+
+        if((index.row() >= 0) && (index.row() < this->tableModel->rowCount()))
+        {
+            QMenu contextMenu;
+            contextMenu.addAction("Change Annotation", this, SLOT(slot_tableViewChangeAnnotation()));
+            contextMenu.addAction("Delete Annotation", this, SLOT(slot_tableViewRemoveAnnotation()));
+            contextMenu.exec(windowPos);
+        }
+    }
+}
+
+void MainWindow::slot_tableViewChangeAnnotation()
+{
+    QModelIndex index = this->ui->tableViewFrame->currentIndex();
+    this->slot_tableViewFrameDoubleClicked(index);
+}
+
+void MainWindow::slot_tableViewRemoveAnnotation()
+{
+    int response;
+    QModelIndex index = this->ui->tableViewFrame->currentIndex();
+
+    QMessageBox message;
+    message.setIcon(QMessageBox::Warning);
+    message.setText("Remove Annotation");
+    message.setInformativeText("Are you sure you want to continue?");
+    message.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    response = message.exec();
+
+    switch(response)
+    {
+    case QMessageBox::Yes:
+        this->tableModel->removeRow(index.row());
+        break;
+    case QMessageBox::No:
+        break;
+    }
+}
+
 void MainWindow::slot_frameBasedInsertAccepted(const FrameBasedData _data)
 {
-    this->manager->insertFrameBasedSegment(*(this->singleton), _data);
-    this->ui->tableViewFrame->repaint();
+    this->tableModel->insertRow(_data);
 }
 
 void MainWindow::slot_frameBasedAlterAccepted(const FrameBasedData _data, const int _index)
 {
-    this->manager->alterFrameBasedSegment(*(this->singleton), _data, _index);
+    this->tableModel->changeRow(_data, _index);
 }
 
 void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
