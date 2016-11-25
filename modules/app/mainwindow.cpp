@@ -628,8 +628,24 @@ void MainWindow::slot_tableViewChangeAnnotation()
 
 void MainWindow::slot_tableViewRemoveAnnotation()
 {
+    int response;
     QModelIndex index = this->ui->tableViewFrame->currentIndex();
-    std::cout << "Remove: "<< index.row() << " : " << index.column() << std::endl;
+
+    QMessageBox message;
+    message.setIcon(QMessageBox::Warning);
+    message.setText("Remove Annotation");
+    message.setInformativeText("Are you sure you want to continue?");
+    message.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    response = message.exec();
+
+    switch(response)
+    {
+    case QMessageBox::Yes:
+        this->tableModel->removeRow(index.row());
+        break;
+    case QMessageBox::No:
+        break;
+    }
 }
 
 void MainWindow::slot_frameBasedInsertAccepted(const FrameBasedData _data)

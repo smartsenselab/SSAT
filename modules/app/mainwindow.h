@@ -6,6 +6,7 @@
 #include <QFileDialog>
 #include <QGraphicsScene>
 #include <QMainWindow>
+#include <QMessageBox>
 #include <QScopedPointer>
 #include <QTime>
 #include <QTimer>

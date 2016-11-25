@@ -32,7 +32,7 @@ public:
     // Custom methods:
     bool insertRow(const FrameBasedData &_frameBasedData);
     bool changeRow(const FrameBasedData &_frameBasedData, const int _index);
-    bool removeRow();
+    bool removeRow(const int _index);
     bool clear();
     void setFrameBasedData(vector<FrameBasedData> &_frameBasedData);
     vector<FrameBasedData>* getFrameBasedData();
