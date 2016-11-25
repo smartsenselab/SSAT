@@ -523,8 +523,6 @@ void MainWindow::slot_spinBoxSpeedValueChanged(int _value)
 
 void MainWindow::slot_tableViewFrameDoubleClicked(const QModelIndex _index)
 {
-    std::cout << "Clique duplo: " << _index.row() << "-" << _index.column() << std::endl;
-
     this->frameDialog = new DialogFrameBased(this);
     this->connectMainWindow2DialogFrameBased();
 
@@ -610,9 +608,7 @@ void MainWindow::slot_tableViewContextMenu(const QPoint &_point)
     {
         QPoint tablePos = this->ui->tableViewFrame->mapTo(this->ui->tableViewFrame, _point);
         QPoint windowPos = this->ui->tableViewFrame->mapToGlobal(_point);
-
         QModelIndex index = this->ui->tableViewFrame->indexAt(tablePos);
-        std::cout << "indexAt: " << index.row() << " : " << index.column() << std::endl;
 
         if((index.row() >= 0) && (index.row() < this->tableModel->rowCount()))
         {
@@ -626,12 +622,14 @@ void MainWindow::slot_tableViewContextMenu(const QPoint &_point)
 
 void MainWindow::slot_tableViewChangeAnnotation()
 {
-
+    QModelIndex index = this->ui->tableViewFrame->currentIndex();
+    this->slot_tableViewFrameDoubleClicked(index);
 }
 
 void MainWindow::slot_tableViewRemoveAnnotation()
 {
-
+    QModelIndex index = this->ui->tableViewFrame->currentIndex();
+    std::cout << "Remove: "<< index.row() << " : " << index.column() << std::endl;
 }
 
 void MainWindow::slot_frameBasedInsertAccepted(const FrameBasedData _data)
