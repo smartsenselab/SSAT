@@ -102,8 +102,9 @@ void WorkerThread::exportJSON(Core &_singleton, const QString &_jsonName){
 
 void WorkerThread::importJSON(Core &_singleton, QFrameBasedTableModel *_tableModel, const QString &_jsonName)
 {
-    _singleton.frameData.clear();
+    _tableModel->clear();
     _singleton.attributes.clear();
+    _singleton.frameData.clear();
 
     QString val;
     QFile file;
