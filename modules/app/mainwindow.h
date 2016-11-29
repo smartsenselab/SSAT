@@ -1,8 +1,9 @@
 #ifndef mainwindow_h
 #define mainwindow_h
 
+#include<QShortcut>
 #include <iostream>
-
+#include<QProgressDialog>
 #include <QFileDialog>
 #include <QGraphicsScene>
 #include <QMainWindow>
@@ -57,7 +58,13 @@ private:
 public:
     MainWindow(QWidget *parent = 0);
     virtual ~MainWindow();
-
+    QProgressDialog *m_progress;
+    QAction *crtf = new QAction(tr("id1"),this);
+    QAction *crto = new QAction(tr("id"),this);
+    QAction *crti = new QAction(tr("id2"),this);
+    QAction *crte = new QAction(tr("id3"),this);
+    QAction *crta = new QAction(tr("id4"),this);
+    QAction *crtb = new QAction(tr("id5"),this);
 protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
@@ -79,6 +86,12 @@ private:
     void connectMainWindow2DialogFrameBased();
 
 public slots:
+    void Fshortcut();
+    void Ashortcut();
+    void Oshortcut();
+    void Ishortcut();
+    void Bshortcut();
+    void Eshortcut();
     void slot_displayFrame(const QImage _frame);
     void slot_openFile();
     void slot_importJson();

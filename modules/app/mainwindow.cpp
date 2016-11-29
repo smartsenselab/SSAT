@@ -5,7 +5,24 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     this->ui->setupUi(this);
-
+    this->crto->setShortcuts(QList<QKeySequence>()
+                             <<Qt::CTRL + Qt::Key_O);
+    this->crtf->setShortcuts(QList<QKeySequence>()
+                             <<Qt::CTRL + Qt::Key_F);
+    this->crti->setShortcuts(QList<QKeySequence>()
+                             <<Qt::CTRL + Qt::Key_I);
+    this->crte->setShortcuts(QList<QKeySequence>()
+                             <<Qt::CTRL + Qt::Key_E);
+    this->crta->setShortcuts(QList<QKeySequence>()
+                             <<Qt::CTRL + Qt::Key_A);
+    this->crtb->setShortcuts(QList<QKeySequence>()
+                             <<Qt::CTRL + Qt::Key_B);
+    this->addAction(crti);
+    this->addAction(crtb);
+    this->addAction(crta);
+    this->addAction(crtf);
+    this->addAction(crto);
+    this->addAction(crte);
     this->loaded = false;
     this->manager = new VideoManager;
     this->playing = false;
@@ -92,7 +109,12 @@ void MainWindow::connectSignalSlots()
                   this,
                   &MainWindow::slot_openFile
                   );
-
+    this->connect(this->crtf,SIGNAL(triggered()),SLOT(Fshortcut()));
+    this->connect(this->crta,SIGNAL(triggered()),SLOT(Ashortcut()));
+    this->connect(this->crto,SIGNAL(triggered()),SLOT(Oshortcut()));
+    this->connect(this->crti,SIGNAL(triggered()),SLOT(Ishortcut()));
+    this->connect(this->crte,SIGNAL(triggered()),SLOT(Eshortcut()));
+    this->connect(this->crtb,SIGNAL(triggered()),SLOT(Bshortcut()));
     this->connect(this->ui->actionImport_JSON,
                   &QAction::triggered,
                   this,
@@ -305,6 +327,7 @@ void MainWindow::updateFrame(const int _frameId)
         emit signal_drawFrameBboxes(this->singleton->frames[static_cast<unsigned long>(nextFrameId - 1)]);
     }
 }
+
 
 void MainWindow::connectMainWindow2DialogFrameBased()
 {
@@ -667,4 +690,29 @@ void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
     string temp_key = "bbox" + std::to_string(num_bboxes);
 
     this->singleton->frames[nextFrameId - 1].addBox(temp_id + "_" + temp_key, _box);
+}
+
+void MainWindow::Fshortcut()
+{
+    this->slot_viewFrameNewFrameMenu();
+}
+void MainWindow::Ashortcut()
+{
+     this->slot_openAttributes();
+}
+void MainWindow::Oshortcut()
+{
+    this->slot_openFile();
+}
+void MainWindow::Ishortcut()
+{
+    slot_importJson();
+}
+void MainWindow::Eshortcut()
+{
+    this->slot_exportJson();
+}
+void MainWindow::Bshortcut()
+{
+    this->slot_viewFrameNewBoxMenu();
 }
