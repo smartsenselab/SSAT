@@ -58,6 +58,7 @@ private:
 public:
     MainWindow(QWidget *parent = 0);
     virtual ~MainWindow();
+    void keyPressEvent(QKeyEvent* e);
     QProgressDialog *m_progress;
     QAction *crtf = new QAction(tr("id1"),this);
     QAction *crto = new QAction(tr("id"),this);

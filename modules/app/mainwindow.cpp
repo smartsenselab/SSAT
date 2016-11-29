@@ -716,3 +716,13 @@ void MainWindow::Bshortcut()
 {
     this->slot_viewFrameNewBoxMenu();
 }
+
+void MainWindow ::keyPressEvent(QKeyEvent* e)
+{
+    switch(e->key())
+{
+    case Qt::Key_Delete:
+        this->slot_tableViewRemoveAnnotation();
+
+    }
+}
