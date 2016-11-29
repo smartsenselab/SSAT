@@ -174,3 +174,11 @@ void QBoundingBox::slot_enableDraw()
     this->itemToDraw = 0;
     this->drawEnabled = true;
 }
+void QBoundingBox ::keyPressEvent(QKeyEvent* e)
+{
+    switch(e->key())
+{
+    case Qt::Key_Delete:
+        removeItem(selectedItems().front());
+    }
+}
