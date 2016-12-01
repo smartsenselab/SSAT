@@ -50,9 +50,13 @@ private:
 
     VideoManager *manager;
 
+    QHeaderView *m_horiz_header;
+
     QString nome;
     int InitFrame;
     int EndFrame;
+
+    QHeaderView *m_pHeaderView;
 
 public:
     MainWindow(QWidget *parent = 0);
@@ -118,6 +122,8 @@ public slots:
 
     void slot_addBoundingBoxToCore(const Rect _box);
 
+    void on_sectionClicked(int index);
+    void Sort(int);
 signals:
     void signal_drawFrameBboxes(const Frame _frame);
 };
