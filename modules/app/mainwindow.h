@@ -82,6 +82,8 @@ private:
 
     void connectMainWindow2DialogFrameBased();
 
+    void Sort(int);
+
 public slots:
     void slot_displayFrame(const QImage _frame);
     void slot_openFile();
@@ -123,9 +125,10 @@ public slots:
     void slot_addBoundingBoxToCore(const Rect _box);
 
     void on_sectionClicked(int index);
-    void Sort(int);
+
 signals:
     void signal_drawFrameBboxes(const Frame _frame);
+    void signal_Sort(int);
 };
 
 #endif

@@ -16,6 +16,7 @@ class QFrameBasedTableModel : public QAbstractTableModel
 public:
     explicit QFrameBasedTableModel(QObject* _parent = 0);
     explicit QFrameBasedTableModel(vector<FrameBasedData> &_frameBasedData, QObject* _parent = 0);
+    void Sort(int);
 
     // Basic functionality:
     int rowCount(const QModelIndex &_parent = QModelIndex()) const Q_DECL_OVERRIDE;
@@ -39,6 +40,9 @@ public:
 
 private:
     vector<FrameBasedData>* frameData;
+
+public slots:
+   void slot_SortTable(int index);
 };
 
 #endif // QFRAMEBASEDTABLEMODEL_H

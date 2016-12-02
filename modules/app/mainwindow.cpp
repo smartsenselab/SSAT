@@ -201,6 +201,12 @@ void MainWindow::setTableModel()
     this->ui->tableViewFrame->setAlternatingRowColors(true);
     this->ui->tableViewFrame->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     this->ui->tableViewFrame->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    this->connect(this,
+               SIGNAL(signal_Sort(int)),
+               this->tableModel,
+               SLOT(slot_SortTable(int))
+               );
 }
 
 void MainWindow::changeSpeed(const int _speed)
@@ -347,7 +353,11 @@ void MainWindow::connectMainWindow2DialogFrameBased()
                   SLOT(slot_frameBasedAlterAccepted(const FrameBasedData, const int))
                   );
 
-    this->connect(m_horiz_header, SIGNAL(sectionClicked(int)), this, SLOT(on_sectionClicked(int)));
+    this->connect(this->m_horiz_header,
+                  SIGNAL(sectionClicked(int)),
+                  this,
+                  SLOT(on_sectionClicked(int))
+                  );
 }
 
 void MainWindow::slot_displayFrame(const QImage _frame)
@@ -679,43 +689,47 @@ void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
 
 void MainWindow::on_sectionClicked(int index){
 
-    int size = this->singleton->frameData.size();
+    emit signal_Sort(index);
 
-    for (int i = 0; i < size - 1; i++){
-      for( int j = 0; j < size - 1; j++){
-          if( index == 3){
-              if(this->singleton->frameData.at(j).getInitialFrameId() > this->singleton->frameData.at(j+1).getInitialFrameId()){
-                 Sort(j);
-              }
-          }
-          if( index == 4){
-              if(this->singleton->frameData.at(j).getFinalFrameId() > this->singleton->frameData.at(j+1).getFinalFrameId()){
-                  Sort(j);
-              }
-          }
-          if( index == 0){
-              const char* n = this->singleton->frameData.at(j).getName().c_str();
-              const char* n2 = this->singleton->frameData.at(j+1).getName().c_str();
-              if(strcmp(n, n2) > 0){
-                  Sort(j);
-              }
-          }
-          if( index == 1){
-              const char* c = this->singleton->frameData.at(j).getCategory().c_str();
-              const char* c2 = this->singleton->frameData.at(j+1).getCategory().c_str();
-              if(strcmp(c, c2) > 0){
-                  Sort(j);
-              }
-          }
-          if( index == 2){
-              const char* l = this->singleton->frameData.at(j).getLabel().c_str();
-              const char* l2 = this->singleton->frameData.at(j+1).getLabel().c_str();
-              if(strcmp(l, l2) > 0){
-                  Sort(j);
-              }
-          }
-      }
-   }
+//    int size = this->singleton->frameData.size();
+
+//    for (int i = 0; i < size - 1; i++){
+//      for( int j = 0; j < size - 1; j++){
+//          if( index == 3){
+//              if(this->singleton->frameData.at(j).getInitialFrameId() > this->singleton->frameData.at(j+1).getInitialFrameId()){
+//                 Sort(j);
+//                 //this->tableModel->dataChanged(QAbstractItemModel::createIndex(i,j), QAbstractItemModel::createIndex(2, size - 1));
+//              }
+//          }
+//          if( index == 4){
+//              if(this->singleton->frameData.at(j).getFinalFrameId() > this->singleton->frameData.at(j+1).getFinalFrameId()){
+//                  Sort(j);
+//              }
+//          }
+//          if( index == 0){
+//              const char* n = this->singleton->frameData.at(j).getName().c_str();
+//              const char* n2 = this->singleton->frameData.at(j+1).getName().c_str();
+//              if(strcmp(n, n2) > 0){
+//                  Sort(j);
+//              }
+//          }
+//          if( index == 1){
+//              const char* c = this->singleton->frameData.at(j).getCategory().c_str();
+//              const char* c2 = this->singleton->frameData.at(j+1).getCategory().c_str();
+//              if(strcmp(c, c2) > 0){
+//                  Sort(j);
+//              }
+//          }
+//          if( index == 2){
+//              const char* l = this->singleton->frameData.at(j).getLabel().c_str();
+//              const char* l2 = this->singleton->frameData.at(j+1).getLabel().c_str();
+//              if(strcmp(l, l2) > 0){
+//                  Sort(j);
+//              }
+//          }
+//      }
+//   }
+   // this->ui->tableViewFrame->repaint();
 }
 
 void MainWindow::Sort(int j){

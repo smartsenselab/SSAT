@@ -1,8 +1,10 @@
 #include "qframebasedtablemodel.h"
+#include <QDebug>
 
 QFrameBasedTableModel::QFrameBasedTableModel(QObject *_parent)
     : QAbstractTableModel(_parent)
-{}
+{
+}
 
 QFrameBasedTableModel::QFrameBasedTableModel(vector<FrameBasedData> &_frameBasedData, QObject *_parent)
     : QAbstractTableModel(_parent)
@@ -206,4 +208,68 @@ void QFrameBasedTableModel::setFrameBasedData(vector<FrameBasedData> &_frameBase
 vector<FrameBasedData>* QFrameBasedTableModel::getFrameBasedData()
 {
     return this->frameData;
+}
+
+void QFrameBasedTableModel::slot_SortTable(int index){
+    int size = this->frameData->size();
+     for (int i = 0; i < size - 1; i++){
+      for( int j = 0; j < size - 1; j++){
+          if( index == 3){
+              if(this->frameData->at(j).getInitialFrameId() > this->frameData->at(j+1).getInitialFrameId()){
+                 Sort(j);
+              }
+          }
+          if( index == 4){
+              if(this->frameData->at(j).getFinalFrameId() > this->frameData->at(j+1).getFinalFrameId()){
+                  Sort(j);
+              }
+          }
+          if( index == 0){
+              const char* n = this->frameData->at(j).getName().c_str();
+              const char* n2 = this->frameData->at(j+1).getName().c_str();
+              if(strcmp(n, n2) > 0){
+                  Sort(j);
+//                  this->dataChanged(QAbstractItemModel::createIndex(i,j), QAbstractItemModel::createIndex(2, size - 1));
+              }
+          }
+          if( index == 1){
+              const char* c = this->frameData->at(j).getCategory().c_str();
+              const char* c2 = this->frameData->at(j+1).getCategory().c_str();
+              if(strcmp(c, c2) > 0){
+                  Sort(j);
+              }
+          }
+          if( index == 2){
+              const char* l = this->frameData->at(j).getLabel().c_str();
+              const char* l2 = this->frameData->at(j+1).getLabel().c_str();
+              if(strcmp(l, l2) > 0){
+                  Sort(j);
+              }
+          }
+      }
+   }
+     this->dataChanged(QAbstractItemModel::createIndex(0,0), QAbstractItemModel::createIndex(2, size - 1));
+}
+
+void QFrameBasedTableModel::Sort(int j){
+
+    int iniFram = this->frameData->at(j).getInitialFrameId();
+    this->frameData->at(j).setInitialFrameId(this->frameData->at(j+1).getInitialFrameId());
+    this->frameData->at(j+1).setInitialFrameId(iniFram);
+
+    int finalFram = this->frameData->at(j).getFinalFrameId();
+    this->frameData->at(j).setFinalFrameId(this->frameData->at(j+1).getFinalFrameId());
+    this->frameData->at(j+1).setFinalFrameId(finalFram);
+
+    string Category = this->frameData->at(j).getCategory();
+    this->frameData->at(j).setCategory(this->frameData->at(j+1).getCategory());
+    this->frameData->at(j+1).setCategory(Category);
+
+    string Label = this->frameData->at(j).getLabel();
+    this->frameData->at(j).setLabel(this->frameData->at(j+1).getLabel());
+    this->frameData->at(j+1).setLabel(Label);
+
+    string Name = this->frameData->at(j).getName();
+    this->frameData->at(j).setName(this->frameData->at(j+1).getName());
+    this->frameData->at(j+1).setName(Name);
 }
