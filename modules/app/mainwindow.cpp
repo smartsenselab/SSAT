@@ -459,11 +459,14 @@ void MainWindow::slot_openFile()
 
 void MainWindow::slot_importJson()
 {
-    QString jsonName = QFileDialog::getOpenFileName(this,
-                                                    tr("Import JSON..."),
-                                                    tr("/home"),
-                                                    tr("JSON file (*.json)"));
-    this->manager->importJSON(*(this->singleton), this->tableModel, jsonName);
+    if(this->ui->actionImport_JSON->isEnabled())
+    {
+        QString jsonName = QFileDialog::getOpenFileName(this,
+                                                        tr("Import JSON..."),
+                                                        tr("/home"),
+                                                        tr("JSON file (*.json)"));
+        this->manager->importJSON(*(this->singleton), this->tableModel, jsonName);
+    }
 }
 
 void MainWindow::slot_importProgressBar()
@@ -473,11 +476,14 @@ void MainWindow::slot_importProgressBar()
 
 void MainWindow::slot_exportJson()
 {
-    QString jsonName = QFileDialog::getSaveFileName(this,
-                                                    tr("Import JSON..."),
-                                                    tr("/home"),
-                                                    tr("JSON file (*.json)"));
-    this->manager->exportJSON(*(this->singleton), jsonName);
+    if(this->ui->actionExport_JSON->isEnabled())
+    {
+        QString jsonName = QFileDialog::getSaveFileName(this,
+                                                        tr("Export JSON..."),
+                                                        tr("/home"),
+                                                        tr("JSON file (*.json)"));
+        this->manager->exportJSON(*(this->singleton), jsonName);
+    }
 }
 
 void MainWindow::slot_closeApplitacion()
