@@ -24,7 +24,7 @@ class QBoundingBox : public QGraphicsScene
 
 public:
     QBoundingBox(QObject* parent = 0);
-
+    void keyPressEvent(QKeyEvent* e);
     void deleteBBox();
 
 protected:

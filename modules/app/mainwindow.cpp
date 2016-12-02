@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->enableWidgets(false);
     this->connectSignalSlots();
+    this->setShortcuts();
     this->setTableModel();
 }
 
@@ -20,6 +21,15 @@ MainWindow::~MainWindow()
 {
     delete(this->manager);
     delete(this->playerTime);
+}
+
+void MainWindow ::keyPressEvent(QKeyEvent* event)
+{
+    switch(event->key())
+    {
+    case Qt::Key_Delete:
+        this->slot_tableViewRemoveAnnotation();
+    }
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
@@ -192,6 +202,38 @@ void MainWindow::connectSignalSlots()
                   );
 }
 
+void MainWindow::setShortcuts()
+{
+    this->crta = new QAction(tr("id1"), this);
+    this->crtb = new QAction(tr("id2"), this);
+    this->crte = new QAction(tr("id3"), this);
+    this->crtf = new QAction(tr("id4"), this);
+    this->crti = new QAction(tr("id5"), this);
+    this->crto = new QAction(tr("id6"), this);
+
+    this->crta->setShortcuts(QList<QKeySequence>() << Qt::CTRL + Qt::Key_A);
+    this->crtb->setShortcuts(QList<QKeySequence>() << Qt::CTRL + Qt::Key_B);
+    this->crte->setShortcuts(QList<QKeySequence>() << Qt::CTRL + Qt::Key_E);
+    this->crtf->setShortcuts(QList<QKeySequence>() << Qt::CTRL + Qt::Key_F);
+    this->crti->setShortcuts(QList<QKeySequence>() << Qt::CTRL + Qt::Key_I);
+    this->crto->setShortcuts(QList<QKeySequence>() << Qt::CTRL + Qt::Key_O);
+
+    this->addAction(crta);
+    this->addAction(crtb);
+    this->addAction(crte);
+    this->addAction(crtf);
+    this->addAction(crti);
+    this->addAction(crto);
+
+    // Connecting SHORTCUTS to SLOTS
+    this->connect(this->crta, SIGNAL(triggered()), SLOT(slot_Ashortcut()));
+    this->connect(this->crtb, SIGNAL(triggered()), SLOT(slot_Bshortcut()));
+    this->connect(this->crte, SIGNAL(triggered()), SLOT(slot_Eshortcut()));
+    this->connect(this->crtf, SIGNAL(triggered()), SLOT(slot_Fshortcut()));
+    this->connect(this->crti, SIGNAL(triggered()), SLOT(slot_Ishortcut()));
+    this->connect(this->crto, SIGNAL(triggered()), SLOT(slot_Oshortcut()));
+}
+
 void MainWindow::setTableModel()
 {
     this->tableModel = new QFrameBasedTableModel(this);
@@ -345,6 +387,36 @@ void MainWindow::connectMainWindow2DialogFrameBased()
                   );
 }
 
+void MainWindow::slot_Fshortcut()
+{
+    this->slot_viewFrameNewFrameMenu();
+}
+
+void MainWindow::slot_Ashortcut()
+{
+    this->slot_openAttributes();
+}
+
+void MainWindow::slot_Oshortcut()
+{
+    this->slot_openFile();
+}
+
+void MainWindow::slot_Ishortcut()
+{
+    slot_importJson();
+}
+
+void MainWindow::slot_Eshortcut()
+{
+    this->slot_exportJson();
+}
+
+void MainWindow::slot_Bshortcut()
+{
+    this->slot_viewFrameNewBoxMenu();
+}
+
 void MainWindow::slot_displayFrame(const QImage _frame)
 {
     if(!_frame.isNull())
@@ -396,7 +468,6 @@ void MainWindow::slot_importJson()
 
 void MainWindow::slot_importProgressBar()
 {
-
 
 }
 

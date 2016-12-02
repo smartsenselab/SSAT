@@ -1,8 +1,9 @@
 #ifndef mainwindow_h
 #define mainwindow_h
 
+#include<QShortcut>
 #include <iostream>
-
+#include<QProgressDialog>
 #include <QFileDialog>
 #include <QGraphicsScene>
 #include <QMainWindow>
@@ -31,6 +32,13 @@ class MainWindow : public QMainWindow {
 private:
     QScopedPointer<Ui::MainWindow> ui;
 
+    QAction *crta = NULL;
+    QAction *crtb = NULL;
+    QAction *crte = NULL;
+    QAction *crtf = NULL;
+    QAction *crti = NULL;
+    QAction *crto = NULL;
+
     bool loaded;
     bool playing;
     double totalFrames;
@@ -57,6 +65,7 @@ private:
 public:
     MainWindow(QWidget *parent = 0);
     virtual ~MainWindow();
+    void keyPressEvent(QKeyEvent* e);
 
 protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
@@ -64,6 +73,7 @@ protected:
 private:
     void enableWidgets(const bool _enable);
     void connectSignalSlots();
+    void setShortcuts();
     void setTableModel();
 
     bool isPlaying();
@@ -79,6 +89,13 @@ private:
     void connectMainWindow2DialogFrameBased();
 
 public slots:
+    void slot_Fshortcut();
+    void slot_Ashortcut();
+    void slot_Oshortcut();
+    void slot_Ishortcut();
+    void slot_Bshortcut();
+    void slot_Eshortcut();
+
     void slot_displayFrame(const QImage _frame);
     void slot_openFile();
     void slot_importJson();
