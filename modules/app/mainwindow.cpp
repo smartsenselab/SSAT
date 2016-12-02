@@ -5,24 +5,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     this->ui->setupUi(this);
-    this->crto->setShortcuts(QList<QKeySequence>()
-                             <<Qt::CTRL + Qt::Key_O);
-    this->crtf->setShortcuts(QList<QKeySequence>()
-                             <<Qt::CTRL + Qt::Key_F);
-    this->crti->setShortcuts(QList<QKeySequence>()
-                             <<Qt::CTRL + Qt::Key_I);
-    this->crte->setShortcuts(QList<QKeySequence>()
-                             <<Qt::CTRL + Qt::Key_E);
-    this->crta->setShortcuts(QList<QKeySequence>()
-                             <<Qt::CTRL + Qt::Key_A);
-    this->crtb->setShortcuts(QList<QKeySequence>()
-                             <<Qt::CTRL + Qt::Key_B);
-    this->addAction(crti);
-    this->addAction(crtb);
-    this->addAction(crta);
-    this->addAction(crtf);
-    this->addAction(crto);
-    this->addAction(crte);
+
     this->loaded = false;
     this->manager = new VideoManager;
     this->playing = false;
@@ -30,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->enableWidgets(false);
     this->connectSignalSlots();
+    this->setShortcuts();
     this->setTableModel();
 }
 
@@ -37,6 +21,15 @@ MainWindow::~MainWindow()
 {
     delete(this->manager);
     delete(this->playerTime);
+}
+
+void MainWindow ::keyPressEvent(QKeyEvent* event)
+{
+    switch(event->key())
+    {
+    case Qt::Key_Delete:
+        this->slot_tableViewRemoveAnnotation();
+    }
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
@@ -109,12 +102,7 @@ void MainWindow::connectSignalSlots()
                   this,
                   &MainWindow::slot_openFile
                   );
-    this->connect(this->crtf,SIGNAL(triggered()),SLOT(Fshortcut()));
-    this->connect(this->crta,SIGNAL(triggered()),SLOT(Ashortcut()));
-    this->connect(this->crto,SIGNAL(triggered()),SLOT(Oshortcut()));
-    this->connect(this->crti,SIGNAL(triggered()),SLOT(Ishortcut()));
-    this->connect(this->crte,SIGNAL(triggered()),SLOT(Eshortcut()));
-    this->connect(this->crtb,SIGNAL(triggered()),SLOT(Bshortcut()));
+
     this->connect(this->ui->actionImport_JSON,
                   &QAction::triggered,
                   this,
@@ -212,6 +200,38 @@ void MainWindow::connectSignalSlots()
                   &(this->frameScene),
                   SLOT(slot_drawFrameBboxes(const Frame))
                   );
+}
+
+void MainWindow::setShortcuts()
+{
+    this->crta = new QAction(tr("id1"), this);
+    this->crtb = new QAction(tr("id2"), this);
+    this->crte = new QAction(tr("id3"), this);
+    this->crtf = new QAction(tr("id4"), this);
+    this->crti = new QAction(tr("id5"), this);
+    this->crto = new QAction(tr("id6"), this);
+
+    this->crta->setShortcuts(QList<QKeySequence>() << Qt::CTRL + Qt::Key_A);
+    this->crtb->setShortcuts(QList<QKeySequence>() << Qt::CTRL + Qt::Key_B);
+    this->crte->setShortcuts(QList<QKeySequence>() << Qt::CTRL + Qt::Key_E);
+    this->crtf->setShortcuts(QList<QKeySequence>() << Qt::CTRL + Qt::Key_F);
+    this->crti->setShortcuts(QList<QKeySequence>() << Qt::CTRL + Qt::Key_I);
+    this->crto->setShortcuts(QList<QKeySequence>() << Qt::CTRL + Qt::Key_O);
+
+    this->addAction(crta);
+    this->addAction(crtb);
+    this->addAction(crte);
+    this->addAction(crtf);
+    this->addAction(crti);
+    this->addAction(crto);
+
+    // Connecting SHORTCUTS to SLOTS
+    this->connect(this->crta, SIGNAL(triggered()), SLOT(slot_Ashortcut()));
+    this->connect(this->crtb, SIGNAL(triggered()), SLOT(slot_Bshortcut()));
+    this->connect(this->crte, SIGNAL(triggered()), SLOT(slot_Eshortcut()));
+    this->connect(this->crtf, SIGNAL(triggered()), SLOT(slot_Fshortcut()));
+    this->connect(this->crti, SIGNAL(triggered()), SLOT(slot_Ishortcut()));
+    this->connect(this->crto, SIGNAL(triggered()), SLOT(slot_Oshortcut()));
 }
 
 void MainWindow::setTableModel()
@@ -328,7 +348,6 @@ void MainWindow::updateFrame(const int _frameId)
     }
 }
 
-
 void MainWindow::connectMainWindow2DialogFrameBased()
 {
     this->connect(this->frameDialog,
@@ -366,6 +385,36 @@ void MainWindow::connectMainWindow2DialogFrameBased()
                   this,
                   SLOT(slot_frameBasedAlterAccepted(const FrameBasedData, const int))
                   );
+}
+
+void MainWindow::slot_Fshortcut()
+{
+    this->slot_viewFrameNewFrameMenu();
+}
+
+void MainWindow::slot_Ashortcut()
+{
+    this->slot_openAttributes();
+}
+
+void MainWindow::slot_Oshortcut()
+{
+    this->slot_openFile();
+}
+
+void MainWindow::slot_Ishortcut()
+{
+    slot_importJson();
+}
+
+void MainWindow::slot_Eshortcut()
+{
+    this->slot_exportJson();
+}
+
+void MainWindow::slot_Bshortcut()
+{
+    this->slot_viewFrameNewBoxMenu();
 }
 
 void MainWindow::slot_displayFrame(const QImage _frame)
@@ -419,7 +468,6 @@ void MainWindow::slot_importJson()
 
 void MainWindow::slot_importProgressBar()
 {
-
 
 }
 
@@ -690,39 +738,4 @@ void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
     string temp_key = "bbox" + std::to_string(num_bboxes);
 
     this->singleton->frames[nextFrameId - 1].addBox(temp_id + "_" + temp_key, _box);
-}
-
-void MainWindow::Fshortcut()
-{
-    this->slot_viewFrameNewFrameMenu();
-}
-void MainWindow::Ashortcut()
-{
-     this->slot_openAttributes();
-}
-void MainWindow::Oshortcut()
-{
-    this->slot_openFile();
-}
-void MainWindow::Ishortcut()
-{
-    slot_importJson();
-}
-void MainWindow::Eshortcut()
-{
-    this->slot_exportJson();
-}
-void MainWindow::Bshortcut()
-{
-    this->slot_viewFrameNewBoxMenu();
-}
-
-void MainWindow ::keyPressEvent(QKeyEvent* e)
-{
-    switch(e->key())
-{
-    case Qt::Key_Delete:
-        this->slot_tableViewRemoveAnnotation();
-
-    }
 }

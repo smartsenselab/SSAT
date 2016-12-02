@@ -32,6 +32,13 @@ class MainWindow : public QMainWindow {
 private:
     QScopedPointer<Ui::MainWindow> ui;
 
+    QAction *crta = NULL;
+    QAction *crtb = NULL;
+    QAction *crte = NULL;
+    QAction *crtf = NULL;
+    QAction *crti = NULL;
+    QAction *crto = NULL;
+
     bool loaded;
     bool playing;
     double totalFrames;
@@ -59,19 +66,14 @@ public:
     MainWindow(QWidget *parent = 0);
     virtual ~MainWindow();
     void keyPressEvent(QKeyEvent* e);
-    QProgressDialog *m_progress;
-    QAction *crtf = new QAction(tr("id1"),this);
-    QAction *crto = new QAction(tr("id"),this);
-    QAction *crti = new QAction(tr("id2"),this);
-    QAction *crte = new QAction(tr("id3"),this);
-    QAction *crta = new QAction(tr("id4"),this);
-    QAction *crtb = new QAction(tr("id5"),this);
+
 protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private:
     void enableWidgets(const bool _enable);
     void connectSignalSlots();
+    void setShortcuts();
     void setTableModel();
 
     bool isPlaying();
@@ -87,12 +89,13 @@ private:
     void connectMainWindow2DialogFrameBased();
 
 public slots:
-    void Fshortcut();
-    void Ashortcut();
-    void Oshortcut();
-    void Ishortcut();
-    void Bshortcut();
-    void Eshortcut();
+    void slot_Fshortcut();
+    void slot_Ashortcut();
+    void slot_Oshortcut();
+    void slot_Ishortcut();
+    void slot_Bshortcut();
+    void slot_Eshortcut();
+
     void slot_displayFrame(const QImage _frame);
     void slot_openFile();
     void slot_importJson();
