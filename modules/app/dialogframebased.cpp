@@ -131,32 +131,7 @@ void DialogFrameBased::enableDisableButtonBox()
 {
     this->ui->spinBoxFinalFrame->setMinimum(this->getIniFrameValue());
 
-    QPalette palette = this->ui->label->palette();
-    palette.setColor(ui->label->backgroundRole(), Qt::red);
-    palette.setColor(ui->label->foregroundRole(), Qt::red);
-    this->ui->label->setPalette(palette);
-
-    name2 = this->getNameValue();
-    if(name2.length() == 0)
-    {
-        this->ui->label->setText("Choose a new name");
-        this->ui->buttonBox->setEnabled(false);
-    }
-    else
-    {
-        std::string nameAux = name2.toUtf8().constData();
-        if(this->uniqueValues.find(nameAux) == this->uniqueValues.end())
-        {
-            this->ui->label->clear();
-            this->ui->buttonBox->setEnabled(true);
-        }
-        else
-        {
-            this->ui->label->setText("Name already used");
-            this->ui->buttonBox->setEnabled(false);
-        }
-    }
-
+    this->ui->buttonBox->setEnabled(true);
     // this->ui->spinBoxInitialFrame->setMaximum(finalFrame);
     // this->ui->spinBoxFinalFrame->setMaximum(initFrame);
 
