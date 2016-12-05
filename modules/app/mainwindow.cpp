@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->manager = new VideoManager;
     this->playing = false;
     this->speed = 0;
-
+    this->ui->actionOpen->setEnabled(false);
     this->enableWidgets(false);
     this->connectSignalSlots();
     this->setShortcuts();
@@ -762,6 +762,7 @@ void MainWindow::slot_newAnnot(){
                                                     tr("New Json File(*.json)"));
     this->save_time = new QTimer(this);
     this->connect(save_time,SIGNAL(timeout()),SLOT(backup()));
+    this->ui->actionOpen->setEnabled(true);
 }
 void MainWindow::backup(){
     this->manager->exportJSON(*(this->singleton), this->core_path);
