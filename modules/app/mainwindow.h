@@ -11,7 +11,7 @@
 #include <QScopedPointer>
 #include <QTime>
 #include <QTimer>
-
+#include <fstream>
 #include "dialogannotation.h"
 #include "dialogframebased.h"
 #include "framebaseddata.h"
@@ -68,6 +68,7 @@ public:
     virtual ~MainWindow();
     void keyPressEvent(QKeyEvent* e);
     QString core_path;
+    void restore();
 
 protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;

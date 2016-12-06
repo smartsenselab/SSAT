@@ -449,7 +449,7 @@ void MainWindow::slot_openFile()
         this->tableModel->setFrameBasedData(this->singleton->frameData);
         this->ui->sliderFrame->setRange(1, static_cast<int>(this->totalFrames));
         this->ui->tableViewFrame->setModel(this->tableModel);
-
+        this->restore();
         this->enableWidgets(true);
         this->updateFrame(1);
         this->save_time = new QTimer(this);
@@ -749,4 +749,23 @@ void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
 void MainWindow::backup(){
     this->manager->exportJSON(*(this->singleton), this->core_path);
     qDebug()<<"saving";
+}
+void MainWindow::restore(){
+   std::ifstream file("./temp.json");
+    if (file.good())
+    {
+        int response;
+        QMessageBox message;
+        message.setIcon(QMessageBox::Warning);
+        message.setInformativeText("Do you want to restore previous settings");
+        message.setText("there is a backup file in your directory");
+        message.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        response = message.exec();
+        switch(response)
+        {
+            case QMessageBox::Yes:
+                this->manager->importJSON(*(this->singleton), this->tableModel, "temp.json");
+        }
+
+    }
 }
