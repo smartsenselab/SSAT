@@ -5,12 +5,11 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     this->ui->setupUi(this);
-
+    this->core_path = "./temp.json";
     this->loaded = false;
     this->manager = new VideoManager;
     this->playing = false;
     this->speed = 0;
-    this->ui->actionOpen->setEnabled(false);
     this->enableWidgets(false);
     this->connectSignalSlots();
     this->setShortcuts();
@@ -102,12 +101,6 @@ void MainWindow::connectSignalSlots()
                   this,
                   &MainWindow::slot_openFile
                   );
-    this->connect(this->ui->actionNew,
-                  &QAction::triggered,
-                  this,
-                  &MainWindow::slot_newAnnot
-                  );
-
     this->connect(this->ui->actionImport_JSON,
                   &QAction::triggered,
                   this,
@@ -215,7 +208,6 @@ void MainWindow::setShortcuts()
     this->crtf = new QAction(tr("id4"), this);
     this->crti = new QAction(tr("id5"), this);
     this->crto = new QAction(tr("id6"), this);
-    this->crtn = new QAction(tr("id6"), this);
 
     this->crta->setShortcuts(QList<QKeySequence>() << Qt::CTRL + Qt::Key_A);
     this->crtb->setShortcuts(QList<QKeySequence>() << Qt::CTRL + Qt::Key_B);
@@ -223,7 +215,6 @@ void MainWindow::setShortcuts()
     this->crtf->setShortcuts(QList<QKeySequence>() << Qt::CTRL + Qt::Key_F);
     this->crti->setShortcuts(QList<QKeySequence>() << Qt::CTRL + Qt::Key_I);
     this->crto->setShortcuts(QList<QKeySequence>() << Qt::CTRL + Qt::Key_O);
-    this->crtn->setShortcuts(QList<QKeySequence>() << Qt::CTRL + Qt::Key_N);
 
     this->addAction(crta);
     this->addAction(crtb);
@@ -231,7 +222,6 @@ void MainWindow::setShortcuts()
     this->addAction(crtf);
     this->addAction(crti);
     this->addAction(crto);
-    this->addAction(crtn);
 
     // Connecting SHORTCUTS to SLOTS
     this->connect(this->crta, SIGNAL(triggered()), SLOT(slot_Ashortcut()));
@@ -239,8 +229,7 @@ void MainWindow::setShortcuts()
     this->connect(this->crte, SIGNAL(triggered()), SLOT(slot_Eshortcut()));
     this->connect(this->crtf, SIGNAL(triggered()), SLOT(slot_Fshortcut()));
     this->connect(this->crti, SIGNAL(triggered()), SLOT(slot_Ishortcut()));
-    this->connect(this->crto, SIGNAL(triggered()), SLOT(slot_Oshortcut()));
-    this->connect(this->crtn, SIGNAL(triggered()), SLOT(slot_Nshortcut()));
+    this->connect(this->crto, SIGNAL(triggered()), SLOT(slot_Oshortcut()));;
 }
 
 void MainWindow::setTableModel()
@@ -463,6 +452,8 @@ void MainWindow::slot_openFile()
 
         this->enableWidgets(true);
         this->updateFrame(1);
+        this->save_time = new QTimer(this);
+        this->connect(save_time,SIGNAL(timeout()),SLOT(backup()));
         this->save_time->start(10000);
     }
 }
@@ -755,20 +746,7 @@ void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
 
     this->singleton->frames[nextFrameId - 1].addBox(temp_id + "_" + temp_key, _box);
 }
-void MainWindow::slot_newAnnot(){
-    this->core_path = QFileDialog::getSaveFileName(this,
-                                                    tr("New Annotation File"),
-                                                    tr("/home"),
-                                                    tr("New Json File(*.json)"));
-    this->save_time = new QTimer(this);
-    this->connect(save_time,SIGNAL(timeout()),SLOT(backup()));
-    this->ui->actionOpen->setEnabled(true);
-}
 void MainWindow::backup(){
     this->manager->exportJSON(*(this->singleton), this->core_path);
     qDebug()<<"saving";
-}
-
-void MainWindow::slot_Nshortcut(){
-    this->slot_newAnnot();
 }

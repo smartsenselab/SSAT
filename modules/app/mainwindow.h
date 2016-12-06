@@ -38,7 +38,6 @@ private:
     QAction *crtf = NULL;
     QAction *crti = NULL;
     QAction *crto = NULL;
-    QAction *crtn = NULL;
 
     bool loaded;
     bool playing;
@@ -98,7 +97,6 @@ public slots:
     void slot_Ishortcut();
     void slot_Bshortcut();
     void slot_Eshortcut();
-    void slot_Nshortcut();
 
     void slot_displayFrame(const QImage _frame);
     void slot_openFile();
@@ -107,7 +105,6 @@ public slots:
     void slot_exportJson();
     void slot_closeApplitacion();
     void slot_openAttributes();
-    void slot_newAnnot();
     void slot_slideVideo(int _frameId);
 
     void slot_playButtonPressed();
