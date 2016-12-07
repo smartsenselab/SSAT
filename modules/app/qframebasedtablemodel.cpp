@@ -1,5 +1,6 @@
 #include "qframebasedtablemodel.h"
 #include <QDebug>
+#include <algorithm>
 
 QFrameBasedTableModel::QFrameBasedTableModel(QObject *_parent)
     : QAbstractTableModel(_parent)
@@ -210,66 +211,43 @@ vector<FrameBasedData>* QFrameBasedTableModel::getFrameBasedData()
     return this->frameData;
 }
 
+struct IniFrame {
+  bool operator() (FrameBasedData i,FrameBasedData j) { return (i.getInitialFrameId() < j.getInitialFrameId());}
+} IniFrame;
+
+
+struct FinalFrame {
+  bool operator() (FrameBasedData i,FrameBasedData j) { return (i.getFinalFrameId() < j.getFinalFrameId());}
+} FinalFrame;
+
+
+struct Name {
+  bool operator() (FrameBasedData i,FrameBasedData j) { return strcmp(i.getName().c_str(), j.getName().c_str()) < 0;}
+} Name;
+
+struct Category {
+  bool operator() (FrameBasedData i,FrameBasedData j) { return strcmp(i.getCategory().c_str(), j.getCategory().c_str()) < 0;}
+} Category;
+
+struct Label {
+  bool operator() (FrameBasedData i,FrameBasedData j) { return strcmp(i.getLabel().c_str(), j.getLabel().c_str()) < 0;}
+} Label;
+
 void QFrameBasedTableModel::slot_SortTable(int index){
-    int size = this->frameData->size();
-     for (int i = 0; i < size - 1; i++){
-      for( int j = 0; j < size - 1; j++){
-          if( index == 3){
-              if(this->frameData->at(j).getInitialFrameId() > this->frameData->at(j+1).getInitialFrameId()){
-                 Sort(j);
-              }
-          }
-          if( index == 4){
-              if(this->frameData->at(j).getFinalFrameId() > this->frameData->at(j+1).getFinalFrameId()){
-                  Sort(j);
-              }
-          }
-          if( index == 0){
-              const char* n = this->frameData->at(j).getName().c_str();
-              const char* n2 = this->frameData->at(j+1).getName().c_str();
-              if(strcmp(n, n2) > 0){
-                  Sort(j);
-//                  this->dataChanged(QAbstractItemModel::createIndex(i,j), QAbstractItemModel::createIndex(2, size - 1));
-              }
-          }
-          if( index == 1){
-              const char* c = this->frameData->at(j).getCategory().c_str();
-              const char* c2 = this->frameData->at(j+1).getCategory().c_str();
-              if(strcmp(c, c2) > 0){
-                  Sort(j);
-              }
-          }
-          if( index == 2){
-              const char* l = this->frameData->at(j).getLabel().c_str();
-              const char* l2 = this->frameData->at(j+1).getLabel().c_str();
-              if(strcmp(l, l2) > 0){
-                  Sort(j);
-              }
-          }
-      }
-   }
+     if(index == 3){
+         std::sort(this->frameData->begin(), this->frameData->end(), IniFrame);
+     }
+     else if( index == 4){
+        std::sort(this->frameData->begin(), this->frameData->end(), FinalFrame);
+     }
+     else if( index == 0){
+         std::sort(this->frameData->begin(), this->frameData->end(), Name);
+     }
+     else if( index == 1){
+          std::sort(this->frameData->begin(), this->frameData->end(), Category);
+     }
+     else if( index == 2){
+         std::sort(this->frameData->begin(), this->frameData->end(), Label);
+     }
      this->dataChanged(QAbstractItemModel::createIndex(0,0), QAbstractItemModel::createIndex(2, size - 1));
-}
-
-void QFrameBasedTableModel::Sort(int j){
-
-    int iniFram = this->frameData->at(j).getInitialFrameId();
-    this->frameData->at(j).setInitialFrameId(this->frameData->at(j+1).getInitialFrameId());
-    this->frameData->at(j+1).setInitialFrameId(iniFram);
-
-    int finalFram = this->frameData->at(j).getFinalFrameId();
-    this->frameData->at(j).setFinalFrameId(this->frameData->at(j+1).getFinalFrameId());
-    this->frameData->at(j+1).setFinalFrameId(finalFram);
-
-    string Category = this->frameData->at(j).getCategory();
-    this->frameData->at(j).setCategory(this->frameData->at(j+1).getCategory());
-    this->frameData->at(j+1).setCategory(Category);
-
-    string Label = this->frameData->at(j).getLabel();
-    this->frameData->at(j).setLabel(this->frameData->at(j+1).getLabel());
-    this->frameData->at(j+1).setLabel(Label);
-
-    string Name = this->frameData->at(j).getName();
-    this->frameData->at(j).setName(this->frameData->at(j+1).getName());
-    this->frameData->at(j+1).setName(Name);
 }
