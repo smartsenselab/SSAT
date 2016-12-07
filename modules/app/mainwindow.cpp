@@ -5,11 +5,14 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     this->ui->setupUi(this);
+
     this->core_path = "./temp.json";
     this->loaded = false;
     this->manager = new VideoManager;
     this->playing = false;
+    this->saveTimer = new QTimer(this);
     this->speed = 0;
+
     this->enableWidgets(false);
     this->connectSignalSlots();
     this->setShortcuts();
@@ -187,6 +190,11 @@ void MainWindow::connectSignalSlots()
                   );
 
     // Connecting custom SIGNALS to SLOTS
+    this->connect(this->saveTimer,
+                  SIGNAL(timeout()),
+                  SLOT(slot_backupJson())
+                  );
+
     this->connect(&(this->frameScene),
                   SIGNAL(signal_addBoundingBoxToCore(Rect)),
                   this,
@@ -346,6 +354,28 @@ void MainWindow::updateFrame(const int _frameId)
     }
 }
 
+void MainWindow::restoreJson()
+{
+    std::ifstream file("./temp.json");
+    if (file.good())
+    {
+        int response;
+        QMessageBox message;
+        message.setIcon(QMessageBox::Warning);
+        message.setText("There is a backup file in your directory.");
+        message.setInformativeText("Do you want to restore previous settings");
+        message.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+
+        response = message.exec();
+
+        switch(response)
+        {
+        case QMessageBox::Yes:
+            this->manager->importJSON(*(this->singleton), this->tableModel, "temp.json");
+        }
+    }
+}
+
 void MainWindow::connectMainWindow2DialogFrameBased()
 {
     this->connect(this->frameDialog,
@@ -449,13 +479,18 @@ void MainWindow::slot_openFile()
         this->tableModel->setFrameBasedData(this->singleton->frameData);
         this->ui->sliderFrame->setRange(1, static_cast<int>(this->totalFrames));
         this->ui->tableViewFrame->setModel(this->tableModel);
-        this->restore();
         this->enableWidgets(true);
         this->updateFrame(1);
-        this->save_time = new QTimer(this);
-        this->connect(save_time,SIGNAL(timeout()),SLOT(backup()));
-        this->save_time->start(10000);
+
+        this->restoreJson();
+        this->saveTimer->start(10000);
     }
+}
+
+void MainWindow::slot_backupJson()
+{
+    this->manager->exportJSON(*(this->singleton), this->core_path);
+    std::cout << "saving" << std::endl;
 }
 
 void MainWindow::slot_importJson()
@@ -745,27 +780,4 @@ void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
     string temp_key = "bbox" + std::to_string(num_bboxes);
 
     this->singleton->frames[nextFrameId - 1].addBox(temp_id + "_" + temp_key, _box);
-}
-void MainWindow::backup(){
-    this->manager->exportJSON(*(this->singleton), this->core_path);
-    qDebug()<<"saving";
-}
-void MainWindow::restore(){
-   std::ifstream file("./temp.json");
-    if (file.good())
-    {
-        int response;
-        QMessageBox message;
-        message.setIcon(QMessageBox::Warning);
-        message.setInformativeText("Do you want to restore previous settings");
-        message.setText("there is a backup file in your directory");
-        message.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-        response = message.exec();
-        switch(response)
-        {
-            case QMessageBox::Yes:
-                this->manager->importJSON(*(this->singleton), this->tableModel, "temp.json");
-        }
-
-    }
 }
