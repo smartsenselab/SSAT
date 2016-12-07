@@ -11,7 +11,7 @@
 #include <QScopedPointer>
 #include <QTime>
 #include <QTimer>
-
+#include <fstream>
 #include "dialogannotation.h"
 #include "dialogframebased.h"
 #include "framebaseddata.h"
@@ -23,7 +23,7 @@
 
 namespace Ui
 {
-    class MainWindow;
+class MainWindow;
 }
 
 class MainWindow : public QMainWindow {
@@ -45,7 +45,9 @@ private:
     int speed;
 
     QImage frameQImage;
+    QString core_path;
     QTimer *playerTime = NULL;
+    QTimer *saveTimer = NULL;
 
     Core *singleton = NULL;
 
@@ -65,7 +67,7 @@ private:
 public:
     MainWindow(QWidget *parent = 0);
     virtual ~MainWindow();
-    void keyPressEvent(QKeyEvent* e);
+    void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
 
 protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
@@ -85,6 +87,7 @@ private:
     void stopVideo();
     void updateFrame();
     void updateFrame(const int _frameId);
+    void restoreJson();
 
     void connectMainWindow2DialogFrameBased();
 
@@ -98,12 +101,12 @@ public slots:
 
     void slot_displayFrame(const QImage _frame);
     void slot_openFile();
+    void slot_backupJson();
     void slot_importJson();
     void slot_importProgressBar();
     void slot_exportJson();
     void slot_closeApplitacion();
     void slot_openAttributes();
-
     void slot_slideVideo(int _frameId);
 
     void slot_playButtonPressed();
@@ -121,7 +124,6 @@ public slots:
     void slot_tableViewFrameDoubleClicked(const QModelIndex _index);
 
     void slot_keepVideoRunning();
-
     void slot_viewFrameContextMenu(const QPoint &_point);
     void slot_viewFrameNewBoxMenu();
     void slot_viewFrameNewFrameMenu();
