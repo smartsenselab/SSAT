@@ -169,7 +169,7 @@ Qt::ItemFlags QFrameBasedTableModel::flags(const QModelIndex &_index) const
 
     Qt::ItemFlags flags = QAbstractItemModel::flags(_index);
     flags |= ( Qt::ItemIsSelectable
-              |Qt::ItemIsEnabled);
+               |Qt::ItemIsEnabled);
 
     return flags;
 }
@@ -211,43 +211,61 @@ vector<FrameBasedData>* QFrameBasedTableModel::getFrameBasedData()
     return this->frameData;
 }
 
-struct IniFrame {
-  bool operator() (FrameBasedData i,FrameBasedData j) { return (i.getInitialFrameId() < j.getInitialFrameId());}
-} IniFrame;
+struct IniFrame
+{
+    bool operator() (FrameBasedData i,FrameBasedData j) { return (i.getInitialFrameId() < j.getInitialFrameId());}
+}
+IniFrame;
 
 
-struct FinalFrame {
-  bool operator() (FrameBasedData i,FrameBasedData j) { return (i.getFinalFrameId() < j.getFinalFrameId());}
-} FinalFrame;
+struct FinalFrame
+{
+    bool operator() (FrameBasedData i,FrameBasedData j) { return (i.getFinalFrameId() < j.getFinalFrameId());}
+}
+FinalFrame;
 
 
-struct Name {
-  bool operator() (FrameBasedData i,FrameBasedData j) { return strcmp(i.getName().c_str(), j.getName().c_str()) < 0;}
-} Name;
+struct Name
+{
+    bool operator() (FrameBasedData i,FrameBasedData j) { return strcmp(i.getName().c_str(), j.getName().c_str()) < 0;}
+}
+Name;
 
-struct Category {
-  bool operator() (FrameBasedData i,FrameBasedData j) { return strcmp(i.getCategory().c_str(), j.getCategory().c_str()) < 0;}
-} Category;
+struct Category
+{
+    bool operator() (FrameBasedData i,FrameBasedData j) { return strcmp(i.getCategory().c_str(), j.getCategory().c_str()) < 0;}
+}
+Category;
 
-struct Label {
-  bool operator() (FrameBasedData i,FrameBasedData j) { return strcmp(i.getLabel().c_str(), j.getLabel().c_str()) < 0;}
-} Label;
+struct Label
+{
+    bool operator() (FrameBasedData i,FrameBasedData j) { return strcmp(i.getLabel().c_str(), j.getLabel().c_str()) < 0;}
+}
+Label;
 
-void QFrameBasedTableModel::slot_SortTable(int index){
-     if(index == 3){
-         std::sort(this->frameData->begin(), this->frameData->end(), IniFrame);
-     }
-     else if( index == 4){
+void QFrameBasedTableModel::slot_SortTable(int index)
+{
+    int size = this->frameData->size();
+
+    if(index == 3)
+    {
+        std::sort(this->frameData->begin(), this->frameData->end(), IniFrame);
+    }
+    else if( index == 4)
+    {
         std::sort(this->frameData->begin(), this->frameData->end(), FinalFrame);
-     }
-     else if( index == 0){
-         std::sort(this->frameData->begin(), this->frameData->end(), Name);
-     }
-     else if( index == 1){
-          std::sort(this->frameData->begin(), this->frameData->end(), Category);
-     }
-     else if( index == 2){
-         std::sort(this->frameData->begin(), this->frameData->end(), Label);
-     }
-     this->dataChanged(QAbstractItemModel::createIndex(0,0), QAbstractItemModel::createIndex(2, size - 1));
+    }
+    else if( index == 0)
+    {
+        std::sort(this->frameData->begin(), this->frameData->end(), Name);
+    }
+    else if( index == 1)
+    {
+        std::sort(this->frameData->begin(), this->frameData->end(), Category);
+    }
+    else if( index == 2)
+    {
+        std::sort(this->frameData->begin(), this->frameData->end(), Label);
+    }
+    this->dataChanged(QAbstractItemModel::createIndex(0,0), QAbstractItemModel::createIndex(2, size - 1));
 }
