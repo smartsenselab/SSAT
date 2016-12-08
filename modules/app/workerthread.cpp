@@ -86,7 +86,7 @@ void WorkerThread::exportJSON(Core &_singleton, const QString &_jsonName){
     }
     Final["Attributes"] = Array1;
     for(auto iter:_singleton.frameData){
-        obj3["Info"] = QString ::fromStdString(iter.getName());
+        obj3["Info"] = QString ::fromStdString(iter.getInfo());
         obj3["Category"] = QString::fromStdString(iter.getCategory());
         obj3["label"] = QString::fromStdString(iter.getLabel());
         obj3["IniFrame"] = QString::fromStdString(std::to_string(iter.getInitialFrameId()));

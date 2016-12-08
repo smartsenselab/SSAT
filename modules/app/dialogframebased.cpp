@@ -26,7 +26,7 @@ int DialogFrameBased::getEndFrameValue()
     return this->ui->spinBoxFinalFrame->value();
 }
 
-QString DialogFrameBased::getNameValue()
+QString DialogFrameBased::getInfoValue()
 {
     return this->ui->lineEditName->text();
 }
@@ -42,7 +42,7 @@ void DialogFrameBased::connectSignalSlots()
     this->connect(this->ui->lineEditName,
                   SIGNAL(textChanged(QString)),
                   this,
-                  SLOT(slot_lineEditNameChanged())
+                  SLOT(slot_lineEditInfoChanged())
                   );
 
     this->connect(this->ui->buttonRewindF,
@@ -124,9 +124,6 @@ void DialogFrameBased::initializeComboboxes()
     this->ui->comboBoxLabel->setModel(this->labelModel);
 }
 
-
-QString name2;
-
 void DialogFrameBased::enableDisableButtonBox()
 {
     this->ui->spinBoxFinalFrame->setMinimum(this->getIniFrameValue());
@@ -152,11 +149,6 @@ void DialogFrameBased::slot_initializeDialog(Core &_singleton, const int _frameI
     this->ui->spinBoxFinalFrame->setMinimum(this->getIniFrameValue());
     this->ui->spinBoxFinalFrame->setMaximum(this->totalFrames);
 
-    for(int index = 0; index < this->singleton->frameData.size(); index++)
-    {
-        this->uniqueValues.insert(this->singleton->frameData.at(index).getName());
-    }
-
     this->initializeComboboxes();
 
     this->ui->spinBoxInitialFrame->setValue(this->frameId);
@@ -168,7 +160,6 @@ void DialogFrameBased::slot_initializeDialog(Core &_singleton, const QModelIndex
     this->manipulation = mode::alter;
 
     this->indexId = _index.row();
-    this->nameFlag = 0;
     this->singleton = &_singleton;
     this->totalFrames = this->singleton->frames.size();
 
@@ -181,7 +172,7 @@ void DialogFrameBased::slot_initializeDialog(Core &_singleton, const QModelIndex
 
     this->initializeComboboxes();
 
-    this->ui->lineEditName->setText(QString::fromStdString(frameData.getName()));
+    this->ui->lineEditName->setText(QString::fromStdString(frameData.getInfo()));
     this->ui->comboBoxCategory->setCurrentText(QString::fromStdString(frameData.getCategory()));
     this->ui->comboBoxLabel->setCurrentText(QString::fromStdString(frameData.getLabel()));
     this->ui->spinBoxInitialFrame->setValue(frameData.getInitialFrameId());
@@ -269,9 +260,6 @@ void DialogFrameBased::slot_spinBoxValueChanged()
 
 void DialogFrameBased::slot_buttonBoxAccepted()
 {
-    std::string nameAux = name2.toUtf8().constData();
-    this->uniqueValues.insert(nameAux);
-
     FrameBasedData data = FrameBasedData(this->ui->spinBoxInitialFrame->value(),
                                          this->ui->spinBoxFinalFrame->value(),
                                          this->ui->comboBoxCategory->currentText().toStdString(),
@@ -289,7 +277,7 @@ void DialogFrameBased::slot_buttonBoxAccepted()
     this->accept();
 }
 
-void DialogFrameBased::slot_lineEditNameChanged()
+void DialogFrameBased::slot_lineEditInfoChanged()
 {
 
     this->enableDisableButtonBox();

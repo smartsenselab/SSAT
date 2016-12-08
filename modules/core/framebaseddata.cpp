@@ -10,13 +10,13 @@ FrameBasedData::FrameBasedData(const int _iniFrame,
                const int _endFrame,
                const string &_category,
                const string &_label,
-               const string &_name)
+               const string &_info)
 {
     this->setInitialFrameId(_iniFrame);
     this->setFinalFrameId(_endFrame);
     this->setCategory(_category);
     this->setLabel(_label);
-    this->setName(_name);
+    this->setinfo(_info);
 }
 
 int FrameBasedData::getInitialFrameId() const
@@ -39,9 +39,9 @@ string FrameBasedData::getLabel() const
     return this->label;
 }
 
-string FrameBasedData::getName() const
+string FrameBasedData::getInfo() const
 {
-    return this->name;
+    return this->info;
 }
 
 void FrameBasedData::setInitialFrameId(const int _id)
@@ -64,7 +64,7 @@ void FrameBasedData::setLabel(const string &_label)
     this->label = _label;
 }
 
-void FrameBasedData::setName(const string &_name)
+void FrameBasedData::setinfo(const string &_info)
 {
-    this->name = _name;
+    this->info = _info;
 }
