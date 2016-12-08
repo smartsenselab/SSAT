@@ -670,8 +670,8 @@ void MainWindow::slot_viewFrameContextMenu(const QPoint &_point)
     QPoint position = this->ui->viewFrame->mapToGlobal(_point);
 
     QMenu contextMenu;
-    contextMenu.addAction("New Bounding box", this, SLOT(slot_viewFrameNewBoxMenu()));
-    contextMenu.addAction("New Frame box", this, SLOT(slot_viewFrameNewFrameMenu()));
+    contextMenu.addAction("New Bounding box     Ctrl+B", this, SLOT(slot_viewFrameNewBoxMenu()));
+    contextMenu.addAction("New Frame box          Ctrl+F", this, SLOT(slot_viewFrameNewFrameMenu()));
     contextMenu.addAction("Remove Bbox", this, SLOT(slot_viewFrameRemoveBoxMenu()));
 
     contextMenu.exec(position);
