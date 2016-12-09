@@ -86,7 +86,7 @@ void WorkerThread::exportJSON(Core &_singleton, const QString &_jsonName){
     }
     Final["Attributes"] = Array1;
     for(auto iter:_singleton.frameData){
-        obj3["Name"] = QString ::fromStdString(iter.getName());
+        obj3["Info"] = QString ::fromStdString(iter.getInfo());
         obj3["Category"] = QString::fromStdString(iter.getCategory());
         obj3["label"] = QString::fromStdString(iter.getLabel());
         obj3["IniFrame"] = QString::fromStdString(std::to_string(iter.getInitialFrameId()));
@@ -155,7 +155,7 @@ void WorkerThread::importJSON(Core &_singleton, QFrameBasedTableModel *_tableMod
         QJsonObject obj = value.toObject();
 
         // NAME
-        name = obj.value("Name").toString();
+        name = obj.value("Info").toString();
         nameString = name.toString().toUtf8().constData();
 
         // CATEGORY

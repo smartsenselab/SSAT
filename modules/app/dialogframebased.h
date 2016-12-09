@@ -21,13 +21,11 @@ class DialogFrameBased : public QDialog
     Q_OBJECT
 
 private:
-    int nameFlag;
 
     Ui::DialogFrameBased *ui;
 
     int frameId, indexId, totalFrames;
     mode manipulation;
-    set<string> uniqueValues;
     Core *singleton = NULL;
 
     QStringListModel *categoryModel = NULL;
@@ -38,7 +36,7 @@ public:
     ~DialogFrameBased();
     int getIniFrameValue();
     int getEndFrameValue();
-    QString getNameValue();
+    QString getInfoValue();
 
 private:
     void connectSignalSlots();
@@ -58,7 +56,7 @@ public slots:
     void slot_buttonBoxAccepted();
     void slot_buttonBoxRejected();
     void slot_spinBoxValueChanged();
-    void slot_lineEditNameChanged();
+    void slot_lineEditInfoChanged();
 
 signals:
     void signal_rewindButtonPressed();
