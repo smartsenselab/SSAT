@@ -236,7 +236,7 @@ bool sortByEndFrame(FrameBasedData i,FrameBasedData j)
 
 bool sortByName(FrameBasedData i,FrameBasedData j)
 {
-    return strcmp(i.getName().c_str(), j.getName().c_str()) < 0;
+    return strcmp(i.getInfo().c_str(), j.getInfo().c_str()) < 0;
 }
 
 bool sortByCategory(FrameBasedData i,FrameBasedData j)
