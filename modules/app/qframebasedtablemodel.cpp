@@ -211,61 +211,30 @@ vector<FrameBasedData>* QFrameBasedTableModel::getFrameBasedData()
     return this->frameData;
 }
 
-struct IniFrame
+void QFrameBasedTableModel::slot_sortTable(int index)
 {
-    bool operator() (FrameBasedData i,FrameBasedData j) { return (i.getInitialFrameId() < j.getInitialFrameId());}
-}
-IniFrame;
-
-
-struct FinalFrame
-{
-    bool operator() (FrameBasedData i,FrameBasedData j) { return (i.getFinalFrameId() < j.getFinalFrameId());}
-}
-FinalFrame;
-
-
-struct Name
-{
-    bool operator() (FrameBasedData i,FrameBasedData j) { return strcmp(i.getName().c_str(), j.getName().c_str()) < 0;}
-}
-Name;
-
-struct Category
-{
-    bool operator() (FrameBasedData i,FrameBasedData j) { return strcmp(i.getCategory().c_str(), j.getCategory().c_str()) < 0;}
-}
-Category;
-
-struct Label
-{
-    bool operator() (FrameBasedData i,FrameBasedData j) { return strcmp(i.getLabel().c_str(), j.getLabel().c_str()) < 0;}
-}
-Label;
-
-void QFrameBasedTableModel::slot_SortTable(int index)
-{
-    int size = this->frameData->size();
+    unsigned long size = this->frameData->size();
 
     if(index == 3)
     {
-        std::sort(this->frameData->begin(), this->frameData->end(), IniFrame);
+        std::sort(this->frameData->begin(), this->frameData->end(), sortByIniFrame);
     }
-    else if( index == 4)
+    else if(index == 4)
     {
-        std::sort(this->frameData->begin(), this->frameData->end(), FinalFrame);
+        std::sort(this->frameData->begin(), this->frameData->end(), sortByEndFrame);
     }
-    else if( index == 0)
+    else if(index == 0)
     {
-        std::sort(this->frameData->begin(), this->frameData->end(), Name);
+        std::sort(this->frameData->begin(), this->frameData->end(), sortByName);
     }
-    else if( index == 1)
+    else if(index == 1)
     {
-        std::sort(this->frameData->begin(), this->frameData->end(), Category);
+        std::sort(this->frameData->begin(), this->frameData->end(), sortByCategory);
     }
-    else if( index == 2)
+    else if(index == 2)
     {
-        std::sort(this->frameData->begin(), this->frameData->end(), Label);
+        std::sort(this->frameData->begin(), this->frameData->end(), sortByLabel);
     }
+
     this->dataChanged(QAbstractItemModel::createIndex(0,0), QAbstractItemModel::createIndex(2, size - 1));
 }

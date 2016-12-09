@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <cstring>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -203,9 +202,9 @@ void MainWindow::setTableModel()
     this->ui->tableViewFrame->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     this->connect(this,
-               SIGNAL(signal_Sort(int)),
+               SIGNAL(signal_sortTable(int)),
                this->tableModel,
-               SLOT(slot_SortTable(int))
+               SLOT(slot_sortTable(int))
                );
 }
 
@@ -254,7 +253,6 @@ void MainWindow::stopVideo()
     if (this->playerTime != NULL)
     {
         this->playerTime->stop();
-
         delete(this->playerTime);
         this->playerTime = NULL;
     }
@@ -687,70 +685,7 @@ void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
     this->singleton->frames[nextFrameId - 1].addBox(temp_id + "_" + temp_key, _box);
 }
 
-void MainWindow::on_sectionClicked(int index){
-
-    emit signal_Sort(index);
-
-//    int size = this->singleton->frameData.size();
-
-//    for (int i = 0; i < size - 1; i++){
-//      for( int j = 0; j < size - 1; j++){
-//          if( index == 3){
-//              if(this->singleton->frameData.at(j).getInitialFrameId() > this->singleton->frameData.at(j+1).getInitialFrameId()){
-//                 Sort(j);
-//                 //this->tableModel->dataChanged(QAbstractItemModel::createIndex(i,j), QAbstractItemModel::createIndex(2, size - 1));
-//              }
-//          }
-//          if( index == 4){
-//              if(this->singleton->frameData.at(j).getFinalFrameId() > this->singleton->frameData.at(j+1).getFinalFrameId()){
-//                  Sort(j);
-//              }
-//          }
-//          if( index == 0){
-//              const char* n = this->singleton->frameData.at(j).getName().c_str();
-//              const char* n2 = this->singleton->frameData.at(j+1).getName().c_str();
-//              if(strcmp(n, n2) > 0){
-//                  Sort(j);
-//              }
-//          }
-//          if( index == 1){
-//              const char* c = this->singleton->frameData.at(j).getCategory().c_str();
-//              const char* c2 = this->singleton->frameData.at(j+1).getCategory().c_str();
-//              if(strcmp(c, c2) > 0){
-//                  Sort(j);
-//              }
-//          }
-//          if( index == 2){
-//              const char* l = this->singleton->frameData.at(j).getLabel().c_str();
-//              const char* l2 = this->singleton->frameData.at(j+1).getLabel().c_str();
-//              if(strcmp(l, l2) > 0){
-//                  Sort(j);
-//              }
-//          }
-//      }
-//   }
-   // this->ui->tableViewFrame->repaint();
-}
-
-void MainWindow::Sort(int j){
-
-    int iniFram = this->singleton->frameData.at(j).getInitialFrameId();
-    this->singleton->frameData.at(j).setInitialFrameId(this->singleton->frameData.at(j+1).getInitialFrameId());
-    this->singleton->frameData.at(j+1).setInitialFrameId(iniFram);
-
-    int finalFram = this->singleton->frameData.at(j).getFinalFrameId();
-    this->singleton->frameData.at(j).setFinalFrameId(this->singleton->frameData.at(j+1).getFinalFrameId());
-    this->singleton->frameData.at(j+1).setFinalFrameId(finalFram);
-
-    string Category = this->singleton->frameData.at(j).getCategory();
-    this->singleton->frameData.at(j).setCategory(this->singleton->frameData.at(j+1).getCategory());
-    this->singleton->frameData.at(j+1).setCategory(Category);
-
-    string Label = this->singleton->frameData.at(j).getLabel();
-    this->singleton->frameData.at(j).setLabel(this->singleton->frameData.at(j+1).getLabel());
-    this->singleton->frameData.at(j+1).setLabel(Label);
-
-    string Name = this->singleton->frameData.at(j).getName();
-    this->singleton->frameData.at(j).setName(this->singleton->frameData.at(j+1).getName());
-    this->singleton->frameData.at(j+1).setName(Name);
+void MainWindow::on_sectionClicked(int index)
+{
+    emit signal_sortTable(index);
 }

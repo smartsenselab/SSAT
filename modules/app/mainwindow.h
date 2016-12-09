@@ -82,8 +82,6 @@ private:
 
     void connectMainWindow2DialogFrameBased();
 
-    void Sort(int);
-
 public slots:
     void slot_displayFrame(const QImage _frame);
     void slot_openFile();
@@ -128,7 +126,7 @@ public slots:
 
 signals:
     void signal_drawFrameBboxes(const Frame _frame);
-    void signal_Sort(int);
+    void signal_sortTable(int);
 };
 
 #endif
