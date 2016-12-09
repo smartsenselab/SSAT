@@ -1,8 +1,11 @@
 #include "qframebasedtablemodel.h"
+#include <QDebug>
+#include <algorithm>
 
 QFrameBasedTableModel::QFrameBasedTableModel(QObject *_parent)
     : QAbstractTableModel(_parent)
-{}
+{
+}
 
 QFrameBasedTableModel::QFrameBasedTableModel(vector<FrameBasedData> &_frameBasedData, QObject *_parent)
     : QAbstractTableModel(_parent)
@@ -151,7 +154,7 @@ Qt::ItemFlags QFrameBasedTableModel::flags(const QModelIndex &_index) const
 
     Qt::ItemFlags flags = QAbstractItemModel::flags(_index);
     flags |= ( Qt::ItemIsSelectable
-              |Qt::ItemIsEnabled);
+               |Qt::ItemIsEnabled);
 
     return flags;
 }
@@ -191,4 +194,32 @@ void QFrameBasedTableModel::setFrameBasedData(vector<FrameBasedData> &_frameBase
 vector<FrameBasedData>* QFrameBasedTableModel::getFrameBasedData()
 {
     return this->frameData;
+}
+
+void QFrameBasedTableModel::slot_sortTable(int index)
+{
+    unsigned long size = this->frameData->size();
+
+    if(index == 3)
+    {
+        std::sort(this->frameData->begin(), this->frameData->end(), sortByIniFrame);
+    }
+    else if(index == 4)
+    {
+        std::sort(this->frameData->begin(), this->frameData->end(), sortByEndFrame);
+    }
+    else if(index == 0)
+    {
+        std::sort(this->frameData->begin(), this->frameData->end(), sortByName);
+    }
+    else if(index == 1)
+    {
+        std::sort(this->frameData->begin(), this->frameData->end(), sortByCategory);
+    }
+    else if(index == 2)
+    {
+        std::sort(this->frameData->begin(), this->frameData->end(), sortByLabel);
+    }
+
+    this->dataChanged(QAbstractItemModel::createIndex(0,0), QAbstractItemModel::createIndex(2, size - 1));
 }

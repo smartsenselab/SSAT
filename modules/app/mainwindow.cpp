@@ -17,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent)
     this->connectSignalSlots();
     this->setShortcuts();
     this->setTableModel();
+
+    m_horiz_header = this->ui->tableViewFrame->horizontalHeader();
 }
 
 MainWindow::~MainWindow()
@@ -246,6 +248,12 @@ void MainWindow::setTableModel()
     this->ui->tableViewFrame->setAlternatingRowColors(true);
     this->ui->tableViewFrame->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     this->ui->tableViewFrame->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    this->connect(this,
+               SIGNAL(signal_sortTable(int)),
+               this->tableModel,
+               SLOT(slot_sortTable(int))
+               );
 }
 
 void MainWindow::changeSpeed(const int _speed)
@@ -293,7 +301,6 @@ void MainWindow::stopVideo()
     if (this->playerTime != NULL)
     {
         this->playerTime->stop();
-
         delete(this->playerTime);
         this->playerTime = NULL;
     }
@@ -412,6 +419,12 @@ void MainWindow::connectMainWindow2DialogFrameBased()
                   SIGNAL(signal_frameBasedAlterAccepted(const FrameBasedData, const int)),
                   this,
                   SLOT(slot_frameBasedAlterAccepted(const FrameBasedData, const int))
+                  );
+
+    this->connect(this->m_horiz_header,
+                  SIGNAL(sectionClicked(int)),
+                  this,
+                  SLOT(on_sectionClicked(int))
                   );
 }
 
@@ -764,6 +777,9 @@ void MainWindow::slot_tableViewRemoveAnnotation()
 void MainWindow::slot_frameBasedInsertAccepted(const FrameBasedData _data)
 {
     this->tableModel->insertRow(_data);
+    //this->ui->tableViewFrame->horizontalHeader()->setSortIndicator(0, Qt::AscendingOrder);
+    this->ui->tableViewFrame->setSortingEnabled(true);
+    this->ui->tableViewFrame->sortByColumn(0, Qt::AscendingOrder);
 }
 
 void MainWindow::slot_frameBasedAlterAccepted(const FrameBasedData _data, const int _index)
@@ -780,4 +796,9 @@ void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
     string temp_key = "bbox" + std::to_string(num_bboxes);
 
     this->singleton->frames[nextFrameId - 1].addBox(temp_id + "_" + temp_key, _box);
+}
+
+void MainWindow::on_sectionClicked(int index)
+{
+    emit signal_sortTable(index);
 }
