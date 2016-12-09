@@ -7,7 +7,6 @@
 using std::vector;
 
 #include <framebaseddata.h>
-#include <util.h>
 
 class QFrameBasedTableModel : public QAbstractTableModel
 {
@@ -44,5 +43,12 @@ private:
 public slots:
    void slot_sortTable(int index);
 };
+
+// Sorting methods
+bool sortByIniFrame(FrameBasedData i,FrameBasedData j);
+bool sortByEndFrame(FrameBasedData i,FrameBasedData j);
+bool sortByName(FrameBasedData i,FrameBasedData j);
+bool sortByCategory(FrameBasedData i,FrameBasedData j);
+bool sortByLabel(FrameBasedData i,FrameBasedData j);
 
 #endif // QFRAMEBASEDTABLEMODEL_H
