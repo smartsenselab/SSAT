@@ -1,11 +1,8 @@
 #include "qframebasedtablemodel.h"
-#include <QDebug>
-#include <algorithm>
 
 QFrameBasedTableModel::QFrameBasedTableModel(QObject *_parent)
     : QAbstractTableModel(_parent)
-{
-}
+{}
 
 QFrameBasedTableModel::QFrameBasedTableModel(vector<FrameBasedData> &_frameBasedData, QObject *_parent)
     : QAbstractTableModel(_parent)
@@ -211,29 +208,67 @@ vector<FrameBasedData>* QFrameBasedTableModel::getFrameBasedData()
     return this->frameData;
 }
 
+int flag1 = 0;
+
 struct IniFrame {
-  bool operator() (FrameBasedData i,FrameBasedData j) { return (i.getInitialFrameId() < j.getInitialFrameId());}
+  bool operator() (FrameBasedData i,FrameBasedData j) {
+      if(flag1 == 0){
+          return (i.getInitialFrameId() < j.getInitialFrameId());
+      }
+      else{
+          return (i.getInitialFrameId() > j.getInitialFrameId());
+      }
+  }
 } IniFrame;
 
 
 struct FinalFrame {
-  bool operator() (FrameBasedData i,FrameBasedData j) { return (i.getFinalFrameId() < j.getFinalFrameId());}
+  bool operator() (FrameBasedData i,FrameBasedData j) {
+      if(flag1 == 0){
+          return (i.getFinalFrameId() < j.getFinalFrameId());
+      }
+      else{
+          return (i.getFinalFrameId() > j.getFinalFrameId());
+      }
+  }
 } FinalFrame;
 
 
 struct Name {
-  bool operator() (FrameBasedData i,FrameBasedData j) { return strcmp(i.getName().c_str(), j.getName().c_str()) < 0;}
+  bool operator() (FrameBasedData i,FrameBasedData j) {
+      if(flag1 == 0){
+          return strcmp(i.getName().c_str(), j.getName().c_str()) < 0;
+      }
+      else{
+          return strcmp(i.getName().c_str(), j.getName().c_str()) > 0;
+      }
+  }
 } Name;
 
 struct Category {
-  bool operator() (FrameBasedData i,FrameBasedData j) { return strcmp(i.getCategory().c_str(), j.getCategory().c_str()) < 0;}
+  bool operator() (FrameBasedData i,FrameBasedData j) {
+      if(flag1 == 0){
+          return strcmp(i.getCategory().c_str(), j.getCategory().c_str()) < 0;
+      }
+      else{
+          return strcmp(i.getCategory().c_str(), j.getCategory().c_str()) > 0;
+      }
+  }
 } Category;
 
 struct Label {
-  bool operator() (FrameBasedData i,FrameBasedData j) { return strcmp(i.getLabel().c_str(), j.getLabel().c_str()) < 0;}
+  bool operator() (FrameBasedData i,FrameBasedData j) {
+      if(flag1 == 0){
+          return strcmp(i.getLabel().c_str(), j.getLabel().c_str()) < 0;
+      }
+      else{
+          return strcmp(i.getLabel().c_str(), j.getLabel().c_str()) > 0;
+      }
+  }
 } Label;
 
 void QFrameBasedTableModel::slot_SortTable(int index){
+     int size = this->frameData->size();
      if(index == 3){
          std::sort(this->frameData->begin(), this->frameData->end(), IniFrame);
      }
@@ -249,5 +284,7 @@ void QFrameBasedTableModel::slot_SortTable(int index){
      else if( index == 2){
          std::sort(this->frameData->begin(), this->frameData->end(), Label);
      }
+     flag1 = flag;
+     if(flag == 1){ flag = 0;} else {flag = 1;}
      this->dataChanged(QAbstractItemModel::createIndex(0,0), QAbstractItemModel::createIndex(2, size - 1));
 }

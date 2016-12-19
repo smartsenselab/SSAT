@@ -14,6 +14,7 @@ class QFrameBasedTableModel : public QAbstractTableModel
 /// https://doc.qt.io/archives/4.6/itemviews-addressbook.html
 
 public:
+    int flag = 0;
     explicit QFrameBasedTableModel(QObject* _parent = 0);
     explicit QFrameBasedTableModel(vector<FrameBasedData> &_frameBasedData, QObject* _parent = 0);
 
@@ -41,7 +42,14 @@ private:
     vector<FrameBasedData>* frameData;
 
 public slots:
-   void slot_SortTable(int index);
+   void slot_SortTable(int);
 };
+
+// Sorting methods
+bool sortByIniFrame(FrameBasedData i,FrameBasedData j);
+bool sortByEndFrame(FrameBasedData i,FrameBasedData j);
+bool sortByName(FrameBasedData i,FrameBasedData j);
+bool sortByCategory(FrameBasedData i,FrameBasedData j);
+bool sortByLabel(FrameBasedData i,FrameBasedData j);
 
 #endif // QFRAMEBASEDTABLEMODEL_H
