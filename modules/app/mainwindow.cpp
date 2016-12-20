@@ -216,6 +216,7 @@ void MainWindow::setShortcuts()
     this->crtf = new QAction(tr("id4"), this);
     this->crti = new QAction(tr("id5"), this);
     this->crto = new QAction(tr("id6"), this);
+    this->crtw = new QAction(tr("id7"), this);
 
     this->crta->setShortcuts(QList<QKeySequence>() << Qt::CTRL + Qt::Key_A);
     this->crtb->setShortcuts(QList<QKeySequence>() << Qt::CTRL + Qt::Key_B);
@@ -223,6 +224,7 @@ void MainWindow::setShortcuts()
     this->crtf->setShortcuts(QList<QKeySequence>() << Qt::CTRL + Qt::Key_F);
     this->crti->setShortcuts(QList<QKeySequence>() << Qt::CTRL + Qt::Key_I);
     this->crto->setShortcuts(QList<QKeySequence>() << Qt::CTRL + Qt::Key_O);
+    this->crtw->setShortcuts(QList<QKeySequence>() << Qt::CTRL + Qt::Key_W);
 
     this->addAction(crta);
     this->addAction(crtb);
@@ -230,6 +232,7 @@ void MainWindow::setShortcuts()
     this->addAction(crtf);
     this->addAction(crti);
     this->addAction(crto);
+    this->addAction(crtw);
 
     // Connecting SHORTCUTS to SLOTS
     this->connect(this->crta, SIGNAL(triggered()), SLOT(slot_Ashortcut()));
@@ -237,7 +240,8 @@ void MainWindow::setShortcuts()
     this->connect(this->crte, SIGNAL(triggered()), SLOT(slot_Eshortcut()));
     this->connect(this->crtf, SIGNAL(triggered()), SLOT(slot_Fshortcut()));
     this->connect(this->crti, SIGNAL(triggered()), SLOT(slot_Ishortcut()));
-    this->connect(this->crto, SIGNAL(triggered()), SLOT(slot_Oshortcut()));;
+    this->connect(this->crto, SIGNAL(triggered()), SLOT(slot_Oshortcut()));
+    this->connect(this->crtw, SIGNAL(triggered()), SLOT(slot_Wshortcut()));
 }
 
 void MainWindow::setTableModel()
@@ -428,6 +432,11 @@ void MainWindow::slot_Ashortcut()
 void MainWindow::slot_Oshortcut()
 {
     this->slot_openFile();
+}
+
+void MainWindow::slot_Wshortcut()
+{
+    this->slot_closeApplitacion();
 }
 
 void MainWindow::slot_Ishortcut()

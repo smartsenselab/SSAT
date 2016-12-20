@@ -287,7 +287,7 @@
   </action>
   <action name="actionExit">
    <property name="text">
-    <string>Exit</string>
+    <string>Exit                      Ctrl+W</string>
    </property>
   </action>
   <action name="actionNew">
