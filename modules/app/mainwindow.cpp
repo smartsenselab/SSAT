@@ -211,6 +211,13 @@ void MainWindow::connectSignalSlots()
                   &(this->frameScene),
                   SLOT(slot_drawFrameBboxes(const Frame))
                   );
+
+    this->connect(this->ui->splitter,
+                  SIGNAL(splitterMoved(int,int)),
+                  this,
+                  SLOT(slot_resizeFrame)
+                  );
+
 }
 
 void MainWindow::setShortcuts()
@@ -804,4 +811,9 @@ void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
 void MainWindow::on_sectionClicked(int index)
 {
     emit signal_sortTable(index);
+}
+
+void MainWindow::slot_resizeFrame()
+{
+    this->updateFrame();
 }
