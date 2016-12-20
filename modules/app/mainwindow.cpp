@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "qsizegrip.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -19,6 +20,8 @@ MainWindow::MainWindow(QWidget *parent)
     this->setTableModel();
 
     m_horiz_header = this->ui->tableViewFrame->horizontalHeader();
+
+    this->ui->viewFrame->setWindowFlags(Qt::SubWindow);
 }
 
 MainWindow::~MainWindow()
