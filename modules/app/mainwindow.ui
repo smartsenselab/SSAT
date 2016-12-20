@@ -267,27 +267,27 @@
   </widget>
   <action name="actionOpen">
    <property name="text">
-    <string>Open</string>
+    <string>Open                    Ctrl+O</string>
    </property>
   </action>
   <action name="actionAttributes">
    <property name="text">
-    <string>Attributes</string>
+    <string>Attributes          Ctrl+A</string>
    </property>
   </action>
   <action name="actionExport_JSON">
    <property name="text">
-    <string>Export JSON</string>
+    <string>Export JSON         Ctrl+E</string>
    </property>
   </action>
   <action name="actionImport_JSON">
    <property name="text">
-    <string>Import JSON</string>
+    <string>Import JSON         Ctrl+I</string>
    </property>
   </action>
   <action name="actionExit">
    <property name="text">
-    <string>Exit</string>
+    <string>Exit                      Ctrl+W</string>
    </property>
   </action>
   <action name="actionNew">

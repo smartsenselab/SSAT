@@ -38,6 +38,7 @@ private:
     QAction *crtf = NULL;
     QAction *crti = NULL;
     QAction *crto = NULL;
+    QAction *crtw = NULL;
 
     bool loaded;
     bool playing;
@@ -102,6 +103,7 @@ public slots:
     void slot_Ishortcut();
     void slot_Bshortcut();
     void slot_Eshortcut();
+    void slot_Wshortcut();
 
     void slot_displayFrame(const QImage _frame);
     void slot_openFile();
