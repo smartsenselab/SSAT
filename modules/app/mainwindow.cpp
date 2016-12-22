@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "qsizegrip.h"
+#include "qdebug.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -215,7 +216,7 @@ void MainWindow::connectSignalSlots()
     this->connect(this->ui->splitter,
                   SIGNAL(splitterMoved(int,int)),
                   this,
-                  SLOT(slot_resizeFrame)
+                  SLOT(slot_resizeFrame())
                   );
 
 }
@@ -815,5 +816,9 @@ void MainWindow::on_sectionClicked(int index)
 
 void MainWindow::slot_resizeFrame()
 {
-    this->updateFrame();
+    if(!this->isPlaying())
+    {
+        int frame = manager->getFrameId();
+        this->updateFrame(frame-1);
+    }
 }
