@@ -434,7 +434,8 @@ void MainWindow::connectMainWindow2DialogFrameBased()
 
 void MainWindow::slot_Fshortcut()
 {
-    this->slot_viewFrameNewFrameMenu();
+    if(!this->isPlaying())
+        this->slot_viewFrameNewFrameMenu();
 }
 
 void MainWindow::slot_Ashortcut()
@@ -694,16 +695,21 @@ void MainWindow::slot_viewFrameContextMenu(const QPoint &_point)
     QPoint position = this->ui->viewFrame->mapToGlobal(_point);
 
     QMenu contextMenu;
-    contextMenu.addAction("New Bounding box     Ctrl+B", this, SLOT(slot_viewFrameNewBoxMenu()));
-    contextMenu.addAction("New Frame box          Ctrl+F", this, SLOT(slot_viewFrameNewFrameMenu()));
-    contextMenu.addAction("Remove Bbox", this, SLOT(slot_viewFrameRemoveBoxMenu()));
+    if (!this->isPlaying()){
+        contextMenu.addAction("New Bounding box     Ctrl+B", this, SLOT(slot_viewFrameNewBoxMenu()));
+        contextMenu.addAction("New Frame box          Ctrl+F", this, SLOT(slot_viewFrameNewFrameMenu()));
+        contextMenu.addAction("Remove Bbox", this, SLOT(slot_viewFrameRemoveBoxMenu()));
+        contextMenu.exec(position);
+    }
 
-    contextMenu.exec(position);
 }
 
 void MainWindow::slot_viewFrameNewBoxMenu()
 {
-    this->frameScene->slot_enableDraw();
+    if (this->isPlaying() == false)
+    {
+        this->frameScene->slot_enableDraw();
+    }
 
     //    // CheckBox
     //    QTableWidgetItem *checkBoxItem = new QTableWidgetItem();
