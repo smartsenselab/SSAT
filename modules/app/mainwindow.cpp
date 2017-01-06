@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "qsizegrip.h"
+#include "qdebug.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -19,6 +21,8 @@ MainWindow::MainWindow(QWidget *parent)
     this->setTableModel();
 
     m_horiz_header = this->ui->tableViewFrame->horizontalHeader();
+
+    this->ui->viewFrame->setWindowFlags(Qt::SubWindow);
 }
 
 MainWindow::~MainWindow()
@@ -208,6 +212,13 @@ void MainWindow::connectSignalSlots()
                   &(this->frameScene),
                   SLOT(slot_drawFrameBboxes(const Frame))
                   );
+
+    this->connect(this->ui->splitter,
+                  SIGNAL(splitterMoved(int,int)),
+                  this,
+                  SLOT(slot_resizeFrame())
+                  );
+
 }
 
 void MainWindow::setShortcuts()
@@ -810,4 +821,13 @@ void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
 void MainWindow::on_sectionClicked(int index)
 {
     emit signal_sortTable(index);
+}
+
+void MainWindow::slot_resizeFrame()
+{
+    if(!this->isPlaying())
+    {
+        int frame = manager->getFrameId();
+        this->updateFrame(frame-1);
+    }
 }
