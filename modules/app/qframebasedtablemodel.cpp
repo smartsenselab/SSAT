@@ -1,5 +1,7 @@
 #include "qframebasedtablemodel.h"
 
+bool static staticFlag = 0;
+
 QFrameBasedTableModel::QFrameBasedTableModel(QObject *_parent)
     : QAbstractTableModel(_parent)
 {}
@@ -166,7 +168,7 @@ Qt::ItemFlags QFrameBasedTableModel::flags(const QModelIndex &_index) const
 
     Qt::ItemFlags flags = QAbstractItemModel::flags(_index);
     flags |= ( Qt::ItemIsSelectable
-              |Qt::ItemIsEnabled);
+               |Qt::ItemIsEnabled);
 
     return flags;
 }
@@ -208,83 +210,91 @@ vector<FrameBasedData>* QFrameBasedTableModel::getFrameBasedData()
     return this->frameData;
 }
 
-int flag1 = 0;
+void QFrameBasedTableModel::slot_sortTable(int index){
+    unsigned long size = this->frameData->size();
 
-struct IniFrame {
-  bool operator() (FrameBasedData i,FrameBasedData j) {
-      if(flag1 == 0){
-          return (i.getInitialFrameId() < j.getInitialFrameId());
-      }
-      else{
-          return (i.getInitialFrameId() > j.getInitialFrameId());
-      }
-  }
-} IniFrame;
+    if(index == 3)
+    {
+        std::sort(this->frameData->begin(), this->frameData->end(), sortingMethods::sortByIniFrame);
+    }
+    else if(index == 4)
+    {
+        std::sort(this->frameData->begin(), this->frameData->end(), sortingMethods::sortByEndFrame);
+    }
+    else if(index == 0)
+    {
+        std::sort(this->frameData->begin(), this->frameData->end(), sortingMethods::sortByName);
+    }
+    else if(index == 1)
+    {
+        std::sort(this->frameData->begin(), this->frameData->end(), sortingMethods::sortByCategory);
+    }
+    else if(index == 2)
+    {
+        std::sort(this->frameData->begin(), this->frameData->end(), sortingMethods::sortByLabel);
+    }
 
+    staticFlag = this->sortFlag;
+    this->sortFlag = !this->sortFlag;
+    this->dataChanged(QAbstractItemModel::createIndex(0,0), QAbstractItemModel::createIndex(2, size - 1));
+}
 
-struct FinalFrame {
-  bool operator() (FrameBasedData i,FrameBasedData j) {
-      if(flag1 == 0){
-          return (i.getFinalFrameId() < j.getFinalFrameId());
-      }
-      else{
-          return (i.getFinalFrameId() > j.getFinalFrameId());
-      }
-  }
-} FinalFrame;
+bool sortingMethods::sortByIniFrame(FrameBasedData i,FrameBasedData j)
+{
+    if(staticFlag == 0)
+    {
+        return (i.getInitialFrameId() < j.getInitialFrameId());
+    }
+    else
+    {
+        return (i.getInitialFrameId() > j.getInitialFrameId());
+    }
+}
 
+bool sortingMethods::sortByEndFrame(FrameBasedData i,FrameBasedData j)
+{
+    if(staticFlag == 0)
+    {
+        return (i.getFinalFrameId() < j.getFinalFrameId());
+    }
+    else
+    {
+        return (i.getFinalFrameId() > j.getFinalFrameId());
+    }
+}
 
-struct Name {
-  bool operator() (FrameBasedData i,FrameBasedData j) {
-      if(flag1 == 0){
-          return strcmp(i.getName().c_str(), j.getName().c_str()) < 0;
-      }
-      else{
-          return strcmp(i.getName().c_str(), j.getName().c_str()) > 0;
-      }
-  }
-} Name;
+bool sortingMethods::sortByName(FrameBasedData i,FrameBasedData j)
+{
+    if(staticFlag == 0)
+    {
+        return strcmp(i.getName().c_str(), j.getName().c_str()) < 0;
+    }
+    else
+    {
+        return strcmp(i.getName().c_str(), j.getName().c_str()) > 0;
+    }
+}
 
-struct Category {
-  bool operator() (FrameBasedData i,FrameBasedData j) {
-      if(flag1 == 0){
-          return strcmp(i.getCategory().c_str(), j.getCategory().c_str()) < 0;
-      }
-      else{
-          return strcmp(i.getCategory().c_str(), j.getCategory().c_str()) > 0;
-      }
-  }
-} Category;
+bool sortingMethods::sortByCategory(FrameBasedData i,FrameBasedData j)
+{
+    if(staticFlag == 0)
+    {
+        return strcmp(i.getCategory().c_str(), j.getCategory().c_str()) < 0;
+    }
+    else
+    {
+        return strcmp(i.getCategory().c_str(), j.getCategory().c_str()) > 0;
+    }
+}
 
-struct Label {
-  bool operator() (FrameBasedData i,FrameBasedData j) {
-      if(flag1 == 0){
-          return strcmp(i.getLabel().c_str(), j.getLabel().c_str()) < 0;
-      }
-      else{
-          return strcmp(i.getLabel().c_str(), j.getLabel().c_str()) > 0;
-      }
-  }
-} Label;
-
-void QFrameBasedTableModel::slot_SortTable(int index){
-     int size = this->frameData->size();
-     if(index == 3){
-         std::sort(this->frameData->begin(), this->frameData->end(), IniFrame);
-     }
-     else if( index == 4){
-        std::sort(this->frameData->begin(), this->frameData->end(), FinalFrame);
-     }
-     else if( index == 0){
-         std::sort(this->frameData->begin(), this->frameData->end(), Name);
-     }
-     else if( index == 1){
-          std::sort(this->frameData->begin(), this->frameData->end(), Category);
-     }
-     else if( index == 2){
-         std::sort(this->frameData->begin(), this->frameData->end(), Label);
-     }
-     flag1 = flag;
-     if(flag == 1){ flag = 0;} else {flag = 1;}
-     this->dataChanged(QAbstractItemModel::createIndex(0,0), QAbstractItemModel::createIndex(2, size - 1));
+bool sortingMethods::sortByLabel(FrameBasedData i,FrameBasedData j)
+{
+    if(staticFlag == 0)
+    {
+        return strcmp(i.getLabel().c_str(), j.getLabel().c_str()) < 0;
+    }
+    else
+    {
+        return strcmp(i.getLabel().c_str(), j.getLabel().c_str()) > 0;
+    }
 }

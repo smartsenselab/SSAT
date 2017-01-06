@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <cstring>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -203,9 +202,9 @@ void MainWindow::setTableModel()
     this->ui->tableViewFrame->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     this->connect(this,
-               SIGNAL(signal_Sort(int)),
+               SIGNAL(signal_sort(int)),
                this->tableModel,
-               SLOT(slot_SortTable(int))
+               SLOT(slot_sortTable(int))
                );
 }
 
@@ -358,6 +357,30 @@ void MainWindow::connectMainWindow2DialogFrameBased()
                   this,
                   SLOT(on_sectionClicked(int))
                   );
+}
+
+void MainWindow::sort(int _pos)
+{
+    unsigned long pos = static_cast<unsigned long>(_pos);
+    int iniFram = this->singleton->frameData.at(pos).getInitialFrameId();
+    this->singleton->frameData.at(pos).setInitialFrameId(this->singleton->frameData.at(pos+1).getInitialFrameId());
+    this->singleton->frameData.at(pos+1).setInitialFrameId(iniFram);
+
+    int endFram = this->singleton->frameData.at(pos).getFinalFrameId();
+    this->singleton->frameData.at(pos).setFinalFrameId(this->singleton->frameData.at(pos+1).getFinalFrameId());
+    this->singleton->frameData.at(pos+1).setFinalFrameId(endFram);
+
+    string category = this->singleton->frameData.at(pos).getCategory();
+    this->singleton->frameData.at(pos).setCategory(this->singleton->frameData.at(pos+1).getCategory());
+    this->singleton->frameData.at(pos+1).setCategory(category);
+
+    string label = this->singleton->frameData.at(pos).getLabel();
+    this->singleton->frameData.at(pos).setLabel(this->singleton->frameData.at(pos+1).getLabel());
+    this->singleton->frameData.at(pos+1).setLabel(label);
+
+    string name = this->singleton->frameData.at(pos).getName();
+    this->singleton->frameData.at(pos).setName(this->singleton->frameData.at(pos+1).getName());
+    this->singleton->frameData.at(pos+1).setName(name);
 }
 
 void MainWindow::slot_displayFrame(const QImage _frame)
@@ -689,7 +712,7 @@ void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
 
 void MainWindow::on_sectionClicked(int index){
 
-    emit signal_Sort(index);
+    emit signal_sort(index);
 
 //    int size = this->singleton->frameData.size();
 
@@ -730,27 +753,4 @@ void MainWindow::on_sectionClicked(int index){
 //      }
 //   }
    // this->ui->tableViewFrame->repaint();
-}
-
-void MainWindow::Sort(int j){
-
-    int iniFram = this->singleton->frameData.at(j).getInitialFrameId();
-    this->singleton->frameData.at(j).setInitialFrameId(this->singleton->frameData.at(j+1).getInitialFrameId());
-    this->singleton->frameData.at(j+1).setInitialFrameId(iniFram);
-
-    int finalFram = this->singleton->frameData.at(j).getFinalFrameId();
-    this->singleton->frameData.at(j).setFinalFrameId(this->singleton->frameData.at(j+1).getFinalFrameId());
-    this->singleton->frameData.at(j+1).setFinalFrameId(finalFram);
-
-    string Category = this->singleton->frameData.at(j).getCategory();
-    this->singleton->frameData.at(j).setCategory(this->singleton->frameData.at(j+1).getCategory());
-    this->singleton->frameData.at(j+1).setCategory(Category);
-
-    string Label = this->singleton->frameData.at(j).getLabel();
-    this->singleton->frameData.at(j).setLabel(this->singleton->frameData.at(j+1).getLabel());
-    this->singleton->frameData.at(j+1).setLabel(Label);
-
-    string Name = this->singleton->frameData.at(j).getName();
-    this->singleton->frameData.at(j).setName(this->singleton->frameData.at(j+1).getName());
-    this->singleton->frameData.at(j+1).setName(Name);
 }
