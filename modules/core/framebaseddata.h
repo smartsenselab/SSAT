@@ -31,7 +31,7 @@ public:
     void setFinalFrameId(const int _id);
     void setCategory(const string &_category);
     void setLabel(const string &_label);
-    void setinfo(const string &_info);
+    void setInfo(const string &_info);
 
 private:
     int initialFrameId;

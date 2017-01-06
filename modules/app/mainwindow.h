@@ -1,17 +1,19 @@
 #ifndef mainwindow_h
 #define mainwindow_h
 
-#include<QShortcut>
 #include <iostream>
+#include <fstream>
+
 #include<QProgressDialog>
 #include <QFileDialog>
 #include <QGraphicsScene>
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QScopedPointer>
+#include<QShortcut>
 #include <QTime>
 #include <QTimer>
-#include <fstream>
+
 #include "dialogannotation.h"
 #include "dialogframebased.h"
 #include "framebaseddata.h"

@@ -16,7 +16,7 @@ FrameBasedData::FrameBasedData(const int _iniFrame,
     this->setFinalFrameId(_endFrame);
     this->setCategory(_category);
     this->setLabel(_label);
-    this->setinfo(_info);
+    this->setInfo(_info);
 }
 
 int FrameBasedData::getInitialFrameId() const
@@ -64,7 +64,7 @@ void FrameBasedData::setLabel(const string &_label)
     this->label = _label;
 }
 
-void FrameBasedData::setinfo(const string &_info)
+void FrameBasedData::setInfo(const string &_info)
 {
     this->info = _info;
 }
