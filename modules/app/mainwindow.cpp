@@ -1,14 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "qsizegrip.h"
-#include "qdebug.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     this->ui->setupUi(this);
-    this->frameScene = new QBoundingBox;
     this->core_path = "./temp.json";
+    this->frameScene = new QBoundingBox;
     this->loaded = false;
     this->manager = new VideoManager;
     this->playing = false;
@@ -265,10 +263,10 @@ void MainWindow::setTableModel()
     this->ui->tableViewFrame->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     this->connect(this,
-               SIGNAL(signal_sortTable(int)),
-               this->tableModel,
-               SLOT(slot_sortTable(int))
-               );
+                  SIGNAL(signal_sortTable(int)),
+                  this->tableModel,
+                  SLOT(slot_sortTable(int))
+                  );
 }
 
 void MainWindow::changeSpeed(const int _speed)
@@ -446,7 +444,9 @@ void MainWindow::connectMainWindow2DialogFrameBased()
 void MainWindow::slot_Fshortcut()
 {
     if(!this->isPlaying())
+    {
         this->slot_viewFrameNewFrameMenu();
+    }
 }
 
 void MainWindow::slot_Ashortcut()
@@ -706,13 +706,13 @@ void MainWindow::slot_viewFrameContextMenu(const QPoint &_point)
     QPoint position = this->ui->viewFrame->mapToGlobal(_point);
 
     QMenu contextMenu;
-    if (!this->isPlaying()){
+    if (!this->isPlaying())
+    {
         contextMenu.addAction("New Bounding box     Ctrl+B", this, SLOT(slot_viewFrameNewBoxMenu()));
         contextMenu.addAction("New Frame box          Ctrl+F", this, SLOT(slot_viewFrameNewFrameMenu()));
         contextMenu.addAction("Remove Bbox", this, SLOT(slot_viewFrameRemoveBoxMenu()));
         contextMenu.exec(position);
     }
-
 }
 
 void MainWindow::slot_viewFrameNewBoxMenu()
@@ -835,7 +835,7 @@ void MainWindow::slot_resizeFrame()
 {
     if(!this->isPlaying())
     {
-        int frame = manager->getFrameId();
-        this->updateFrame(frame-1);
+        int frame = static_cast<int>(this->manager->getFrameId());
+        this->updateFrame(frame - 1);
     }
 }

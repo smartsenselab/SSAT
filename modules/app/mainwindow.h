@@ -4,13 +4,16 @@
 #include <iostream>
 #include <fstream>
 
-#include<QProgressDialog>
+#include "qsizegrip.h"
+#include "qdebug.h"
+
 #include <QFileDialog>
 #include <QGraphicsScene>
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QProgressDialog>
 #include <QScopedPointer>
-#include<QShortcut>
+#include <QShortcut>
 #include <QTime>
 #include <QTimer>
 
