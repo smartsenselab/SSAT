@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     this->ui->setupUi(this);
-
+    this->frameScene = new QBoundingBox;
     this->core_path = "./temp.json";
     this->loaded = false;
     this->manager = new VideoManager;
@@ -43,7 +43,7 @@ void MainWindow ::keyPressEvent(QKeyEvent* event)
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     QMainWindow::resizeEvent(event);
-    this->ui->viewFrame->fitInView(this->frameScene.sceneRect(), Qt::KeepAspectRatio);
+    this->ui->viewFrame->fitInView(this->frameScene->sceneRect(), Qt::KeepAspectRatio);
 }
 
 bool MainWindow::isPlaying()
@@ -201,7 +201,7 @@ void MainWindow::connectSignalSlots()
                   SLOT(slot_backupJson())
                   );
 
-    this->connect(&(this->frameScene),
+    this->connect((this->frameScene),
                   SIGNAL(signal_addBoundingBoxToCore(Rect)),
                   this,
                   SLOT(slot_addBoundingBoxToCore(Rect))
@@ -209,7 +209,7 @@ void MainWindow::connectSignalSlots()
 
     this->connect(this,
                   SIGNAL(signal_drawFrameBboxes(const Frame)),
-                  &(this->frameScene),
+                  (this->frameScene),
                   SLOT(slot_drawFrameBboxes(const Frame))
                   );
 
@@ -332,7 +332,7 @@ void MainWindow::updateFrame()
         this->ui->sliderFrame->setValue(static_cast<int>(currentFrame));
         this->ui->labelFrameId->setText(QString::number(currentFrame) + "/" + QString::number(this->totalFrames));
 
-        this->frameScene.clear();
+        this->frameScene->clear();
 
         qint64 current = this->manager->getTime();
         QTime currentTime((current/3600)%60, (current/60)%60, current%60, (current*1000)%1000);
@@ -340,10 +340,10 @@ void MainWindow::updateFrame()
         this->ui->labelTime->setText(stringTime);
 
         this->frameQImage = this->manager->matToQimage(frameMat);
-        this->frameScene.addPixmap(QPixmap::fromImage(frameQImage));
+        this->frameScene->addPixmap(QPixmap::fromImage(frameQImage));
 
-        this->ui->viewFrame->setScene(&(this->frameScene));
-        this->ui->viewFrame->fitInView(this->frameScene.sceneRect(), Qt::KeepAspectRatio);
+        this->ui->viewFrame->setScene((this->frameScene));
+        this->ui->viewFrame->fitInView(this->frameScene->sceneRect(), Qt::KeepAspectRatio);
 
         emit signal_drawFrameBboxes(this->singleton->frames[nextFrameId - 1]);
     }
@@ -359,7 +359,7 @@ void MainWindow::updateFrame(const int _frameId)
         this->ui->sliderFrame->setValue(static_cast<int>(_frameId));
         this->ui->labelFrameId->setText(QString::number(_frameId) + "/" + QString::number(this->totalFrames));
 
-        this->frameScene.clear();
+        this->frameScene->clear();
 
         qint64 current = this->manager->getTime();
         QTime currentTime((current/3600)%60, (current/60)%60, current%60, (current*1000)%1000);
@@ -367,10 +367,10 @@ void MainWindow::updateFrame(const int _frameId)
         this->ui->labelTime->setText(stringTime);
 
         this->frameQImage = this->manager->matToQimage(frameMat);
-        this->frameScene.addPixmap(QPixmap::fromImage(frameQImage));
+        this->frameScene->addPixmap(QPixmap::fromImage(frameQImage));
 
-        this->ui->viewFrame->setScene(&(this->frameScene));
-        this->ui->viewFrame->fitInView(this->frameScene.sceneRect(), Qt::KeepAspectRatio);
+        this->ui->viewFrame->setScene((this->frameScene));
+        this->ui->viewFrame->fitInView(this->frameScene->sceneRect(), Qt::KeepAspectRatio);
 
         emit signal_drawFrameBboxes(this->singleton->frames[static_cast<unsigned long>(nextFrameId - 1)]);
     }
@@ -445,7 +445,8 @@ void MainWindow::connectMainWindow2DialogFrameBased()
 
 void MainWindow::slot_Fshortcut()
 {
-    this->slot_viewFrameNewFrameMenu();
+    if(!this->isPlaying())
+        this->slot_viewFrameNewFrameMenu();
 }
 
 void MainWindow::slot_Ashortcut()
@@ -482,8 +483,8 @@ void MainWindow::slot_displayFrame(const QImage _frame)
 {
     if(!_frame.isNull())
     {
-        this->frameScene.addPixmap(QPixmap::fromImage(_frame));
-        this->ui->viewFrame->setScene(&(this->frameScene));
+        this->frameScene->addPixmap(QPixmap::fromImage(_frame));
+        this->ui->viewFrame->setScene((this->frameScene));
     }
 }
 
@@ -495,6 +496,8 @@ void MainWindow::slot_openFile()
                                                      tr("Video Files (*.avi *.mp4 *.mov)"));
     if(!videoName.isEmpty())
     {
+        delete this->frameScene;
+        this->frameScene = new QBoundingBox;
         this->manager->loadVideo(videoName);
 
         this->loaded = true;
@@ -703,16 +706,21 @@ void MainWindow::slot_viewFrameContextMenu(const QPoint &_point)
     QPoint position = this->ui->viewFrame->mapToGlobal(_point);
 
     QMenu contextMenu;
-    contextMenu.addAction("New Bounding box     Ctrl+B", this, SLOT(slot_viewFrameNewBoxMenu()));
-    contextMenu.addAction("New Frame box          Ctrl+F", this, SLOT(slot_viewFrameNewFrameMenu()));
-    contextMenu.addAction("Remove Bbox", this, SLOT(slot_viewFrameRemoveBoxMenu()));
+    if (!this->isPlaying()){
+        contextMenu.addAction("New Bounding box     Ctrl+B", this, SLOT(slot_viewFrameNewBoxMenu()));
+        contextMenu.addAction("New Frame box          Ctrl+F", this, SLOT(slot_viewFrameNewFrameMenu()));
+        contextMenu.addAction("Remove Bbox", this, SLOT(slot_viewFrameRemoveBoxMenu()));
+        contextMenu.exec(position);
+    }
 
-    contextMenu.exec(position);
 }
 
 void MainWindow::slot_viewFrameNewBoxMenu()
 {
-    this->frameScene.slot_enableDraw();
+    if (this->isPlaying() == false)
+    {
+        this->frameScene->slot_enableDraw();
+    }
 
     //    // CheckBox
     //    QTableWidgetItem *checkBoxItem = new QTableWidgetItem();
@@ -745,7 +753,7 @@ void MainWindow::slot_viewFrameNewFrameMenu()
 
 void MainWindow::slot_viewFrameRemoveBoxMenu()
 {
-    this->frameScene.deleteBBox();
+    this->frameScene->deleteBBox();
 }
 
 void MainWindow::slot_tableViewContextMenu(const QPoint &_point)

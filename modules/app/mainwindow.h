@@ -57,7 +57,7 @@ private:
     DialogAnnotation *annotationDialog = NULL;
     DialogFrameBased *frameDialog = NULL;
 
-    QBoundingBox frameScene;
+    QBoundingBox *frameScene = NULL;
     QFrameBasedTableModel *tableModel = NULL;
     QGraphicsRectItem *rectangle = NULL;
 
