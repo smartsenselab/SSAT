@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->speed = 0;
 
     this->enableWidgets(false);
+    this->enableFrameBased(false);
     this->connectSignalSlots();
     this->setShortcuts();
     this->setTableModel();
@@ -62,6 +63,32 @@ void MainWindow::isPlaying(const bool _enable)
     }
 }
 
+
+void MainWindow::enableFrameBased(const bool _enable)
+{
+    this->ui->comboBoxCategory_2->clear();
+    this->ui->comboBoxLabel_2->clear();
+    this->ui->spinBoxInitialFrame_2->setValue(this->frameId);
+    this->ui->spinBoxInitialFrame_2->setValue(this->frameId);
+    this->ui->lineEditName_2->clear();
+
+    this->ui->comboBoxCategory_2->setEnabled(_enable);
+    this->ui->comboBoxLabel_2->setEnabled(_enable);
+    this->ui->spinBoxFinalFrame_2->setEnabled(_enable);
+    this->ui->spinBoxInitialFrame_2->setEnabled(_enable);
+    this->ui->buttonForward_3->setEnabled(_enable);
+    this->ui->buttonForwardF_3->setEnabled(_enable);
+    this->ui->buttonRewindF_3->setEnabled(_enable);
+    this->ui->buttonRewind_3->setEnabled(_enable);
+    this->ui->lineEditName_2->setEnabled(_enable);
+    this->ui->buttonBox_2->setEnabled(_enable);
+    this->ui->labelCategory_2->setEnabled(_enable);
+    this->ui->labelLabel_2->setEnabled(_enable);
+    this->ui->labelInitialFrame_2->setEnabled(_enable);
+    this->ui->labelFinalFrame_2->setEnabled(_enable);
+    this->ui->labelName_2->setEnabled(_enable);
+}
+
 void MainWindow::enableWidgets(const bool _enable)
 {
     this->ui->actionAttributes->setEnabled(_enable);
@@ -82,6 +109,8 @@ void MainWindow::enableWidgets(const bool _enable)
     this->ui->spinBoxSpeed->setEnabled(_enable);
     this->ui->tableViewFrame->setEnabled(_enable);
     this->ui->viewFrame->setEnabled(_enable);
+    this->ui->labelSpeed->setEnabled(_enable);
+    this->ui->buttonTool->setEnabled(_enable);
 }
 
 void MainWindow::connectSignalSlots()
@@ -211,7 +240,7 @@ void MainWindow::connectSignalSlots()
                   SLOT(slot_drawFrameBboxes(const Frame))
                   );
 
-    this->connect(this->ui->splitter,
+    this->connect(this->ui->splitter_2,
                   SIGNAL(splitterMoved(int,int)),
                   this,
                   SLOT(slot_resizeFrame())
@@ -398,37 +427,37 @@ void MainWindow::restoreJson()
 
 void MainWindow::connectMainWindow2DialogFrameBased()
 {
-    this->connect(this->frameDialog,
-                  SIGNAL(signal_rewindButtonPressed()),
+    this->connect(this->ui->buttonRewindF_3,
+                  SIGNAL(pressed()),
                   this,
-                  SLOT(slot_rewindButtonPressed())
+                  SLOT(slot_rewindButtonPressed2())
                   );
 
-    this->connect(this->frameDialog,
-                  SIGNAL(signal_backButtonPressed()),
+    this->connect(this->ui->buttonRewind_3,
+                  SIGNAL(pressed()),
                   this,
-                  SLOT(slot_backButtonPressed())
+                  SLOT(slot_backButtonPressed2())
                   );
 
-    this->connect(this->frameDialog,
-                  SIGNAL(signal_forwardButtonPressed()),
+    this->connect(this->ui->buttonForward_3,
+                  SIGNAL(pressed()),
                   this,
-                  SLOT(slot_forwardButtonPressed())
+                  SLOT(slot_forwardButtonPressed2())
                   );
 
-    this->connect(this->frameDialog,
-                  SIGNAL(signal_fastfButtonPressed()),
+    this->connect(this->ui->buttonForwardF_3,
+                  SIGNAL(pressed()),
                   this,
-                  SLOT(slot_fastfButtonPressed())
+                  SLOT(slot_fastfButtonPressed2())
                   );
 
-    this->connect(this->frameDialog,
+    this->connect(this,
                   SIGNAL(signal_frameBasedInsertAccepted(const FrameBasedData)),
                   this,
                   SLOT(slot_frameBasedInsertAccepted(const FrameBasedData))
                   );
 
-    this->connect(this->frameDialog,
+    this->connect(this,
                   SIGNAL(signal_frameBasedAlterAccepted(const FrameBasedData, const int)),
                   this,
                   SLOT(slot_frameBasedAlterAccepted(const FrameBasedData, const int))
@@ -439,6 +468,20 @@ void MainWindow::connectMainWindow2DialogFrameBased()
                   this,
                   SLOT(on_sectionClicked(int))
                   );
+
+    this->connect(this->ui->buttonBox_2,
+                  SIGNAL(accepted()),
+                  this,
+                  SLOT(slot_buttonBoxAccepted())
+                  );
+
+    this->connect(this->ui->buttonBox_2,
+                  SIGNAL(rejected()),
+                  this,
+                  SLOT(slot_buttonBoxRejected())
+                  );
+
+
 }
 
 void MainWindow::slot_Fshortcut()
@@ -446,6 +489,7 @@ void MainWindow::slot_Fshortcut()
     if(!this->isPlaying())
     {
         this->slot_viewFrameNewFrameMenu();
+        this->enableFrameBased(true);
     }
 }
 
@@ -672,12 +716,10 @@ void MainWindow::slot_spinBoxSpeedValueChanged(int _value)
 
 void MainWindow::slot_tableViewFrameDoubleClicked(const QModelIndex _index)
 {
-    this->frameDialog = new DialogFrameBased(this);
     this->connectMainWindow2DialogFrameBased();
+    this->enableFrameBased(true);
 
-    this->frameDialog->setModal(true);
-    this->frameDialog->show();
-    this->frameDialog->slot_initializeDialog(*(this->singleton), _index);
+    //this->frameDialog->slot_initializeDialog(*(this->singleton), _index);
 }
 
 void MainWindow::slot_keepVideoRunning()
@@ -742,13 +784,11 @@ void MainWindow::slot_viewFrameNewBoxMenu()
 void MainWindow::slot_viewFrameNewFrameMenu()
 {
     int nextFrameId = static_cast<int>(this->manager->getFrameId());
+    this->enableFrameBased(true);
 
-    this->frameDialog = new DialogFrameBased(this);
     this->connectMainWindow2DialogFrameBased();
 
-    this->frameDialog->setModal(true);
-    this->frameDialog->show();
-    this->frameDialog->slot_initializeDialog(*(this->singleton), nextFrameId);
+    //this->frameDialog->slot_initializeDialog(*(this->singleton), nextFrameId);
 }
 
 void MainWindow::slot_viewFrameRemoveBoxMenu()
@@ -776,6 +816,7 @@ void MainWindow::slot_tableViewContextMenu(const QPoint &_point)
 
 void MainWindow::slot_tableViewChangeAnnotation()
 {
+    this->enableFrameBased(true);
     QModelIndex index = this->ui->tableViewFrame->currentIndex();
     this->slot_tableViewFrameDoubleClicked(index);
 }
@@ -838,4 +879,214 @@ void MainWindow::slot_resizeFrame()
         int frame = static_cast<int>(this->manager->getFrameId());
         this->updateFrame(frame - 1);
     }
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+
+int MainWindow::getIniFrameValue()
+{
+    return this->ui->spinBoxInitialFrame_2->value();
+}
+
+int MainWindow::getEndFrameValue()
+{
+    return this->ui->spinBoxFinalFrame_2->value();
+}
+
+QString MainWindow::getInfoValue()
+{
+    return this->ui->lineEditName_2->text();
+}
+
+
+
+void MainWindow::initializeComboboxes()
+{
+    QStringList categoryList, labelList;
+    QSet<QString> categorySet, labelSet;
+
+    // populate comboBoxCategory
+    multimap<string, string>::iterator it;
+    for(it = this->singleton->attributes.begin(); it != this->singleton->attributes.end(); it++)
+    {
+        categorySet.insert(QString::fromStdString(it->first));
+    }
+    categoryList.append(categorySet.toList());
+
+    this->categoryModel = new QStringListModel(this);
+    this->categoryModel->setStringList(categoryList);
+    this->ui->comboBoxCategory_2->setModel(this->categoryModel);
+
+    // populate comboBoxLabel
+    string category = this->ui->comboBoxCategory_2->currentText().toStdString();
+    for(it = this->singleton->attributes.lower_bound(category); it != this->singleton->attributes.upper_bound(category); it++)
+    {
+        labelSet.insert(QString::fromStdString(it->second));
+    }
+    labelList.append(labelSet.toList());
+
+    this->labelModel = new QStringListModel(this);
+    this->labelModel->setStringList(labelList);
+    this->ui->comboBoxLabel_2->setModel(this->labelModel);
+}
+
+void MainWindow::enableDisableButtonBox()
+{
+    this->ui->spinBoxFinalFrame_2->setMinimum(this->getIniFrameValue());
+
+    this->ui->buttonBox_2->setEnabled(true);
+    // this->ui->spinBoxInitialFrame->setMaximum(finalFrame);
+    // this->ui->spinBoxFinalFrame->setMaximum(initFrame);
+
+}
+
+void MainWindow::slot_initializeDialog(Core &_singleton, const int _frameId)
+{
+    this->manipulation = mode::insert;
+
+    this->frameId = _frameId - 1;
+    this->singleton = &_singleton;
+    this->totalFrames2 = this->singleton->frames.size();
+
+    this->ui->buttonBox_2->setEnabled(false);
+
+    this->ui->spinBoxInitialFrame_2->setMinimum(1);
+    this->ui->spinBoxInitialFrame_2->setMaximum(this->totalFrames2);
+    this->ui->spinBoxFinalFrame_2->setMinimum(this->getIniFrameValue());
+    this->ui->spinBoxFinalFrame_2->setMaximum(this->totalFrames2);
+
+    this->initializeComboboxes();
+
+    this->ui->spinBoxInitialFrame_2->setValue(this->frameId);
+    this->ui->spinBoxFinalFrame_2->setValue(this->frameId);
+}
+
+void MainWindow::slot_initializeDialog(Core &_singleton, const QModelIndex _index)
+{
+    this->manipulation = mode::alter;
+
+    this->indexId = _index.row();
+    this->singleton = &_singleton;
+    this->totalFrames2 = this->singleton->frames.size();
+
+    FrameBasedData frameData = this->singleton->frameData.at(_index.row());
+
+    this->ui->spinBoxInitialFrame_2->setMinimum(1);
+    this->ui->spinBoxInitialFrame_2->setMaximum(this->totalFrames2);
+    this->ui->spinBoxFinalFrame_2->setMinimum(1);
+    this->ui->spinBoxFinalFrame_2->setMaximum(this->totalFrames2);
+
+    this->initializeComboboxes();
+
+    this->ui->lineEditName_2->setText(QString::fromStdString(frameData.getInfo()));
+    this->ui->comboBoxCategory_2->setCurrentText(QString::fromStdString(frameData.getCategory()));
+    this->ui->comboBoxLabel_2->setCurrentText(QString::fromStdString(frameData.getLabel()));
+    this->ui->spinBoxInitialFrame_2->setValue(frameData.getInitialFrameId());
+    this->ui->spinBoxFinalFrame_2->setValue(frameData.getFinalFrameId());
+}
+
+void MainWindow::slot_comboBoxCategoryActivated(const QString &_text)
+{
+    QStringList labelList;
+    QSet<QString> labelSet;
+
+    // populate comboBoxLabel
+    string category = _text.toStdString();
+    multimap<string, string>::iterator it;
+    for(it = this->singleton->attributes.lower_bound(category); it != this->singleton->attributes.upper_bound(category); it++)
+    {
+        labelSet.insert(QString::fromStdString(it->second));
+    }
+    labelList.append(labelSet.toList());
+
+    this->labelModel->setStringList(labelList);
+    this->ui->comboBoxLabel_2->setModel(this->labelModel);
+}
+
+void MainWindow::slot_rewindButtonPressed2()
+{
+    int nextFrameId = static_cast<int>((this->frameId + 1) - std::round(+this->totalFrames2 / 100.0));
+    if(nextFrameId < 1)
+    {
+        nextFrameId = 1;
+    }
+
+    this->frameId = nextFrameId;
+    this->ui->spinBoxFinalFrame_2->setValue(this->frameId);
+
+}
+
+void MainWindow::slot_backButtonPressed2()
+{
+    int nextFrameId = (this->frameId - 1);
+    if(nextFrameId < 1)
+    {
+        nextFrameId = 1;
+    }
+
+    this->frameId = nextFrameId;
+    this->ui->spinBoxFinalFrame_2->setValue(this->frameId);
+
+}
+
+void MainWindow::slot_forwardButtonPressed2()
+{
+    int nextFrameId = (this->frameId + 1);
+    if(nextFrameId > this->totalFrames2)
+    {
+        nextFrameId = this->totalFrames2;
+    }
+
+    this->frameId = nextFrameId;
+    this->ui->spinBoxFinalFrame_2->setValue(this->frameId);
+
+}
+
+void MainWindow::slot_fastfButtonPressed2()
+{
+    int nextFrameId = static_cast<int>((this->frameId + 1) + std::round(+this->totalFrames2 / 100.0));
+    if(nextFrameId > this->totalFrames2)
+    {
+        nextFrameId = this->totalFrames2;
+    }
+
+    this->frameId = nextFrameId;
+    this->ui->spinBoxFinalFrame_2->setValue(this->frameId);
+
+}
+
+void MainWindow::slot_spinBoxValueChanged()
+{
+    this->enableDisableButtonBox();
+}
+
+void MainWindow::slot_buttonBoxAccepted()
+{
+    FrameBasedData data = FrameBasedData(this->ui->spinBoxInitialFrame_2->value(),
+                                         this->ui->spinBoxFinalFrame_2->value(),
+                                         this->ui->comboBoxCategory_2->currentText().toStdString(),
+                                         this->ui->comboBoxLabel_2->currentText().toStdString(),
+                                         this->ui->lineEditName_2->text().toStdString());
+
+    if(this->manipulation == mode::insert)
+    {
+        emit this->signal_frameBasedInsertAccepted(data);
+    }
+    else if(this->manipulation == mode::alter)
+    {
+        emit this->signal_frameBasedAlterAccepted(data, this->indexId);
+    }
+
+    this->enableFrameBased(false);
+}
+
+void MainWindow::slot_buttonBoxRejected()
+{
+    this->enableFrameBased(false);
+}
+
+void MainWindow::slot_lineEditInfoChanged()
+{
+
+    this->enableDisableButtonBox();
 }

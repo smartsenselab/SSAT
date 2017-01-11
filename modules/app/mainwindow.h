@@ -26,6 +26,13 @@
 
 #include "core.h"
 
+
+#include <cmath>
+#include <QDialog>
+#include <QtCore>
+#include <QtGui>
+
+
 namespace Ui
 {
 class MainWindow;
@@ -58,7 +65,6 @@ private:
     Core *singleton = NULL;
 
     DialogAnnotation *annotationDialog = NULL;
-    DialogFrameBased *frameDialog = NULL;
 
     QBoundingBox *frameScene = NULL;
     QFrameBasedTableModel *tableModel = NULL;
@@ -74,16 +80,26 @@ private:
 
     QHeaderView *m_pHeaderView;
 
+
+    QStringListModel *categoryModel = NULL;
+    QStringListModel *labelModel = NULL;
+
 public:
     MainWindow(QWidget *parent = 0);
     virtual ~MainWindow();
     void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
+
+
+    int getIniFrameValue();
+    int getEndFrameValue();
+    QString getInfoValue();
 
 protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private:
     void enableWidgets(const bool _enable);
+    void enableFrameBased(const bool _enable);
     void connectSignalSlots();
     void setShortcuts();
     void setTableModel();
@@ -99,7 +115,14 @@ private:
     void updateFrame(const int _frameId);
     void restoreJson();
 
+    // FrameBased:
+
     void connectMainWindow2DialogFrameBased();
+    void initializeComboboxes();
+    void enableDisableButtonBox();
+
+    int frameId, indexId, totalFrames2;
+    mode manipulation;
 
 public slots:
     void slot_Fshortcut();
@@ -151,9 +174,33 @@ public slots:
 
     void on_sectionClicked(int index);
 
+    // FrameBased:
+
+    void slot_rewindButtonPressed2();
+    void slot_backButtonPressed2();
+    void slot_forwardButtonPressed2();
+    void slot_fastfButtonPressed2();
+    void slot_spinBoxValueChanged();
+    void slot_buttonBoxAccepted();
+    void slot_buttonBoxRejected();
+    void slot_lineEditInfoChanged();
+
+
+    void slot_initializeDialog(Core &_singleton, const int _frameId);
+    void slot_initializeDialog(Core &_singleton, const QModelIndex _index);
+    void slot_comboBoxCategoryActivated(const QString &_text);
+
 signals:
     void signal_drawFrameBboxes(const Frame _frame);
     void signal_sortTable(int);
+
+    // FrameBased:
+
+    void signal_buttonBoxAccepted();
+    void signal_frameBasedRejected();
+
+    void signal_frameBasedInsertAccepted(const FrameBasedData _data);
+    void signal_frameBasedAlterAccepted(const FrameBasedData _data, const int _index);
 };
 
 #endif
