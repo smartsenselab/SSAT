@@ -68,8 +68,16 @@ void MainWindow::enableFrameBased(const bool _enable)
 {
     this->ui->comboBoxCategory_2->clear();
     this->ui->comboBoxLabel_2->clear();
-    this->ui->spinBoxInitialFrame_2->setValue(this->frameId);
-    this->ui->spinBoxInitialFrame_2->setValue(this->frameId);
+    if(_enable == false)
+    {
+        this->ui->spinBoxFinalFrame_2->clear();
+        this->ui->spinBoxInitialFrame_2->clear();
+    }
+    else
+    {
+        this->ui->spinBoxInitialFrame_2->setValue(this->ui->sliderFrame->value());
+        this->ui->spinBoxFinalFrame_2->setValue(this->ui->sliderFrame->value());
+    }
     this->ui->lineEditName_2->clear();
 
     this->ui->comboBoxCategory_2->setEnabled(_enable);
@@ -452,7 +460,7 @@ void MainWindow::connectMainWindow2DialogFrameBased()
                   );
 
     this->connect(this,
-                  SIGNAL(signal_frameBasedInsertAccepted(const FrameBasedData)),
+                  SIGNAL(signal_frameBasedInsertAccepted(FrameBasedData)),//SINAL DO ADICIONAR NEW)
                   this,
                   SLOT(slot_frameBasedInsertAccepted(const FrameBasedData))
                   );
@@ -719,7 +727,7 @@ void MainWindow::slot_tableViewFrameDoubleClicked(const QModelIndex _index)
     this->connectMainWindow2DialogFrameBased();
     this->enableFrameBased(true);
 
-    //this->frameDialog->slot_initializeDialog(*(this->singleton), _index);
+    this->slot_initializeDialog(*(this->singleton), _index);
 }
 
 void MainWindow::slot_keepVideoRunning()
@@ -757,6 +765,8 @@ void MainWindow::slot_viewFrameContextMenu(const QPoint &_point)
     }
 }
 
+
+
 void MainWindow::slot_viewFrameNewBoxMenu()
 {
     if (this->isPlaying() == false)
@@ -783,12 +793,28 @@ void MainWindow::slot_viewFrameNewBoxMenu()
 
 void MainWindow::slot_viewFrameNewFrameMenu()
 {
-    int nextFrameId = static_cast<int>(this->manager->getFrameId());
     this->enableFrameBased(true);
 
     this->connectMainWindow2DialogFrameBased();
 
-    //this->frameDialog->slot_initializeDialog(*(this->singleton), nextFrameId);
+    this->slot_initializeDialog(*(this->singleton), this->ui->sliderFrame->value() + 1);
+
+    this->manipulation = mode::insert;
+
+    this->frameId = this->ui->sliderFrame->value();
+    this->totalFrames2 = this->singleton->frames.size();
+
+    //this->ui->buttonBox_2->setEnabled(false);
+
+    this->ui->spinBoxInitialFrame_2->setMinimum(1);
+    this->ui->spinBoxInitialFrame_2->setMaximum(this->totalFrames2);
+    this->ui->spinBoxFinalFrame_2->setMinimum(this->getIniFrameValue());
+    this->ui->spinBoxFinalFrame_2->setMaximum(this->totalFrames2);
+
+    this->initializeComboboxes();
+
+    this->ui->spinBoxInitialFrame_2->setValue(this->frameId);
+    this->ui->spinBoxFinalFrame_2->setValue(this->frameId);
 }
 
 void MainWindow::slot_viewFrameRemoveBoxMenu()
@@ -853,6 +879,8 @@ void MainWindow::slot_frameBasedInsertAccepted(const FrameBasedData _data)
 
 void MainWindow::slot_frameBasedAlterAccepted(const FrameBasedData _data, const int _index)
 {
+    FrameBasedData frameData = this->singleton->frameData.at(_index);
+    frameData.setCategory(this->ui->comboBoxCategory_2->currentText().toStdString());
     this->tableModel->changeRow(_data, _index);
 }
 
@@ -944,11 +972,11 @@ void MainWindow::slot_initializeDialog(Core &_singleton, const int _frameId)
 {
     this->manipulation = mode::insert;
 
-    this->frameId = _frameId - 1;
+    this->frameId = this->ui->spinBoxFinalFrame_2->value();
     this->singleton = &_singleton;
     this->totalFrames2 = this->singleton->frames.size();
 
-    this->ui->buttonBox_2->setEnabled(false);
+    //this->ui->buttonBox_2->setEnabled(false);
 
     this->ui->spinBoxInitialFrame_2->setMinimum(1);
     this->ui->spinBoxInitialFrame_2->setMaximum(this->totalFrames2);
@@ -963,6 +991,11 @@ void MainWindow::slot_initializeDialog(Core &_singleton, const int _frameId)
 
 void MainWindow::slot_initializeDialog(Core &_singleton, const QModelIndex _index)
 {
+
+    QMessageBox::information(
+            this,
+            tr("Application Name"),
+            tr("An information message.") );
     this->manipulation = mode::alter;
 
     this->indexId = _index.row();
@@ -983,6 +1016,7 @@ void MainWindow::slot_initializeDialog(Core &_singleton, const QModelIndex _inde
     this->ui->comboBoxLabel_2->setCurrentText(QString::fromStdString(frameData.getLabel()));
     this->ui->spinBoxInitialFrame_2->setValue(frameData.getInitialFrameId());
     this->ui->spinBoxFinalFrame_2->setValue(frameData.getFinalFrameId());
+    // Quando der o OK, salvar os novos valores no singleton
 }
 
 void MainWindow::slot_comboBoxCategoryActivated(const QString &_text)
@@ -1005,7 +1039,7 @@ void MainWindow::slot_comboBoxCategoryActivated(const QString &_text)
 
 void MainWindow::slot_rewindButtonPressed2()
 {
-    int nextFrameId = static_cast<int>((this->frameId + 1) - std::round(+this->totalFrames2 / 100.0));
+    int nextFrameId = static_cast<int>((this->ui->spinBoxFinalFrame_2->value() + 1) - std::round(+this->totalFrames2 / 100.0));
     if(nextFrameId < 1)
     {
         nextFrameId = 1;
@@ -1018,7 +1052,7 @@ void MainWindow::slot_rewindButtonPressed2()
 
 void MainWindow::slot_backButtonPressed2()
 {
-    int nextFrameId = (this->frameId - 1);
+    int nextFrameId = (this->ui->spinBoxFinalFrame_2->value() - 1);
     if(nextFrameId < 1)
     {
         nextFrameId = 1;
@@ -1031,7 +1065,7 @@ void MainWindow::slot_backButtonPressed2()
 
 void MainWindow::slot_forwardButtonPressed2()
 {
-    int nextFrameId = (this->frameId + 1);
+    int nextFrameId = (this->ui->spinBoxFinalFrame_2->value() + 1);
     if(nextFrameId > this->totalFrames2)
     {
         nextFrameId = this->totalFrames2;
@@ -1044,7 +1078,7 @@ void MainWindow::slot_forwardButtonPressed2()
 
 void MainWindow::slot_fastfButtonPressed2()
 {
-    int nextFrameId = static_cast<int>((this->frameId + 1) + std::round(+this->totalFrames2 / 100.0));
+    int nextFrameId = static_cast<int>((this->ui->spinBoxFinalFrame_2->value() + 1) + std::round(+this->totalFrames2 / 100.0));
     if(nextFrameId > this->totalFrames2)
     {
         nextFrameId = this->totalFrames2;
