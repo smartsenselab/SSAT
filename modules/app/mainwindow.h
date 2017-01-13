@@ -77,6 +77,7 @@ private:
 public:
     MainWindow(QWidget *parent = 0);
     virtual ~MainWindow();
+    QString videopath;
     void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
 
 protected:
