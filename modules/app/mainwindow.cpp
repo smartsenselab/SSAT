@@ -63,9 +63,11 @@ void MainWindow::isPlaying(const bool _enable)
     }
 }
 
+bool frameBasedIsEnable = false;
 
 void MainWindow::enableFrameBased(const bool _enable)
 {
+    frameBasedIsEnable = _enable;
     this->ui->comboBoxCategory_2->clear();
     this->ui->comboBoxLabel_2->clear();
     if(_enable == false)
@@ -84,10 +86,6 @@ void MainWindow::enableFrameBased(const bool _enable)
     this->ui->comboBoxLabel_2->setEnabled(_enable);
     this->ui->spinBoxFinalFrame_2->setEnabled(_enable);
     this->ui->spinBoxInitialFrame_2->setEnabled(_enable);
-    this->ui->buttonForward_3->setEnabled(_enable);
-    this->ui->buttonForwardF_3->setEnabled(_enable);
-    this->ui->buttonRewindF_3->setEnabled(_enable);
-    this->ui->buttonRewind_3->setEnabled(_enable);
     this->ui->lineEditName_2->setEnabled(_enable);
     this->ui->buttonBox_2->setEnabled(_enable);
     this->ui->labelCategory_2->setEnabled(_enable);
@@ -322,7 +320,7 @@ void MainWindow::pauseVideo()
     }
 }
 
-void MainWindow::playVideo()
+void MainWindow::playVideo() // AQUI
 {
     if (this->playerTime == NULL)
     {
@@ -435,30 +433,6 @@ void MainWindow::restoreJson()
 
 void MainWindow::connectMainWindow2DialogFrameBased()
 {
-    this->connect(this->ui->buttonRewindF_3,
-                  SIGNAL(pressed()),
-                  this,
-                  SLOT(slot_rewindButtonPressed2())
-                  );
-
-    this->connect(this->ui->buttonRewind_3,
-                  SIGNAL(pressed()),
-                  this,
-                  SLOT(slot_backButtonPressed2())
-                  );
-
-    this->connect(this->ui->buttonForward_3,
-                  SIGNAL(pressed()),
-                  this,
-                  SLOT(slot_forwardButtonPressed2())
-                  );
-
-    this->connect(this->ui->buttonForwardF_3,
-                  SIGNAL(pressed()),
-                  this,
-                  SLOT(slot_fastfButtonPressed2())
-                  );
-
     this->connect(this,
                   SIGNAL(signal_frameBasedInsertAccepted(FrameBasedData)),//SINAL DO ADICIONAR NEW)
                   this,
@@ -646,6 +620,12 @@ void MainWindow::slot_playButtonPressed()
 void MainWindow::slot_rewindButtonPressed()
 {
     int nextFrameId = static_cast<int>(this->manager->getFrameId());
+
+    if(frameBasedIsEnable)
+    {
+        this->ui->spinBoxFinalFrame_2->setValue(nextFrameId);
+    }
+
     this->slot_rewindButtonPressed(nextFrameId);
 }
 
@@ -658,11 +638,22 @@ void MainWindow::slot_rewindButtonPressed(const int _frameId)
     }
 
     this->updateFrame(nextFrameId);
+
+    if(frameBasedIsEnable)
+    {
+        this->ui->spinBoxFinalFrame_2->setValue(nextFrameId);
+    }
 }
 
 void MainWindow::slot_backButtonPressed()
 {
     int nextFrameId = static_cast<int>(this->manager->getFrameId());
+
+    if(frameBasedIsEnable)
+    {
+        this->ui->spinBoxFinalFrame_2->setValue(nextFrameId);
+    }
+
     this->slot_backButtonPressed(nextFrameId);
 }
 
@@ -675,11 +666,22 @@ void MainWindow::slot_backButtonPressed(const int _frameId)
     }
 
     this->updateFrame(nextFrameId);
+
+    if(frameBasedIsEnable)
+    {
+        this->ui->spinBoxFinalFrame_2->setValue(nextFrameId);
+    }
 }
 
 void MainWindow::slot_forwardButtonPressed()
 {
     int nextFrameId = static_cast<int>(this->manager->getFrameId());
+
+    if(frameBasedIsEnable)
+    {
+        this->ui->spinBoxFinalFrame_2->setValue(nextFrameId);
+    }
+
     this->slot_forwardButtonPressed(nextFrameId);
 }
 
@@ -692,11 +694,22 @@ void MainWindow::slot_forwardButtonPressed(const int _frameId)
     }
 
     this->updateFrame(nextFrameId);
+
+    if(frameBasedIsEnable)
+    {
+        this->ui->spinBoxFinalFrame_2->setValue(nextFrameId);
+    }
 }
 
 void MainWindow::slot_fastfButtonPressed()
 {
     int nextFrameId = static_cast<int>(this->manager->getFrameId());
+
+    if(frameBasedIsEnable)
+    {
+        this->ui->spinBoxFinalFrame_2->setValue(nextFrameId);
+    }
+
     this->slot_fastfButtonPressed(nextFrameId);
 }
 
@@ -709,6 +722,11 @@ void MainWindow::slot_fastfButtonPressed(const int _frameId)
     }
 
     this->updateFrame(nextFrameId);
+
+    if(frameBasedIsEnable)
+    {
+        this->ui->spinBoxFinalFrame_2->setValue(nextFrameId);
+    }
 }
 
 void MainWindow::slot_stopButtonPressed()
@@ -748,6 +766,11 @@ void MainWindow::slot_keepVideoRunning()
         {
             this->updateFrame(nextFrameId);
         }
+    }
+
+    if(frameBasedIsEnable)
+    {
+        this->ui->spinBoxFinalFrame_2->setValue(nextFrameId);
     }
 }
 
@@ -992,10 +1015,10 @@ void MainWindow::slot_initializeDialog(Core &_singleton, const int _frameId)
 void MainWindow::slot_initializeDialog(Core &_singleton, const QModelIndex _index)
 {
 
-    QMessageBox::information(
-            this,
-            tr("Application Name"),
-            tr("An information message.") );
+//    QMessageBox::information(
+//            this,
+//            tr("Application Name"),
+//            tr("An information message.") );
     this->manipulation = mode::alter;
 
     this->indexId = _index.row();
@@ -1035,58 +1058,6 @@ void MainWindow::slot_comboBoxCategoryActivated(const QString &_text)
 
     this->labelModel->setStringList(labelList);
     this->ui->comboBoxLabel_2->setModel(this->labelModel);
-}
-
-void MainWindow::slot_rewindButtonPressed2()
-{
-    int nextFrameId = static_cast<int>((this->ui->spinBoxFinalFrame_2->value() + 1) - std::round(+this->totalFrames2 / 100.0));
-    if(nextFrameId < 1)
-    {
-        nextFrameId = 1;
-    }
-
-    this->frameId = nextFrameId;
-    this->ui->spinBoxFinalFrame_2->setValue(this->frameId);
-
-}
-
-void MainWindow::slot_backButtonPressed2()
-{
-    int nextFrameId = (this->ui->spinBoxFinalFrame_2->value() - 1);
-    if(nextFrameId < 1)
-    {
-        nextFrameId = 1;
-    }
-
-    this->frameId = nextFrameId;
-    this->ui->spinBoxFinalFrame_2->setValue(this->frameId);
-
-}
-
-void MainWindow::slot_forwardButtonPressed2()
-{
-    int nextFrameId = (this->ui->spinBoxFinalFrame_2->value() + 1);
-    if(nextFrameId > this->totalFrames2)
-    {
-        nextFrameId = this->totalFrames2;
-    }
-
-    this->frameId = nextFrameId;
-    this->ui->spinBoxFinalFrame_2->setValue(this->frameId);
-
-}
-
-void MainWindow::slot_fastfButtonPressed2()
-{
-    int nextFrameId = static_cast<int>((this->ui->spinBoxFinalFrame_2->value() + 1) + std::round(+this->totalFrames2 / 100.0));
-    if(nextFrameId > this->totalFrames2)
-    {
-        nextFrameId = this->totalFrames2;
-    }
-
-    this->frameId = nextFrameId;
-    this->ui->spinBoxFinalFrame_2->setValue(this->frameId);
-
 }
 
 void MainWindow::slot_spinBoxValueChanged()

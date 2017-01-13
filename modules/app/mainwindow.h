@@ -176,10 +176,6 @@ public slots:
 
     // FrameBased:
 
-    void slot_rewindButtonPressed2();
-    void slot_backButtonPressed2();
-    void slot_forwardButtonPressed2();
-    void slot_fastfButtonPressed2();
     void slot_spinBoxValueChanged();
     void slot_buttonBoxAccepted();
     void slot_buttonBoxRejected();
