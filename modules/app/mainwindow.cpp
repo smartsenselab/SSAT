@@ -601,6 +601,10 @@ void MainWindow::slot_slideVideo(int _frameId)
 {
     std::cout << _frameId << std::endl;
     this->updateFrame(_frameId);
+    if(frameBasedIsEnable)
+    {
+        this->ui->spinBoxFinalFrame_2->setValue(_frameId);
+    }
 }
 
 void MainWindow::slot_playButtonPressed()
