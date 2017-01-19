@@ -19,7 +19,6 @@
 #include "core.h"
 
 #include "dialogannotation.h"
-#include "dialogframebased.h"
 #include "framebaseddata.h"
 #include "qboundingbox.h"
 #include "qframebasedtablemodel.h"
@@ -74,11 +73,14 @@ private:
 
     VideoManager *manager = NULL;
 
+    // FrameBased:
+    int frameId, indexId;
+    mode manipulation;
+
 public:
     MainWindow(QWidget *parent = 0);
     virtual ~MainWindow();
     void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
-
 
     int getIniFrameValue();
     int getEndFrameValue();
@@ -107,10 +109,8 @@ private:
 
     // FrameBased:
     void initializeComboboxes();
+    void initializeComboboxes(const QString _category);
     void enableDisableButtonBox();
-
-    int frameId, indexId, totalFrames2;
-    mode manipulation;
 
 public slots:
     void slot_Fshortcut();
@@ -168,8 +168,8 @@ public slots:
     void slot_lineEditInfoChanged();
     void slot_spinBoxValueChanged();
 
-    void slot_initializeDialog(Core &_singleton, const int _frameId);
-    void slot_initializeDialog(Core &_singleton, const QModelIndex _index);
+    void slot_initializeDialog();
+    void slot_initializeDialog(const QModelIndex _index);
     void slot_comboBoxCategoryActivated(const QString &_text);
 
 signals:
