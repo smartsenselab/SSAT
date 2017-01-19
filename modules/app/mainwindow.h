@@ -1,12 +1,11 @@
 #ifndef mainwindow_h
 #define mainwindow_h
 
+#include <cmath>
 #include <iostream>
 #include <fstream>
 
-#include "qsizegrip.h"
-#include "qdebug.h"
-
+#include <QDialog>
 #include <QFileDialog>
 #include <QGraphicsScene>
 #include <QMainWindow>
@@ -17,21 +16,14 @@
 #include <QTime>
 #include <QTimer>
 
+#include "core.h"
+
 #include "dialogannotation.h"
 #include "dialogframebased.h"
 #include "framebaseddata.h"
 #include "qboundingbox.h"
 #include "qframebasedtablemodel.h"
 #include "videomanager.h"
-
-#include "core.h"
-
-
-#include <cmath>
-#include <QDialog>
-#include <QtCore>
-#include <QtGui>
-
 
 namespace Ui
 {
@@ -54,6 +46,7 @@ private:
 
     bool loaded;
     bool playing;
+    bool frameBasedIsEnable;
     double totalFrames;
     int speed;
 
@@ -70,19 +63,16 @@ private:
     QFrameBasedTableModel *tableModel = NULL;
     QGraphicsRectItem *rectangle = NULL;
 
-    VideoManager *manager;
-
-    QHeaderView *m_horiz_header;
+    QHeaderView *horizontalHeader = NULL;
 
     QString nome;
     int InitFrame;
     int EndFrame;
 
-    QHeaderView *m_pHeaderView;
-
-
     QStringListModel *categoryModel = NULL;
     QStringListModel *labelModel = NULL;
+
+    VideoManager *manager = NULL;
 
 public:
     MainWindow(QWidget *parent = 0);
@@ -116,8 +106,6 @@ private:
     void restoreJson();
 
     // FrameBased:
-
-    void connectMainWindow2DialogFrameBased();
     void initializeComboboxes();
     void enableDisableButtonBox();
 
@@ -175,12 +163,10 @@ public slots:
     void on_sectionClicked(int index);
 
     // FrameBased:
-
-    void slot_spinBoxValueChanged();
     void slot_buttonBoxAccepted();
     void slot_buttonBoxRejected();
     void slot_lineEditInfoChanged();
-
+    void slot_spinBoxValueChanged();
 
     void slot_initializeDialog(Core &_singleton, const int _frameId);
     void slot_initializeDialog(Core &_singleton, const QModelIndex _index);
@@ -191,12 +177,10 @@ signals:
     void signal_sortTable(int);
 
     // FrameBased:
-
     void signal_buttonBoxAccepted();
-    void signal_frameBasedRejected();
-
     void signal_frameBasedInsertAccepted(const FrameBasedData _data);
     void signal_frameBasedAlterAccepted(const FrameBasedData _data, const int _index);
+    void signal_frameBasedRejected();
 };
 
 #endif
