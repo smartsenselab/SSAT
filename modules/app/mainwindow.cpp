@@ -230,7 +230,7 @@ void MainWindow::connectSignalSlots()
     this->connect(this->horizontalHeader,
                   SIGNAL(sectionClicked(int)),
                   this,
-                  SLOT(on_sectionClicked(int))
+                  SLOT(slot_on_sectionClicked(int))
                   );
 
     this->connect(this->ui->comboBoxCategory,
@@ -251,8 +251,20 @@ void MainWindow::connectSignalSlots()
                   SLOT(slot_buttonBoxRejected())
                   );
 
+    this->connect(this->ui->spinBoxInitialFrame,
+                  SIGNAL(valueChanged(int)),
+                  this,
+                  SLOT(slot_spinBoxValueChanged())
+                  );
+
+    this->connect(this->ui->spinBoxFinalFrame,
+                  SIGNAL(valueChanged(int)),
+                  this,
+                  SLOT(slot_spinBoxValueChanged())
+                  );
+
     this->connect(this,
-                  SIGNAL(signal_frameBasedInsertAccepted(FrameBasedData)),//SINAL DO ADICIONAR NEW)
+                  SIGNAL(signal_frameBasedInsertAccepted(FrameBasedData)),
                   this,
                   SLOT(slot_frameBasedInsertAccepted(const FrameBasedData))
                   );
@@ -498,17 +510,47 @@ void MainWindow::initializeComboboxes()
 
 void MainWindow::initializeComboboxes(QString const _category)
 {
-    this->ui->comboBoxCategory->setCurrentText(_category);
-    this->initializeComboboxes();
+    QStringList categoryList, labelList;
+    QSet<QString> categorySet, labelSet;
+    string category = _category.toStdString();
+
+    // populate comboBoxCategory
+    multimap<string, string>::iterator it;
+    for(it = this->singleton->attributes.begin(); it != this->singleton->attributes.end(); it++)
+    {
+        categorySet.insert(QString::fromStdString(it->first));
+    }
+    categoryList.append(categorySet.toList());
+
+    this->categoryModel = new QStringListModel(this);
+    this->categoryModel->setStringList(categoryList);
+    this->ui->comboBoxCategory->setModel(this->categoryModel);
+
+    // populate comboBoxLabel
+    for(it = this->singleton->attributes.lower_bound(category); it != this->singleton->attributes.upper_bound(category); it++)
+    {
+        labelSet.insert(QString::fromStdString(it->second));
+    }
+    labelList.append(labelSet.toList());
+
+    this->labelModel = new QStringListModel(this);
+    this->labelModel->setStringList(labelList);
+    this->ui->comboBoxLabel->setModel(this->labelModel);
 }
 
 void MainWindow::enableDisableButtonBox()
 {
-    this->ui->spinBoxFinalFrame->setMinimum(this->getIniFrameValue());
+    int iniIndex = this->ui->spinBoxInitialFrame->value();
+    int endIndex = this->ui->spinBoxFinalFrame->value();
 
-    this->ui->buttonBoxOKcancel->setEnabled(true);
-    // this->ui->spinBoxInitialFrame->setMaximum(finalFrame);
-    // this->ui->spinBoxFinalFrame->setMaximum(initFrame);
+    if(endIndex < iniIndex)
+    {
+        this->ui->buttonBoxOKcancel->setEnabled(false);
+    }
+    else
+    {
+        this->ui->buttonBoxOKcancel->setEnabled(true);
+    }
 }
 
 void MainWindow::slot_Fshortcut()
@@ -959,7 +1001,7 @@ void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
     this->singleton->frames[nextFrameId - 1].addBox(temp_id + "_" + temp_key, _box);
 }
 
-void MainWindow::on_sectionClicked(int index)
+void MainWindow::slot_on_sectionClicked(int index)
 {
     emit signal_sortTable(index);
 }
@@ -1029,7 +1071,6 @@ void MainWindow::slot_initializeDialog(const QModelIndex _index)
     this->ui->comboBoxLabel->setCurrentText(QString::fromStdString(frameData.getLabel()));
     this->ui->spinBoxInitialFrame->setValue(frameData.getInitialFrameId());
     this->ui->spinBoxFinalFrame->setValue(frameData.getFinalFrameId());
-    // Quando der o OK, salvar os novos valores no singleton
 }
 
 void MainWindow::slot_comboBoxCategoryActivated(const QString &_text)

@@ -160,7 +160,7 @@ public slots:
     void slot_addBoundingBoxToCore(const Rect _box);
     void slot_resizeFrame();
 
-    void on_sectionClicked(int index);
+    void slot_on_sectionClicked(int index);
 
     // FrameBased:
     void slot_buttonBoxAccepted();
