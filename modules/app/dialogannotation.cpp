@@ -1,5 +1,6 @@
 #include "dialogannotation.h"
 #include "ui_dialogannotation.h"
+#include <qdebug.h>
 
 DialogAnnotation::DialogAnnotation(QWidget *parent) :
     QDialog(parent),
@@ -91,6 +92,12 @@ void DialogAnnotation::slot_initializeDialog(Core &_singleton)
 
     QModelIndex first = this->qStandardModel->index(0, 0, QModelIndex());
     this->ui->treeViewAttributes->setCurrentIndex(first);
+
+    int row = this->qStandardModel->rowCount();
+    if(row == 0){
+        this->ui->pushButtonInsertLabel->setDisabled(true);
+        this->ui->pushButtonRemove->setDisabled(true);
+    }//desabilitar botao de inserie e remover se nao existirem categorias
 }
 
 void DialogAnnotation::slot_insertCategoryPressed()
@@ -103,6 +110,9 @@ void DialogAnnotation::slot_insertCategoryPressed()
     QModelIndex index = this->qStandardModel->index(row, 0);
     this->ui->treeViewAttributes->setCurrentIndex(index);
     this->ui->treeViewAttributes->edit(index);
+
+    this->ui->pushButtonInsertLabel->setEnabled(true);
+    this->ui->pushButtonRemove->setEnabled(true);
 }
 
 void DialogAnnotation::slot_insertLabelPressed()
@@ -131,6 +141,11 @@ void DialogAnnotation::slot_removePressed()
     QModelIndex parent = this->ui->treeViewAttributes->currentIndex().parent();
 
     this->qStandardModel->removeRows(row, 1, parent);
+
+    if(this->qStandardModel->rowCount() == 0){
+        this->ui->pushButtonInsertLabel->setDisabled(true);
+        this->ui->pushButtonRemove->setDisabled(true);
+    }
 }
 
 void DialogAnnotation::slot_accept()
