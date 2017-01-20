@@ -33,7 +33,6 @@ private:
 
 public:
     explicit DialogFrameBased(QWidget *parent = 0);
-    ~DialogFrameBased();
     int getIniFrameValue();
     int getEndFrameValue();
     QString getInfoValue();

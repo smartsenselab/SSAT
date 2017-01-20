@@ -1,12 +1,11 @@
 #ifndef mainwindow_h
 #define mainwindow_h
 
+#include <cmath>
 #include <iostream>
 #include <fstream>
 
-#include "qsizegrip.h"
-#include "qdebug.h"
-
+#include <QDialog>
 #include <QFileDialog>
 #include <QGraphicsScene>
 #include <QMainWindow>
@@ -17,14 +16,13 @@
 #include <QTime>
 #include <QTimer>
 
+#include "core.h"
+
 #include "dialogannotation.h"
-#include "dialogframebased.h"
 #include "framebaseddata.h"
 #include "qboundingbox.h"
 #include "qframebasedtablemodel.h"
 #include "videomanager.h"
-
-#include "core.h"
 
 namespace Ui
 {
@@ -47,6 +45,7 @@ private:
 
     bool loaded;
     bool playing;
+    bool frameBasedIsEnable;
     double totalFrames;
     int speed;
 
@@ -58,21 +57,25 @@ private:
     Core *singleton = NULL;
 
     DialogAnnotation *annotationDialog = NULL;
-    DialogFrameBased *frameDialog = NULL;
 
     QBoundingBox *frameScene = NULL;
     QFrameBasedTableModel *tableModel = NULL;
     QGraphicsRectItem *rectangle = NULL;
 
-    VideoManager *manager;
-
-    QHeaderView *m_horiz_header;
+    QHeaderView *horizontalHeader = NULL;
 
     QString nome;
     int InitFrame;
     int EndFrame;
 
-    QHeaderView *m_pHeaderView;
+    QStringListModel *categoryModel = NULL;
+    QStringListModel *labelModel = NULL;
+
+    VideoManager *manager = NULL;
+
+    // FrameBased:
+    int frameId, indexId;
+    mode manipulation;
 
 public:
     MainWindow(QWidget *parent = 0);
@@ -80,11 +83,16 @@ public:
     QString videopath;
     void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
 
+    int getIniFrameValue();
+    int getEndFrameValue();
+    QString getInfoValue();
+
 protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private:
     void enableWidgets(const bool _enable);
+    void enableFrameBased(const bool _enable);
     void connectSignalSlots();
     void setShortcuts();
     void setTableModel();
@@ -100,7 +108,10 @@ private:
     void updateFrame(const int _frameId);
     void restoreJson();
 
-    void connectMainWindow2DialogFrameBased();
+    // FrameBased:
+    void initializeComboboxes();
+    void initializeComboboxes(const QString _category);
+    void enableDisableButtonBox();
 
 public slots:
     void slot_Fshortcut();
@@ -150,11 +161,27 @@ public slots:
     void slot_addBoundingBoxToCore(const Rect _box);
     void slot_resizeFrame();
 
-    void on_sectionClicked(int index);
+    void slot_on_sectionClicked(int index);
+
+    // FrameBased:
+    void slot_buttonBoxAccepted();
+    void slot_buttonBoxRejected();
+    void slot_lineEditInfoChanged();
+    void slot_spinBoxValueChanged();
+
+    void slot_initializeDialog();
+    void slot_initializeDialog(const QModelIndex _index);
+    void slot_comboBoxCategoryActivated(const QString &_text);
 
 signals:
     void signal_drawFrameBboxes(const Frame _frame);
     void signal_sortTable(int);
+
+    // FrameBased:
+    void signal_buttonBoxAccepted();
+    void signal_frameBasedInsertAccepted(const FrameBasedData _data);
+    void signal_frameBasedAlterAccepted(const FrameBasedData _data, const int _index);
+    void signal_frameBasedRejected();
 };
 
 #endif

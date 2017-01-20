@@ -11,11 +11,6 @@ DialogFrameBased::DialogFrameBased(QWidget *parent) :
     this->connectSignalSlots();
 }
 
-DialogFrameBased::~DialogFrameBased()
-{
-    delete this->ui;
-}
-
 int DialogFrameBased::getIniFrameValue()
 {
     return this->ui->spinBoxInitialFrame->value();
