@@ -472,7 +472,7 @@ void MainWindow::restoreJson()
         switch(response)
         {
         case QMessageBox::Yes:
-            this->manager->importJSON(*(this->singleton), this->tableModel, "temp.json");
+            this->manager->importJSON(*(this->singleton), this->tableModel, this->core_path);
         }
     }
 }
