@@ -5,7 +5,6 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     this->ui->setupUi(this);
-    this->core_path = "./temp.json";
     this->frameScene = new QBoundingBox;
     this->loaded = false;
     this->manager = new VideoManager;
@@ -376,7 +375,7 @@ void MainWindow::updateFrame(const int _frameId)
 
 void MainWindow::restoreJson()
 {
-    std::ifstream file("./temp.json");
+    std::ifstream file(this->core_path.toStdString());
     if (file.good())
     {
         int response;
@@ -496,6 +495,9 @@ void MainWindow::slot_openFile()
                                                      tr("Video Files (*.avi *.mp4 *.mov)"));
     if(!videoName.isEmpty())
     {
+        string temp = videoName.toStdString();
+        size_t found = temp.find_last_of("/");
+        this->core_path =QString::fromStdString( "./temp_" + temp.substr(found).substr(1) +".json");
         delete this->frameScene;
         this->frameScene = new QBoundingBox;
         this->manager->loadVideo(videoName);
@@ -525,6 +527,7 @@ void MainWindow::slot_openFile()
 
 void MainWindow::slot_backupJson()
 {
+
     this->manager->exportJSON(*(this->singleton), this->core_path);
     std::cout << "saving" << std::endl;
 }
