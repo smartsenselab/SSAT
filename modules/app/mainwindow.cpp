@@ -18,8 +18,6 @@ MainWindow::MainWindow(QWidget *parent)
     this->setShortcuts();
     this->setTableModel();
 
-    horizontalHeader = this->ui->tableViewFrame->horizontalHeader();
-
     this->ui->viewFrame->setWindowFlags(Qt::SubWindow);
 }
 
@@ -226,7 +224,7 @@ void MainWindow::connectSignalSlots()
                   SLOT(slot_tableViewFrameDoubleClicked(QModelIndex))
                   );
 
-    this->connect(this->horizontalHeader,
+    this->connect(this->ui->tableViewFrame->horizontalHeader(),
                   SIGNAL(sectionClicked(int)),
                   this,
                   SLOT(slot_on_sectionClicked(int))
@@ -292,12 +290,11 @@ void MainWindow::connectSignalSlots()
                   SLOT(slot_drawFrameBboxes(const Frame))
                   );
 
-    this->connect(this->ui->splitter_2,
+    this->connect(this->ui->splitterHorizontal,
                   SIGNAL(splitterMoved(int,int)),
                   this,
                   SLOT(slot_resizeFrame())
                   );
-
 }
 
 void MainWindow::setShortcuts()
@@ -1004,9 +1001,9 @@ void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
     this->singleton->frames[nextFrameId - 1].addBox(temp_id + "_" + temp_key, _box);
 }
 
-void MainWindow::slot_on_sectionClicked(int index)
+void MainWindow::slot_on_sectionClicked(int _index)
 {
-    emit signal_sortTable(index);
+    emit signal_sortTable(_index);
 }
 
 void MainWindow::slot_resizeFrame()

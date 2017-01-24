@@ -62,8 +62,6 @@ private:
     QFrameBasedTableModel *tableModel = NULL;
     QGraphicsRectItem *rectangle = NULL;
 
-    QHeaderView *horizontalHeader = NULL;
-
     QString nome;
     int InitFrame;
     int EndFrame;
@@ -161,7 +159,7 @@ public slots:
     void slot_addBoundingBoxToCore(const Rect _box);
     void slot_resizeFrame();
 
-    void slot_on_sectionClicked(int index);
+    void slot_on_sectionClicked(int _index);
 
     // FrameBased:
     void slot_buttonBoxAccepted();
