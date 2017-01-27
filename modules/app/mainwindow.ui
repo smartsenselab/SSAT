@@ -194,7 +194,7 @@
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
-       <widget class="QTableView" name="tableViewFrame">
+       <widget class="QTreeView" name="treeViewFrame">
         <property name="selectionBehavior">
          <enum>QAbstractItemView::SelectItems</enum>
         </property>

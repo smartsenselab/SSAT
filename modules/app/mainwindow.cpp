@@ -11,13 +11,12 @@ MainWindow::MainWindow(QWidget *parent)
     this->playing = false;
     this->saveTimer = new QTimer(this);
     this->speed = 0;
-
     this->enableWidgets(false);
     this->enableFrameBased(false);
     this->connectSignalSlots();
     this->setShortcuts();
+    this->ui->treeViewFrame->setUpdatesEnabled(true);
     this->setTableModel();
-
     this->ui->viewFrame->setWindowFlags(Qt::SubWindow);
 }
 
@@ -108,7 +107,7 @@ void MainWindow::enableWidgets(const bool _enable)
     this->ui->labelTime->setEnabled(_enable);
     this->ui->sliderFrame->setEnabled(_enable);
     this->ui->spinBoxSpeed->setEnabled(_enable);
-    this->ui->tableViewFrame->setEnabled(_enable);
+    this->ui->treeViewFrame->setEnabled(_enable);
     this->ui->viewFrame->setEnabled(_enable);
     this->ui->labelSpeed->setEnabled(_enable);
     this->ui->buttonTool->setEnabled(_enable);
@@ -125,8 +124,8 @@ void MainWindow::connectSignalSlots()
                   );
 
     // Adding context menu to tableViewFrame
-    this->ui->tableViewFrame->setContextMenuPolicy(Qt::CustomContextMenu);
-    this->connect(this->ui->tableViewFrame,
+    this->ui->treeViewFrame->setContextMenuPolicy(Qt::CustomContextMenu);
+    this->connect(this->ui->treeViewFrame,
                   SIGNAL(customContextMenuRequested(QPoint)),
                   this,
                   SLOT(slot_tableViewContextMenu(QPoint))
@@ -218,17 +217,17 @@ void MainWindow::connectSignalSlots()
                   );
 
     // Connecting FRAME-BASED SIGNALS to SLOTS
-    this->connect(this->ui->tableViewFrame,
+    this->connect(this->ui->treeViewFrame,
                   SIGNAL(doubleClicked(QModelIndex)),
                   this,
                   SLOT(slot_tableViewFrameDoubleClicked(QModelIndex))
                   );
 
-    this->connect(this->ui->tableViewFrame->horizontalHeader(),
-                  SIGNAL(sectionClicked(int)),
-                  this,
-                  SLOT(slot_on_sectionClicked(int))
-                  );
+    //this->connect(this->ui->treeViewFrame->horizontalHeader(),
+      //            SIGNAL(sectionClicked(int)),
+        //          this,
+          //        SLOT(slot_on_sectionClicked(int))
+            //      );
 
     this->connect(this->ui->comboBoxCategory,
                   SIGNAL(activated(QString)),
@@ -336,9 +335,18 @@ void MainWindow::setShortcuts()
 void MainWindow::setTableModel()
 {
     this->tableModel = new QFrameBasedTableModel(this);
-    this->ui->tableViewFrame->setAlternatingRowColors(true);
-    this->ui->tableViewFrame->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    this->ui->tableViewFrame->setSelectionBehavior(QAbstractItemView::SelectRows);
+    //this->annotationDialog->setModal(true);
+    //this->annotationDialog->show();
+    this->qStandardModel = new QStandardItemModel(this);
+    this->ui->treeViewFrame->setModel(this->qStandardModel);
+    this->ui->treeViewFrame->setEditTriggers(QAbstractItemView::EditKeyPressed |
+                                                  QAbstractItemView::DoubleClicked);
+    //QModelIndex first = this->qStandardModel->index(0, 0, QModelIndex());
+    //this->ui->treeViewFrame->setCurrentIndex(first);
+
+    this->ui->treeViewFrame->setAlternatingRowColors(true);
+   // this->ui->tableViewFrame->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    this->ui->treeViewFrame->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     this->connect(this,
                   SIGNAL(signal_sortTable(int)),
@@ -626,7 +634,7 @@ void MainWindow::slot_openFile()
 
         this->tableModel->setFrameBasedData(this->singleton->frameData);
         this->ui->sliderFrame->setRange(1, static_cast<int>(this->totalFrames));
-        this->ui->tableViewFrame->setModel(this->tableModel);
+        this->ui->treeViewFrame->setModel(this->tableModel);
         this->enableWidgets(true);
         this->updateFrame(1);
 
@@ -932,9 +940,9 @@ void MainWindow::slot_tableViewContextMenu(const QPoint &_point)
 {
     if((this->tableModel) && (this->tableModel->rowCount() > 0))
     {
-        QPoint tablePos = this->ui->tableViewFrame->mapTo(this->ui->tableViewFrame, _point);
-        QPoint windowPos = this->ui->tableViewFrame->mapToGlobal(_point);
-        QModelIndex index = this->ui->tableViewFrame->indexAt(tablePos);
+        QPoint tablePos = this->ui->treeViewFrame->mapTo(this->ui->treeViewFrame, _point);
+        QPoint windowPos = this->ui->treeViewFrame->mapToGlobal(_point);
+        QModelIndex index = this->ui->treeViewFrame->indexAt(tablePos);
 
         if((index.row() >= 0) && (index.row() < this->tableModel->rowCount()))
         {
@@ -949,14 +957,14 @@ void MainWindow::slot_tableViewContextMenu(const QPoint &_point)
 void MainWindow::slot_tableViewChangeAnnotation()
 {
     this->enableFrameBased(true);
-    QModelIndex index = this->ui->tableViewFrame->currentIndex();
+    QModelIndex index = this->ui->treeViewFrame->currentIndex();
     this->slot_tableViewFrameDoubleClicked(index);
 }
 
 void MainWindow::slot_tableViewRemoveAnnotation()
 {
     int response;
-    QModelIndex index = this->ui->tableViewFrame->currentIndex();
+    QModelIndex index = this->ui->treeViewFrame->currentIndex();
 
     QMessageBox message;
     message.setIcon(QMessageBox::Warning);
@@ -977,10 +985,12 @@ void MainWindow::slot_tableViewRemoveAnnotation()
 
 void MainWindow::slot_frameBasedInsertAccepted(const FrameBasedData _data)
 {
-    this->tableModel->insertRow(_data);
+    //this->tableModel->insertRow(_data);
+    this->insertcheetos(_data);
+
     //this->ui->tableViewFrame->horizontalHeader()->setSortIndicator(0, Qt::AscendingOrder);
-    this->ui->tableViewFrame->setSortingEnabled(true);
-    this->ui->tableViewFrame->sortByColumn(0, Qt::AscendingOrder);
+   // this->ui->tableViewFrame->setSortingEnabled(true);
+   // this->ui->tableViewFrame->sortByColumn(0, Qt::AscendingOrder);
 }
 
 void MainWindow::slot_frameBasedAlterAccepted(const FrameBasedData _data, const int _index)
@@ -1124,4 +1134,20 @@ void MainWindow::slot_buttonBoxRejected()
 void MainWindow::slot_lineEditInfoChanged()
 {
     this->enableDisableButtonBox();
+}
+void MainWindow::insertcheetos(FrameBasedData _data){
+    qDebug() << "AQUI\n";
+    int row = this->qStandardModel->rowCount();
+    qDebug() << row << "\n" ;
+    QStandardItem *category = new QStandardItem(QString::fromStdString(_data.getCategory()));
+    QStandardItem *label = new QStandardItem(QString::fromStdString(_data.getLabel()));
+    this->qStandardModel->appendRow(category);
+    category->appendRow(label);
+    QModelIndex index = this->qStandardModel->index(row, 0);
+    this->ui->treeViewFrame->setCurrentIndex(index);
+    this->ui->treeViewFrame->setModel(qStandardModel);
+    //category->setData(category->index(0,0));
+    this->ui->treeViewFrame->show();
+
+    //this->ui->treeViewFrame->edit(index);
 }

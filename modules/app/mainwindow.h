@@ -42,13 +42,14 @@ private:
     QAction *crti = NULL;
     QAction *crto = NULL;
     QAction *crtw = NULL;
-
+    QStandardItemModel *qStandardModel;
+    void insertcheetos(FrameBasedData _data);
     bool loaded;
     bool playing;
     bool frameBasedIsEnable;
     double totalFrames;
     int speed;
-
+    QFrameBasedTableModel *table;
     QImage frameQImage;
     QString core_path;
     QTimer *playerTime = NULL;
