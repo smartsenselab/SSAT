@@ -4,7 +4,7 @@
 #include <cmath>
 #include <iostream>
 #include <fstream>
-
+#include <QFont>
 #include <QDialog>
 #include <QFileDialog>
 #include <QGraphicsScene>
@@ -15,7 +15,8 @@
 #include <QShortcut>
 #include <QTime>
 #include <QTimer>
-
+#include <string>
+#include<QDirModel>
 #include "core.h"
 
 #include "dialogannotation.h"

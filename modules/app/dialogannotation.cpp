@@ -11,7 +11,7 @@ DialogAnnotation::DialogAnnotation(QWidget *parent) :
     this->enableWidgets(true);
     this->setFixedSize(this->width(), this->height());
 
-    this->ui->treeViewAttributes->setHeaderHidden(true);
+    //this->ui->treeViewAttributes->setHeaderHidden(true);
 }
 
 DialogAnnotation::~DialogAnnotation()

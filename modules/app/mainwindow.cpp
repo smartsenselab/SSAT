@@ -334,6 +334,8 @@ void MainWindow::setShortcuts()
 
 void MainWindow::setTableModel()
 {
+    QFont *fonte = new QFont();
+    fonte->setPixelSize(15);
     this->tableModel = new QFrameBasedTableModel(this);
     //this->annotationDialog->setModal(true);
     //this->annotationDialog->show();
@@ -341,13 +343,18 @@ void MainWindow::setTableModel()
     this->ui->treeViewFrame->setModel(this->qStandardModel);
     this->ui->treeViewFrame->setEditTriggers(QAbstractItemView::EditKeyPressed |
                                                   QAbstractItemView::DoubleClicked);
+    this->ui->treeViewFrame->setFont(*fonte);
+    this->qStandardModel->setColumnCount(4);
+    this->qStandardModel->setHeaderData(0,Qt::Horizontal,QObject::tr("Category"));
+    this->qStandardModel->setHeaderData(1,Qt::Horizontal,QObject::tr("Label"));
+    this->qStandardModel->setHeaderData(2,Qt::Horizontal,QObject::tr("IniFrame"));
+    this->qStandardModel->setHeaderData(3,Qt::Horizontal,QObject::tr("EndFrame"));
     //QModelIndex first = this->qStandardModel->index(0, 0, QModelIndex());
     //this->ui->treeViewFrame->setCurrentIndex(first);
-
+   // this->ui->treeViewFrame->setHeader();
     this->ui->treeViewFrame->setAlternatingRowColors(true);
    // this->ui->tableViewFrame->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     this->ui->treeViewFrame->setSelectionBehavior(QAbstractItemView::SelectRows);
-
     this->connect(this,
                   SIGNAL(signal_sortTable(int)),
                   this->tableModel,
@@ -842,7 +849,7 @@ void MainWindow::slot_spinBoxSpeedValueChanged(int _value)
 void MainWindow::slot_tableViewFrameDoubleClicked(const QModelIndex _index)
 {
     this->enableFrameBased(true);
-    this->slot_initializeDialog(_index);
+    //this->slot_initializeDialog(_index);
 }
 
 void MainWindow::slot_keepVideoRunning()
@@ -1141,8 +1148,17 @@ void MainWindow::insertcheetos(FrameBasedData _data){
     qDebug() << row << "\n" ;
     QStandardItem *category = new QStandardItem(QString::fromStdString(_data.getCategory()));
     QStandardItem *label = new QStandardItem(QString::fromStdString(_data.getLabel()));
-    this->qStandardModel->appendRow(category);
-    category->appendRow(label);
+    QStandardItem *empty = new QStandardItem();
+    QStandardItem *ini = new QStandardItem(QString::fromStdString(std::to_string(_data.getInitialFrameId())));
+    QStandardItem *fim = new QStandardItem(QString::fromStdString(std::to_string(_data.getFinalFrameId())));
+    QList<QStandardItem*> list = QList<QStandardItem*>()<<empty<< label << ini << fim;
+    QList<QStandardItem*> lst =  this->qStandardModel->findItems(QString::fromStdString(_data.getCategory()));
+    if (lst.empty() == false){
+       category = lst.takeFirst();
+    }
+    else
+        this->qStandardModel->appendRow(category);
+    category->appendRow(list);
     QModelIndex index = this->qStandardModel->index(row, 0);
     this->ui->treeViewFrame->setCurrentIndex(index);
     this->ui->treeViewFrame->setModel(qStandardModel);
