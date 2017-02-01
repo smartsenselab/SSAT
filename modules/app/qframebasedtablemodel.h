@@ -35,14 +35,28 @@ public:
 
     // Editable:
     ///
-    /// \brief insertRows insert rows in the model
-    /// \param _row
-    /// \param _count
+    /// \brief insertRows insert rows in the model (overrided function)
+    /// \param _row row to be inserted
+    /// \param _count count of rows
     /// \param _parent
     /// \return true for success false for failure
     ///
     bool insertRows(int _row, int _count, const QModelIndex &_parent) Q_DECL_OVERRIDE;
+    ///
+    /// \brief removeRows remove rows in the model (override function)
+    /// \param _row row to insert
+    /// \param _count count of rows
+    /// \param _parent
+    /// \return
+    ///
     bool removeRows(int _row, int _count, const QModelIndex &_parent) Q_DECL_OVERRIDE;
+    ///
+    /// \brief setData
+    /// \param _index
+    /// \param _value
+    /// \param _role
+    /// \return
+    ///
     bool setData(const QModelIndex &_index, const QVariant &_value, int _role = Qt::EditRole) Q_DECL_OVERRIDE;
     Qt::ItemFlags flags(const QModelIndex &_index) const Q_DECL_OVERRIDE;
 
@@ -90,6 +104,7 @@ public slots:
 class sortingMethods
 {
 public:
+    /// sort by diferent parameters
     bool static sortByIniFrame(FrameBasedData i,FrameBasedData j);
     bool static sortByEndFrame(FrameBasedData i,FrameBasedData j);
     bool static sortByName(FrameBasedData i,FrameBasedData j);
