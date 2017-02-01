@@ -363,7 +363,7 @@ void MainWindow::pauseVideo()
     }
 }
 
-void MainWindow::playVideo() // AQUI
+void MainWindow::playVideo()
 {
     if (this->playerTime == NULL)
     {
@@ -652,11 +652,6 @@ void MainWindow::slot_importJson()
                                                         tr("JSON file (*.json)"));
         this->manager->importJSON(*(this->singleton), this->tableModel, jsonName);
     }
-}
-
-void MainWindow::slot_importProgressBar()
-{
-
 }
 
 void MainWindow::slot_exportJson()
