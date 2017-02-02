@@ -33,11 +33,13 @@ private:
     /// \brief connectSignalSlots connect button signals to their slots
     ///
     void connectSignalSlots();
+
     ///
     /// \brief enableWidgets Enable (Insert Cat/Label/Remove) buttons
     /// \param _enable true or false
     ///
     void enableWidgets(const bool _enable);
+
     ///
     /// \brief updateCoreContent Does nothing
     ///
@@ -66,18 +68,22 @@ private slots:
     /// \brief slot_insertCategoryPressed Insert new Category to the tree
     ///
     void slot_insertCategoryPressed();
+
     ///
     /// \brief slot_insertLabelPressed Insert new Label to the tree
     ///
     void slot_insertLabelPressed();
+
     ///
     /// \brief slot_removePressed Remove Category or Label
     ///
     void slot_removePressed();
+
     ///
     /// \brief slot_accept When Ok is pressed, save all tree changes on core
     ///
     void slot_accept();
+
     ///
     /// \brief slot_reject When Cancel is pressed, discard all tree changes
     ///

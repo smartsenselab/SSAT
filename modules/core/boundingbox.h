@@ -17,25 +17,46 @@ class BoundingBox : public Data
 {
 public:
     ///
-    /// \brief BoundingBox boundingbox constructor
+    /// \brief BoundingBox Default BoundingBox constructor
     ///
     BoundingBox();
-    BoundingBox(const BoundingBox &_box);
-    BoundingBox(const Rect &_box);
-    BoundingBox(const int _x, const int _y,
-                const int _w, const int _h);
 
+    ///
+    /// \brief BoundingBox BoundingBox constructor
+    /// \param _box A struct holding X,Y,W and H values
+    ///
+    BoundingBox(const BoundingBox &_box);
+
+    ///
+    /// \brief BoundingBox BoundingBox constructor
+    /// \param _box A struct holding X,Y,W and H values
+    ///
+    BoundingBox(const Rect &_box);
+
+    ///
+    /// \brief BoundingBox BoundingBox constructor
+    /// \param _x The X cordinate of the boundingbox
+    /// \param _y The Y cordinate of the boundingbox
+    /// \param _w The width of the boundingbox
+    /// \param _h The height of the boundingbox
+    ///
+    BoundingBox(const int _x, const int _y, const int _w, const int _h);
+
+    ///
     /// \brief getX Get the x cordinate of the boundingbox
     ///
     int getX() const;
+
     ///
     /// \brief getY Get the y cordinate of the boudingbox
     ///
     int getY() const;
+
     ///
     /// \brief getW Get the boundingbox Width
     ///
     int getW() const;
+
     ///
     /// \brief getH Get the boudingbox Heigth
     ///
@@ -46,21 +67,25 @@ public:
     /// \param _x New value of x
     ///
     void setX(const int _x);
+
     ///
     /// \brief setY Set the boundingbox's y coordinate
     /// \param _y New value of y
     ///
     void setY(const int _y);
+
     ///
     /// \brief setW Set the boundingbox width
     /// \param _w New value of width
     ///
     void setW(const int _w);
+
     ///
     /// \brief setH Set the boundingbox heigth
     /// \param _h New value of heigth
     ///
     void setH(const int _h);
+
     ///
     /// \brief operator = Update boundingbox values(attributes, cordinates, comments, id, name)
     /// \param _box Updated BoudingBox values
