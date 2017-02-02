@@ -28,11 +28,13 @@ public:
     /// \param parent
     ///
     QBoundingBox(QObject* parent = 0);
+
     ///
     /// \brief keyPressEvent
     /// \param e
     ///
     void keyPressEvent(QKeyEvent* e);
+
     ///
     /// \brief deleteBBox Removes a bbox
     ///
@@ -44,11 +46,13 @@ protected:
     /// \param event Event sent by mouse
     ///
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
     ///
     /// \brief mouseMoveEvent When mouse is moved
     /// \param event Event sent by mouse
     ///
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+
     ///
     /// \brief mouseReleaseEvent Mouse button released
     /// \param event Event sent by mouse
@@ -57,6 +61,7 @@ protected:
 
 private:
     void makeItemsControllable(bool areControllable);
+
     ///
     /// \brief drawEnabled Bool to indicate if the user can draw a bbox
     /// \brief moveEnabled Bool to indicate if teh user can move a bbox
@@ -83,6 +88,7 @@ public slots:
     /// \param _frame frame where the bbox is gonna be drawn
     ///
     void slot_drawFrameBboxes(const Frame _frame);
+
     ///
     /// \brief slot_enableDraw Allow the user to draw a new bbox
     ///
