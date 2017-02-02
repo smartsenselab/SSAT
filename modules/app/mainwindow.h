@@ -56,6 +56,7 @@ private:
     QString core_path;
     QTimer *playerTime = NULL;
     QTimer *saveTimer = NULL;
+    QString videopath;
 
     Core *singleton = NULL;
 
@@ -80,13 +81,16 @@ private:
 
 public:
     ///
-    /// \brief MainWindow   Prepare the view to be initialized
+    /// \brief MainWindow   Standard constructor
     /// \param parent
     ///
     MainWindow(QWidget *parent = 0);
 
+    ///
+    /// \brief ~MainWindow Standard destructor
+    ///
     virtual ~MainWindow();
-    QString videopath;
+
     ///
     /// \brief keyPressEvent Shortcut to delete annotation
     /// \param e    button 'Delete'
@@ -104,6 +108,11 @@ public:
     /// \return
     ///
     int getEndFrameValue();
+
+    ///
+    /// \brief getInfoValue
+    /// \return
+    ///
     QString getInfoValue();
 
 protected:
@@ -429,7 +438,7 @@ public slots:
 
 signals:
     void signal_drawFrameBboxes(const Frame _frame);
-    void signal_sortTable(int);
+    void signal_sortTable(int _ansc_desc);
 
     // FrameBased:
     void signal_buttonBoxAccepted();
