@@ -56,7 +56,6 @@ private:
     QString core_path;
     QTimer *playerTime = NULL;
     QTimer *saveTimer = NULL;
-    QString videopath;
 
     Core *singleton = NULL;
 
@@ -81,16 +80,13 @@ private:
 
 public:
     ///
-    /// \brief MainWindow   Standard constructor
+    /// \brief MainWindow   Prepare the view to be initialized
     /// \param parent
     ///
     MainWindow(QWidget *parent = 0);
 
-    ///
-    /// \brief ~MainWindow Standard destructor
-    ///
     virtual ~MainWindow();
-
+    QString videopath;
     ///
     /// \brief keyPressEvent Shortcut to delete annotation
     /// \param e    button 'Delete'
@@ -108,11 +104,6 @@ public:
     /// \return
     ///
     int getEndFrameValue();
-
-    ///
-    /// \brief getInfoValue
-    /// \return
-    ///
     QString getInfoValue();
 
 protected:
@@ -187,6 +178,11 @@ private:
     /// \brief updateFrame  Update the frame and time when it has changed (by slider, spin, etc)
     ///
     void updateFrame();
+
+    ///
+    /// \brief updateFrame  Update the frame, the next frame will be the param of this function
+    /// \param _frameId     The number of the frame that will be the next frame
+    ///
     void updateFrame(const int _frameId);
 
     ///
@@ -199,6 +195,11 @@ private:
     /// \brief initializeComboboxes Build the multimap of the category and label
     ///
     void initializeComboboxes();
+
+    ///
+    /// \brief initializeComboboxes Add a new category
+    /// \param _category    The QString (name) that will represent the category
+    ///
     void initializeComboboxes(const QString _category);
 
     ///
@@ -294,24 +295,44 @@ public slots:
     /// \brief slot_rewindButtonPressed Go back 1% of total number of frames
     ///
     void slot_rewindButtonPressed();
+
+    ///
+    /// \brief slot_rewindButtonPressed Auxiliar function to rewind the video
+    /// \param _frameId The next frame
+    ///
     void slot_rewindButtonPressed(const int _frameId);
 
     ///
     /// \brief slot_backButtonPressed Go back 1 frame
     ///
     void slot_backButtonPressed();
+
+    ///
+    /// \brief slot_backButtonPressed   Auxiliar function to go back 1 frame on the video
+    /// \param _frameId the next frame (need to do _frameId - 2 to go back 1 frame)
+    ///
     void slot_backButtonPressed(const int _frameId);
 
     ///
     /// \brief slot_forwardButtonPressed    Go foward 1 frame
     ///
     void slot_forwardButtonPressed();
+
+    ///
+    /// \brief slot_forwardButtonPressed    Auxiliar function to go foward 1 frame
+    /// \param _frameId The next frame
+    ///
     void slot_forwardButtonPressed(const int _frameId);
 
     ///
     /// \brief slot_fastfButtonPressed  Go foward 1% of total number of frames
     ///
     void slot_fastfButtonPressed();
+
+    ///
+    /// \brief slot_fastfButtonPressed  Auxiliar function to go foward 1% the video
+    /// \param _frameId The next frame
+    ///
     void slot_fastfButtonPressed(const int _frameId);
 
     ///
@@ -425,9 +446,14 @@ public slots:
     void slot_spinBoxValueChanged();
 
     ///
-    /// \brief slot_initializeDialog    Prepare the annotation box to be used
+    /// \brief slot_initializeDialog    Prepare the annotation box to be used to insert a new annotation
     ///
     void slot_initializeDialog();
+
+    ///
+    /// \brief slot_initializeDialog    Prepare the annotation box to be used to change a new annotation
+    /// \param _index   The previous annotation
+    ///
     void slot_initializeDialog(const QModelIndex _index);
 
     ///
@@ -437,14 +463,41 @@ public slots:
     void slot_comboBoxCategoryActivated(const QString &_text);
 
 signals:
+    ///
+    /// \brief signal_drawFrameBboxes   Signal to call slot_drawFrameBboxes
+    /// \param _frame   Actual frame
+    ///
     void signal_drawFrameBboxes(const Frame _frame);
-    void signal_sortTable(int _ansc_desc);
+
+    ///
+    /// \brief signal_sortTable Signal to call slot_sortTable
+    ///
+    void signal_sortTable(int);
 
     // FrameBased:
+    ///
+    /// \brief signal_buttonBoxAccepted to call nobody
+    ///
     void signal_buttonBoxAccepted();
+
+    ///
+    /// \brief signal_frameBasedInsertAccepted Signal to call slot_frameBasedInsertAccepted
+    /// \param _data    Informations of the annotation
+    ///
     void signal_frameBasedInsertAccepted(const FrameBasedData _data);
+
+    ///
+    /// \brief signal_frameBasedAlterAccepted Signal to call slot_frameBasedAlterAccepted
+    /// \param _data    Previous informations of the annotation
+    /// \param _index   Number of the line
+    ///
     void signal_frameBasedAlterAccepted(const FrameBasedData _data, const int _index);
+
+    ///
+    /// \brief signal_frameBasedRejected Signal to call nobody
+    ///
     void signal_frameBasedRejected();
+
 };
 
 #endif
