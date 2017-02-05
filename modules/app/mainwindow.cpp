@@ -219,6 +219,11 @@ void MainWindow::connectSignalSlots()
 
     // Connecting FRAME-BASED SIGNALS to SLOTS
     this->connect(this->ui->tableViewFrame,
+                  SIGNAL(clicked(QModelIndex)),
+                  this,
+                  SLOT(slot_tableviewSingleClick(QModelIndex))
+                  );
+    this->connect(this->ui->tableViewFrame,
                   SIGNAL(doubleClicked(QModelIndex)),
                   this,
                   SLOT(slot_tableViewFrameDoubleClicked(QModelIndex))
@@ -833,8 +838,6 @@ void MainWindow::slot_spinBoxSpeedValueChanged(int _value)
 
 void MainWindow::slot_tableViewFrameDoubleClicked(const QModelIndex _index)
 {
-    this->enableFrameBased(true);
-    this->slot_initializeDialog(_index);
     FrameBasedData Data = this->singleton->frameData.at(_index.row());
     this->updateFrame(Data.getInitialFrameId());
 
@@ -1128,8 +1131,8 @@ void MainWindow::slot_lineEditInfoChanged()
 {
     this->enableDisableButtonBox();
 }
-void MainWindow::jumpTo(int frame)
-{
-    qDebug()<<"penes";
+void MainWindow::slot_tableviewSingleClick(QModelIndex _index){
+    this->enableFrameBased(true);
+    this->slot_initializeDialog(_index);
 }
 

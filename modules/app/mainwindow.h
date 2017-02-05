@@ -112,6 +112,7 @@ private:
     void enableDisableButtonBox();
 
 public slots:
+    void slot_tableviewSingleClick(QModelIndex _index);
     void slot_Fshortcut();
     void slot_Ashortcut();
     void slot_Oshortcut();
