@@ -835,6 +835,9 @@ void MainWindow::slot_tableViewFrameDoubleClicked(const QModelIndex _index)
 {
     this->enableFrameBased(true);
     this->slot_initializeDialog(_index);
+    FrameBasedData Data = this->singleton->frameData.at(_index.row());
+    this->updateFrame(Data.getInitialFrameId());
+
 }
 
 void MainWindow::slot_keepVideoRunning()
@@ -1125,3 +1128,8 @@ void MainWindow::slot_lineEditInfoChanged()
 {
     this->enableDisableButtonBox();
 }
+void MainWindow::jumpTo(int frame)
+{
+    qDebug()<<"penes";
+}
+
