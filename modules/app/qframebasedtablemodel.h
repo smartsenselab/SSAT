@@ -124,6 +124,10 @@ public:
     /// \return true for success false for failure
     ///
     bool clear();
+    ///
+    /// \brief setFrameBasedData set the framebased vector
+    /// \param _frameBasedData info on the vector
+    ///
     void setFrameBasedData(vector<FrameBasedData> &_frameBasedData);
     vector<FrameBasedData>* getFrameBasedData();
 
