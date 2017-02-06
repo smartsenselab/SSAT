@@ -25,6 +25,7 @@ class DialogAnnotation : public QDialog
     Q_OBJECT
 
 public:
+    QAction *enterok = NULL;
     explicit DialogAnnotation(QWidget *parent = 0);
     ~DialogAnnotation();
 
@@ -48,6 +49,7 @@ public slots:
     void slot_initializeDialog(Core &_singleton);
 
 private slots:
+    void slot_enterShortcut();
     void slot_insertCategoryPressed();
     void slot_insertLabelPressed();
     void slot_removePressed();
