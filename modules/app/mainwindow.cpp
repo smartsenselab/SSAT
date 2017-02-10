@@ -988,7 +988,7 @@ void MainWindow::slot_frameBasedAlterAccepted(const FrameBasedData _data, const 
 void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
 {
     unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
-    unsigned long num_bboxes = this->singleton->frames[nextFrameId - 1].getBoxes().size();
+    unsigned long num_bboxes = static_cast<unsigned long>(this->singleton->frames[nextFrameId - 1].getBoxes().size());
 
     string temp_id = "frame" + std::to_string(nextFrameId - 1);
     string temp_key = "bbox" + std::to_string(num_bboxes);

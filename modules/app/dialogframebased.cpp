@@ -135,7 +135,7 @@ void DialogFrameBased::slot_initializeDialog(Core &_singleton, const int _frameI
 
     this->frameId = _frameId - 1;
     this->singleton = &_singleton;
-    this->totalFrames = this->singleton->frames.size();
+    this->totalFrames = static_cast<int>(this->singleton->frames.size());
 
     this->ui->buttonBox->setEnabled(false);
 
@@ -156,7 +156,7 @@ void DialogFrameBased::slot_initializeDialog(Core &_singleton, const QModelIndex
 
     this->indexId = _index.row();
     this->singleton = &_singleton;
-    this->totalFrames = this->singleton->frames.size();
+    this->totalFrames =static_cast<int>(this->singleton->frames.size());
 
     FrameBasedData frameData = this->singleton->frameData.at(_index.row());
 

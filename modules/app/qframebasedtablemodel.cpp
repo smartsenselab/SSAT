@@ -199,7 +199,7 @@ vector<FrameBasedData>* QFrameBasedTableModel::getFrameBasedData()
 
 void QFrameBasedTableModel::slot_sortTable(int _index)
 {
-    unsigned long size = this->frameData->size();
+    unsigned long size = static_cast<unsigned long>(this->frameData->size());
 
     if(_index == 0)
     {
