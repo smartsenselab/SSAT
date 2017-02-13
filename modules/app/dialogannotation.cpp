@@ -7,6 +7,10 @@ DialogAnnotation::DialogAnnotation(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    this->enterPressed = new QAction(tr("id1"),this);
+    this->enterPressed->setShortcuts(QList<QKeySequence>() << Qt::EnterKeyDefault);
+    this->addAction(enterPressed);
+
     this->connectSignalSlots();
     this->enableWidgets(true);
     this->setFixedSize(this->width(), this->height());
@@ -21,6 +25,11 @@ DialogAnnotation::~DialogAnnotation()
 
 void DialogAnnotation::connectSignalSlots()
 {
+    this->connect(this->enterPressed,
+                  SIGNAL(triggered()),
+                  this,
+                  SLOT(slot_enterShortcut())
+                  );
     this->connect(this->ui->pushButtonInsertCategory,
                   SIGNAL(pressed()),
                   this,
@@ -157,4 +166,9 @@ void DialogAnnotation::slot_accept()
 void DialogAnnotation::slot_reject()
 {
     this->reject();
+}
+
+void DialogAnnotation::slot_enterShortcut()
+{
+    this->accept();
 }

@@ -25,6 +25,7 @@ class DialogAnnotation : public QDialog
     Q_OBJECT
 
 public:
+    QAction *enterPressed = NULL;
     explicit DialogAnnotation(QWidget *parent = 0);
     ~DialogAnnotation();
 
@@ -88,6 +89,11 @@ private slots:
     /// \brief slot_reject When Cancel is pressed, discard all tree changes
     ///
     void slot_reject();
+
+    ///
+    /// \brief slot_enterShortcut When Enter key is pressed, save all tree changes on core
+    ///
+    void slot_enterShortcut();
 };
 
 #endif // DIALOGANNOTATION_H

@@ -347,7 +347,13 @@ public slots:
     void slot_spinBoxSpeedValueChanged(int _value);
 
     ///
-    /// \brief slot_tableViewFrameDoubleClicked Open the annotation box to chance a annotation
+    /// \brief slot_tableviewFrameSingleClicked Open the annotation box to chance a annotation
+    /// \param _index   Identifies which annotation will be modified
+    ///
+    void slot_tableviewFrameSingleClicked(const QModelIndex _index);
+
+    ///
+    /// \brief slot_tableViewFrameDoubleClicked Open the annotation box to change a annotation
     /// \param _index   Identifies which annotation will be modified
     ///
     void slot_tableViewFrameDoubleClicked(const QModelIndex _index);

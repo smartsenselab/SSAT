@@ -219,6 +219,12 @@ void MainWindow::connectSignalSlots()
 
     // Connecting FRAME-BASED SIGNALS to SLOTS
     this->connect(this->ui->tableViewFrame,
+                  SIGNAL(clicked(QModelIndex)),
+                  this,
+                  SLOT(slot_tableviewFrameSingleClicked(QModelIndex))
+                  );
+
+    this->connect(this->ui->tableViewFrame,
                   SIGNAL(doubleClicked(QModelIndex)),
                   this,
                   SLOT(slot_tableViewFrameDoubleClicked(QModelIndex))
@@ -826,10 +832,15 @@ void MainWindow::slot_spinBoxSpeedValueChanged(int _value)
     this->changeSpeed(_value);
 }
 
-void MainWindow::slot_tableViewFrameDoubleClicked(const QModelIndex _index)
-{
+void MainWindow::slot_tableviewFrameSingleClicked(const QModelIndex _index){
     this->enableFrameBased(true);
     this->slot_initializeDialog(_index);
+}
+
+void MainWindow::slot_tableViewFrameDoubleClicked(const QModelIndex _index)
+{
+    FrameBasedData data = this->singleton->frameData.at(_index.row());
+    this->updateFrame(data.getInitialFrameId());
 }
 
 void MainWindow::slot_keepVideoRunning()
