@@ -18,6 +18,10 @@ MainWindow::MainWindow(QWidget *parent)
     this->setShortcuts();
     this->setTableModel();
 
+
+    this->ui->splitterHorizontal->setStretchFactor(0,1);
+    this->ui->splitterVertical->setStretchFactor(0,1);
+
     this->ui->viewFrame->setWindowFlags(Qt::SubWindow);
 }
 
@@ -597,14 +601,29 @@ void MainWindow::slot_displayFrame(const QImage _frame)
     }
 }
 
+int aux = 0; // Se 1 video já foi aberto
 void MainWindow::slot_openFile()
 {
     QString videoName = QFileDialog::getOpenFileName(this,
                                                      tr("Open Video..."),
                                                      tr("/home"),
                                                      tr("Video Files (*.avi *.mp4 *.mov)"));
+
+
     if(!videoName.isEmpty())
     {
+        if(aux==1)
+        {
+            int previousRows = this->tableModel->rowCount();
+            if(previousRows > 0)
+            {
+                int i;
+                for(i=0; i < previousRows; i++){
+                    this->tableModel->removeRow(i);
+                }
+            }
+        }
+        aux = 1;
         string temp = videoName.toStdString();
         size_t found = temp.find_last_of("/");
         this->core_path =QString::fromStdString( "./temp_" + temp.substr(found).substr(1) +".json");
