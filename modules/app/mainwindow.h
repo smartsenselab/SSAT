@@ -80,7 +80,6 @@ public:
     virtual ~MainWindow();
     QString videopath;
     void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
-    void jumpTo(int frame);
     int getIniFrameValue();
     int getEndFrameValue();
     QString getInfoValue();
