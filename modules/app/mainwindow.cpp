@@ -601,7 +601,6 @@ void MainWindow::slot_displayFrame(const QImage _frame)
     }
 }
 
-int aux = 0; // Se 1 video já foi aberto
 void MainWindow::slot_openFile()
 {
     QString videoName = QFileDialog::getOpenFileName(this,
@@ -612,18 +611,11 @@ void MainWindow::slot_openFile()
 
     if(!videoName.isEmpty())
     {
-        if(aux==1)
+        if(oneVideoWasOpened == 1)
         {
-            int previousRows = this->tableModel->rowCount();
-            if(previousRows > 0)
-            {
-                int i;
-                for(i=0; i < previousRows; i++){
-                    this->tableModel->removeRow(i);
-                }
-            }
+            this->tableModel->clear();
         }
-        aux = 1;
+        oneVideoWasOpened = 1;
         string temp = videoName.toStdString();
         size_t found = temp.find_last_of("/");
         this->core_path =QString::fromStdString( "./temp_" + temp.substr(found).substr(1) +".json");

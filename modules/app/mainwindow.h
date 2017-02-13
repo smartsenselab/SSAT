@@ -68,6 +68,8 @@ private:
     QString nome;
     int InitFrame;
     int EndFrame;
+    int oneVideoWasOpened = 0;
+
 
     QStringListModel *categoryModel = NULL;
     QStringListModel *labelModel = NULL;
