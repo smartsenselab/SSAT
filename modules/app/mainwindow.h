@@ -66,10 +66,11 @@ private:
     QGraphicsRectItem *rectangle = NULL;
 
     QString nome;
+    QString videopath;
+
     int InitFrame;
     int EndFrame;
     int oneVideoWasOpened = 0;
-
 
     QStringListModel *categoryModel = NULL;
     QStringListModel *labelModel = NULL;
@@ -87,28 +88,18 @@ public:
     ///
     MainWindow(QWidget *parent = 0);
 
+    ///
+    /// \brief ~MainWindow Default destructor
+    ///
     virtual ~MainWindow();
-    QString videopath;
-    ///
-    /// \brief keyPressEvent Shortcut to delete annotation
-    /// \param e    button 'Delete'
-    ///
-    void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
-
-    ///
-    /// \brief getIniFrameValue Return the initial frame of the annotation
-    /// \return
-    ///
-    int getIniFrameValue();
-
-    ///
-    /// \brief getEndFrameValue Return the final frame of the annotation
-    /// \return
-    ///
-    int getEndFrameValue();
-    QString getInfoValue();
 
 protected:
+    ///
+    /// \brief keyPressEvent Shortcut to delete annotation
+    /// \param event button 'Delete'
+    ///
+    void keyPressEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
+
     ///
     /// \brief resizeEvent  Resize the window
     /// \param event
@@ -191,6 +182,24 @@ private:
     /// \brief restoreJson  Get a Json file previously created (if the user wants to)
     ///
     void restoreJson();
+
+    ///
+    /// \brief getIniFrameValue Return the initial frame of the annotation displayed on the interface
+    /// \return
+    ///
+    int getIniFrameValue();
+
+    ///
+    /// \brief getEndFrameValue Return the final frame of the annotation displayed on the interface
+    /// \return
+    ///
+    int getEndFrameValue();
+
+    ///
+    /// \brief getInfoValue Return the annotation information displayed on the interface
+    /// \return
+    ///
+    QString getInfoValue();
 
     // FrameBased:
     ///
@@ -416,21 +425,15 @@ public slots:
     void slot_frameBasedAlterAccepted(const FrameBasedData _data, const int _index);
 
     ///
-    /// \brief slot_addBoundingBoxToCore    Save the x,y,w,h of the BBox on core
-    /// \param _box
+    /// \brief slot_on_sectionClicked   Sort the column clicked
+    /// \param _index
     ///
-    void slot_addBoundingBoxToCore(const Rect _box);
+    void slot_on_sectionClicked(int _index);
 
     ///
     /// \brief slot_resizeFrame Resize the frame
     ///
     void slot_resizeFrame();
-
-    ///
-    /// \brief slot_on_sectionClicked   Sort the column clicked
-    /// \param _index
-    ///
-    void slot_on_sectionClicked(int _index);
 
     // FrameBased:
     ///
@@ -470,6 +473,13 @@ public slots:
     ///
     void slot_comboBoxCategoryActivated(const QString &_text);
 
+    // BoundingBox-Based
+    ///
+    /// \brief slot_addBoundingBoxToCore    Save the x,y,w,h of the BBox on core
+    /// \param _box
+    ///
+    void slot_addBoundingBoxToCore(const Rect _box);
+
 signals:
     ///
     /// \brief signal_drawFrameBboxes   Signal to call slot_drawFrameBboxes
@@ -482,7 +492,7 @@ signals:
     ///
     void signal_sortTable(int);
 
-    // FrameBased:
+    // Frame-Based:
     ///
     /// \brief signal_buttonBoxAccepted to call nobody
     ///
@@ -505,7 +515,6 @@ signals:
     /// \brief signal_frameBasedRejected Signal to call nobody
     ///
     void signal_frameBasedRejected();
-
 };
 
 #endif

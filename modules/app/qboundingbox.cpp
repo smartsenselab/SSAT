@@ -4,10 +4,14 @@
 
 QBoundingBox::QBoundingBox(QObject* parent): QGraphicsScene(parent)
 {
-    std::cout << this->items().size() << std::endl;
+//    std::cout << this->items().size() << std::endl;
     this->itemToDraw = 0;
+
     this->moveEnabled = false;
     this->drawEnabled = false;
+
+    this->heightD = 0;
+    this->widthD = 0;
 }
 
 void QBoundingBox::deleteBBox()
@@ -26,20 +30,23 @@ void QBoundingBox::mousePressEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsScene::mousePressEvent(event);
 }
 
-double w = 0, h = 0;
-double mouseMoveX, mouseMoveY;
-
-
 void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     if(this->drawEnabled)
     {
         double mouse_posX = event->scenePos().x();
         double mouse_posY = event->scenePos().y();
-        if(w == 0) w = sceneRect().width(); // width
-        if(h == 0) h = sceneRect().height(); // height
+        if(this->widthD == 0)
+        {
+            this->widthD = sceneRect().width();
+        }
+        if(this->heightD == 0)
+        {
+            this->heightD = sceneRect().height();
+        }
 
-        if((this->pointXa >= 0)&&(this->pointYa>=0)&&(this->pointXa<=w)&&(this->pointYa<=h)){ // the initial point must be inside the video resolution
-
+        // the initial point must be inside the video resolution
+        if((this->pointXa >= 0) && (this->pointYa >= 0) && (this->pointXa <= this->widthD) && (this->pointYa <= this->heightD))
+        {
             delete(this->itemToDraw);
             this->itemToDraw = NULL;
 
@@ -51,8 +58,8 @@ void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
 
             if(mouse_posX < 0) mouse_posX = 0;
             if(mouse_posY < 0) mouse_posY = 0;
-            if(mouse_posX > w) mouse_posX = w;
-            if(mouse_posY > h) mouse_posY = h;
+            if(mouse_posX > this->widthD) mouse_posX = this->widthD;
+            if(mouse_posY > this->heightD) mouse_posY = this->heightD;
 
             this->pointXb = mouse_posX;
             this->pointYb = mouse_posY;
@@ -118,8 +125,8 @@ void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     }
     else
     {
-        mouseMoveX = this->pointXa - event->scenePos().x(); // Init position - End position  X - Deslocamento para a esquerda
-        mouseMoveY = this->pointYa - event->scenePos().y(); // Init position - End position  Y
+        this->mouseMoveX = this->pointXa - event->scenePos().x(); // Init position - End position  X - Deslocamento para a esquerda
+        this->mouseMoveY = this->pointYa - event->scenePos().y(); // Init position - End position  Y
 
 //        qDebug() << "X = " << this->box.x - mouseMoveX << endl;
 //        qDebug() << "Y = " << this->box.y - mouseMoveY << endl;
@@ -130,7 +137,6 @@ void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
         QGraphicsScene::mouseMoveEvent(event);
     }
 }
-
 
 void QBoundingBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
@@ -174,6 +180,7 @@ void QBoundingBox::slot_enableDraw()
     this->itemToDraw = 0;
     this->drawEnabled = true;
 }
+
 void QBoundingBox ::keyPressEvent(QKeyEvent* e)
 {
     switch(e->key())

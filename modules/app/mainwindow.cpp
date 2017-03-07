@@ -18,7 +18,6 @@ MainWindow::MainWindow(QWidget *parent)
     this->setShortcuts();
     this->setTableModel();
 
-
     this->ui->splitterHorizontal->setStretchFactor(0,1);
     this->ui->splitterVertical->setStretchFactor(0,1);
 
@@ -46,22 +45,28 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     this->ui->viewFrame->fitInView(this->frameScene->sceneRect(), Qt::KeepAspectRatio);
 }
 
-bool MainWindow::isPlaying()
+void MainWindow::enableWidgets(const bool _enable)
 {
-    return this->playing;
-}
+    this->ui->actionAttributes->setEnabled(_enable);
+    this->ui->actionExport_JSON->setEnabled(_enable);
+    this->ui->actionImport_JSON->setEnabled(_enable);
 
-void MainWindow::isPlaying(const bool _enable)
-{
-    this->playing = _enable;
-    if(_enable)
-    {
-        this->ui->buttonPlay->setText("Pause");
-    }
-    else
-    {
-        this->ui->buttonPlay->setText("Play");
-    }
+    this->ui->buttonForward->setEnabled(_enable);
+    this->ui->buttonForwardF->setEnabled(_enable);
+    this->ui->buttonPlay->setEnabled(_enable);
+    this->ui->buttonRewind->setEnabled(_enable);
+    this->ui->buttonRewindF->setEnabled(_enable);
+    this->ui->buttonStop->setEnabled(_enable);
+    this->ui->buttonNewBox->setEnabled(_enable);
+
+    this->ui->labelFrameId->setEnabled(_enable);
+    this->ui->labelTime->setEnabled(_enable);
+    this->ui->sliderFrame->setEnabled(_enable);
+    this->ui->spinBoxSpeed->setEnabled(_enable);
+    this->ui->tableViewFrame->setEnabled(_enable);
+    this->ui->viewFrame->setEnabled(_enable);
+    this->ui->labelSpeed->setEnabled(_enable);
+    this->ui->buttonTool->setEnabled(_enable);
 }
 
 void MainWindow::enableFrameBased(const bool _enable)
@@ -92,30 +97,6 @@ void MainWindow::enableFrameBased(const bool _enable)
     this->ui->labelInitialFrame->setEnabled(_enable);
     this->ui->labelFinalFrame->setEnabled(_enable);
     this->ui->labelInfo->setEnabled(_enable);
-}
-
-void MainWindow::enableWidgets(const bool _enable)
-{
-    this->ui->actionAttributes->setEnabled(_enable);
-    this->ui->actionExport_JSON->setEnabled(_enable);
-    this->ui->actionImport_JSON->setEnabled(_enable);
-
-    this->ui->buttonForward->setEnabled(_enable);
-    this->ui->buttonForwardF->setEnabled(_enable);
-    this->ui->buttonPlay->setEnabled(_enable);
-    this->ui->buttonRewind->setEnabled(_enable);
-    this->ui->buttonRewindF->setEnabled(_enable);
-    this->ui->buttonStop->setEnabled(_enable);
-    this->ui->buttonNewBox->setEnabled(_enable);
-
-    this->ui->labelFrameId->setEnabled(_enable);
-    this->ui->labelTime->setEnabled(_enable);
-    this->ui->sliderFrame->setEnabled(_enable);
-    this->ui->spinBoxSpeed->setEnabled(_enable);
-    this->ui->tableViewFrame->setEnabled(_enable);
-    this->ui->viewFrame->setEnabled(_enable);
-    this->ui->labelSpeed->setEnabled(_enable);
-    this->ui->buttonTool->setEnabled(_enable);
 }
 
 void MainWindow::connectSignalSlots()
@@ -291,7 +272,7 @@ void MainWindow::connectSignalSlots()
     this->connect((this->frameScene),
                   SIGNAL(signal_addBoundingBoxToCore(Rect)),
                   this,
-                  SLOT(slot_addBoundingBoxToCore(Rect))
+                  SLOT(slot_addBoundingBoxToCore(const Rect))
                   );
 
     this->connect(this,
@@ -355,6 +336,24 @@ void MainWindow::setTableModel()
                   this->tableModel,
                   SLOT(slot_sortTable(int))
                   );
+}
+
+bool MainWindow::isPlaying()
+{
+    return this->playing;
+}
+
+void MainWindow::isPlaying(const bool _enable)
+{
+    this->playing = _enable;
+    if(_enable)
+    {
+        this->ui->buttonPlay->setText("Pause");
+    }
+    else
+    {
+        this->ui->buttonPlay->setText("Play");
+    }
 }
 
 void MainWindow::changeSpeed(const int _speed)
@@ -482,6 +481,21 @@ void MainWindow::restoreJson()
             this->manager->importJSON(*(this->singleton), this->tableModel, this->core_path);
         }
     }
+}
+
+int MainWindow::getIniFrameValue()
+{
+    return this->ui->spinBoxInitialFrame->value();
+}
+
+int MainWindow::getEndFrameValue()
+{
+    return this->ui->spinBoxFinalFrame->value();
+}
+
+QString MainWindow::getInfoValue()
+{
+    return this->ui->lineEditInfo->text();
 }
 
 void MainWindow::initializeComboboxes()
@@ -1011,17 +1025,6 @@ void MainWindow::slot_frameBasedAlterAccepted(const FrameBasedData _data, const 
     this->tableModel->changeRow(_data, _index);
 }
 
-void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
-{
-    unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
-    unsigned long num_bboxes = static_cast<unsigned long>(this->singleton->frames[nextFrameId - 1].getBoxes().size());
-
-    string temp_id = "frame" + std::to_string(nextFrameId - 1);
-    string temp_key = "bbox" + std::to_string(num_bboxes);
-
-    this->singleton->frames[nextFrameId - 1].addBox(temp_id + "_" + temp_key, _box);
-}
-
 void MainWindow::slot_on_sectionClicked(int _index)
 {
     emit signal_sortTable(_index);
@@ -1038,19 +1041,39 @@ void MainWindow::slot_resizeFrame()
 
 //-------------------------------------------------------------------------------------------------------------------
 
-int MainWindow::getIniFrameValue()
+void MainWindow::slot_buttonBoxAccepted()
 {
-    return this->ui->spinBoxInitialFrame->value();
+    FrameBasedData data = FrameBasedData(this->ui->spinBoxInitialFrame->value(),
+                                         this->ui->spinBoxFinalFrame->value(),
+                                         this->ui->comboBoxCategory->currentText().toStdString(),
+                                         this->ui->comboBoxLabel->currentText().toStdString(),
+                                         this->ui->lineEditInfo->text().toStdString());
+
+    if(this->manipulation == mode::insert)
+    {
+        emit this->signal_frameBasedInsertAccepted(data);
+    }
+    else if(this->manipulation == mode::alter)
+    {
+        emit this->signal_frameBasedAlterAccepted(data, this->indexId);
+    }
+
+    this->enableFrameBased(false);
 }
 
-int MainWindow::getEndFrameValue()
+void MainWindow::slot_buttonBoxRejected()
 {
-    return this->ui->spinBoxFinalFrame->value();
+    this->enableFrameBased(false);
 }
 
-QString MainWindow::getInfoValue()
+void MainWindow::slot_lineEditInfoChanged()
 {
-    return this->ui->lineEditInfo->text();
+    this->enableDisableButtonBox();
+}
+
+void MainWindow::slot_spinBoxValueChanged()
+{
+    this->enableDisableButtonBox();
 }
 
 void MainWindow::slot_initializeDialog()
@@ -1112,37 +1135,14 @@ void MainWindow::slot_comboBoxCategoryActivated(const QString &_text)
     this->ui->comboBoxLabel->setModel(this->labelModel);
 }
 
-void MainWindow::slot_spinBoxValueChanged()
+void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
 {
-    this->enableDisableButtonBox();
+    unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
+    unsigned long num_bboxes = static_cast<unsigned long>(this->singleton->frames[nextFrameId - 1].getBoxes().size());
+
+    string temp_id = "frame" + std::to_string(nextFrameId - 1);
+    string temp_key = "bbox" + std::to_string(num_bboxes);
+
+    this->singleton->frames[nextFrameId - 1].addBox(temp_id + "_" + temp_key, _box);
 }
 
-void MainWindow::slot_buttonBoxAccepted()
-{
-    FrameBasedData data = FrameBasedData(this->ui->spinBoxInitialFrame->value(),
-                                         this->ui->spinBoxFinalFrame->value(),
-                                         this->ui->comboBoxCategory->currentText().toStdString(),
-                                         this->ui->comboBoxLabel->currentText().toStdString(),
-                                         this->ui->lineEditInfo->text().toStdString());
-
-    if(this->manipulation == mode::insert)
-    {
-        emit this->signal_frameBasedInsertAccepted(data);
-    }
-    else if(this->manipulation == mode::alter)
-    {
-        emit this->signal_frameBasedAlterAccepted(data, this->indexId);
-    }
-
-    this->enableFrameBased(false);
-}
-
-void MainWindow::slot_buttonBoxRejected()
-{
-    this->enableFrameBased(false);
-}
-
-void MainWindow::slot_lineEditInfoChanged()
-{
-    this->enableDisableButtonBox();
-}

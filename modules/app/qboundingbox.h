@@ -66,6 +66,8 @@ private:
     /// \brief drawEnabled Bool to indicate if the user can draw a bbox
     /// \brief moveEnabled Bool to indicate if teh user can move a bbox
     bool drawEnabled, moveEnabled;
+    double heightD, widthD;
+    double mouseMoveX, mouseMoveY;
 
     QGraphicsRectItem* itemToDraw = NULL;
     qreal height;
@@ -80,7 +82,7 @@ signals:
     /// \brief signal_addBoundingBoxToCore signal to add the bbox to singleton
     /// \param newBox bbox to add
     ///
-    void signal_addBoundingBoxToCore(Rect newBox);
+    void signal_addBoundingBoxToCore(const Rect _newBox);
 
 public slots:
     ///
