@@ -33,7 +33,7 @@ public:
     /// \brief keyPressEvent
     /// \param e
     ///
-    void keyPressEvent(QKeyEvent* e);
+    void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
 
     ///
     /// \brief deleteBBox Removes a bbox
@@ -45,19 +45,19 @@ protected:
     /// \brief mousePressEvent When mouse button is pressed
     /// \param event Event sent by mouse
     ///
-    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) Q_DECL_OVERRIDE;
 
     ///
     /// \brief mouseMoveEvent When mouse is moved
     /// \param event Event sent by mouse
     ///
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) Q_DECL_OVERRIDE;
 
     ///
     /// \brief mouseReleaseEvent Mouse button released
     /// \param event Event sent by mouse
     ///
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) Q_DECL_OVERRIDE;
 
 private:
     void makeItemsControllable(bool areControllable);
@@ -83,6 +83,7 @@ signals:
     /// \param newBox bbox to add
     ///
     void signal_addBoundingBoxToCore(const Rect _box);
+    void signal_testing(void);
 
 public slots:
     ///

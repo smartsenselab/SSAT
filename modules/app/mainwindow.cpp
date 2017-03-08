@@ -5,7 +5,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     this->ui->setupUi(this);
-    this->frameScene = new QBoundingBox;
+    this->frameScene = new QBoundingBox(this);
     this->loaded = false;
     this->manager = new VideoManager;
     this->playing = false;
@@ -252,6 +252,38 @@ void MainWindow::connectSignalSlots()
                   SLOT(slot_buttonBoxRejected())
                   );
 
+    this->connect(this->ui->splitterHorizontal,
+                  SIGNAL(splitterMoved(int,int)),
+                  this,
+                  SLOT(slot_resizeFrame())
+                  );
+
+    this->connect(this->saveTimer,
+                  SIGNAL(timeout()),
+                  SLOT(slot_backupJson())
+                  );
+
+    // Connecting custom SIGNALS to SLOTS
+    //    this->connect(this->frameScene,
+    //                  SIGNAL(signal_addBoundingBoxToCore(const Rect)),
+    //                  this,
+    //                  SLOT(slot_addBoundingBoxToCore(const Rect))
+    //                  );
+
+    // CONNECTION NOT WORKING
+    this->connect(this->frameScene,
+                  SIGNAL(signal_testing(void)),
+                  this,
+                  SLOT(slot_testing(void))
+                  );
+
+    // CONNECTION NOT WORKING
+    this->connect(this,
+                  SIGNAL(signal_drawFrameBboxes(const Frame)),
+                  this->frameScene,
+                  SLOT(slot_drawFrameBboxes(const Frame))
+                  );
+
     this->connect(this,
                   SIGNAL(signal_frameBasedInsertAccepted(FrameBasedData)),
                   this,
@@ -262,30 +294,6 @@ void MainWindow::connectSignalSlots()
                   SIGNAL(signal_frameBasedAlterAccepted(const FrameBasedData, const int)),
                   this,
                   SLOT(slot_frameBasedAlterAccepted(const FrameBasedData, const int))
-                  );
-
-    // Connecting custom SIGNALS to SLOTS
-    this->connect(this->saveTimer,
-                  SIGNAL(timeout()),
-                  SLOT(slot_backupJson())
-                  );
-
-    this->connect(this->frameScene,
-                  SIGNAL(signal_addBoundingBoxToCore(const Rect)),
-                  this,
-                  SLOT(slot_addBoundingBoxToCore(const Rect))
-                  );
-
-    this->connect(this,
-                  SIGNAL(signal_drawFrameBboxes(const Frame)),
-                  (this->frameScene),
-                  SLOT(slot_drawFrameBboxes(const Frame))
-                  );
-
-    this->connect(this->ui->splitterHorizontal,
-                  SIGNAL(splitterMoved(int,int)),
-                  this,
-                  SLOT(slot_resizeFrame())
                   );
 }
 
@@ -632,17 +640,10 @@ void MainWindow::slot_openFile()
 
     if(!videoName.isEmpty())
     {
-        if(this->oneVideoWasOpened == 1)
-        {
-            this->tableModel->clear();
-        }
-        else
-        {
-            this->oneVideoWasOpened = 1;
-        }
-
         delete this->frameScene;
-        this->frameScene = new QBoundingBox;
+        this->tableModel->clear();
+
+        this->frameScene = new QBoundingBox(this);
 
         string temp = videoName.toStdString();
         size_t found = temp.find_last_of("/");
@@ -906,9 +907,9 @@ void MainWindow::slot_viewFrameContextMenu(const QPoint &_point)
     QMenu contextMenu;
     if (!this->isPlaying())
     {
-        contextMenu.addAction("New Bounding box     Ctrl+B", this, SLOT(slot_viewFrameNewBoxMenu()));
-        contextMenu.addAction("New Frame box          Ctrl+F", this, SLOT(slot_viewFrameNewFrameMenu()));
-        contextMenu.addAction("Remove Bbox", this, SLOT(slot_viewFrameRemoveBoxMenu()));
+        contextMenu.addAction("New Bounding box\tCtrl+B", this, SLOT(slot_viewFrameNewBoxMenu()));
+        contextMenu.addAction("New Frame box\tCtrl+F", this, SLOT(slot_viewFrameNewFrameMenu()));
+        contextMenu.addAction("Remove Bounding box", this, SLOT(slot_viewFrameRemoveBoxMenu()));
         contextMenu.exec(position);
     }
 }
@@ -1138,6 +1139,7 @@ void MainWindow::slot_comboBoxCategoryActivated(const QString &_text)
 
 void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
 {
+    qDebug() << Q_FUNC_INFO;
     unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
     unsigned long num_bboxes = static_cast<unsigned long>(this->singleton->frames[nextFrameId - 1].getBoxes().size());
 
@@ -1145,5 +1147,12 @@ void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
     string temp_key = "bbox" + std::to_string(num_bboxes);
 
     this->singleton->frames[nextFrameId - 1].addBox(temp_id + "_" + temp_key, _box);
+}
+
+void MainWindow::slot_testing()
+{
+    qDebug() << Q_FUNC_INFO;
+    std::cout << "PRINTING TESTING" << std::endl;
+    qDebug() << "Box = BOX BOIX BOX";
 }
 

@@ -70,7 +70,6 @@ private:
 
     int InitFrame;
     int EndFrame;
-    int oneVideoWasOpened = 0;
 
     QStringListModel *categoryModel = NULL;
     QStringListModel *labelModel = NULL;
@@ -479,6 +478,7 @@ public slots:
     /// \param _box
     ///
     void slot_addBoundingBoxToCore(const Rect _box);
+    void slot_testing(void);
 
 signals:
     ///

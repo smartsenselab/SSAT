@@ -4,7 +4,7 @@
 
 QBoundingBox::QBoundingBox(QObject* parent): QGraphicsScene(parent)
 {
-//    std::cout << this->items().size() << std::endl;
+    //    std::cout << this->items().size() << std::endl;
     this->itemToDraw = 0;
 
     this->moveEnabled = false;
@@ -128,10 +128,10 @@ void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
         this->mouseMoveX = this->pointXa - event->scenePos().x(); // Init position - End position  X - Deslocamento para a esquerda
         this->mouseMoveY = this->pointYa - event->scenePos().y(); // Init position - End position  Y
 
-//        qDebug() << "X = " << this->box.x - mouseMoveX << endl;
-//        qDebug() << "Y = " << this->box.y - mouseMoveY << endl;
-//        qDebug() << "W = " << this->box.width << endl;
-//        qDebug() << "H = " << this->box.height << endl;
+        //        qDebug() << "X = " << this->box.x - mouseMoveX << endl;
+        //        qDebug() << "Y = " << this->box.y - mouseMoveY << endl;
+        //        qDebug() << "W = " << this->box.width << endl;
+        //        qDebug() << "H = " << this->box.height << endl;
 
 
         QGraphicsScene::mouseMoveEvent(event);
@@ -145,13 +145,15 @@ void QBoundingBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         this->drawEnabled = false;
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsSelectable, true);
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsMovable, true);
-        emit this->signal_addBoundingBoxToCore(this->box);
-        qDebug() << "Box = " << this->box.x << ":" << this->box.y << ":" << this->box.width << ":" << this->box.height << endl;
+        emit this->signal_testing();
+        qDebug() << "Box = " << this->box.x << ":" << this->box.y << ":"
+                 << this->box.width << ":" << this->box.height << endl;
+        // emit this->signal_addBoundingBoxToCore(this->box);
     }
     else
     {
-//        this->box.x = static_cast<int>(this->box.x - mouseMoveX);
-//        this->box.y = static_cast<int>(this->box.y - mouseMoveY);
+        //        this->box.x = static_cast<int>(this->box.x - mouseMoveX);
+        //        this->box.y = static_cast<int>(this->box.y - mouseMoveY);
     }
 
     QGraphicsScene::mouseReleaseEvent(event);
@@ -184,7 +186,7 @@ void QBoundingBox::slot_enableDraw()
 void QBoundingBox ::keyPressEvent(QKeyEvent* e)
 {
     switch(e->key())
-{
+    {
     case Qt::Key_Delete:
         removeItem(selectedItems().front());
     }
