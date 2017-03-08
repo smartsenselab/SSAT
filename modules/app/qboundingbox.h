@@ -82,7 +82,7 @@ signals:
     /// \brief signal_addBoundingBoxToCore signal to add the bbox to singleton
     /// \param newBox bbox to add
     ///
-    void signal_addBoundingBoxToCore(const Rect _newBox);
+    void signal_addBoundingBoxToCore(const Rect _box);
 
 public slots:
     ///

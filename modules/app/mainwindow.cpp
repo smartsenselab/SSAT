@@ -202,7 +202,7 @@ void MainWindow::connectSignalSlots()
                   SLOT(slot_spinBoxSpeedValueChanged(int))
                   );
 
-    // Connecting FRAME-BASED SIGNALS to SLOTS
+    // Connecting TABLE_VIEW_FRAME SIGNALS to SLOTS
     this->connect(this->ui->tableViewFrame,
                   SIGNAL(clicked(QModelIndex)),
                   this,
@@ -221,22 +221,11 @@ void MainWindow::connectSignalSlots()
                   SLOT(slot_on_sectionClicked(int))
                   );
 
+    // Connecting INFO PANEL SIGNALS to SLOTS
     this->connect(this->ui->comboBoxCategory,
                   SIGNAL(activated(QString)),
                   this,
                   SLOT(slot_comboBoxCategoryActivated(QString))
-                  );
-
-    this->connect(this->ui->buttonBoxOKcancel,
-                  SIGNAL(accepted()),
-                  this,
-                  SLOT(slot_buttonBoxAccepted())
-                  );
-
-    this->connect(this->ui->buttonBoxOKcancel,
-                  SIGNAL(rejected()),
-                  this,
-                  SLOT(slot_buttonBoxRejected())
                   );
 
     this->connect(this->ui->spinBoxInitialFrame,
@@ -249,6 +238,18 @@ void MainWindow::connectSignalSlots()
                   SIGNAL(valueChanged(int)),
                   this,
                   SLOT(slot_spinBoxValueChanged())
+                  );
+
+    this->connect(this->ui->buttonBoxOKcancel,
+                  SIGNAL(accepted()),
+                  this,
+                  SLOT(slot_buttonBoxAccepted())
+                  );
+
+    this->connect(this->ui->buttonBoxOKcancel,
+                  SIGNAL(rejected()),
+                  this,
+                  SLOT(slot_buttonBoxRejected())
                   );
 
     this->connect(this,
@@ -269,8 +270,8 @@ void MainWindow::connectSignalSlots()
                   SLOT(slot_backupJson())
                   );
 
-    this->connect((this->frameScene),
-                  SIGNAL(signal_addBoundingBoxToCore(Rect)),
+    this->connect(this->frameScene,
+                  SIGNAL(signal_addBoundingBoxToCore(const Rect)),
                   this,
                   SLOT(slot_addBoundingBoxToCore(const Rect))
                   );
