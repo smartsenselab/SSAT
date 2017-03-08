@@ -94,6 +94,17 @@ private slots:
     /// \brief slot_enterShortcut When Enter key is pressed, save all tree changes on core
     ///
     void slot_enterShortcut();
+
+    ///
+    /// \brief slot_Consistency_Check_Cat Check if the new category wasn't used before
+    ///
+    void slot_Consistency_Check_Cat();
+
+    ///
+    /// \brief slot_Consistency_Check_Lab Check if the new label wasn't used before
+    /// \param node Category that the new label is contained
+    ///
+    void slot_Consistency_Check_Lab(QStandardItem *node);
 };
 
 #endif // DIALOGANNOTATION_H

@@ -122,6 +122,18 @@ void DialogAnnotation::slot_insertCategoryPressed()
 
     this->ui->pushButtonInsertLabel->setEnabled(true);
     this->ui->pushButtonRemove->setEnabled(true);
+
+    this->connect(qStandardModel,
+                  SIGNAL(itemChanged(QStandardItem*)),
+                  this,
+                  SLOT(slot_Consistency_Check_Cat())
+                  );
+
+    this->disconnect(qStandardModel,
+                     SIGNAL(itemChanged(QStandardItem*)),
+                     this,
+                     SLOT(slot_Consistency_Check_Lab(QStandardItem*))
+                     );
 }
 
 void DialogAnnotation::slot_insertLabelPressed()
@@ -142,6 +154,18 @@ void DialogAnnotation::slot_insertLabelPressed()
 
     this->ui->treeViewAttributes->setCurrentIndex(label->index());
     this->ui->treeViewAttributes->edit(label->index());
+
+    this->connect(qStandardModel,
+                  SIGNAL(itemChanged(QStandardItem*)),
+                  this,
+                  SLOT(slot_Consistency_Check_Lab(QStandardItem*))
+                  );
+
+    this->disconnect(qStandardModel,
+                     SIGNAL(itemChanged(QStandardItem*)),
+                     this,
+                     SLOT(slot_Consistency_Check_Cat())
+                     );
 }
 
 void DialogAnnotation::slot_removePressed()
@@ -186,4 +210,76 @@ void DialogAnnotation::slot_reject()
 void DialogAnnotation::slot_enterShortcut()
 {
     this->accept();
+}
+
+void DialogAnnotation::slot_Consistency_Check_Cat(){
+    int flag = 0;
+    for(int outer = 0; outer < this->qStandardModel->rowCount(); outer++)
+    {
+        QModelIndex categoryIndex = this->qStandardModel->index(outer, 0);
+        QVariant categoryName = this->qStandardModel->data(categoryIndex);
+        for(int outer2 = 0; outer2 < this->qStandardModel->rowCount(); outer2++){
+            QModelIndex categoryIndex2 = this->qStandardModel->index(outer2, 0);
+            QVariant categoryName2 = this->qStandardModel->data(categoryIndex2);
+            QString str1 = categoryName.toString();
+            QString str2 = categoryName2.toString();
+            QByteArray ba1 = str1.toLatin1();
+            QByteArray ba2 = str2.toLatin1();
+            const char *c_str1 = ba1.data();
+            const char *c_str2 = ba2.data();
+            if(strcmp(c_str1, c_str2) == 0 && outer != outer2 ){
+                flag = 1;
+            }
+        }
+    }
+    if(flag == 0){
+        this->ui->buttonBox->setEnabled(true);
+        this->ui->pushButtonInsertCategory->setEnabled(true);
+        this->ui->pushButtonInsertLabel->setEnabled(true);
+        this->ui->pushButtonRemove->setEnabled(true);
+    }
+    else{
+        this->ui->buttonBox->setEnabled(false);
+        this->ui->pushButtonInsertCategory->setEnabled(false);
+        this->ui->pushButtonInsertLabel->setEnabled(false);
+        this->ui->pushButtonRemove->setEnabled(false);
+    }
+}
+
+void DialogAnnotation::slot_Consistency_Check_Lab(QStandardItem *node){
+    int flag = 0;
+    int row = node->parent()->row();
+    QModelIndex categoryIndex = this->qStandardModel->index(row, 0);
+    qDebug() << node->parent()->row() << "\n";
+    for(int outer = 0; outer < this->qStandardModel->rowCount(categoryIndex); outer++)
+    {
+        QModelIndex labelIndex = this->qStandardModel->index(outer, 0, categoryIndex);
+        QVariant labelName = this->qStandardModel->data(labelIndex);
+
+        for(int outer2 = 0; outer2 < this->qStandardModel->rowCount(categoryIndex); outer2++){
+            QModelIndex labelIndex2 = this->qStandardModel->index(outer2, 0, categoryIndex);
+            QVariant labelName2 = this->qStandardModel->data(labelIndex2);
+            QString str1 = labelName.toString();
+            QString str2 = labelName2.toString();
+            QByteArray ba1 = str1.toLatin1();
+            QByteArray ba2 = str2.toLatin1();
+            const char *c_str1 = ba1.data();
+            const char *c_str2 = ba2.data();
+            if(strcmp(c_str1, c_str2) == 0 && outer != outer2 ){
+                flag = 1;
+            }
+        }
+    }
+    if(flag == 0){
+        this->ui->buttonBox->setEnabled(true);
+        this->ui->pushButtonInsertCategory->setEnabled(true);
+        this->ui->pushButtonInsertLabel->setEnabled(true);
+        this->ui->pushButtonRemove->setEnabled(true);
+    }
+    else{
+        this->ui->buttonBox->setEnabled(false);
+        this->ui->pushButtonInsertCategory->setEnabled(false);
+        this->ui->pushButtonInsertLabel->setEnabled(false);
+        this->ui->pushButtonRemove->setEnabled(false);
+    }
 }
