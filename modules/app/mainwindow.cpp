@@ -5,7 +5,8 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     this->ui->setupUi(this);
-    this->frameScene = new QBoundingBox(this);
+
+    this->frameScene = new QBoundingBoxScene(this);
     this->loaded = false;
     this->manager = new VideoManager;
     this->playing = false;
@@ -448,7 +449,7 @@ void MainWindow::updateFrame(const int _frameId)
         this->frameScene->clear();
 
         qint64 current = this->manager->getTime();
-        QTime currentTime((current/3600)%60, (current/60)%60, current%60, (current*1000)%1000);
+        QTime currentTime((current/3600) % 60, (current/60) % 60, current % 60, (current * 1000) % 1000);
         QString stringTime = currentTime.toString("hh:mm:ss");
         this->ui->labelTime->setText(stringTime);
 
@@ -635,7 +636,7 @@ void MainWindow::slot_openFile()
         this->tableModel->clear();
 
         // Re-instantiating frameScene and its Signal/Slot connections
-        this->frameScene = new QBoundingBox(this);
+        this->frameScene = new QBoundingBoxScene(this);
         this->connect(this->frameScene,
                       SIGNAL(signal_addBoundingBoxToCore(const Rect)),
                       this,

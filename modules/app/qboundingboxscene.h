@@ -10,6 +10,8 @@
 #include <QtMath>
 #include <QToolBar>
 
+#include <qdebug.h>
+
 #include <cstdlib>
 #include <iostream>
 
@@ -18,14 +20,13 @@ using cv::Rect;
 
 #include "frame.h"
 
-class QBoundingBox : public QGraphicsScene
+class QBoundingBoxScene : public QGraphicsScene
 {
     Q_OBJECT
 
 private:
     void makeItemsControllable(bool areControllable);
 
-    ///
     /// \brief drawEnabled Bool to indicate if the user can draw a bbox
     /// \brief moveEnabled Bool to indicate if teh user can move a bbox
     bool drawEnabled, moveEnabled;
@@ -33,6 +34,7 @@ private:
     double mouseMoveX, mouseMoveY;
 
     QGraphicsRectItem* itemToDraw = NULL;
+
     qreal height;
     qreal pointXa, pointXb;
     qreal pointYa, pointYb;
@@ -42,10 +44,10 @@ private:
 
 public:
     ///
-    /// \brief QBoundingBox Constructor for a new bbox
+    /// \brief QBoundingBoxScene Constructor for a new bbox
     /// \param parent
     ///
-    QBoundingBox(QObject* parent = 0);
+    QBoundingBoxScene(QObject* parent = 0);
 
     ///
     /// \brief keyPressEvent

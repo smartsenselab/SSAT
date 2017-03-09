@@ -1,10 +1,7 @@
-#include "qboundingbox.h"
-#include "boundingbox.h"
-#include "qdebug.h"
+#include "qboundingboxscene.h"
 
-QBoundingBox::QBoundingBox(QObject* parent): QGraphicsScene(parent)
+QBoundingBoxScene::QBoundingBoxScene(QObject* parent): QGraphicsScene(parent)
 {
-    // std::cout << this->items().size() << std::endl;
     this->itemToDraw = 0;
 
     this->moveEnabled = false;
@@ -14,7 +11,7 @@ QBoundingBox::QBoundingBox(QObject* parent): QGraphicsScene(parent)
     this->widthD = 0;
 }
 
-void QBoundingBox::deleteBBox()
+void QBoundingBoxScene::deleteBBox()
 {
     foreach(QGraphicsItem *item, selectedItems())
     {
@@ -23,14 +20,14 @@ void QBoundingBox::deleteBBox()
     }
 }
 
-void QBoundingBox::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void QBoundingBoxScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     this->pointXa = event->scenePos().x();
     this->pointYa = event->scenePos().y();
     QGraphicsScene::mousePressEvent(event);
 }
 
-void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
+void QBoundingBoxScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     if(this->drawEnabled)
     {
         double mouse_posX = event->scenePos().x();
@@ -137,7 +134,7 @@ void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     }
 }
 
-void QBoundingBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if((this->drawEnabled) && (this->itemToDraw != NULL))
     {
@@ -154,10 +151,12 @@ void QBoundingBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         //this->box.y = static_cast<int>(this->box.y - mouseMoveY);
     }
 
+    std::cout << this->items().size() << std::endl;
+
     QGraphicsScene::mouseReleaseEvent(event);
 }
 
-void QBoundingBox::slot_drawFrameBboxes(const Frame _frame)
+void QBoundingBoxScene::slot_drawFrameBboxes(const Frame _frame)
 {
     map<string, BoundingBox> bboxes = _frame.getBoxes();
     for(map<string, BoundingBox>::iterator it = bboxes.begin(); it != bboxes.end(); it++)
@@ -176,13 +175,13 @@ void QBoundingBox::slot_drawFrameBboxes(const Frame _frame)
     }
 }
 
-void QBoundingBox::slot_enableDraw()
+void QBoundingBoxScene::slot_enableDraw()
 {
     this->itemToDraw = 0;
     this->drawEnabled = true;
 }
 
-void QBoundingBox ::keyPressEvent(QKeyEvent* e)
+void QBoundingBoxScene ::keyPressEvent(QKeyEvent* e)
 {
     switch(e->key())
     {

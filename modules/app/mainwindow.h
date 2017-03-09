@@ -20,7 +20,7 @@
 
 #include "dialogannotation.h"
 #include "framebaseddata.h"
-#include "qboundingbox.h"
+#include "qboundingboxscene.h"
 #include "qframebasedtablemodel.h"
 #include "videomanager.h"
 
@@ -60,7 +60,7 @@ private:
 
     Core *singleton = NULL;
     DialogAnnotation *annotationDialog = NULL;
-    QBoundingBox *frameScene = NULL;
+    QBoundingBoxScene *frameScene = NULL;
     QFrameBasedTableModel *tableModel = NULL;
     QGraphicsRectItem *rectangle = NULL;
 
