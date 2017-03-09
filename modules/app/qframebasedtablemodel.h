@@ -13,9 +13,11 @@ class QFrameBasedTableModel : public QAbstractTableModel
     Q_OBJECT
     /// https://doc.qt.io/archives/4.6/itemviews-addressbook.html
 
-public:
+private:
     int sortFlag = 0;
+    vector<FrameBasedData>* frameData = NULL;
 
+public:
     ///
     /// \brief QFrameBasedTableModel Constructor for a empty table model
     /// \param _parent parent of the model
@@ -130,12 +132,6 @@ public:
     ///
     void setFrameBasedData(vector<FrameBasedData> &_frameBasedData);
     vector<FrameBasedData>* getFrameBasedData();
-
-private:
-    ///
-    /// \brief frameData vector containing the data in the table
-    ///
-    vector<FrameBasedData>* frameData;
 
 public slots:
     ///

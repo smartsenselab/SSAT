@@ -29,7 +29,8 @@ namespace Ui
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow {
+class MainWindow : public QMainWindow
+{
     Q_OBJECT
 
 private:
@@ -53,23 +54,18 @@ private:
     int speed;
 
     QImage frameQImage;
-    QString core_path;
+    QString corePath;
     QTimer *playerTime = NULL;
     QTimer *saveTimer = NULL;
 
     Core *singleton = NULL;
-
     DialogAnnotation *annotationDialog = NULL;
-
     QBoundingBox *frameScene = NULL;
     QFrameBasedTableModel *tableModel = NULL;
     QGraphicsRectItem *rectangle = NULL;
 
     QString nome;
     QString videopath;
-
-    int InitFrame;
-    int EndFrame;
 
     QStringListModel *categoryModel = NULL;
     QStringListModel *labelModel = NULL;
@@ -180,7 +176,7 @@ private:
     ///
     /// \brief restoreJson  Get a Json file previously created (if the user wants to)
     ///
-    void restoreJson();
+    void messageRestoreJson();
 
     ///
     /// \brief getIniFrameValue Return the initial frame of the annotation displayed on the interface
@@ -218,7 +214,6 @@ private:
     void enableDisableButtonBox();
 
 public slots:
-
     ///
     /// \brief slot_Fshortcut   Shortcut to open the annotation box
     ///
@@ -478,7 +473,6 @@ public slots:
     /// \param _box
     ///
     void slot_addBoundingBoxToCore(const Rect _box);
-    void slot_testing(void);
 
 signals:
     ///

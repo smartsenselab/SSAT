@@ -145,10 +145,9 @@ void QBoundingBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         this->drawEnabled = false;
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsSelectable, true);
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsMovable, true);
-        emit this->signal_testing();
         qDebug() << "Box = " << this->box.x << ":" << this->box.y << ":"
                  << this->box.width << ":" << this->box.height << endl;
-        // emit this->signal_addBoundingBoxToCore(this->box);
+        emit this->signal_addBoundingBoxToCore(this->box);
     }
     else
     {

@@ -6,6 +6,15 @@
 
 class QDraggableRectItem : public QGraphicsRectItem
 {
+private:
+    ///
+    /// \brief anchorPoint Center point of the bbox
+    ///
+    QPointF anchorPoint;
+
+    /// Sets the mouse to start to draw bboxes
+    bool m_dragged;
+
 public:
     ///
     /// \brief QDraggableRectItem Constructor for a new bbox
@@ -30,15 +39,6 @@ protected:
     /// \param event Event of releasing mouse button or moving the mouse
     ///
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-
-private:
-    ///
-    /// \brief anchorPoint Center point of the bbox
-    ///
-    QPointF anchorPoint;
-
-    /// Sets the mouse to start to draw bboxes
-    bool m_dragged;
 };
 
 #endif // DRAGGABLERECTITEM_H

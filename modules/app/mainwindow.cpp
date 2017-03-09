@@ -264,20 +264,12 @@ void MainWindow::connectSignalSlots()
                   );
 
     // Connecting custom SIGNALS to SLOTS
-    //    this->connect(this->frameScene,
-    //                  SIGNAL(signal_addBoundingBoxToCore(const Rect)),
-    //                  this,
-    //                  SLOT(slot_addBoundingBoxToCore(const Rect))
-    //                  );
-
-    // CONNECTION NOT WORKING
     this->connect(this->frameScene,
-                  SIGNAL(signal_testing(void)),
+                  SIGNAL(signal_addBoundingBoxToCore(const Rect)),
                   this,
-                  SLOT(slot_testing(void))
+                  SLOT(slot_addBoundingBoxToCore(const Rect))
                   );
 
-    // CONNECTION NOT WORKING
     this->connect(this,
                   SIGNAL(signal_drawFrameBboxes(const Frame)),
                   this->frameScene,
@@ -470,9 +462,9 @@ void MainWindow::updateFrame(const int _frameId)
     }
 }
 
-void MainWindow::restoreJson()
+void MainWindow::messageRestoreJson()
 {
-    std::ifstream file(this->core_path.toStdString());
+    std::ifstream file(this->corePath.toStdString());
     if (file.good())
     {
         int response;
@@ -487,7 +479,7 @@ void MainWindow::restoreJson()
         switch(response)
         {
         case QMessageBox::Yes:
-            this->manager->importJSON(*(this->singleton), this->tableModel, this->core_path);
+            this->manager->importJSON(*(this->singleton), this->tableModel, this->corePath);
         }
     }
 }
@@ -643,15 +635,28 @@ void MainWindow::slot_openFile()
         delete this->frameScene;
         this->tableModel->clear();
 
+        // Re-instantiating frameScene and its Signal/Slot connections
         this->frameScene = new QBoundingBox(this);
+        this->connect(this->frameScene,
+                      SIGNAL(signal_addBoundingBoxToCore(const Rect)),
+                      this,
+                      SLOT(slot_addBoundingBoxToCore(const Rect))
+                      );
+        this->connect(this,
+                      SIGNAL(signal_drawFrameBboxes(const Frame)),
+                      this->frameScene,
+                      SLOT(slot_drawFrameBboxes(const Frame))
+                      );
 
-        string temp = videoName.toStdString();
-        size_t found = temp.find_last_of("/");
-        this->core_path =QString::fromStdString( "./temp_" + temp.substr(found).substr(1) +".json");
+        // Loading name from file
+        string stdName = videoName.toStdString();
+        size_t slashFound = stdName.find_last_of("/");
+        this->corePath = QString::fromStdString("./temp_" + stdName.substr(slashFound).substr(1) +".json");
         this->loaded = true;
         this->manager->loadVideo(videoName);
         this->totalFrames = std::round(+this->manager->getTotalFrames());
 
+        // Lazy instantiation of SSAT Core
         if(this->singleton == NULL)
         {
             this->singleton = Core::getInstance(static_cast<unsigned int>(this->totalFrames));
@@ -661,22 +666,22 @@ void MainWindow::slot_openFile()
             this->singleton->reset(static_cast<unsigned int>(this->totalFrames));
         }
 
+        // Displaying Frame and Core information on Interface
         this->tableModel->setFrameBasedData(this->singleton->frameData);
         this->ui->sliderFrame->setRange(1, static_cast<int>(this->totalFrames));
         this->ui->tableViewFrame->setModel(this->tableModel);
         this->enableWidgets(true);
         this->updateFrame(1);
 
-        this->restoreJson();
-        this->saveTimer->start(10000);
+        this->messageRestoreJson();
+        this->saveTimer->start(15000);
     }
 }
 
 void MainWindow::slot_backupJson()
 {
-
-    this->manager->exportJSON(*(this->singleton), this->core_path);
-    std::cout << "saving" << std::endl;
+    this->manager->exportJSON(*(this->singleton), this->corePath);
+    std::cout << "User modifications were saved to file." << std::endl;
 }
 
 void MainWindow::slot_importJson()
@@ -1139,7 +1144,6 @@ void MainWindow::slot_comboBoxCategoryActivated(const QString &_text)
 
 void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
 {
-    qDebug() << Q_FUNC_INFO;
     unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
     unsigned long num_bboxes = static_cast<unsigned long>(this->singleton->frames[nextFrameId - 1].getBoxes().size());
 
@@ -1147,12 +1151,5 @@ void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
     string temp_key = "bbox" + std::to_string(num_bboxes);
 
     this->singleton->frames[nextFrameId - 1].addBox(temp_id + "_" + temp_key, _box);
-}
-
-void MainWindow::slot_testing()
-{
-    qDebug() << Q_FUNC_INFO;
-    std::cout << "PRINTING TESTING" << std::endl;
-    qDebug() << "Box = BOX BOIX BOX";
 }
 

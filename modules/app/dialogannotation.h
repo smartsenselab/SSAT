@@ -24,8 +24,20 @@ class DialogAnnotation : public QDialog
 {
     Q_OBJECT
 
-public:
+private:
+    Ui::DialogAnnotation *ui = NULL;
+
     QAction *enterPressed = NULL;
+    QMultiMap<QString, QString> qAttributes;
+
+    QStandardItemModel *qStandardModel = NULL;
+
+    QString selectedCategory;
+    QString selectedLabel;
+
+    Core *singleton = NULL;
+
+public:
     explicit DialogAnnotation(QWidget *parent = 0);
     ~DialogAnnotation();
 
@@ -45,17 +57,6 @@ private:
     /// \brief updateCoreContent Does nothing
     ///
     void updateCoreContent();
-
-private:
-    Ui::DialogAnnotation *ui;
-    QMultiMap<QString, QString> qAttributes;
-
-    QStandardItemModel *qStandardModel;
-
-    QString selectedCategory;
-    QString selectedLabel;
-
-    Core *singleton = NULL;
 
 public slots:
     ///

@@ -22,6 +22,24 @@ class QBoundingBox : public QGraphicsScene
 {
     Q_OBJECT
 
+private:
+    void makeItemsControllable(bool areControllable);
+
+    ///
+    /// \brief drawEnabled Bool to indicate if the user can draw a bbox
+    /// \brief moveEnabled Bool to indicate if teh user can move a bbox
+    bool drawEnabled, moveEnabled;
+    double heightD, widthD;
+    double mouseMoveX, mouseMoveY;
+
+    QGraphicsRectItem* itemToDraw = NULL;
+    qreal height;
+    qreal pointXa, pointXb;
+    qreal pointYa, pointYb;
+    qreal width;
+
+    Rect box;
+
 public:
     ///
     /// \brief QBoundingBox Constructor for a new bbox
@@ -59,32 +77,6 @@ protected:
     ///
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) Q_DECL_OVERRIDE;
 
-private:
-    void makeItemsControllable(bool areControllable);
-
-    ///
-    /// \brief drawEnabled Bool to indicate if the user can draw a bbox
-    /// \brief moveEnabled Bool to indicate if teh user can move a bbox
-    bool drawEnabled, moveEnabled;
-    double heightD, widthD;
-    double mouseMoveX, mouseMoveY;
-
-    QGraphicsRectItem* itemToDraw = NULL;
-    qreal height;
-    qreal pointXa, pointXb;
-    qreal pointYa, pointYb;
-    qreal width;
-
-    Rect box;
-
-signals:
-    ///
-    /// \brief signal_addBoundingBoxToCore signal to add the bbox to singleton
-    /// \param newBox bbox to add
-    ///
-    void signal_addBoundingBoxToCore(const Rect _box);
-    void signal_testing(void);
-
 public slots:
     ///
     /// \brief slot_drawFrameBboxes Slot to draw a new bbox
@@ -96,6 +88,13 @@ public slots:
     /// \brief slot_enableDraw Allow the user to draw a new bbox
     ///
     void slot_enableDraw();
+
+signals:
+    ///
+    /// \brief signal_addBoundingBoxToCore signal to add the bbox to singleton
+    /// \param newBox bbox to add
+    ///
+    void signal_addBoundingBoxToCore(const Rect _box);
 };
 
 #endif // SCENE_H

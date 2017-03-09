@@ -21,8 +21,7 @@ class DialogFrameBased : public QDialog
     Q_OBJECT
 
 private:
-
-    Ui::DialogFrameBased *ui;
+    Ui::DialogFrameBased *ui = NULL;
 
     int frameId, indexId, totalFrames;
     mode manipulation;
