@@ -629,7 +629,6 @@ void MainWindow::slot_openFile()
                                                      tr("/home"),
                                                      tr("Video Files (*.avi *.mp4 *.mov)"));
 
-
     if(!videoName.isEmpty())
     {
         delete this->frameScene;

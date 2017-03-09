@@ -14,13 +14,13 @@ void QDraggableRectItem::setAnchorPoint(const QPointF &anchorPoint)
 
 void QDraggableRectItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    m_dragged = true;
+    this->m_dragged = true;
     QGraphicsRectItem::mouseMoveEvent(event);
 }
 
 void QDraggableRectItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(m_dragged)
+    if(this->m_dragged)
     {
         QList<QGraphicsItem*> colItems = collidingItems();
 
@@ -32,17 +32,19 @@ void QDraggableRectItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         {
             QGraphicsItem* closestItem = colItems.at(0);
             qreal shortestDist = 100000;
-            foreach(QGraphicsItem* item, colItems){
+            foreach(QGraphicsItem* item, colItems)
+            {
                 QLineF line(item->sceneBoundingRect().center(),
                             this->sceneBoundingRect().center());
-                if(line.length() < shortestDist){
+                if(line.length() < shortestDist)
+                {
                     shortestDist = line.length();
                     closestItem = item;
                 }
             }
             this->setPos(closestItem->scenePos());
         }
-        m_dragged = false;
+        this->m_dragged = false;
     }
     QGraphicsRectItem::mouseReleaseEvent(event);
 }

@@ -17,7 +17,7 @@ QFrameBasedTableModel::QFrameBasedTableModel(vector<FrameBasedData> &_frameBased
 int QFrameBasedTableModel::rowCount(const QModelIndex &_parent) const
 {
     Q_UNUSED(_parent);
-        return static_cast<int>(this->frameData->size());
+    return static_cast<int>(this->frameData->size());
 }
 
 int QFrameBasedTableModel::columnCount(const QModelIndex &_parent) const

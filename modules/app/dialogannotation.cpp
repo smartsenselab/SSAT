@@ -102,11 +102,14 @@ void DialogAnnotation::slot_initializeDialog(Core &_singleton)
     QModelIndex first = this->qStandardModel->index(0, 0, QModelIndex());
     this->ui->treeViewAttributes->setCurrentIndex(first);
 
-    int row = this->qStandardModel->rowCount();
-    if(row == 0){
+    int rowCount = this->qStandardModel->rowCount();
+
+    // disable insert button and remove if there are no categories
+    if(rowCount == 0)
+    {
         this->ui->pushButtonInsertLabel->setDisabled(true);
         this->ui->pushButtonRemove->setDisabled(true);
-    }//desabilitar botao de inserie e remover se nao existirem categorias
+    }
 }
 
 void DialogAnnotation::slot_insertCategoryPressed()
