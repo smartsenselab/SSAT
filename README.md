@@ -16,6 +16,9 @@ There are a few requirements thata make the SSAT work properly.
   * Before begining the annotation the user must establish the atributes in wich he desire to base his annotations , to do this select
   "Annotation" in the menu bar followed by attributes, another dialog will pop up and the user can create an hierarchy of 
   categorys(filters) and labels.
+  ![Alt text](/images/image3.png?raw=true "Attributes screen")
+  The attributes box, showed in the image above, will be initialy empty, the attributes are defined following an hierarchy of categorys and labels, this hierarchy was created to ease to use of the tool in the midst of a high number of different labels.
+  Hence  a category can be understood as an collection of labels, that have something in common. It is not possible to create a label that doesn´t belong to a category, so the insert label button remains deativated until an category is selected.
   * There are two tipes of annotation frame based annotation and bounding-box based, the former comprises the whole video frame
   whereas the latter specifies a region(box) from the video picture, to annotate right-click on the video and then choose between frame based
   and bounding box based.
