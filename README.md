@@ -8,6 +8,11 @@ visit this link and dowload the application installer <insert link here>
 There are a few requirements thata make the SSAT work properly.
   * No operation can be executed if no videos has been previously loaded, to load a video press "File" in the menu bar and then "Open"
   (or use the sortcut CTR + O)an open dialog will pop up and you can select any video that has a format .mp4 or .avi
+  ![Alt text](/images/image1.png?raw=true "SSAT screen with no loaded video")
+  Note that in the image all features are locked because no video has been loaded
+  ![Alt text](/images/image2.png?raw=true "SSAT screen with a loaded video")
+  After the video is loaded, all functionalities start to work properly
+  
   * Before begining the annotation the user must establish the atributes in wich he desire to base his annotations , to do this select
   "Annotation" in the menu bar followed by attributes, another dialog will pop up and the user can create an hierarchy of 
   categorys(filters) and labels.
