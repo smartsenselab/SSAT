@@ -14,11 +14,8 @@ There are a few requirements thata make the SSAT work properly.
   * There are two tipes of annotation frame based annotation and bounding-box based, the former comprises the whole video frame
   whereas the latter specifies a region(box) from the video picture, to annotate right-click on the video and then choose between frame based
   and bounding box based.
-  
-  
-  
-      a. Frame boxes hold the following info: category, label, initial frame, final frame and general information.  
-      b. Bounding boxes encompass information like: category, label, initial frame, final frame, x-axis position, y-axis position,width, height, and general information.
+    1. Frame boxes hold the following info: category, label, initial frame, final frame and general information.  
+    2. Bounding boxes encompass information like: category, label, initial frame, final frame, x-axis position, y-axis position,width, height, and general information.
       
    * Whenever the user decides to import/export a file he must click on file and then selects import/export JSON and then specify
    either desired the file to import or the folder to export. Note that every 10 seconds a security file will be exported for the root
