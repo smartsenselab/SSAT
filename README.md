@@ -1,10 +1,12 @@
-#SSAT Anotation Tool
+# SSAT Anotation Tool
 SSAT is presentely an in-progress project of a free and interactive anotation tool for the computer vision community, it eases
 the way reseachers can annotate data from massive video datasets.
-##Instalation
+## Instalation
 Note that for the moment the annotation tool has only versions for MAC and Windows, to install the tool in this two operating systems
 visit this link and dowload the application installer <insert link here>
-##Proper use
+## Code Compiling
+If the user prefers to compile the source code there are two major dependencies, the user will have to install OpenCv 3.0 or 3.1 with contrib libraries, and then execute the cmake file in an environment that has qt libraries.
+## Proper use
 There are a few requirements thata make the SSAT work properly.
   * No operation can be executed if no videos has been previously loaded, to load a video press "File" in the menu bar and then "Open"
   (or use the sortcut CTR + O)an open dialog will pop up and you can select any video that has a format .mp4 or .avi
