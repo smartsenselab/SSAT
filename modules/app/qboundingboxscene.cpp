@@ -141,17 +141,36 @@ void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         this->drawEnabled = false;
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsSelectable, true);
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsMovable, true);
-        qDebug() << "Box = " << this->box.x << ":" << this->box.y << ":"
-                 << this->box.width << ":" << this->box.height << endl;
+        qDebug() << "Created Box = " << this->box.x << ":" << this->box.y << ":" << this->box.width << ":" << this->box.height << endl;
         emit this->signal_addBoundingBoxToCore(this->box);
     }
     else
     {
+        //foreach(QGraphicsItem *item, selectedItems())
+        //{
+        //    qDebug() << "z is "<< item->zValue();
+        //}
+
+        if (this->selectedItems().size() > 0)
+        {
+            qDebug() << "Clicked Box"
+                     << "=" << selectedItems().first()->sceneBoundingRect().x()
+                     << ":" << selectedItems().first()->sceneBoundingRect().y()
+                     << ":" << selectedItems().first()->sceneBoundingRect().width()
+                     << ":" << selectedItems().first()->sceneBoundingRect().height();
+
+
+            qDebug() << this->itemIndexMethod();
+        }
+
+        //qDebug() << "X = " << this->box.x << endl;
+        //qDebug() << "Y = " << this->box.y << endl;
+        //qDebug() << "W = " << this->box.width << endl;
+        //qDebug() << "H = " << this->box.height << endl;
+
         //this->box.x = static_cast<int>(this->box.x - mouseMoveX);
         //this->box.y = static_cast<int>(this->box.y - mouseMoveY);
     }
-
-    std::cout << this->items().size() << std::endl;
 
     QGraphicsScene::mouseReleaseEvent(event);
 }
