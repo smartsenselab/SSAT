@@ -19,6 +19,7 @@
 using cv::Rect;
 
 #include "frame.h"
+#include "qboundingboxrectangle.h"
 
 class QBoundingBoxScene : public QGraphicsScene
 {
@@ -33,7 +34,7 @@ private:
     double heightD, widthD;
     double mouseMoveX, mouseMoveY;
 
-    QGraphicsRectItem* itemToDraw = NULL;
+    QGraphicsRectItem *itemToDraw = NULL;
 
     qreal height;
     qreal pointXa, pointXb;

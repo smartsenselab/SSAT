@@ -47,11 +47,10 @@ void QBoundingBoxScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
             delete(this->itemToDraw);
             this->itemToDraw = NULL;
 
-            this->itemToDraw = new QGraphicsRectItem;
+            this->itemToDraw = new QBoundingBoxRectangle();
             this->itemToDraw->setPen(QPen(Qt::yellow, 3, Qt::SolidLine));
             this->itemToDraw->setBrush(QBrush(QColor(255, 255, 0, 50)));
             this->addItem(itemToDraw);
-
 
             if(mouse_posX < 0) mouse_posX = 0;
             if(mouse_posY < 0) mouse_posY = 0;
