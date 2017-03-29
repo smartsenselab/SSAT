@@ -94,10 +94,24 @@ public slots:
 
 signals:
     ///
-    /// \brief signal_addBoundingBoxToCore signal to add the bbox to singleton
+    /// \brief signal_addBoundingBoxToCore signal to add the bbox to core
     /// \param newBox bbox to add
     ///
     void signal_addBoundingBoxToCore(const Rect _box);
+
+    ///
+    /// \brief signal_moveBoundingBoxInCore signal to update core with new bbox position
+    /// \param _frameId frame which bbox will be updated
+    /// \param _bboxId  id of bounding box that will be updated
+    ///
+    void signal_moveBoundingBoxInCore(const unsigned int _frameId, const unsigned int _bboxId);
+
+    ///
+    /// \brief signal_removeBoundingBoxFromCore signal to remove bbox from core
+    /// \param _frameId frame which bbox will be removed from
+    /// \param _bboxId  id of bounding box that will be deleted
+    ///
+    void signal_removeBoundingBoxFromCore(const unsigned int _frameId, const unsigned int _bboxId);
 };
 
 #endif // SCENE_H

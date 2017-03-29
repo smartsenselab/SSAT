@@ -47,7 +47,7 @@ void QBoundingBoxScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
             delete(this->itemToDraw);
             this->itemToDraw = NULL;
 
-            this->itemToDraw = new QBoundingBoxRectangle();
+            this->itemToDraw = new QBoundingBoxRectangle(qrand() % 100);
             this->itemToDraw->setPen(QPen(Qt::yellow, 3, Qt::SolidLine));
             this->itemToDraw->setBrush(QBrush(QColor(255, 255, 0, 50)));
             this->addItem(itemToDraw);
@@ -121,13 +121,8 @@ void QBoundingBoxScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     }
     else
     {
-        this->mouseMoveX = this->pointXa - event->scenePos().x(); // Init position - End position  X - Deslocamento para a esquerda
+        this->mouseMoveX = this->pointXa - event->scenePos().x(); // Init position - End position  X - Shift to the left
         this->mouseMoveY = this->pointYa - event->scenePos().y(); // Init position - End position  Y
-
-        //qDebug() << "X = " << this->box.x - mouseMoveX << endl;
-        //qDebug() << "Y = " << this->box.y - mouseMoveY << endl;
-        //qDebug() << "W = " << this->box.width << endl;
-        //qDebug() << "H = " << this->box.height << endl;
 
         QGraphicsScene::mouseMoveEvent(event);
     }
@@ -140,35 +135,30 @@ void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         this->drawEnabled = false;
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsSelectable, true);
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsMovable, true);
-        qDebug() << "Created Box = " << this->box.x << ":" << this->box.y << ":" << this->box.width << ":" << this->box.height << endl;
         emit this->signal_addBoundingBoxToCore(this->box);
     }
     else
     {
-        //foreach(QGraphicsItem *item, selectedItems())
-        //{
-        //    qDebug() << "z is "<< item->zValue();
-        //}
-
-        if (this->selectedItems().size() > 0)
+        if (this->selectedItems().size() == 1)
         {
+            QBoundingBoxRectangle *temp = static_cast<QBoundingBoxRectangle*>(this->selectedItems().first());
+
             qDebug() << "Clicked Box"
                      << "=" << selectedItems().first()->sceneBoundingRect().x()
                      << ":" << selectedItems().first()->sceneBoundingRect().y()
                      << ":" << selectedItems().first()->sceneBoundingRect().width()
                      << ":" << selectedItems().first()->sceneBoundingRect().height();
-
-
-            qDebug() << this->itemIndexMethod();
+            qDebug() << "Identifier: " << temp->getIdentifier();
         }
-
-        //qDebug() << "X = " << this->box.x << endl;
-        //qDebug() << "Y = " << this->box.y << endl;
-        //qDebug() << "W = " << this->box.width << endl;
-        //qDebug() << "H = " << this->box.height << endl;
-
-        //this->box.x = static_cast<int>(this->box.x - mouseMoveX);
-        //this->box.y = static_cast<int>(this->box.y - mouseMoveY);
+        else if (this->selectedItems().size() > 1)
+        {
+            QList<QGraphicsItem*> temps = this->selectedItems();
+            foreach(QGraphicsItem *item, temps)
+            {
+                QBoundingBoxRectangle *conv = static_cast<QBoundingBoxRectangle*>(item);
+                qDebug() << "Identifier: " << conv->getIdentifier();
+            }
+        }
     }
 
     QGraphicsScene::mouseReleaseEvent(event);

@@ -2,7 +2,6 @@
 
 QBoundingBoxRectangle::QBoundingBoxRectangle() : QGraphicsRectItem()
 {
-
 }
 
 QBoundingBoxRectangle::QBoundingBoxRectangle(unsigned int _id) : QGraphicsRectItem()

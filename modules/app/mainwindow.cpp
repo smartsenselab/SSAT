@@ -254,7 +254,7 @@ void MainWindow::connectSignalSlots()
                   );
 
     this->connect(this->ui->splitterHorizontal,
-                  SIGNAL(splitterMoved(int,int)),
+                  SIGNAL(splitterMoved(int, int)),
                   this,
                   SLOT(slot_resizeFrame())
                   );
@@ -269,6 +269,18 @@ void MainWindow::connectSignalSlots()
                   SIGNAL(signal_addBoundingBoxToCore(const Rect)),
                   this,
                   SLOT(slot_addBoundingBoxToCore(const Rect))
+                  );
+
+    this->connect(this->frameScene,
+                  SIGNAL(signal_moveBoundingBoxInCore(const unsigned int, const unsigned int)),
+                  this,
+                  SLOT(slot_moveBoundingBoxInCore(const unsigned int, const unsigned int))
+                  );
+
+    this->connect(this->frameScene,
+                  SIGNAL(signal_removeBoundingBoxFromCore(const unsigned int, const unsigned int)),
+                  this,
+                  SLOT(slot_removeBoundingBoxFromCore(const unsigned int, const unsigned int))
                   );
 
     this->connect(this,
@@ -410,7 +422,7 @@ void MainWindow::stopVideo()
 
 void MainWindow::updateFrame()
 {
-    Mat frameMat = this->manager->getFrame();
+    cv::Mat frameMat = this->manager->getFrame();
     unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
 
     if(frameMat.data)
@@ -438,7 +450,7 @@ void MainWindow::updateFrame()
 
 void MainWindow::updateFrame(const int _frameId)
 {
-    Mat frameMat = this->manager->getFrame(_frameId + this->speed);
+    cv::Mat frameMat = this->manager->getFrame(_frameId + this->speed);
     unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
 
     if(frameMat.data)
@@ -641,6 +653,16 @@ void MainWindow::slot_openFile()
                       SIGNAL(signal_addBoundingBoxToCore(const Rect)),
                       this,
                       SLOT(slot_addBoundingBoxToCore(const Rect))
+                      );
+        this->connect(this->frameScene,
+                      SIGNAL(signal_moveBoundingBoxInCore(const unsigned int, const unsigned int)),
+                      this,
+                      SLOT(slot_moveBoundingBoxInCore(const unsigned int, const unsigned int))
+                      );
+        this->connect(this->frameScene,
+                      SIGNAL(signal_removeBoundingBoxFromCore(const unsigned int, const unsigned int)),
+                      this,
+                      SLOT(slot_removeBoundingBoxFromCore(const unsigned int, const unsigned int))
                       );
         this->connect(this,
                       SIGNAL(signal_drawFrameBboxes(const Frame)),
@@ -1151,5 +1173,15 @@ void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
     string temp_key = "bbox" + std::to_string(num_bboxes);
 
     this->singleton->frames[nextFrameId - 1].addBox(temp_id + "_" + temp_key, _box);
+}
+
+void MainWindow::slot_moveBoundingBoxInCore(const unsigned int _frameId, const unsigned int _bboxId)
+{
+    qDebug() << "slot_moveBoundingBoxInCore >> Frame Id: " << _frameId << " - Bounding-box Id: " << _bboxId;
+}
+
+void MainWindow::slot_removeBoundingBoxFromCore(const unsigned int _frameId, const unsigned int _bboxId)
+{
+    qDebug() << "slot_removeBoundingBoxFromCore >> Frame Id: " << _frameId << " - Bounding-box Id: " << _bboxId;
 }
 
