@@ -29,9 +29,10 @@ public:
 
     ///
     /// \brief BoundingBox BoundingBox constructor
+    /// \param _id  An identifier for the bounding-box
     /// \param _box A struct holding X,Y,W and H values
     ///
-    BoundingBox(const Rect &_box);
+    BoundingBox(const unsigned int _id, const Rect &_box);
 
     ///
     /// \brief BoundingBox BoundingBox constructor
@@ -92,9 +93,9 @@ public:
     ///
     void operator=(const BoundingBox &_box);
 
+
 private:
-    ///boundingbox coordinates(x,y,width,heigth)
-    Rect coordinates;
+    Rect coordinates; //boundingbox coordinates(x, y, width, heigth)
 };
 
 #endif // BOUNDINGBOX_H

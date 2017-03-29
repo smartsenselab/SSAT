@@ -19,18 +19,18 @@ class Frame : public Data
 public:
     Frame();
 
-    bool addBox(const string &_key, const BoundingBox &_box);
-    bool addBox(const string &_key, const Rect &_box);
+    bool addBox(const unsigned int _key, const BoundingBox &_box);
+    bool addBox(const unsigned int _key, const Rect &_box);
 
-    BoundingBox getBoxes(const string &_key) const;
-    map<string, BoundingBox> getBoxes() const;
+    BoundingBox getBoxes(const unsigned int _key) const;
+    map<unsigned int, BoundingBox> getBoxes() const;
 
-    void setBox(const map<string, BoundingBox> &_boxes);
+    void setBox(const map<unsigned int, BoundingBox> &_boxes);
 
     void operator=(const Frame &_frame);
 
 private:
-    map<string, BoundingBox> boxes;
+    map<unsigned int, BoundingBox> boxes;
 };
 
 #endif // FRAME_H

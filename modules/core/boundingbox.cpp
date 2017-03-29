@@ -13,8 +13,9 @@ BoundingBox::BoundingBox(const BoundingBox &_box)
     (*this) = _box;
 }
 
-BoundingBox::BoundingBox(const Rect &_coordinates)
+BoundingBox::BoundingBox(const unsigned int _id, const Rect &_coordinates)
 {
+    this->id = _id;
     this->coordinates = _coordinates;
 }
 

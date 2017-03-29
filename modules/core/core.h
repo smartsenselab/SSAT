@@ -41,6 +41,8 @@ public:
     multimap<string, string> attributes;
     vector<FrameBasedData> frameData;
     vector<Frame> frames;
+
+    unsigned int bboxCounter;
 };
 
 #endif // CORE_H

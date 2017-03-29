@@ -85,7 +85,7 @@ public slots:
     /// \brief slot_drawFrameBboxes Slot to draw a new bbox
     /// \param _frame frame where the bbox is gonna be drawn
     ///
-    void slot_drawFrameBboxes(const Frame _frame);
+    void slot_drawFrameBboxes(const Frame &_frame);
 
     ///
     /// \brief slot_enableDraw Allow the user to draw a new bbox

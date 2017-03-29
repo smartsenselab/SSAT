@@ -27,7 +27,8 @@ void QBoundingBoxScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsScene::mousePressEvent(event);
 }
 
-void QBoundingBoxScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
+void QBoundingBoxScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
     if(this->drawEnabled)
     {
         double mouse_posX = event->scenePos().x();
@@ -156,7 +157,7 @@ void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             foreach(QGraphicsItem *item, temps)
             {
                 QBoundingBoxRectangle *conv = static_cast<QBoundingBoxRectangle*>(item);
-                qDebug() << "Identifier: " << conv->getIdentifier();
+                qDebug() << "Identifier on Release: " << conv->getIdentifier();
             }
         }
     }
@@ -164,12 +165,14 @@ void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsScene::mouseReleaseEvent(event);
 }
 
-void QBoundingBoxScene::slot_drawFrameBboxes(const Frame _frame)
+void QBoundingBoxScene::slot_drawFrameBboxes(const Frame &_frame)
 {
-    map<string, BoundingBox> bboxes = _frame.getBoxes();
-    for(map<string, BoundingBox>::iterator it = bboxes.begin(); it != bboxes.end(); it++)
-    {
-        this->itemToDraw = new QGraphicsRectItem;
+    map<unsigned int, BoundingBox> bboxes = _frame.getBoxes();
+    for(map<unsigned int, BoundingBox>::iterator it = bboxes.begin(); it != bboxes.end(); it++)
+    {       
+        unsigned int id = it->second.getId();
+        qDebug() << id;
+        this->itemToDraw = new QBoundingBoxRectangle(id);
         this->itemToDraw->setPen(QPen(Qt::yellow, 3, Qt::SolidLine));
         this->itemToDraw->setBrush(QBrush(QColor(255, 255, 0, 50)));
         this->itemToDraw->setRect(it->second.getX(),
@@ -194,6 +197,6 @@ void QBoundingBoxScene ::keyPressEvent(QKeyEvent* e)
     switch(e->key())
     {
     case Qt::Key_Delete:
-        removeItem(selectedItems().front());
+        this->removeItem(selectedItems().front());
     }
 }
