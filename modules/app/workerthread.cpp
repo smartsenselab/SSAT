@@ -63,10 +63,10 @@ void WorkerThread::loadVideo(QString _path)
 
 void WorkerThread::exportJSON(Core &_singleton, const QString &_jsonName){
     QFile file;
-    QJsonArray arrayJson1, arrayJson2;
+    QJsonArray arrayJson1, arrayJson2, arrayJson3;
     QJsonDocument output;
-    QJsonObject object1, object2, object3, final;
-
+    QJsonObject object1, object2, object3, object4, final;
+    int frame_id = 0;
     map<string, BoundingBox> x;
     multimap<string, string> map1 = _singleton.attributes;
     multimap<string, string>::iterator i = map1.begin();
@@ -96,7 +96,22 @@ void WorkerThread::exportJSON(Core &_singleton, const QString &_jsonName){
         object3["EndFrame"] = QString::fromStdString(std::to_string(iter.getFinalFrameId()));
         arrayJson2.append(object3);
     }
-
+    while(j!=_singleton.frames.end()){
+        auto novo = j->getBoxes();
+        object4["frame_num"] = frame_id;
+        for (auto elemen:novo)
+        {
+            object4["Bbox Name"] = QString::fromStdString(elemen.first);
+            object4["X"] = elemen.second.getX();
+            object4["Y"] = elemen.second.getY();
+            object4["W"] = elemen.second.getW();
+            object4["H"] = elemen.second.getH();
+            arrayJson3.append(object4);
+        }
+        frame_id++;
+        j++;
+    }
+    final["BBOX"] = arrayJson3;
     final["FrameTable"] = arrayJson2;
     output.setObject(final);
     file.setFileName(_jsonName);
@@ -121,8 +136,8 @@ void WorkerThread::importJSON(Core &_singleton, QFrameBasedTableModel *_tableMod
     QJsonObject json_Obj = json_Doc.object();
 
     FrameBasedData frameData;
-    QJsonValue label, category, name, iniframe, endframe;
-    std::string labelString, categoryString, nameString, iniframeString, endframeString;
+    QJsonValue label, category, name, iniframe, endframe,vX,vY,vH,vW;
+    std::string labelString, categoryString, nameString, iniframeString, endframeString,vXString,vYString,vHString,vWstring;
 
     int percent = 0; // Percent = 100% of the ImportProgressBar
 
@@ -177,14 +192,27 @@ void WorkerThread::importJSON(Core &_singleton, QFrameBasedTableModel *_tableMod
         // EndFrame
         endframe = obj.value("EndFrame").toString();
         endframeString = endframe.toString().toUtf8().constData();
-
         int init = std::stoi(iniframeString);
         int end = std::stoi(endframeString);
 
         frameData = FrameBasedData(init, end, categoryString, labelString, nameString);
         _tableModel->insertRow(frameData);
     }
-}
+    QJsonArray BoxArray = json_Obj["BBOX"].toArray();
+    for(auto elemen:BoxArray){
+        QJsonObject obj = elemen.toObject();
+            int frame = obj.value("frame_num").toInt();
+            auto BBox = _singleton.frames[frame].getBoxes();
+            Rect box;
+            box.x = obj.value("X").toInt();
+            box.y = obj.value("Y").toInt();
+            box.height = obj.value("H").toInt();
+            box.width = obj.value("W").toInt();
+            _singleton.frames[frame].addBox(obj.value("Bbox Name").toString().toStdString(), box);
+
+        }
+
+    }
 
 QImage WorkerThread::matToQimage(const Mat &_frameId)
 {
