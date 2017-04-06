@@ -51,8 +51,8 @@ void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
             this->itemToDraw = NULL;
 
             this->itemToDraw = new QGraphicsRectItem;
-            this->itemToDraw->setPen(QPen(Qt::yellow, 3, Qt::SolidLine));
-            this->itemToDraw->setBrush(QBrush(QColor(255, 255, 0, 50)));
+            this->itemToDraw->setPen(QPen(QColor(this->array_of_colors[this->color_counter]), 3, Qt::SolidLine));
+            this->itemToDraw->setBrush(QBrush(QColor(20, 180, 45, 50)));
             this->addItem(itemToDraw);
 
 
@@ -163,8 +163,8 @@ void QBoundingBox::slot_drawFrameBboxes(const Frame _frame)
     for(map<string, BoundingBox>::iterator it = bboxes.begin(); it != bboxes.end(); it++)
     {
         this->itemToDraw = new QGraphicsRectItem;
-        this->itemToDraw->setPen(QPen(Qt::yellow, 3, Qt::SolidLine));
-        this->itemToDraw->setBrush(QBrush(QColor(255, 255, 0, 50)));
+        this->itemToDraw->setPen(QPen(Qt::blue, 3, Qt::SolidLine));
+        this->itemToDraw->setBrush(QBrush(QColor(255, 0, 0, 50)));
         this->itemToDraw->setRect(it->second.getX(),
                                   it->second.getY(),
                                   it->second.getW(),
