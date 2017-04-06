@@ -51,8 +51,13 @@ void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
             this->itemToDraw = NULL;
 
             this->itemToDraw = new QGraphicsRectItem;
-            this->itemToDraw->setPen(QPen(QColor(this->array_of_colors[this->color_counter]), 3, Qt::SolidLine));
-            this->itemToDraw->setBrush(QBrush(QColor(20, 180, 45, 50)));
+            QString color = this->array_of_colors[this->color_counter];
+            this->itemToDraw->setPen(QPen(QColor(color), 3, Qt::SolidLine));
+
+            this->itemToDraw->setBrush(QBrush(QColor((color.toInt() & 0xff0000) >> 16,
+                                              (color.toInt() & 0x00ff00) >> 8,
+                                              (color.toInt() & 0x0000ff),
+                                              100)));
             this->addItem(itemToDraw);
 
 
@@ -147,6 +152,13 @@ void QBoundingBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         qDebug() << "Box = " << this->box.x << ":" << this->box.y << ":"
                  << this->box.width << ":" << this->box.height << endl;
         emit this->signal_addBoundingBoxToCore(this->box);
+
+        if(this->color_counter == 41){
+            this->color_counter = 0;
+        }
+        else{
+            this->color_counter++;
+        }
     }
     else
     {
