@@ -1,6 +1,7 @@
 #include "qboundingbox.h"
 #include "boundingbox.h"
 #include "qdebug.h"
+#include "string"
 
 QBoundingBox::QBoundingBox(QObject* parent): QGraphicsScene(parent)
 {
@@ -30,6 +31,31 @@ void QBoundingBox::mousePressEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsScene::mousePressEvent(event);
 }
 
+int convertNumber(std::string str, std::string color){
+    int a;
+    if(color == "red") a = 1;
+    if(color == "green") a = 3;
+    if(color == "blue") a = 5;
+
+
+    std::string str1 = str.substr(a,2);
+
+    int rgb = 0;
+
+    for(int i =1; i>=0; i--){
+        if(str1[i] == 'f') rgb += 15;
+        else if(str1[i] == 'e') rgb += 14;
+        else if(str1[i] == 'd') rgb += 13;
+        else if(str1[i] == 'c') rgb += 12;
+        else if(str1[i] == 'b') rgb += 11;
+        else if(str1[i] == 'a') rgb += 10;
+        else rgb += (str1[i] - '0');
+        if(i == 1) rgb *= 16;
+    }
+
+    return rgb;
+}
+
 void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     if(this->drawEnabled)
     {
@@ -54,10 +80,14 @@ void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
             QString color = this->array_of_colors[this->color_counter];
             this->itemToDraw->setPen(QPen(QColor(color), 3, Qt::SolidLine));
 
-            this->itemToDraw->setBrush(QBrush(QColor((color.toInt() & 0xff0000) >> 16,
-                                              (color.toInt() & 0x00ff00) >> 8,
-                                              (color.toInt() & 0x0000ff),
-                                              100)));
+            std::string color_string = color.toUtf8().constData(); // qstring to string
+
+            int red = convertNumber(color_string, "red");
+            int green = convertNumber(color_string, "green");
+            int blue = convertNumber(color_string, "blue");
+
+            this->itemToDraw->setBrush(QBrush(QColor(red, green, blue, 50)));
+
             this->addItem(itemToDraw);
 
 
@@ -174,8 +204,10 @@ void QBoundingBox::slot_drawFrameBboxes(const Frame _frame)
     map<string, BoundingBox> bboxes = _frame.getBoxes();
     for(map<string, BoundingBox>::iterator it = bboxes.begin(); it != bboxes.end(); it++)
     {
+        QString color = this->array_of_colors[this->color_counter];
+
         this->itemToDraw = new QGraphicsRectItem;
-        this->itemToDraw->setPen(QPen(Qt::blue, 3, Qt::SolidLine));
+        this->itemToDraw->setPen(QPen(QColor(color), 3, Qt::SolidLine)); // Save bbox color.
         this->itemToDraw->setBrush(QBrush(QColor(255, 0, 0, 50)));
         this->itemToDraw->setRect(it->second.getX(),
                                   it->second.getY(),
