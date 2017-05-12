@@ -40,6 +40,8 @@ int convertNumber(std::string str, std::string color){
 
     std::string str1 = str.substr(a,2);
 
+    // http://phrogz.net/css/distinct-colors.html
+
     int rgb = 0;
 
     for(int i =1; i>=0; i--){
