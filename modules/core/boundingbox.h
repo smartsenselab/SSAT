@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include<string>
 #include <vector>
 using std::map;
 using std::string;
@@ -16,6 +17,10 @@ using cv::Rect;
 class BoundingBox : public Data
 {
 public:
+
+    string getColor();
+    void setColor(string color);
+
     ///
     /// \brief BoundingBox Default BoundingBox constructor
     ///
@@ -31,7 +36,7 @@ public:
     /// \brief BoundingBox BoundingBox constructor
     /// \param _box A struct holding X,Y,W and H values
     ///
-    BoundingBox(const Rect &_box);
+    BoundingBox(const Rect &_box, string color);
 
     ///
     /// \brief BoundingBox BoundingBox constructor
@@ -40,7 +45,7 @@ public:
     /// \param _w The width of the boundingbox
     /// \param _h The height of the boundingbox
     ///
-    BoundingBox(const int _x, const int _y, const int _w, const int _h);
+    BoundingBox(const int _x, const int _y, const int _w, const int _h, string color);
 
     ///
     /// \brief getX Get the x cordinate of the boundingbox
@@ -95,6 +100,7 @@ public:
 private:
     ///boundingbox coordinates(x,y,width,heigth)
     Rect coordinates;
+    string color;
 };
 
 #endif // BOUNDINGBOX_H

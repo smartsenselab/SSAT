@@ -1143,12 +1143,23 @@ void MainWindow::slot_comboBoxCategoryActivated(const QString &_text)
 
 void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
 {
+
     unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
     unsigned long num_bboxes = static_cast<unsigned long>(this->singleton->frames[nextFrameId - 1].getBoxes().size());
 
     string temp_id = "frame" + std::to_string(nextFrameId - 1);
     string temp_key = "bbox" + std::to_string(num_bboxes);
 
-    this->singleton->frames[nextFrameId - 1].addBox(temp_id + "_" + temp_key, _box);
+    std::string color = array_of_colors[color_counter].toUtf8().constData();
+
+
+    this->singleton->frames[nextFrameId - 1].addBox(temp_id + "_" + temp_key, _box, color);
+
+    if(this->color_counter == 41){
+        this->color_counter = 0;
+    }
+    else{
+        this->color_counter++;
+    }
 }
 

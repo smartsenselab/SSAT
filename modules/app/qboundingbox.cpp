@@ -206,7 +206,12 @@ void QBoundingBox::slot_drawFrameBboxes(const Frame _frame)
     map<string, BoundingBox> bboxes = _frame.getBoxes();
     for(map<string, BoundingBox>::iterator it = bboxes.begin(); it != bboxes.end(); it++)
     {
-        QString color = this->array_of_colors[this->color_counter];
+        string colorAux;
+        colorAux.assign(it->second.getColor());
+        std::cout << "coloooor = " << it->second.getX();
+
+        QString color = QString::fromStdString(colorAux);
+        qDebug() << "color = " << color;
 
         this->itemToDraw = new QGraphicsRectItem;
         this->itemToDraw->setPen(QPen(QColor(color), 3, Qt::SolidLine)); // Save bbox color.

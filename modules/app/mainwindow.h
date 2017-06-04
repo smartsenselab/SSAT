@@ -76,6 +76,13 @@ private:
     int frameId, indexId;
     mode manipulation;
 
+    QString array_of_colors[42] = {"#ff0000", "#aaff00", "#000080", "#59161f", "#1f7300", "#c8bfff", "#99574d", "#ace6bb", "#3c394d", "#234d8c", "#304034",
+                                "#7340ff", "#ffd0bf", "#00d957", "#7159b3", "#732e00", "#165931", "#827399", "#594c43", "#00e6b8", "#3a1659", "#bf7c30",
+                                "#005f66", "#d900ca", "#a6987c", "#73dee6", "#663355", "#8c7000", "#00a2f2", "#e5007a", "#4c3d00", "#002b40", "#ffbfd9",
+                                "#f2e63d", "#ffa280", "#ff4059", "#fffbbf", "#000733", "#bf0000", "#7e8c46", "#00008c", "#8c696e"};
+    int color_counter = 0;
+
+
 public:
     ///
     /// \brief MainWindow   Prepare the view to be initialized

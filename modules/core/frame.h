@@ -19,8 +19,8 @@ class Frame : public Data
 public:
     Frame();
 
-    bool addBox(const string &_key, const BoundingBox &_box);
-    bool addBox(const string &_key, const Rect &_box);
+    bool addBox(const string &_key, const BoundingBox &_box, string color);
+    bool addBox(const string &_key, const Rect &_box, string color);
 
     BoundingBox getBoxes(const string &_key) const;
     map<string, BoundingBox> getBoxes() const;
