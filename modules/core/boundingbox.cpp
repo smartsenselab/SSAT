@@ -7,7 +7,7 @@ string BoundingBox::getColor()
 
 void BoundingBox::setColor(string color)
 {
-    this->color.assign(color);
+    this->color = color;
 }
 
 BoundingBox::BoundingBox()
@@ -23,20 +23,21 @@ BoundingBox::BoundingBox(const BoundingBox &_box)
     (*this) = _box;
 }
 
-BoundingBox::BoundingBox(const Rect &_coordinates, string color)
+BoundingBox::BoundingBox(const Rect &_coordinates, string &color)
 {
     this->coordinates = _coordinates;
-    this->color.assign(color);
+    this->color = color;
+    std::cout << "CCColor = " << this->getColor() << std::endl;
 }
 
 BoundingBox::BoundingBox(const int _x, const int _y,
-                         const int _w, const int _h, string color)
+                         const int _w, const int _h, string &color)
 {
     this->setX(_x);
     this->setY(_y);
     this->setW(_w);
     this->setH(_h);
-    this->color.assign(color);
+    this->color = color;
 }
 
 int BoundingBox::getX() const

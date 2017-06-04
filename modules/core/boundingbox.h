@@ -36,7 +36,7 @@ public:
     /// \brief BoundingBox BoundingBox constructor
     /// \param _box A struct holding X,Y,W and H values
     ///
-    BoundingBox(const Rect &_box, string color);
+    BoundingBox(const Rect &_box, string &color);
 
     ///
     /// \brief BoundingBox BoundingBox constructor
@@ -45,7 +45,7 @@ public:
     /// \param _w The width of the boundingbox
     /// \param _h The height of the boundingbox
     ///
-    BoundingBox(const int _x, const int _y, const int _w, const int _h, string color);
+    BoundingBox(const int _x, const int _y, const int _w, const int _h, string &color);
 
     ///
     /// \brief getX Get the x cordinate of the boundingbox

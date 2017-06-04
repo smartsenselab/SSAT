@@ -207,8 +207,8 @@ void QBoundingBox::slot_drawFrameBboxes(const Frame _frame)
     for(map<string, BoundingBox>::iterator it = bboxes.begin(); it != bboxes.end(); it++)
     {
         string colorAux;
-        colorAux.assign(it->second.getColor());
-        std::cout << "coloooor = " << it->second.getX();
+        colorAux = it->second.getColor();
+        std::cout << "coloooor = " << it->second.getColor();
 
         QString color = QString::fromStdString(colorAux);
         qDebug() << "color = " << color;

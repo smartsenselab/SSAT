@@ -4,7 +4,7 @@ Frame::Frame()
 {
 }
 
-bool Frame::addBox(const string &_key, const BoundingBox &_box, string color)
+bool Frame::addBox(const string &_key, const BoundingBox &_box, string &color)
 {
     if(this->boxes.find(_key) == this->boxes.end())
     {
@@ -15,7 +15,7 @@ bool Frame::addBox(const string &_key, const BoundingBox &_box, string color)
     return false;
 }
 
-bool Frame::addBox(const string &_key, const Rect &_box, string color)
+bool Frame::addBox(const string &_key, const Rect &_box, string &color)
 {
     if(this->boxes.find(_key) == this->boxes.end())
     {
