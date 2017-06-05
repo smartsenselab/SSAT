@@ -27,7 +27,6 @@ BoundingBox::BoundingBox(const Rect &_coordinates, string &color)
 {
     this->coordinates = _coordinates;
     this->color = color;
-    std::cout << "CCColor = " << this->getColor() << std::endl;
 }
 
 BoundingBox::BoundingBox(const int _x, const int _y,
@@ -100,4 +99,5 @@ void BoundingBox::operator=(const BoundingBox &_box)
     this->comments = _box.comments;
     this->id = _box.id;
     this->name = _box.name;
+    this->color = _box.color;
 }

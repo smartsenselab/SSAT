@@ -1,6 +1,5 @@
 #include "qboundingbox.h"
 #include "boundingbox.h"
-#include "qdebug.h"
 #include "string"
 
 QBoundingBox::QBoundingBox(QObject* parent): QGraphicsScene(parent)
@@ -181,8 +180,8 @@ void QBoundingBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         this->drawEnabled = false;
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsSelectable, true);
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsMovable, true);
-        qDebug() << "Box = " << this->box.x << ":" << this->box.y << ":"
-                 << this->box.width << ":" << this->box.height << endl;
+        //qDebug() << "Box = " << this->box.x << ":" << this->box.y << ":"
+        //         << this->box.width << ":" << this->box.height << endl;
         emit this->signal_addBoundingBoxToCore(this->box);
 
         if(this->color_counter == 41){
@@ -208,14 +207,18 @@ void QBoundingBox::slot_drawFrameBboxes(const Frame _frame)
     {
         string colorAux;
         colorAux = it->second.getColor();
-        std::cout << "coloooor = " << it->second.getColor();
 
         QString color = QString::fromStdString(colorAux);
-        qDebug() << "color = " << color;
 
         this->itemToDraw = new QGraphicsRectItem;
         this->itemToDraw->setPen(QPen(QColor(color), 3, Qt::SolidLine)); // Save bbox color.
-        this->itemToDraw->setBrush(QBrush(QColor(255, 0, 0, 50)));
+
+
+        int red = convertNumber(colorAux, "red");
+        int green = convertNumber(colorAux, "green");
+        int blue = convertNumber(colorAux, "blue");
+        this->itemToDraw->setBrush(QBrush(QColor(red, green, blue, 50)));
+
         this->itemToDraw->setRect(it->second.getX(),
                                   it->second.getY(),
                                   it->second.getW(),
@@ -224,6 +227,7 @@ void QBoundingBox::slot_drawFrameBboxes(const Frame _frame)
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsSelectable, true);
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsMovable, true);
         this->addItem(this->itemToDraw);
+
     }
 }
 
