@@ -693,6 +693,7 @@ void MainWindow::slot_importJson()
                                                         tr("JSON file (*.json)"));
         this->manager->importJSON(*(this->singleton), this->tableModel, jsonName);
     }
+    this->updateFrame(1);
 }
 
 void MainWindow::slot_exportJson()
