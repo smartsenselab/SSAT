@@ -28,6 +28,16 @@ bool Frame::addBox(const unsigned int _key, const Rect &_box)
     return false;
 }
 
+unsigned int Frame::getLargestKey()
+{
+    if(this->boxes.size() == 0)
+    {
+        return 0;
+    }
+
+    return this->boxes.rbegin()->first;
+}
+
 BoundingBox Frame::getBoxes(const unsigned int _key) const
 {
     if(this->boxes.find(_key) != this->boxes.end())

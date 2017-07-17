@@ -1172,7 +1172,9 @@ void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
 //    string temp_id = "frame" + std::to_string(nextFrameId - 1);
 //    string temp_key = "bbox" + std::to_string(num_bboxes);
 
-    this->singleton->frames[nextFrameId - 1].addBox(1, _box);
+    unsigned int largest_key = this->singleton->frames[nextFrameId - 1].getLargestKey();
+    this->singleton->frames[nextFrameId - 1].addBox(largest_key + 1, _box);
+    emit signal_drawFrameBboxes(this->singleton->frames[nextFrameId - 1]);
 }
 
 void MainWindow::slot_moveBoundingBoxInCore(const unsigned int _frameId, const unsigned int _bboxId)

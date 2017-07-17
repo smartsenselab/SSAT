@@ -21,6 +21,7 @@ public:
 
     bool addBox(const unsigned int _key, const BoundingBox &_box);
     bool addBox(const unsigned int _key, const Rect &_box);
+    unsigned int getLargestKey();
 
     BoundingBox getBoxes(const unsigned int _key) const;
     map<unsigned int, BoundingBox> getBoxes() const;

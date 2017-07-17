@@ -15,7 +15,7 @@ void QBoundingBoxScene::deleteBBox()
 {
     foreach(QGraphicsItem *item, selectedItems())
     {
-        removeItem(item);
+        this->removeItem(item);
         delete item;
     }
 }
@@ -33,6 +33,7 @@ void QBoundingBoxScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     {
         double mouse_posX = event->scenePos().x();
         double mouse_posY = event->scenePos().y();
+
         if(this->widthD == 0)
         {
             this->widthD = sceneRect().width();
@@ -171,7 +172,7 @@ void QBoundingBoxScene::slot_drawFrameBboxes(const Frame &_frame)
     for(map<unsigned int, BoundingBox>::iterator it = bboxes.begin(); it != bboxes.end(); it++)
     {       
         unsigned int id = it->second.getId();
-        qDebug() << id;
+        qDebug() << "Drawing BBOX: " << id;
         this->itemToDraw = new QBoundingBoxRectangle(id);
         this->itemToDraw->setPen(QPen(Qt::yellow, 3, Qt::SolidLine));
         this->itemToDraw->setBrush(QBrush(QColor(255, 255, 0, 50)));
