@@ -7,6 +7,9 @@
 
 #include <qdebug.h>
 
+#include <opencv2/core.hpp>
+using cv::Rect;
+
 class QBoundingBoxRectangle : public QObject, public QGraphicsRectItem
 {
     Q_OBJECT

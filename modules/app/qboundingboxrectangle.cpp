@@ -21,8 +21,8 @@ void QBoundingBoxRectangle::setIdentifier(unsigned int _id)
 
 void QBoundingBoxRectangle::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    qreal mousePosX = event->pos().x();
-    qreal mousePosY = event->pos().y();
+    qreal mousePosX = event->scenePos().x();
+    qreal mousePosY = event->scenePos().y();
 
     if( (this->isSelected()) && (event->button() == Qt::LeftButton) )
     {
@@ -170,8 +170,24 @@ void QBoundingBoxRectangle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     this->pointYb = bbox.y() + bbox.height();
     this->resizeMode = 0;
 
+    qDebug() << event->pos().toPoint();//.x() << " " << event->pos().toPoint().y();
+    qDebug() << event->scenePos().toPoint();//.x() << " " << event->scenePos().toPoint().y();
+    qDebug() << this->rect();
+    qDebug() << this->boundingRect();
+    qDebug() << this->sceneBoundingRect();
+
+
+//    Rect box;
+//    box.x = static_cast<int>(bbox.x());
+//    box.y = static_cast<int>(bbox.y());
+//    box.width = static_cast<int>(bbox.width());
+//    box.height = static_cast<int>(bbox.height());
+
+//    emit this->parent()->signal_moveBoundingBoxInCore(this->getIdentifier(), this->box);
+
     this->prepareGeometryChange();
     this->setFlag(QGraphicsItem::ItemIsMovable, true);
+    this->update();
 
     QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
     QGraphicsItem::mouseReleaseEvent(event);
