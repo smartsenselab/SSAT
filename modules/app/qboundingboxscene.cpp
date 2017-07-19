@@ -24,6 +24,7 @@ void QBoundingBoxScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     this->pointXa = event->scenePos().x();
     this->pointYa = event->scenePos().y();
+    // qDebug() << this->pointXa << " : " << this->pointYa;
     QGraphicsScene::mousePressEvent(event);
 }
 
@@ -143,14 +144,20 @@ void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     {
         if (this->selectedItems().size() == 1)
         {
-            QBoundingBoxRectangle *temp = static_cast<QBoundingBoxRectangle*>(this->selectedItems().first());
+            QBoundingBoxRectangle *bbox = static_cast<QBoundingBoxRectangle*>(this->selectedItems().first());
+
+            this->box.x = static_cast<int>(bbox->sceneBoundingRect().x());
+            this->box.y = static_cast<int>(bbox->sceneBoundingRect().y());
+            this->box.width = static_cast<int>(bbox->sceneBoundingRect().width());
+            this->box.height = static_cast<int>(bbox->sceneBoundingRect().height());
+
+            emit this->signal_moveBoundingBoxInCore(bbox->getIdentifier(), this->box);
 
             qDebug() << "Clicked Box"
-                     << "=" << selectedItems().first()->sceneBoundingRect().x()
-                     << ":" << selectedItems().first()->sceneBoundingRect().y()
-                     << ":" << selectedItems().first()->sceneBoundingRect().width()
-                     << ":" << selectedItems().first()->sceneBoundingRect().height();
-            // qDebug() << "Identifier: " << temp->getIdentifier();
+                     << "=" << bbox->sceneBoundingRect().x()
+                     << ":" << bbox->sceneBoundingRect().y()
+                     << ":" << bbox->sceneBoundingRect().width()
+                     << ":" << bbox->sceneBoundingRect().height();
         }
         else if (this->selectedItems().size() > 1)
         {
@@ -161,12 +168,9 @@ void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                 // qDebug() << "Identifier on Release: " << conv->getIdentifier();
             }
         }
-        else
-        {
-            QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
-        }
     }
 
+    QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
     QGraphicsScene::mouseReleaseEvent(event);
 }
 

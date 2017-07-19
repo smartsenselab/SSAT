@@ -58,6 +58,14 @@ void Frame::setBox(const map<unsigned int, BoundingBox> &_boxes)
     this->boxes = _boxes;
 }
 
+void Frame::setBox(const unsigned int _key, const Rect &_box)
+{
+    this->boxes.at(_key).setX(_box.x);
+    this->boxes.at(_key).setY(_box.y);
+    this->boxes.at(_key).setW(_box.width);
+    this->boxes.at(_key).setH(_box.height);
+}
+
 void Frame::operator=(const Frame &_frame)
 {
     this->boxes = _frame.boxes;

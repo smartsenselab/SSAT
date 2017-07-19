@@ -272,9 +272,9 @@ void MainWindow::connectSignalSlots()
                   );
 
     this->connect(this->frameScene,
-                  SIGNAL(signal_moveBoundingBoxInCore(const unsigned int, const unsigned int)),
+                  SIGNAL(signal_moveBoundingBoxInCore(const unsigned int, const Rect)),
                   this,
-                  SLOT(slot_moveBoundingBoxInCore(const unsigned int, const unsigned int))
+                  SLOT(slot_moveBoundingBoxInCore(const unsigned int, const Rect))
                   );
 
     this->connect(this->frameScene,
@@ -655,9 +655,9 @@ void MainWindow::slot_openFile()
                       SLOT(slot_addBoundingBoxToCore(const Rect))
                       );
         this->connect(this->frameScene,
-                      SIGNAL(signal_moveBoundingBoxInCore(const unsigned int, const unsigned int)),
+                      SIGNAL(signal_moveBoundingBoxInCore(const unsigned int, const Rect)),
                       this,
-                      SLOT(slot_moveBoundingBoxInCore(const unsigned int, const unsigned int))
+                      SLOT(slot_moveBoundingBoxInCore(const unsigned int, const Rect))
                       );
         this->connect(this->frameScene,
                       SIGNAL(signal_removeBoundingBoxFromCore(const unsigned int, const unsigned int)),
@@ -1177,9 +1177,10 @@ void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
     emit signal_drawFrameBboxes(this->singleton->frames[nextFrameId - 1]);
 }
 
-void MainWindow::slot_moveBoundingBoxInCore(const unsigned int _frameId, const unsigned int _bboxId)
+void MainWindow::slot_moveBoundingBoxInCore(const unsigned int _bboxId, const Rect _box)
 {
-    qDebug() << "slot_moveBoundingBoxInCore >> Frame Id: " << _frameId << " - Bounding-box Id: " << _bboxId;
+    unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
+    this->singleton->frames[nextFrameId - 1].setBox(_bboxId, _box);
 }
 
 void MainWindow::slot_removeBoundingBoxFromCore(const unsigned int _frameId, const unsigned int _bboxId)

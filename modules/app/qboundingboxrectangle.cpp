@@ -26,18 +26,18 @@ void QBoundingBoxRectangle::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     if( (this->isSelected()) && (event->button() == Qt::LeftButton) )
     {
-        qreal adjust = 8.0;
+        qreal adjust = 15.0;
 
-        QRectF bbox = this->boundingRect();
+        QRectF bbox = this->sceneBoundingRect();
         this->pointXa = bbox.x();
         this->pointYa = bbox.y();
         this->pointXb = bbox.x() + bbox.width();
         this->pointYb = bbox.y() + bbox.height();
 
-        if( (mousePosX > this->boundingRect().left()) &&
-                (mousePosX < this->boundingRect().right()) &&
-                (mousePosY < this->boundingRect().bottom() + adjust) &&
-                (mousePosY > this->boundingRect().bottom() - adjust) )
+        if( (mousePosX > this->sceneBoundingRect().left()) &&
+                (mousePosX < this->sceneBoundingRect().right()) &&
+                (mousePosY < this->sceneBoundingRect().bottom() + adjust) &&
+                (mousePosY > this->sceneBoundingRect().bottom() - adjust) )
         {
             // bottom
             this->resizeMode = 1;
@@ -47,10 +47,10 @@ void QBoundingBoxRectangle::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
             QApplication::setOverrideCursor(QCursor(Qt::SizeVerCursor));
         }
-        else if( (mousePosX > this->boundingRect().right() - adjust) &&
-                 (mousePosX < this->boundingRect().right() + adjust) &&
-                 (mousePosY < this->boundingRect().bottom()) &&
-                 (mousePosY > this->boundingRect().top()) )
+        else if( (mousePosX > this->sceneBoundingRect().right() - adjust) &&
+                 (mousePosX < this->sceneBoundingRect().right() + adjust) &&
+                 (mousePosY < this->sceneBoundingRect().bottom()) &&
+                 (mousePosY > this->sceneBoundingRect().top()) )
         {
             // right
             this->resizeMode = 2;
@@ -60,10 +60,10 @@ void QBoundingBoxRectangle::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
             QApplication::setOverrideCursor(QCursor(Qt::SizeHorCursor));
         }
-        else if( (mousePosX > this->boundingRect().left() - adjust) &&
-                 (mousePosX < this->boundingRect().left() + adjust) &&
-                 (mousePosY < this->boundingRect().bottom()) &&
-                 (mousePosY > this->boundingRect().top()) )
+        else if( (mousePosX > this->sceneBoundingRect().left() - adjust) &&
+                 (mousePosX < this->sceneBoundingRect().left() + adjust) &&
+                 (mousePosY < this->sceneBoundingRect().bottom()) &&
+                 (mousePosY > this->sceneBoundingRect().top()) )
         {
             // left
             this->resizeMode = 3;
@@ -73,10 +73,10 @@ void QBoundingBoxRectangle::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
             QApplication::setOverrideCursor(QCursor(Qt::SizeHorCursor));
         }
-        else if( (mousePosX > this->boundingRect().left()) &&
-                 (mousePosX < this->boundingRect().right()) &&
-                 (mousePosY < this->boundingRect().top() + adjust) &&
-                 (mousePosY > this->boundingRect().top() - adjust) )
+        else if( (mousePosX > this->sceneBoundingRect().left()) &&
+                 (mousePosX < this->sceneBoundingRect().right()) &&
+                 (mousePosY < this->sceneBoundingRect().top() + adjust) &&
+                 (mousePosY > this->sceneBoundingRect().top() - adjust) )
         {
             // top
             this->resizeMode = 4;
@@ -104,8 +104,8 @@ void QBoundingBoxRectangle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     QApplication::setOverrideCursor(QCursor(Qt::ClosedHandCursor));
 
-    qreal mousePosX = event->pos().x();
-    qreal mousePosY = event->pos().y();
+    qreal mousePosX = event->scenePos().x();
+    qreal mousePosY = event->scenePos().y();
 
     if(this->resizeMode > 0)
     {
@@ -128,7 +128,6 @@ void QBoundingBoxRectangle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             {
                 qreal height = this->pointYb - this->pointYa;
                 qreal width = mousePosX - this->pointXa;
-                qDebug() << this->pointXa << " : " << this->pointXb << " : " << mousePosX << " : " << width;
                 this->setRect(this->pointXa, this->pointYa, width, height);
                 this->prepareGeometryChange();
             }
@@ -140,16 +139,20 @@ void QBoundingBoxRectangle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             {
                 qreal height = this->pointYb - this->pointYa;
                 qreal width = (this->pointXb - mousePosX);
-                qDebug() << this->pointXa << " : " << this->pointXb << " : " << mousePosX << " : " << width;
                 this->setRect(mousePosX, this->pointYa, width, height);
                 this->prepareGeometryChange();
             }
-            this->setPos(this->pos().x() + (mousePosX - this->mouseX), this->pos().y());
             break;
 
         case 4:
             // top
-            this->setPos(this->pos().x(), this->pos().y() + (mousePosY - this->mouseY));
+            if(mousePosY < this->pointYb)
+            {
+                qreal height = this->pointYb - mousePosY;
+                qreal width = (this->pointXb - this->pointXa);
+                this->setRect(this->pointXa, mousePosY, width, height);
+                this->prepareGeometryChange();
+            }
             break;
         }
     }
@@ -160,44 +163,17 @@ void QBoundingBoxRectangle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void QBoundingBoxRectangle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    QApplication::setOverrideCursor(QCursor(Qt::OpenHandCursor));
+    QRectF bbox = this->sceneBoundingRect();
+    this->pointXa = bbox.x();
+    this->pointYa = bbox.y();
+    this->pointXb = bbox.x() + bbox.width();
+    this->pointYb = bbox.y() + bbox.height();
+    this->resizeMode = 0;
 
-    qreal mousePosX = event->pos().x();
-    qreal mousePosY = event->pos().y();
+    this->prepareGeometryChange();
+    this->setFlag(QGraphicsItem::ItemIsMovable, true);
 
-        QRectF bbox = this->boundingRect();
-        this->pointXa = bbox.x();
-        this->pointYa = bbox.y();
-        this->pointXb = bbox.x() + bbox.width();
-        this->pointYb = bbox.y() + bbox.height();
-
-//        switch(this->resizeMode)
-//        {
-//        case 1:
-//            // bottom
-//            this->setPos(this->pos().x(), this->pos().y() + (mousePosY - this->mouseY));
-//            break;
-
-//        case 2:
-//            // right
-//            this->setPos(this->pos().x() + (mousePosX - this->mouseX), this->pos().y());
-//            break;
-
-//        case 3:
-//            // left
-//            this->setPos(this->pos().x() + (mousePosX - this->mouseX), this->pos().y());
-//            break;
-
-//        case 4:
-//            // top
-//            this->setPos(this->pos().x(), this->pos().y() + (mousePosY - this->mouseY));
-//            break;
-//        }
-
-        this->prepareGeometryChange();
-        this->resizeMode = 0;
-        this->setFlag(QGraphicsItem::ItemIsMovable, true);
-
+    QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
     QGraphicsItem::mouseReleaseEvent(event);
 }
 

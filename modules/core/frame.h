@@ -27,6 +27,7 @@ public:
     map<unsigned int, BoundingBox> getBoxes() const;
 
     void setBox(const map<unsigned int, BoundingBox> &_boxes);
+    void setBox(const unsigned int _key, const Rect &_box);
 
     void operator=(const Frame &_frame);
 

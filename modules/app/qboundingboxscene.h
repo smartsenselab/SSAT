@@ -105,7 +105,7 @@ signals:
     /// \param _frameId frame which bbox will be updated
     /// \param _bboxId  id of bounding box that will be updated
     ///
-    void signal_moveBoundingBoxInCore(const unsigned int _frameId, const unsigned int _bboxId);
+    void signal_moveBoundingBoxInCore(const unsigned int _bboxId, const Rect _box);
 
     ///
     /// \brief signal_removeBoundingBoxFromCore signal to remove bbox from core

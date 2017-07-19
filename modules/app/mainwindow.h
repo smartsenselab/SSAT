@@ -479,7 +479,7 @@ public slots:
     /// \param _frameId frame which bbox will be updated
     /// \param _bboxId  id of bounding box that will be updated
     ///
-    void slot_moveBoundingBoxInCore(const unsigned int _frameId, const unsigned int _bboxId);
+    void slot_moveBoundingBoxInCore(const unsigned int _bboxId, const Rect _box);
 
     ///
     /// \brief slot_removeBoundingBoxFromCore Remove bbox from core
