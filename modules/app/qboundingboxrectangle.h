@@ -1,6 +1,7 @@
 #ifndef QBOUNDINGBOXRECTANGLE_H
 #define QBOUNDINGBOXRECTANGLE_H
 
+#include <QApplication>
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
 
@@ -11,7 +12,8 @@ class QBoundingBoxRectangle : public QObject, public QGraphicsRectItem
     Q_OBJECT
 
 private:
-    unsigned int identifier;
+    unsigned int identifier, resizeMode;
+    qreal pointX, pointY;
 
 public:
     QBoundingBoxRectangle();

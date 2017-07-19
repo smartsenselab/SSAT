@@ -161,6 +161,10 @@ void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                 qDebug() << "Identifier on Release: " << conv->getIdentifier();
             }
         }
+        else
+        {
+            QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
+        }
     }
 
     QGraphicsScene::mouseReleaseEvent(event);

@@ -2,6 +2,7 @@
 #define SCENE_H
 
 #include <QAction>
+#include <QApplication>
 #include <QGraphicsScene>
 #include <QGraphicsLineItem>
 #include <QGraphicsSceneMouseEvent>
