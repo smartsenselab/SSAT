@@ -36,11 +36,11 @@ void QBoundingBoxScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
         if(this->widthD == 0)
         {
-            this->widthD = sceneRect().width();
+            this->widthD = this->sceneRect().width();
         }
         if(this->heightD == 0)
         {
-            this->heightD = sceneRect().height();
+            this->heightD = this->sceneRect().height();
         }
 
         // the initial point must be inside the video resolution
@@ -150,7 +150,7 @@ void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                      << ":" << selectedItems().first()->sceneBoundingRect().y()
                      << ":" << selectedItems().first()->sceneBoundingRect().width()
                      << ":" << selectedItems().first()->sceneBoundingRect().height();
-            qDebug() << "Identifier: " << temp->getIdentifier();
+            // qDebug() << "Identifier: " << temp->getIdentifier();
         }
         else if (this->selectedItems().size() > 1)
         {
@@ -158,7 +158,7 @@ void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             foreach(QGraphicsItem *item, temps)
             {
                 QBoundingBoxRectangle *conv = static_cast<QBoundingBoxRectangle*>(item);
-                qDebug() << "Identifier on Release: " << conv->getIdentifier();
+                // qDebug() << "Identifier on Release: " << conv->getIdentifier();
             }
         }
         else

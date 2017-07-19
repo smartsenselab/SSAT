@@ -13,7 +13,8 @@ class QBoundingBoxRectangle : public QObject, public QGraphicsRectItem
 
 private:
     unsigned int identifier, resizeMode;
-    qreal pointX, pointY;
+    qreal mouseX, mouseY;
+    qreal pointXa, pointXb, pointYa, pointYb;
 
 public:
     QBoundingBoxRectangle();
