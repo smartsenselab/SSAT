@@ -1,10 +1,7 @@
-#include "qboundingbox.h"
-#include "boundingbox.h"
-#include "qdebug.h"
+#include "qboundingboxscene.h"
 
-QBoundingBox::QBoundingBox(QObject* parent): QGraphicsScene(parent)
+QBoundingBoxScene::QBoundingBoxScene(QObject* parent): QGraphicsScene(parent)
 {
-    // std::cout << this->items().size() << std::endl;
     this->itemToDraw = 0;
 
     this->moveEnabled = false;
@@ -14,34 +11,36 @@ QBoundingBox::QBoundingBox(QObject* parent): QGraphicsScene(parent)
     this->widthD = 0;
 }
 
-void QBoundingBox::deleteBBox()
+void QBoundingBoxScene::deleteBBox()
 {
-    foreach(QGraphicsItem *item, selectedItems())
+    foreach(QGraphicsItem *item, this->selectedItems())
     {
-        removeItem(item);
+        this->removeItem(item);
         delete item;
     }
 }
 
-void QBoundingBox::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void QBoundingBoxScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     this->pointXa = event->scenePos().x();
     this->pointYa = event->scenePos().y();
     QGraphicsScene::mousePressEvent(event);
 }
 
-void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
+void QBoundingBoxScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
     if(this->drawEnabled)
     {
         double mouse_posX = event->scenePos().x();
         double mouse_posY = event->scenePos().y();
+
         if(this->widthD == 0)
         {
-            this->widthD = sceneRect().width();
+            this->widthD = this->sceneRect().width();
         }
         if(this->heightD == 0)
         {
-            this->heightD = sceneRect().height();
+            this->heightD = this->sceneRect().height();
         }
 
         // the initial point must be inside the video resolution
@@ -50,11 +49,10 @@ void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
             delete(this->itemToDraw);
             this->itemToDraw = NULL;
 
-            this->itemToDraw = new QGraphicsRectItem;
-            this->itemToDraw->setPen(QPen(Qt::yellow, 3, Qt::SolidLine));
+            this->itemToDraw = new QBoundingBoxRectangle(qrand() % 100);
+            this->itemToDraw->setPen(QPen(Qt::yellow, 0, Qt::SolidLine));
             this->itemToDraw->setBrush(QBrush(QColor(255, 255, 0, 50)));
             this->addItem(itemToDraw);
-
 
             if(mouse_posX < 0) mouse_posX = 0;
             if(mouse_posY < 0) mouse_posY = 0;
@@ -125,50 +123,69 @@ void QBoundingBox::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     }
     else
     {
-        this->mouseMoveX = this->pointXa - event->scenePos().x(); // Init position - End position  X - Deslocamento para a esquerda
+        this->mouseMoveX = this->pointXa - event->scenePos().x(); // Init position - End position  X - Shift to the left
         this->mouseMoveY = this->pointYa - event->scenePos().y(); // Init position - End position  Y
-
-        //qDebug() << "X = " << this->box.x - mouseMoveX << endl;
-        //qDebug() << "Y = " << this->box.y - mouseMoveY << endl;
-        //qDebug() << "W = " << this->box.width << endl;
-        //qDebug() << "H = " << this->box.height << endl;
 
         QGraphicsScene::mouseMoveEvent(event);
     }
 }
 
-void QBoundingBox::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if((this->drawEnabled) && (this->itemToDraw != NULL))
     {
         this->drawEnabled = false;
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsSelectable, true);
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsMovable, true);
-        qDebug() << "Box = " << this->box.x << ":" << this->box.y << ":"
-                 << this->box.width << ":" << this->box.height << endl;
         emit this->signal_addBoundingBoxToCore(this->box);
     }
     else
     {
-        //this->box.x = static_cast<int>(this->box.x - mouseMoveX);
-        //this->box.y = static_cast<int>(this->box.y - mouseMoveY);
+        if (this->selectedItems().size() == 1)
+        {
+            QBoundingBoxRectangle *bbox = static_cast<QBoundingBoxRectangle*>(this->selectedItems().first());
+
+            this->box.x = static_cast<int>(bbox->sceneBoundingRect().x());
+            this->box.y = static_cast<int>(bbox->sceneBoundingRect().y());
+            this->box.width = static_cast<int>(bbox->sceneBoundingRect().width());
+            this->box.height = static_cast<int>(bbox->sceneBoundingRect().height());
+
+            emit this->signal_moveBoundingBoxInCore(bbox->getIdentifier(), this->box);
+
+            qDebug() << "Clicked Box"
+                     << "=" << bbox->sceneBoundingRect().x()
+                     << ":" << bbox->sceneBoundingRect().y()
+                     << ":" << bbox->sceneBoundingRect().width()
+                     << ":" << bbox->sceneBoundingRect().height();
+        }
+        else if (this->selectedItems().size() > 1)
+        {
+            foreach(QGraphicsItem *item, this->selectedItems())
+            {
+                QBoundingBoxRectangle *conv = static_cast<QBoundingBoxRectangle*>(item);
+            }
+        }
     }
 
+    QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
     QGraphicsScene::mouseReleaseEvent(event);
 }
 
-void QBoundingBox::slot_drawFrameBboxes(const Frame _frame)
+void QBoundingBoxScene::slot_drawFrameBboxes(const Frame &_frame)
 {
-    map<string, BoundingBox> bboxes = _frame.getBoxes();
-    for(map<string, BoundingBox>::iterator it = bboxes.begin(); it != bboxes.end(); it++)
-    {
-        this->itemToDraw = new QGraphicsRectItem;
-        this->itemToDraw->setPen(QPen(Qt::yellow, 3, Qt::SolidLine));
+    map<unsigned int, BoundingBox> bboxes = _frame.getBoxes();
+    for(map<unsigned int, BoundingBox>::iterator it = bboxes.begin(); it != bboxes.end(); it++)
+    {       
+        unsigned int id = it->second.getId();
+        qDebug() << "Drawing BBOX: " << id;
+        this->itemToDraw = new QBoundingBoxRectangle(id);
+        this->itemToDraw->setPen(QPen(Qt::yellow, 0, Qt::SolidLine));
         this->itemToDraw->setBrush(QBrush(QColor(255, 255, 0, 50)));
         this->itemToDraw->setRect(it->second.getX(),
                                   it->second.getY(),
                                   it->second.getW(),
                                   it->second.getH());
+
         // when going back to a frame, is possible to select and move the BBox already created
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsSelectable, true);
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsMovable, true);
@@ -176,17 +193,17 @@ void QBoundingBox::slot_drawFrameBboxes(const Frame _frame)
     }
 }
 
-void QBoundingBox::slot_enableDraw()
+void QBoundingBoxScene::slot_enableDraw()
 {
     this->itemToDraw = 0;
     this->drawEnabled = true;
 }
 
-void QBoundingBox ::keyPressEvent(QKeyEvent* e)
+void QBoundingBoxScene ::keyPressEvent(QKeyEvent* e)
 {
     switch(e->key())
     {
     case Qt::Key_Delete:
-        removeItem(selectedItems().front());
+        this->removeItem(selectedItems().front());
     }
 }

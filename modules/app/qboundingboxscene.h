@@ -2,6 +2,7 @@
 #define SCENE_H
 
 #include <QAction>
+#include <QApplication>
 #include <QGraphicsScene>
 #include <QGraphicsLineItem>
 #include <QGraphicsSceneMouseEvent>
@@ -10,6 +11,8 @@
 #include <QtMath>
 #include <QToolBar>
 
+#include <qdebug.h>
+
 #include <cstdlib>
 #include <iostream>
 
@@ -17,22 +20,23 @@
 using cv::Rect;
 
 #include "frame.h"
+#include "qboundingboxrectangle.h"
 
-class QBoundingBox : public QGraphicsScene
+class QBoundingBoxScene : public QGraphicsScene
 {
     Q_OBJECT
 
 private:
     void makeItemsControllable(bool areControllable);
 
-    ///
     /// \brief drawEnabled Bool to indicate if the user can draw a bbox
     /// \brief moveEnabled Bool to indicate if teh user can move a bbox
     bool drawEnabled, moveEnabled;
     double heightD, widthD;
     double mouseMoveX, mouseMoveY;
 
-    QGraphicsRectItem* itemToDraw = NULL;
+    QGraphicsRectItem *itemToDraw = NULL;
+
     qreal height;
     qreal pointXa, pointXb;
     qreal pointYa, pointYb;
@@ -42,10 +46,10 @@ private:
 
 public:
     ///
-    /// \brief QBoundingBox Constructor for a new bbox
+    /// \brief QBoundingBoxScene Constructor for a new bbox
     /// \param parent
     ///
-    QBoundingBox(QObject* parent = 0);
+    QBoundingBoxScene(QObject* parent = 0);
 
     ///
     /// \brief keyPressEvent
@@ -79,10 +83,10 @@ protected:
 
 public slots:
     ///
-    /// \brief slot_drawFrameBboxes Slot to draw a new bbox
+    /// \brief slot_drawFrameBboxes Slot to draw all Bboxes in a given frame
     /// \param _frame frame where the bbox is gonna be drawn
     ///
-    void slot_drawFrameBboxes(const Frame _frame);
+    void slot_drawFrameBboxes(const Frame &_frame);
 
     ///
     /// \brief slot_enableDraw Allow the user to draw a new bbox
@@ -91,10 +95,24 @@ public slots:
 
 signals:
     ///
-    /// \brief signal_addBoundingBoxToCore signal to add the bbox to singleton
+    /// \brief signal_addBoundingBoxToCore signal to add the bbox to core
     /// \param newBox bbox to add
     ///
     void signal_addBoundingBoxToCore(const Rect _box);
+
+    ///
+    /// \brief signal_moveBoundingBoxInCore signal to update core with new bbox position
+    /// \param _frameId frame which bbox will be updated
+    /// \param _bboxId  id of bounding box that will be updated
+    ///
+    void signal_moveBoundingBoxInCore(const unsigned int _bboxId, const Rect _box);
+
+    ///
+    /// \brief signal_removeBoundingBoxFromCore signal to remove bbox from core
+    /// \param _frameId frame which bbox will be removed from
+    /// \param _bboxId  id of bounding box that will be deleted
+    ///
+    void signal_removeBoundingBoxFromCore(const unsigned int _frameId, const unsigned int _bboxId);
 };
 
 #endif // SCENE_H

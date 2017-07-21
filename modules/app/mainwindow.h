@@ -20,7 +20,7 @@
 
 #include "dialogannotation.h"
 #include "framebaseddata.h"
-#include "qboundingbox.h"
+#include "qboundingboxscene.h"
 #include "qframebasedtablemodel.h"
 #include "videomanager.h"
 
@@ -60,7 +60,7 @@ private:
 
     Core *singleton = NULL;
     DialogAnnotation *annotationDialog = NULL;
-    QBoundingBox *frameScene = NULL;
+    QBoundingBoxScene *frameScene = NULL;
     QFrameBasedTableModel *tableModel = NULL;
     QGraphicsRectItem *rectangle = NULL;
 
@@ -473,6 +473,20 @@ public slots:
     /// \param _box
     ///
     void slot_addBoundingBoxToCore(const Rect _box);
+
+    ///
+    /// \brief signal_moveBoundingBoxInCore Update core with new bbox position
+    /// \param _frameId frame which bbox will be updated
+    /// \param _bboxId  id of bounding box that will be updated
+    ///
+    void slot_moveBoundingBoxInCore(const unsigned int _bboxId, const Rect _box);
+
+    ///
+    /// \brief slot_removeBoundingBoxFromCore Remove bbox from core
+    /// \param _frameId frame which bbox will be removed from
+    /// \param _bboxId  id of bounding box that will be deleted
+    ///
+    void slot_removeBoundingBoxFromCore(const unsigned int _frameId, const unsigned int _bboxId);
 
 signals:
     ///

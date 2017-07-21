@@ -15,25 +15,36 @@ class FrameBasedData
 {
 public:
     FrameBasedData();
+
     FrameBasedData(const int _iniFrame,
                    const int _endFrame,
                    const string &_category,
                    const string &_label,
                    const string &_info);
 
+    FrameBasedData(const int _identifier,
+                   const int _iniFrame,
+                   const int _endFrame,
+                   const string &_category,
+                   const string &_label,
+                   const string &_info);
+
+    int getIdentifier() const;
     int getInitialFrameId() const;
     int getFinalFrameId() const;
     string getCategory() const;
     string getLabel() const;
     string getInfo() const;
 
-    void setInitialFrameId(const int _id);
-    void setFinalFrameId(const int _id);
+    void setIdentifier(const int _id);
+    void setInitialFrameId(const int _ini);
+    void setFinalFrameId(const int _end);
     void setCategory(const string &_category);
     void setLabel(const string &_label);
     void setInfo(const string &_info);
 
 private:
+    int identifier;
     int initialFrameId;
     int finalFrameId;
     string category;

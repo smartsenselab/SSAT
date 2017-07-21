@@ -5,7 +5,8 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     this->ui->setupUi(this);
-    this->frameScene = new QBoundingBox(this);
+
+    this->frameScene = new QBoundingBoxScene(this);
     this->loaded = false;
     this->manager = new VideoManager;
     this->playing = false;
@@ -253,7 +254,7 @@ void MainWindow::connectSignalSlots()
                   );
 
     this->connect(this->ui->splitterHorizontal,
-                  SIGNAL(splitterMoved(int,int)),
+                  SIGNAL(splitterMoved(int, int)),
                   this,
                   SLOT(slot_resizeFrame())
                   );
@@ -268,6 +269,18 @@ void MainWindow::connectSignalSlots()
                   SIGNAL(signal_addBoundingBoxToCore(const Rect)),
                   this,
                   SLOT(slot_addBoundingBoxToCore(const Rect))
+                  );
+
+    this->connect(this->frameScene,
+                  SIGNAL(signal_moveBoundingBoxInCore(const unsigned int, const Rect)),
+                  this,
+                  SLOT(slot_moveBoundingBoxInCore(const unsigned int, const Rect))
+                  );
+
+    this->connect(this->frameScene,
+                  SIGNAL(signal_removeBoundingBoxFromCore(const unsigned int, const unsigned int)),
+                  this,
+                  SLOT(slot_removeBoundingBoxFromCore(const unsigned int, const unsigned int))
                   );
 
     this->connect(this,
@@ -409,7 +422,7 @@ void MainWindow::stopVideo()
 
 void MainWindow::updateFrame()
 {
-    Mat frameMat = this->manager->getFrame();
+    cv::Mat frameMat = this->manager->getFrame();
     unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
 
     if(frameMat.data)
@@ -437,7 +450,7 @@ void MainWindow::updateFrame()
 
 void MainWindow::updateFrame(const int _frameId)
 {
-    Mat frameMat = this->manager->getFrame(_frameId + this->speed);
+    cv::Mat frameMat = this->manager->getFrame(_frameId + this->speed);
     unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
 
     if(frameMat.data)
@@ -448,7 +461,7 @@ void MainWindow::updateFrame(const int _frameId)
         this->frameScene->clear();
 
         qint64 current = this->manager->getTime();
-        QTime currentTime((current/3600)%60, (current/60)%60, current%60, (current*1000)%1000);
+        QTime currentTime((current/3600) % 60, (current/60) % 60, current % 60, (current * 1000) % 1000);
         QString stringTime = currentTime.toString("hh:mm:ss");
         this->ui->labelTime->setText(stringTime);
 
@@ -635,12 +648,25 @@ void MainWindow::slot_openFile()
         this->tableModel->clear();
 
         // Re-instantiating frameScene and its Signal/Slot connections
-        this->frameScene = new QBoundingBox(this);
+        this->frameScene = new QBoundingBoxScene(this);
         this->connect(this->frameScene,
                       SIGNAL(signal_addBoundingBoxToCore(const Rect)),
                       this,
                       SLOT(slot_addBoundingBoxToCore(const Rect))
                       );
+
+        this->connect(this->frameScene,
+                      SIGNAL(signal_moveBoundingBoxInCore(const unsigned int, const Rect)),
+                      this,
+                      SLOT(slot_moveBoundingBoxInCore(const unsigned int, const Rect))
+                      );
+
+        this->connect(this->frameScene,
+                      SIGNAL(signal_removeBoundingBoxFromCore(const unsigned int, const unsigned int)),
+                      this,
+                      SLOT(slot_removeBoundingBoxFromCore(const unsigned int, const unsigned int))
+                      );
+
         this->connect(this,
                       SIGNAL(signal_drawFrameBboxes(const Frame)),
                       this->frameScene,
@@ -1147,9 +1173,23 @@ void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
     unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
     unsigned long num_bboxes = static_cast<unsigned long>(this->singleton->frames[nextFrameId - 1].getBoxes().size());
 
-    string temp_id = "frame" + std::to_string(nextFrameId - 1);
-    string temp_key = "bbox" + std::to_string(num_bboxes);
+//    string temp_id = "frame" + std::to_string(nextFrameId - 1);
+//    string temp_key = "bbox" + std::to_string(num_bboxes);
 
-    this->singleton->frames[nextFrameId - 1].addBox(temp_id + "_" + temp_key, _box);
+    unsigned int largest_key = this->singleton->frames[nextFrameId - 1].getLargestKey();
+    this->singleton->frames[nextFrameId - 1].addBox(largest_key + 1, _box);
+    this->updateFrame(nextFrameId - 1);
+}
+
+void MainWindow::slot_moveBoundingBoxInCore(const unsigned int _bboxId, const Rect _box)
+{
+    unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
+    this->singleton->frames[nextFrameId - 1].setBox(_bboxId, _box);
+//    this->updateFrame(nextFrameId - 1);
+}
+
+void MainWindow::slot_removeBoundingBoxFromCore(const unsigned int _frameId, const unsigned int _bboxId)
+{
+    qDebug() << "slot_removeBoundingBoxFromCore >> Frame Id: " << _frameId << " - Bounding-box Id: " << _bboxId;
 }
 
