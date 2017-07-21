@@ -170,24 +170,15 @@ void QBoundingBoxRectangle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     this->pointYb = bbox.y() + bbox.height();
     this->resizeMode = 0;
 
-    qDebug() << event->pos().toPoint();//.x() << " " << event->pos().toPoint().y();
-    qDebug() << event->scenePos().toPoint();//.x() << " " << event->scenePos().toPoint().y();
-    qDebug() << this->rect();
-    qDebug() << this->boundingRect();
-    qDebug() << this->sceneBoundingRect();
-
-
-//    Rect box;
-//    box.x = static_cast<int>(bbox.x());
-//    box.y = static_cast<int>(bbox.y());
-//    box.width = static_cast<int>(bbox.width());
-//    box.height = static_cast<int>(bbox.height());
-
-//    emit this->parent()->signal_moveBoundingBoxInCore(this->getIdentifier(), this->box);
-
     this->prepareGeometryChange();
     this->setFlag(QGraphicsItem::ItemIsMovable, true);
     this->update();
+
+    qDebug() << event->pos().toPoint();
+    qDebug() << event->scenePos().toPoint();
+    qDebug() << this->rect();
+    qDebug() << this->boundingRect();
+    qDebug() << this->sceneBoundingRect();
 
     QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
     QGraphicsItem::mouseReleaseEvent(event);
