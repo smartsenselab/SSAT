@@ -83,7 +83,7 @@ protected:
 
 public slots:
     ///
-    /// \brief slot_drawFrameBboxes Slot to draw a new bbox
+    /// \brief slot_drawFrameBboxes Slot to draw all Bboxes in a given frame
     /// \param _frame frame where the bbox is gonna be drawn
     ///
     void slot_drawFrameBboxes(const Frame &_frame);
@@ -94,6 +94,11 @@ public slots:
     void slot_enableDraw();
 
 signals:
+    ///
+    /// \brief signal_drawFrameBboxes   Signal to call slot_drawFrameBboxes
+    ///
+    void signal_drawFrameBboxes();
+
     ///
     /// \brief signal_addBoundingBoxToCore signal to add the bbox to core
     /// \param newBox bbox to add

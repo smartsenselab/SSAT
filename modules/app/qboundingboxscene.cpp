@@ -13,7 +13,7 @@ QBoundingBoxScene::QBoundingBoxScene(QObject* parent): QGraphicsScene(parent)
 
 void QBoundingBoxScene::deleteBBox()
 {
-    foreach(QGraphicsItem *item, selectedItems())
+    foreach(QGraphicsItem *item, this->selectedItems())
     {
         this->removeItem(item);
         delete item;
@@ -170,12 +170,26 @@ void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         }
     }
 
+    emit this->signal_drawFrameBboxes();
+
     QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
     QGraphicsScene::mouseReleaseEvent(event);
 }
 
 void QBoundingBoxScene::slot_drawFrameBboxes(const Frame &_frame)
 {
+//    foreach(QGraphicsItem *item, this->items())
+//    {
+//        if(item->parentItem() == NULL)
+//        {
+//            this->removeItem(item);
+//            delete item;
+//        }
+//    }
+
+//    QList<QGraphicsItem *> items = this->items();
+    this->update();
+
     map<unsigned int, BoundingBox> bboxes = _frame.getBoxes();
     for(map<unsigned int, BoundingBox>::iterator it = bboxes.begin(); it != bboxes.end(); it++)
     {       

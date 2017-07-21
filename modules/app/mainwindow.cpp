@@ -289,6 +289,12 @@ void MainWindow::connectSignalSlots()
                   SLOT(slot_drawFrameBboxes(const Frame))
                   );
 
+    this->connect(this->frameScene,
+                  SIGNAL(signal_drawFrameBboxes()),
+                  this,
+                  SLOT(slot_drawFrameBboxes())
+                  );
+
     this->connect(this,
                   SIGNAL(signal_frameBasedInsertAccepted(FrameBasedData)),
                   this,
@@ -654,16 +660,25 @@ void MainWindow::slot_openFile()
                       this,
                       SLOT(slot_addBoundingBoxToCore(const Rect))
                       );
+
         this->connect(this->frameScene,
                       SIGNAL(signal_moveBoundingBoxInCore(const unsigned int, const Rect)),
                       this,
                       SLOT(slot_moveBoundingBoxInCore(const unsigned int, const Rect))
                       );
+
         this->connect(this->frameScene,
                       SIGNAL(signal_removeBoundingBoxFromCore(const unsigned int, const unsigned int)),
                       this,
                       SLOT(slot_removeBoundingBoxFromCore(const unsigned int, const unsigned int))
                       );
+
+        this->connect(this->frameScene,
+                      SIGNAL(signal_drawFrameBboxes()),
+                      this,
+                      SLOT(slot_drawFrameBboxes())
+                      );
+
         this->connect(this,
                       SIGNAL(signal_drawFrameBboxes(const Frame)),
                       this->frameScene,
@@ -1162,6 +1177,12 @@ void MainWindow::slot_comboBoxCategoryActivated(const QString &_text)
 
     this->labelModel->setStringList(labelList);
     this->ui->comboBoxLabel->setModel(this->labelModel);
+}
+
+void MainWindow::slot_drawFrameBboxes()
+{
+    unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
+    emit this->signal_drawFrameBboxes(this->singleton->frames[nextFrameId - 1]);
 }
 
 void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
