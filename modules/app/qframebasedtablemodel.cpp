@@ -162,10 +162,13 @@ Qt::ItemFlags QFrameBasedTableModel::flags(const QModelIndex &_index) const
 
 bool QFrameBasedTableModel::insertRow(const FrameBasedData &_frameBasedData)
 {
+    FrameBasedData frameData = _frameBasedData;
+    frameData.setId(this->getLargestId() + 1);
+
     bool cond = this->insertRows(0, 1, QModelIndex());
     if(cond)
     {
-        this->frameData->back() = _frameBasedData;
+        this->frameData->back() = frameData;
     }
     return cond;
 }
@@ -189,6 +192,21 @@ bool QFrameBasedTableModel::clear()
         return this->removeRows(0, this->rowCount(), QModelIndex());
     }
     return false;
+}
+
+unsigned int QFrameBasedTableModel::getLargestId()
+{
+    unsigned int largest = 0;
+
+    for(unsigned int index = 0; index < this->frameData->size(); index++)
+    {
+        if(this->frameData->at(index).getId() > largest)
+        {
+            largest = this->frameData->at(index).getId();
+        }
+    }
+
+    return largest;
 }
 
 void QFrameBasedTableModel::setFrameBasedData(vector<FrameBasedData> &_frameBasedData)

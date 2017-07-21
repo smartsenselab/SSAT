@@ -1051,8 +1051,8 @@ void MainWindow::slot_frameBasedInsertAccepted(const FrameBasedData _data)
 
 void MainWindow::slot_frameBasedAlterAccepted(const FrameBasedData _data, const int _index)
 {
-    FrameBasedData frameData = this->singleton->frameData.at(static_cast<unsigned long>(_index));
-    frameData.setCategory(this->ui->comboBoxCategory->currentText().toStdString());
+    FrameBasedData data = this->singleton->frameData.at(static_cast<unsigned long>(_index));
+    data.setCategory(this->ui->comboBoxCategory->currentText().toStdString());
     this->tableModel->changeRow(_data, _index);
 }
 
@@ -1074,11 +1074,13 @@ void MainWindow::slot_resizeFrame()
 
 void MainWindow::slot_buttonBoxAccepted()
 {
-    FrameBasedData data = FrameBasedData(this->ui->spinBoxInitialFrame->value(),
-                                         this->ui->spinBoxFinalFrame->value(),
-                                         this->ui->comboBoxCategory->currentText().toStdString(),
+    FrameBasedData data = FrameBasedData(this->ui->comboBoxCategory->currentText().toStdString(),
+                                         this->ui->lineEditInfo->text().toStdString(),
                                          this->ui->comboBoxLabel->currentText().toStdString(),
-                                         this->ui->lineEditInfo->text().toStdString());
+                                         std::string(),
+                                         this->ui->spinBoxInitialFrame->value(),
+                                         this->ui->spinBoxFinalFrame->value()
+                                         );
 
     if(this->manipulation == mode::insert)
     {
@@ -1130,8 +1132,8 @@ void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
     unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
     unsigned long num_bboxes = static_cast<unsigned long>(this->singleton->frames[nextFrameId - 1].getBoxes().size());
 
-//    string temp_id = "frame" + std::to_string(nextFrameId - 1);
-//    string temp_key = "bbox" + std::to_string(num_bboxes);
+    //    string temp_id = "frame" + std::to_string(nextFrameId - 1);
+    //    string temp_key = "bbox" + std::to_string(num_bboxes);
 
     unsigned int largest_key = this->singleton->frames[nextFrameId - 1].getLargestKey();
     this->singleton->frames[nextFrameId - 1].addBox(largest_key + 1, _box);
@@ -1142,7 +1144,7 @@ void MainWindow::slot_moveBoundingBoxInCore(const unsigned int _bboxId, const Re
 {
     unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
     this->singleton->frames[nextFrameId - 1].setBox(_bboxId, _box);
-//    this->updateFrame(nextFrameId - 1);
+    //    this->updateFrame(nextFrameId - 1);
 }
 
 void MainWindow::slot_removeBoundingBoxFromCore(const unsigned int _frameId, const unsigned int _bboxId)
