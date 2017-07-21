@@ -34,6 +34,7 @@ public:
     void reset(const unsigned int _frames, unsigned int _cores);
     void runTracker(const string  &_videoName, const unsigned int _frameId,
                     const string &_boxName, int identifier, int status);
+    void updateFrameId();
 
 public:
     ThreadPool *pool;

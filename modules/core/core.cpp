@@ -65,3 +65,11 @@ void Core::reset(const unsigned int _frames, unsigned int _cores)
     delete(this->pool);
     this->pool = new ThreadPool(_cores);
 }
+
+void Core::updateFrameId()
+{
+    for(unsigned int index = 0; index < this->frames.size(); index++)
+    {
+        this->frames[index].setId(index);
+    }
+}

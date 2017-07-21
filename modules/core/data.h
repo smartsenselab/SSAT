@@ -15,39 +15,38 @@ class Data
 {
 public:
     Data();
-    Data(const string &_name);
-    Data(const unsigned int &_id, const string &_name);
+    Data(const unsigned int &_id);
 
-    vector<string> getAttributes(const string &_key) const;
-    vector<string> getComments() const;
+    Data(const string &_category,
+         const string &_info,
+         const string &_label,
+         const string &_name);
+    Data(const unsigned int &_id,
+         const string &_category,
+         const string &_info,
+         const string &_label,
+         const string &_name);
+
     unsigned int getId() const;
-    vector<string> getKeys() const;
+    string getCategory() const;
+    string getInfo() const;
+    string getLabel() const;
     string getName() const;
 
-    void addAttributes(const string &_key, const string &_attr);
-    void delAttributes(const string &_key);
-    void delAttributes();
-    void addComments(const string &_info);
-    void delComments(const unsigned int _index);
-    void delComments();
-
     void setId(const unsigned int &_id);
+    void setCategory(const string &_category);
+    void setInfo(const string &_info);
+    void setLabel(const string &_label);
     void setName(const string &_name);
 
     void operator=(const Data &_data);
 
 protected:
-    multimap<string, string> attributes;
-    vector<string> comments;
     unsigned int id;
+    string category;
+    string info;
+    string label;
     string name;
 };
-
-/*
- * trocar labels por info
- * string labels
- * multimap<string> attributes
- * vector<string> names;
- */
 
 #endif // DATA_H

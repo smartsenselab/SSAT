@@ -67,11 +67,12 @@ void Frame::setBox(const unsigned int _key, const Rect &_box)
 }
 
 void Frame::operator=(const Frame &_frame)
-{
-    this->boxes = _frame.boxes;
-
-    this->attributes = _frame.attributes;
-    this->comments = _frame.comments;
+{    
     this->id = _frame.id;
+    this->category = _frame.category;
+    this->info = _frame.info;
+    this->label = _frame.label;
     this->name = _frame.name;
+
+    this->boxes = _frame.boxes;
 }

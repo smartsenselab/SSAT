@@ -685,10 +685,12 @@ void MainWindow::slot_openFile()
         if(this->singleton == NULL)
         {
             this->singleton = Core::getInstance(static_cast<unsigned int>(this->totalFrames));
+            this->singleton->updateFrameId();
         }
         else
         {
             this->singleton->reset(static_cast<unsigned int>(this->totalFrames));
+            this->singleton->updateFrameId();
         }
 
         // Displaying Frame and Core information on Interface
