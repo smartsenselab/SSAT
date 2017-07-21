@@ -469,11 +469,6 @@ public slots:
 
     // BoundingBox-Based
     ///
-    /// \brief slot_drawFrameBboxes Slot to draw all Bboxes in a given frame
-    ///
-    void slot_drawFrameBboxes();
-
-    ///
     /// \brief slot_addBoundingBoxToCore    Save the x,y,w,h of the BBox on core
     /// \param _box
     ///

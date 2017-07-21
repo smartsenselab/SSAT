@@ -289,12 +289,6 @@ void MainWindow::connectSignalSlots()
                   SLOT(slot_drawFrameBboxes(const Frame))
                   );
 
-    this->connect(this->frameScene,
-                  SIGNAL(signal_drawFrameBboxes()),
-                  this,
-                  SLOT(slot_drawFrameBboxes())
-                  );
-
     this->connect(this,
                   SIGNAL(signal_frameBasedInsertAccepted(FrameBasedData)),
                   this,
@@ -671,12 +665,6 @@ void MainWindow::slot_openFile()
                       SIGNAL(signal_removeBoundingBoxFromCore(const unsigned int, const unsigned int)),
                       this,
                       SLOT(slot_removeBoundingBoxFromCore(const unsigned int, const unsigned int))
-                      );
-
-        this->connect(this->frameScene,
-                      SIGNAL(signal_drawFrameBboxes()),
-                      this,
-                      SLOT(slot_drawFrameBboxes())
                       );
 
         this->connect(this,
@@ -1179,12 +1167,6 @@ void MainWindow::slot_comboBoxCategoryActivated(const QString &_text)
     this->ui->comboBoxLabel->setModel(this->labelModel);
 }
 
-void MainWindow::slot_drawFrameBboxes()
-{
-    unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
-    emit this->signal_drawFrameBboxes(this->singleton->frames[nextFrameId - 1]);
-}
-
 void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
 {
     unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
@@ -1195,13 +1177,14 @@ void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
 
     unsigned int largest_key = this->singleton->frames[nextFrameId - 1].getLargestKey();
     this->singleton->frames[nextFrameId - 1].addBox(largest_key + 1, _box);
-    emit signal_drawFrameBboxes(this->singleton->frames[nextFrameId - 1]);
+    this->updateFrame(nextFrameId - 1);
 }
 
 void MainWindow::slot_moveBoundingBoxInCore(const unsigned int _bboxId, const Rect _box)
 {
     unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
     this->singleton->frames[nextFrameId - 1].setBox(_bboxId, _box);
+//    this->updateFrame(nextFrameId - 1);
 }
 
 void MainWindow::slot_removeBoundingBoxFromCore(const unsigned int _frameId, const unsigned int _bboxId)

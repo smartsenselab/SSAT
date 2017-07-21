@@ -95,11 +95,6 @@ public slots:
 
 signals:
     ///
-    /// \brief signal_drawFrameBboxes   Signal to call slot_drawFrameBboxes
-    ///
-    void signal_drawFrameBboxes();
-
-    ///
     /// \brief signal_addBoundingBoxToCore signal to add the bbox to core
     /// \param newBox bbox to add
     ///
