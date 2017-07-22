@@ -70,6 +70,12 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) Q_DECL_OVERRIDE;
 
     ///
+    /// \brief mouseDoubleClickEvent When mouse button is doubly clicked
+    /// \param event Event sent by mouse
+    ///
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) Q_DECL_OVERRIDE;
+
+    ///
     /// \brief mouseMoveEvent When mouse is moved
     /// \param event Event sent by mouse
     ///

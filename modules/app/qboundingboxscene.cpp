@@ -27,6 +27,15 @@ void QBoundingBoxScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsScene::mousePressEvent(event);
 }
 
+void QBoundingBoxScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+{
+    qDebug() << "DOUBLE CLICK WORKS";
+    if (this->selectedItems().size() == 1)
+    {
+        qDebug() << "ONE BOUNDING BOX SELECTED";
+    }
+}
+
 void QBoundingBoxScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if(this->drawEnabled)
