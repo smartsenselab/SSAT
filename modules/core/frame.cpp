@@ -1,7 +1,34 @@
 #include "frame.h"
 
-Frame::Frame()
+Frame::Frame() :
+    Data()
 {
+
+}
+
+Frame::Frame(const unsigned int &_id) :
+    Data(_id)
+{
+
+}
+
+Frame::Frame(const string &_category,
+             const string &_info,
+             const string &_label,
+             const string &_name) :
+    Data(_category, _info, _label, _name)
+{
+
+}
+
+Frame::Frame(const unsigned int &_id,
+             const string &_category,
+             const string &_info,
+             const string &_label,
+             const string &_name) :
+    Data(_id, _category, _info, _label, _name)
+{
+
 }
 
 bool Frame::addBox(const unsigned int _key, const BoundingBox &_box)
@@ -67,11 +94,12 @@ void Frame::setBox(const unsigned int _key, const Rect &_box)
 }
 
 void Frame::operator=(const Frame &_frame)
-{
-    this->boxes = _frame.boxes;
-
-    this->attributes = _frame.attributes;
-    this->comments = _frame.comments;
+{    
     this->id = _frame.id;
+    this->category = _frame.category;
+    this->info = _frame.info;
+    this->label = _frame.label;
     this->name = _frame.name;
+
+    this->boxes = _frame.boxes;
 }

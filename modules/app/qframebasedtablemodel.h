@@ -126,6 +126,13 @@ public:
     /// \return true for success false for failure
     ///
     bool clear();
+
+    ///
+    /// \brief getLargestId return largest Id from vector
+    /// \return
+    ///
+    unsigned int getLargestId();
+
     ///
     /// \brief setFrameBasedData set the framebased vector
     /// \param _frameBasedData info on the vector

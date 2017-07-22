@@ -4,6 +4,8 @@
 #include <iostream>
 using std::string;
 
+#include "data.h"
+
 enum mode
 {
     insert,
@@ -11,45 +13,38 @@ enum mode
     discard
 };
 
-class FrameBasedData
+class FrameBasedData : public Data
 {
 public:
     FrameBasedData();
+    FrameBasedData(const unsigned int &_id);
 
-    FrameBasedData(const int _iniFrame,
-                   const int _endFrame,
-                   const string &_category,
+    FrameBasedData(const string &_category,
+                   const string &_info,
                    const string &_label,
-                   const string &_info);
+                   const string &_name,
+                   const unsigned int &_ini,
+                   const unsigned int &_end);
 
-    FrameBasedData(const int _identifier,
-                   const int _iniFrame,
-                   const int _endFrame,
+    FrameBasedData(const unsigned int &_id,
                    const string &_category,
+                   const string &_info,
                    const string &_label,
-                   const string &_info);
+                   const string &_name,
+                   const unsigned int &_ini,
+                   const unsigned int &_end);
 
-    int getIdentifier() const;
-    int getInitialFrameId() const;
-    int getFinalFrameId() const;
-    string getCategory() const;
-    string getLabel() const;
-    string getInfo() const;
+    unsigned int getInitialFrameId() const;
+    unsigned int getFinalFrameId() const;
 
-    void setIdentifier(const int _id);
-    void setInitialFrameId(const int _ini);
-    void setFinalFrameId(const int _end);
-    void setCategory(const string &_category);
-    void setLabel(const string &_label);
-    void setInfo(const string &_info);
+    void setInitialFrameId(const unsigned int _ini);
+    void setFinalFrameId(const unsigned int _end);
+
+    void operator=(const FrameBasedData &_frameBasedData);
 
 private:
-    int identifier;
-    int initialFrameId;
-    int finalFrameId;
-    string category;
-    string label;
-    string info;
+    unsigned int initialFrameId;
+    unsigned int finalFrameId;
 };
 
 #endif // FRAMEBASEDDATA_H

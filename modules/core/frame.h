@@ -18,6 +18,18 @@ class Frame : public Data
 {
 public:
     Frame();
+    Frame(const unsigned int &_id);
+
+    Frame(const string &_category,
+          const string &_info,
+          const string &_label,
+          const string &_name);
+
+    Frame(const unsigned int &_id,
+          const string &_category,
+          const string &_info,
+          const string &_label,
+          const string &_name);
 
     bool addBox(const unsigned int _key, const BoundingBox &_box);
     bool addBox(const unsigned int _key, const Rect &_box);

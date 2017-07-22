@@ -1,40 +1,38 @@
 #include "data.h"
 
 Data::Data()
-{ }
-
-Data::Data(const string &_name)
 {
-    this->setName(_name);
+    this->setId(0);
 }
 
-Data::Data(const unsigned int &_id, const string &_name)
+Data::Data(const unsigned int &_id)
 {
     this->setId(_id);
+}
+
+Data::Data(const string &_category,
+           const string &_info,
+           const string &_label,
+           const string &_name)
+{
+    this->setId(0);
+    this->setCategory(_category);
+    this->setInfo(_info);
+    this->setLabel(_label);
     this->setName(_name);
 }
 
-vector<string> Data::getAttributes(const string &_key) const
+Data::Data(const unsigned int &_id,
+           const string &_category,
+           const string &_info,
+           const string &_label,
+           const string &_name)
 {
-    vector<string> attributeVector;
-    multimap<string, string>::const_iterator it, itlow, itupp;
-
-    if(this->attributes.find(_key) != this->attributes.end())
-    {
-        itlow = this->attributes.lower_bound(_key);
-        itupp = this->attributes.upper_bound(_key);
-
-        for(it = itlow; it != itupp; it++)
-        {
-            attributeVector.push_back(it->second);
-        }
-    }
-    return attributeVector;
-}
-
-vector<string> Data::getComments() const
-{
-    return this->comments;
+    this->setId(_id);
+    this->setCategory(_category);
+    this->setInfo(_info);
+    this->setLabel(_label);
+    this->setName(_name);
 }
 
 unsigned int Data::getId() const
@@ -42,16 +40,19 @@ unsigned int Data::getId() const
     return this->id;
 }
 
-vector<string> Data::getKeys() const
+string Data::getCategory() const
 {
-    vector<string> keyVector;
-    multimap<string, string>::const_iterator it;
+    return this->category;
+}
 
-    for(it = this->attributes.begin(); it != this->attributes.end(); it++)
-    {
-        keyVector.push_back(it->first);
-    }
-    return keyVector;
+string Data::getInfo() const
+{
+    return this->info;
+}
+
+string Data::getLabel() const
+{
+    return this->label;
 }
 
 string Data::getName() const
@@ -59,39 +60,24 @@ string Data::getName() const
     return this->name;
 }
 
-void Data::addAttributes(const string &_key, const string &_attr)
-{
-    this->attributes.insert(std::make_pair(_key, _attr));
-}
-
-void Data::delAttributes(const string &_key)
-{
-    this->attributes.erase(_key);
-}
-
-void Data::delAttributes()
-{
-    this->attributes.clear();
-}
-
-void Data::addComments(const string &_info)
-{
-    this->comments.push_back(_info);
-}
-
-void Data::delComments(const unsigned int _index)
-{
-    this->comments.erase(this->comments.begin() + _index);
-}
-
-void Data::delComments()
-{
-    this->comments.clear();
-}
-
 void Data::setId(const unsigned int &_id)
 {
     this->id = _id;
+}
+
+void Data::setCategory(const string &_category)
+{
+    this->category = _category;
+}
+
+void Data::setInfo(const string &_info)
+{
+    this->info = _info;
+}
+
+void Data::setLabel(const string &_label)
+{
+    this->label = _label;
 }
 
 void Data::setName(const string &_name)
@@ -101,8 +87,9 @@ void Data::setName(const string &_name)
 
 void Data::operator=(const Data &_data)
 {
-    this->attributes = _data.attributes;
     this->id = _data.id;
-    this->comments = _data.comments;
+    this->category = _data.category;
+    this->info = _data.info;
+    this->label = _data.label;
     this->name = _data.name;
 }

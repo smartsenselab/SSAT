@@ -451,15 +451,15 @@ public slots:
     void slot_spinBoxValueChanged();
 
     ///
-    /// \brief slot_initializeDialog    Prepare the annotation box to be used to insert a new annotation
+    /// \brief slot_initializeDialog Prepare the annotation box to be used to insert a new annotation
     ///
-    void slot_initializeDialog();
+    void slot_initializeFrameBasedComboBox();
 
     ///
-    /// \brief slot_initializeDialog    Prepare the annotation box to be used to change a new annotation
-    /// \param _index   The previous annotation
+    /// \brief slot_initializeDialog Prepare the annotation box to be used to change a new annotation
+    /// \param _index The previous annotation
     ///
-    void slot_initializeDialog(const QModelIndex _index);
+    void slot_initializeFrameBasedComboBox(const QModelIndex _index);
 
     ///
     /// \brief slot_comboBoxCategoryActivated   Insert a new category

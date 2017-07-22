@@ -17,22 +17,9 @@ class BoundingBox : public Data
 {
 public:
     ///
-    /// \brief BoundingBox Default BoundingBox constructor
+    /// \brief BoundingBox BoundingBox default constructor
     ///
     BoundingBox();
-
-    ///
-    /// \brief BoundingBox BoundingBox constructor
-    /// \param _box A struct holding X,Y,W and H values
-    ///
-    BoundingBox(const BoundingBox &_box);
-
-    ///
-    /// \brief BoundingBox BoundingBox constructor
-    /// \param _id  An identifier for the bounding-box
-    /// \param _box A struct holding X,Y,W and H values
-    ///
-    BoundingBox(const unsigned int _id, const Rect &_box);
 
     ///
     /// \brief BoundingBox BoundingBox constructor
@@ -41,7 +28,64 @@ public:
     /// \param _w The width of the boundingbox
     /// \param _h The height of the boundingbox
     ///
-    BoundingBox(const int _x, const int _y, const int _w, const int _h);
+    BoundingBox(const int &_x,
+                const int &_y,
+                const int &_w,
+                const int &_h);
+
+    ///
+    /// \brief BoundingBox BoundingBox constructor
+    /// \param _category A category for the bounding-box
+    /// \param _info An info for the bounding-box
+    /// \param _label A label for the bounding-box
+    /// \param _name A name for the bounding-box
+    /// \param _x The X cordinate of the boundingbox
+    /// \param _y The Y cordinate of the boundingbox
+    /// \param _w The width of the boundingbox
+    /// \param _h The height of the boundingbox
+    ///
+    BoundingBox(const string &_category,
+                const string &_info,
+                const string &_label,
+                const string &_name,
+                const int &_x,
+                const int &_y,
+                const int &_w,
+                const int &_h);
+
+    ///
+    /// \brief BoundingBox BoundingBox constructor
+    /// \param _id An identifier for the bounding-box
+    /// \param _category A category for the bounding-box
+    /// \param _info An info for the bounding-box
+    /// \param _label A label for the bounding-box
+    /// \param _name A name for the bounding-box
+    /// \param _x The X cordinate of the boundingbox
+    /// \param _y The Y cordinate of the boundingbox
+    /// \param _w The width of the boundingbox
+    /// \param _h The height of the boundingbox
+    ///
+    BoundingBox(const unsigned int &_id,
+                const string &_category,
+                const string &_info,
+                const string &_label,
+                const string &_name,
+                const int &_x,
+                const int &_y,
+                const int &_w,
+                const int &_h);
+
+    ///
+    /// \param _id  An identifier for the bounding-box
+    /// \param _box A struct holding X,Y,W and H values
+    ///
+    BoundingBox(const unsigned int _id, const Rect &_box);
+
+    ///
+    /// \brief BoundingBox BoundingBox copy constructor
+    /// \param _box Another BoundingBox
+    ///
+    BoundingBox(const BoundingBox &_box);
 
     ///
     /// \brief getX Get the x cordinate of the boundingbox
