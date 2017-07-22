@@ -103,7 +103,8 @@ void DialogAnnotation::slot_initializeDialog(Core &_singleton)
     this->ui->treeViewAttributes->setCurrentIndex(first);
 
     int row = this->qStandardModel->rowCount();
-    if(row == 0){
+    if(row == 0)
+    {
         this->ui->pushButtonInsertLabel->setDisabled(true);
         this->ui->pushButtonRemove->setDisabled(true);
     }//desabilitar botao de inserie e remover se nao existirem categorias
@@ -126,13 +127,13 @@ void DialogAnnotation::slot_insertCategoryPressed()
     this->connect(qStandardModel,
                   SIGNAL(itemChanged(QStandardItem*)),
                   this,
-                  SLOT(slot_Consistency_Check_Cat())
+                  SLOT(slot_ConsistencyCheckCategory())
                   );
 
     this->disconnect(qStandardModel,
                      SIGNAL(itemChanged(QStandardItem*)),
                      this,
-                     SLOT(slot_Consistency_Check_Lab(QStandardItem*))
+                     SLOT(slot_ConsistencyCheckLabel(QStandardItem*))
                      );
 }
 
@@ -158,13 +159,13 @@ void DialogAnnotation::slot_insertLabelPressed()
     this->connect(qStandardModel,
                   SIGNAL(itemChanged(QStandardItem*)),
                   this,
-                  SLOT(slot_Consistency_Check_Lab(QStandardItem*))
+                  SLOT(slot_ConsistencyCheckLabel(QStandardItem*))
                   );
 
     this->disconnect(qStandardModel,
                      SIGNAL(itemChanged(QStandardItem*)),
                      this,
-                     SLOT(slot_Consistency_Check_Cat())
+                     SLOT(slot_ConsistencyCheckCategory())
                      );
 }
 
@@ -175,7 +176,8 @@ void DialogAnnotation::slot_removePressed()
 
     this->qStandardModel->removeRows(row, 1, parent);
 
-    if(this->qStandardModel->rowCount() == 0){
+    if(this->qStandardModel->rowCount() == 0)
+    {
         this->ui->pushButtonInsertLabel->setDisabled(true);
         this->ui->pushButtonRemove->setDisabled(true);
     }
@@ -212,13 +214,16 @@ void DialogAnnotation::slot_enterShortcut()
     this->accept();
 }
 
-void DialogAnnotation::slot_Consistency_Check_Cat(){
+void DialogAnnotation::slot_ConsistencyCheckCategory()
+{
     int flag = 0;
     for(int outer = 0; outer < this->qStandardModel->rowCount(); outer++)
     {
         QModelIndex categoryIndex = this->qStandardModel->index(outer, 0);
         QVariant categoryName = this->qStandardModel->data(categoryIndex);
-        for(int outer2 = 0; outer2 < this->qStandardModel->rowCount(); outer2++){
+
+        for(int outer2 = 0; outer2 < this->qStandardModel->rowCount(); outer2++)
+        {
             QModelIndex categoryIndex2 = this->qStandardModel->index(outer2, 0);
             QVariant categoryName2 = this->qStandardModel->data(categoryIndex2);
             QString str1 = categoryName.toString();
@@ -227,18 +232,21 @@ void DialogAnnotation::slot_Consistency_Check_Cat(){
             QByteArray ba2 = str2.toLatin1();
             const char *c_str1 = ba1.data();
             const char *c_str2 = ba2.data();
-            if(strcmp(c_str1, c_str2) == 0 && outer != outer2 ){
+            if(strcmp(c_str1, c_str2) == 0 && outer != outer2 )
+            {
                 flag = 1;
             }
         }
     }
-    if(flag == 0){
+    if(flag == 0)
+    {
         this->ui->buttonBox->setEnabled(true);
         this->ui->pushButtonInsertCategory->setEnabled(true);
         this->ui->pushButtonInsertLabel->setEnabled(true);
         this->ui->pushButtonRemove->setEnabled(true);
     }
-    else{
+    else
+    {
         this->ui->buttonBox->setEnabled(false);
         this->ui->pushButtonInsertCategory->setEnabled(false);
         this->ui->pushButtonInsertLabel->setEnabled(false);
@@ -246,17 +254,19 @@ void DialogAnnotation::slot_Consistency_Check_Cat(){
     }
 }
 
-void DialogAnnotation::slot_Consistency_Check_Lab(QStandardItem *node){
+void DialogAnnotation::slot_ConsistencyCheckLabel(QStandardItem *node)
+{
     int flag = 0;
     int row = node->parent()->row();
     QModelIndex categoryIndex = this->qStandardModel->index(row, 0);
-    qDebug() << node->parent()->row() << "\n";
+
     for(int outer = 0; outer < this->qStandardModel->rowCount(categoryIndex); outer++)
     {
         QModelIndex labelIndex = this->qStandardModel->index(outer, 0, categoryIndex);
         QVariant labelName = this->qStandardModel->data(labelIndex);
 
-        for(int outer2 = 0; outer2 < this->qStandardModel->rowCount(categoryIndex); outer2++){
+        for(int outer2 = 0; outer2 < this->qStandardModel->rowCount(categoryIndex); outer2++)
+        {
             QModelIndex labelIndex2 = this->qStandardModel->index(outer2, 0, categoryIndex);
             QVariant labelName2 = this->qStandardModel->data(labelIndex2);
             QString str1 = labelName.toString();
@@ -265,18 +275,21 @@ void DialogAnnotation::slot_Consistency_Check_Lab(QStandardItem *node){
             QByteArray ba2 = str2.toLatin1();
             const char *c_str1 = ba1.data();
             const char *c_str2 = ba2.data();
-            if(strcmp(c_str1, c_str2) == 0 && outer != outer2 ){
+            if(strcmp(c_str1, c_str2) == 0 && outer != outer2 )
+            {
                 flag = 1;
             }
         }
     }
-    if(flag == 0){
+    if(flag == 0)
+    {
         this->ui->buttonBox->setEnabled(true);
         this->ui->pushButtonInsertCategory->setEnabled(true);
         this->ui->pushButtonInsertLabel->setEnabled(true);
         this->ui->pushButtonRemove->setEnabled(true);
     }
-    else{
+    else
+    {
         this->ui->buttonBox->setEnabled(false);
         this->ui->pushButtonInsertCategory->setEnabled(false);
         this->ui->pushButtonInsertLabel->setEnabled(false);

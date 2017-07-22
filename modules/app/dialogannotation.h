@@ -96,15 +96,15 @@ private slots:
     void slot_enterShortcut();
 
     ///
-    /// \brief slot_Consistency_Check_Cat Check if the new category wasn't used before
+    /// \brief slot_ConsistencyCheckCategory Check if the new category wasn't used before
     ///
-    void slot_Consistency_Check_Cat();
+    void slot_ConsistencyCheckCategory();
 
     ///
-    /// \brief slot_Consistency_Check_Lab Check if the new label wasn't used before
+    /// \brief slot_ConsistencyCheckLabel Check if the new label wasn't used before
     /// \param node Category that the new label is contained
     ///
-    void slot_Consistency_Check_Lab(QStandardItem *node);
+    void slot_ConsistencyCheckLabel(QStandardItem *node);
 };
 
 #endif // DIALOGANNOTATION_H
