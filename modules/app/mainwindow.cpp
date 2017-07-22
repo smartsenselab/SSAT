@@ -898,6 +898,7 @@ void MainWindow::slot_spinBoxSpeedValueChanged(int _value)
 
 void MainWindow::slot_tableviewFrameSingleClicked(const QModelIndex _index){
     this->enableFrameBased(true);
+    this->slot_initializeFrameBasedComboBox(_index);
 }
 
 void MainWindow::slot_tableViewFrameDoubleClicked(const QModelIndex _index)
@@ -973,6 +974,9 @@ void MainWindow::slot_viewFrameNewBoxMenu()
 void MainWindow::slot_viewFrameNewFrameMenu()
 {
     this->enableFrameBased(true);
+
+    this->slot_initializeFrameBasedComboBox();
+
     this->manipulation = mode::insert;
 
     this->frameId = this->ui->sliderFrame->value();
@@ -1109,6 +1113,47 @@ void MainWindow::slot_spinBoxValueChanged()
     this->enableDisableButtonBox();
 }
 
+void MainWindow::slot_initializeFrameBasedComboBox()
+{
+    this->manipulation = mode::insert;
+
+    this->frameId = this->ui->spinBoxFinalFrame->value();
+    this->totalFrames = static_cast<int>(this->singleton->frames.size());
+
+    this->ui->spinBoxInitialFrame->setMinimum(1);
+    this->ui->spinBoxInitialFrame->setMaximum(static_cast<int>(this->totalFrames));
+    this->ui->spinBoxFinalFrame->setMinimum(this->getIniFrameValue());
+    this->ui->spinBoxFinalFrame->setMaximum(static_cast<int>(this->totalFrames));
+
+    this->initializeComboboxes();
+
+    this->ui->spinBoxInitialFrame->setValue(this->frameId);
+    this->ui->spinBoxFinalFrame->setValue(this->frameId);
+}
+
+void MainWindow::slot_initializeFrameBasedComboBox(const QModelIndex _index)
+{
+    this->manipulation = mode::alter;
+
+    this->indexId = _index.row();
+    this->totalFrames = static_cast<int>(this->singleton->frames.size());
+
+    FrameBasedData frameData = this->singleton->frameData.at(static_cast<unsigned long>(_index.row()));
+
+    this->ui->spinBoxInitialFrame->setMinimum(1);
+    this->ui->spinBoxInitialFrame->setMaximum(static_cast<int>(this->totalFrames));
+    this->ui->spinBoxFinalFrame->setMinimum(1);
+    this->ui->spinBoxFinalFrame->setMaximum(static_cast<int>(this->totalFrames));
+
+    this->initializeComboboxes(QString::fromStdString(frameData.getCategory()));
+
+    this->ui->lineEditInfo->setText(QString::fromStdString(frameData.getInfo()));
+    this->ui->comboBoxCategory->setCurrentText(QString::fromStdString(frameData.getCategory()));
+    this->ui->comboBoxLabel->setCurrentText(QString::fromStdString(frameData.getLabel()));
+    this->ui->spinBoxInitialFrame->setValue(frameData.getInitialFrameId());
+    this->ui->spinBoxFinalFrame->setValue(frameData.getFinalFrameId());
+}
+
 void MainWindow::slot_comboBoxCategoryActivated(const QString &_text)
 {
     QStringList labelList;
@@ -1131,11 +1176,8 @@ void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
 {
     unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
     unsigned long num_bboxes = static_cast<unsigned long>(this->singleton->frames[nextFrameId - 1].getBoxes().size());
-
-    //    string temp_id = "frame" + std::to_string(nextFrameId - 1);
-    //    string temp_key = "bbox" + std::to_string(num_bboxes);
-
     unsigned int largest_key = this->singleton->frames[nextFrameId - 1].getLargestKey();
+
     this->singleton->frames[nextFrameId - 1].addBox(largest_key + 1, _box);
     this->updateFrame(nextFrameId - 1);
 }
@@ -1144,7 +1186,6 @@ void MainWindow::slot_moveBoundingBoxInCore(const unsigned int _bboxId, const Re
 {
     unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
     this->singleton->frames[nextFrameId - 1].setBox(_bboxId, _box);
-    //    this->updateFrame(nextFrameId - 1);
 }
 
 void MainWindow::slot_removeBoundingBoxFromCore(const unsigned int _frameId, const unsigned int _bboxId)

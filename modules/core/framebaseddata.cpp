@@ -66,6 +66,6 @@ void FrameBasedData::operator=(const FrameBasedData &_frameBasedData)
     this->name = _frameBasedData.name;
 
     this->initialFrameId = _frameBasedData.initialFrameId;
-    this->finalFrameId = _frameBasedData.initialFrameId;
+    this->finalFrameId = _frameBasedData.finalFrameId;
 }
 
