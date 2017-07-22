@@ -1,7 +1,34 @@
 #include "frame.h"
 
-Frame::Frame()
+Frame::Frame() :
+    Data()
 {
+
+}
+
+Frame::Frame(const unsigned int &_id) :
+    Data(_id)
+{
+
+}
+
+Frame::Frame(const string &_category,
+             const string &_info,
+             const string &_label,
+             const string &_name) :
+    Data(_category, _info, _label, _name)
+{
+
+}
+
+Frame::Frame(const unsigned int &_id,
+             const string &_category,
+             const string &_info,
+             const string &_label,
+             const string &_name) :
+    Data(_id, _category, _info, _label, _name)
+{
+
 }
 
 bool Frame::addBox(const unsigned int _key, const BoundingBox &_box)

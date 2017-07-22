@@ -1,16 +1,57 @@
 #include "boundingbox.h"
 
-BoundingBox::BoundingBox()
+BoundingBox::BoundingBox() :
+    Data()
 {
-    this->coordinates.x = -1;
-    this->coordinates.y = -1;
-    this->coordinates.width = -1;
-    this->coordinates.height = -1;
+    this->setX(-1);
+    this->setY(-1);
+    this->setW(0);
+    this->setH(0);
 }
 
-BoundingBox::BoundingBox(const BoundingBox &_box)
+BoundingBox::BoundingBox(const int &_x,
+                         const int &_y,
+                         const int &_w,
+                         const int &_h) :
+    Data()
 {
-    (*this) = _box;
+    this->setX(_x);
+    this->setY(_y);
+    this->setW(_w);
+    this->setH(_h);
+}
+
+BoundingBox::BoundingBox(const string &_category,
+                         const string &_info,
+                         const string &_label,
+                         const string &_name,
+                         const int &_x,
+                         const int &_y,
+                         const int &_w,
+                         const int &_h) :
+    Data(_category, _info, _label, _name)
+{
+    this->setX(_x);
+    this->setY(_y);
+    this->setW(_w);
+    this->setH(_h);
+}
+
+BoundingBox::BoundingBox(const unsigned int &_id,
+                         const string &_category,
+                         const string &_info,
+                         const string &_label,
+                         const string &_name,
+                         const int &_x,
+                         const int &_y,
+                         const int &_w,
+                         const int &_h) :
+    Data(_id, _category, _info, _label, _name)
+{
+    this->setX(_x);
+    this->setY(_y);
+    this->setW(_w);
+    this->setH(_h);
 }
 
 BoundingBox::BoundingBox(const unsigned int _id, const Rect &_coordinates)
@@ -19,13 +60,9 @@ BoundingBox::BoundingBox(const unsigned int _id, const Rect &_coordinates)
     this->coordinates = _coordinates;
 }
 
-BoundingBox::BoundingBox(const int _x, const int _y,
-                         const int _w, const int _h)
+BoundingBox::BoundingBox(const BoundingBox &_box)
 {
-    this->setX(_x);
-    this->setY(_y);
-    this->setW(_w);
-    this->setH(_h);
+    (*this) = _box;
 }
 
 int BoundingBox::getX() const
