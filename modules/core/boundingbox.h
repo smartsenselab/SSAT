@@ -35,26 +35,6 @@ public:
 
     ///
     /// \brief BoundingBox BoundingBox constructor
-    /// \param _category A category for the bounding-box
-    /// \param _info An info for the bounding-box
-    /// \param _label A label for the bounding-box
-    /// \param _name A name for the bounding-box
-    /// \param _x The X cordinate of the boundingbox
-    /// \param _y The Y cordinate of the boundingbox
-    /// \param _w The width of the boundingbox
-    /// \param _h The height of the boundingbox
-    ///
-    BoundingBox(const string &_category,
-                const string &_info,
-                const string &_label,
-                const string &_name,
-                const int &_x,
-                const int &_y,
-                const int &_w,
-                const int &_h);
-
-    ///
-    /// \brief BoundingBox BoundingBox constructor
     /// \param _id An identifier for the bounding-box
     /// \param _category A category for the bounding-box
     /// \param _info An info for the bounding-box
@@ -66,6 +46,30 @@ public:
     /// \param _h The height of the boundingbox
     ///
     BoundingBox(const unsigned int &_id,
+                const string &_category,
+                const string &_info,
+                const string &_label,
+                const string &_name,
+                const int &_x,
+                const int &_y,
+                const int &_w,
+                const int &_h);
+
+    ///
+    /// \brief BoundingBox BoundingBox constructor
+    /// \param _id An identifier for the bounding-box
+    /// \param _key A frame-inner identifer for the bounding-box
+    /// \param _category A category for the bounding-box
+    /// \param _info An info for the bounding-box
+    /// \param _label A label for the bounding-box
+    /// \param _name A name for the bounding-box
+    /// \param _x The X cordinate of the boundingbox
+    /// \param _y The Y cordinate of the boundingbox
+    /// \param _w The width of the boundingbox
+    /// \param _h The height of the boundingbox
+    ///
+    BoundingBox(const unsigned int &_id,
+                const unsigned int &_key,
                 const string &_category,
                 const string &_info,
                 const string &_label,

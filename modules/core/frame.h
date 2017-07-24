@@ -20,19 +20,21 @@ public:
     Frame();
     Frame(const unsigned int &_id);
 
-    Frame(const string &_category,
-          const string &_info,
-          const string &_label,
-          const string &_name);
-
     Frame(const unsigned int &_id,
           const string &_category,
           const string &_info,
           const string &_label,
           const string &_name);
 
-    bool addBox(const unsigned int _key, const BoundingBox &_box);
-    bool addBox(const unsigned int _key, const Rect &_box);
+    Frame(const unsigned int &_id,
+          const unsigned int &_key,
+          const string &_category,
+          const string &_info,
+          const string &_label,
+          const string &_name);
+
+    bool addBox(const BoundingBox &_box);
+    bool addBox(const Rect &_box);
     unsigned int getLargestKey();
 
     BoundingBox getBoxes(const unsigned int _key) const;

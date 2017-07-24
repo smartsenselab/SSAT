@@ -159,9 +159,9 @@ void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             this->box.width = static_cast<int>(bbox->sceneBoundingRect().width());
             this->box.height = static_cast<int>(bbox->sceneBoundingRect().height());
 
-            emit this->signal_moveBoundingBoxInCore(bbox->getIdentifier(), this->box);
+            emit this->signal_moveBoundingBoxInCore(bbox->getId(), this->box);
 
-            qDebug() << "Clicked Box"
+            qDebug() << "Clicked Box " << bbox->getId()
                      << "=" << bbox->sceneBoundingRect().x()
                      << ":" << bbox->sceneBoundingRect().y()
                      << ":" << bbox->sceneBoundingRect().width()
@@ -185,8 +185,9 @@ void QBoundingBoxScene::slot_drawFrameBboxes(const Frame &_frame)
     map<unsigned int, BoundingBox> bboxes = _frame.getBoxes();
     for(map<unsigned int, BoundingBox>::iterator it = bboxes.begin(); it != bboxes.end(); it++)
     {       
-        unsigned int id = it->second.getId();
-        qDebug() << "Drawing BBOX: " << id;
+        int id = it->second.getId();
+        int key = it->second.getKey();
+
         this->itemToDraw = new QBoundingBoxRectangle(id);
         this->itemToDraw->setPen(QPen(Qt::yellow, 0, Qt::SolidLine));
         this->itemToDraw->setBrush(QBrush(QColor(255, 255, 0, 50)));
@@ -194,6 +195,8 @@ void QBoundingBoxScene::slot_drawFrameBboxes(const Frame &_frame)
                                   it->second.getY(),
                                   it->second.getW(),
                                   it->second.getH());
+
+        qDebug() << "Drawing BBOX: " << id << " : " << key;
 
         // when going back to a frame, is possible to select and move the BBox already created
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsSelectable, true);

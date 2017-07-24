@@ -12,15 +12,6 @@ Frame::Frame(const unsigned int &_id) :
 
 }
 
-Frame::Frame(const string &_category,
-             const string &_info,
-             const string &_label,
-             const string &_name) :
-    Data(_category, _info, _label, _name)
-{
-
-}
-
 Frame::Frame(const unsigned int &_id,
              const string &_category,
              const string &_info,
@@ -31,23 +22,39 @@ Frame::Frame(const unsigned int &_id,
 
 }
 
-bool Frame::addBox(const unsigned int _key, const BoundingBox &_box)
+Frame::Frame(const unsigned int &_id,
+             const unsigned int &_key,
+             const string &_category,
+             const string &_info,
+             const string &_label,
+             const string &_name) :
+    Data(_id, _key, _category, _info, _label, _name)
 {
-    if(this->boxes.find(_key) == this->boxes.end())
+
+}
+
+bool Frame::addBox(const BoundingBox &_box)
+{
+    unsigned int key = this->getLargestKey() + 1;
+    if(this->boxes.find(key) == this->boxes.end())
     {
-        this->boxes.insert(pair<unsigned int, BoundingBox>(_key, _box));
+        BoundingBox bbox(_box);
+        bbox.setKey(key);
+
+        this->boxes.insert(pair<unsigned int, BoundingBox>(key, bbox));
         return true;
     }
 
     return false;
 }
 
-bool Frame::addBox(const unsigned int _key, const Rect &_box)
+bool Frame::addBox(const Rect &_box)
 {
-    if(this->boxes.find(_key) == this->boxes.end())
+    unsigned int key = this->getLargestKey() + 1;
+    if(this->boxes.find(key) == this->boxes.end())
     {
-        BoundingBox bbox(_key, _box);
-        this->boxes.insert(pair<unsigned int, BoundingBox>(_key, bbox));
+        BoundingBox bbox(key, _box);
+        this->boxes.insert(pair<unsigned int, BoundingBox>(key, bbox));
 
         return true;
     }

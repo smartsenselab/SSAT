@@ -6,17 +6,27 @@ QBoundingBoxRectangle::QBoundingBoxRectangle() : QGraphicsRectItem()
 
 QBoundingBoxRectangle::QBoundingBoxRectangle(unsigned int _id) : QGraphicsRectItem()
 {
-    this->setIdentifier(_id);
+    this->setId(_id);
 }
 
-unsigned int QBoundingBoxRectangle::getIdentifier()
+int QBoundingBoxRectangle::getId()
 {
-    return this->identifier;
+    return this->id;
 }
 
-void QBoundingBoxRectangle::setIdentifier(unsigned int _id)
+int QBoundingBoxRectangle::getKey()
 {
-    this->identifier = _id;
+    return this->key;
+}
+
+void QBoundingBoxRectangle::setId(int _id)
+{
+    this->id = _id;
+}
+
+void QBoundingBoxRectangle::setKey(int _key)
+{
+    this->key = _key;
 }
 
 void QBoundingBoxRectangle::mousePressEvent(QGraphicsSceneMouseEvent *event)

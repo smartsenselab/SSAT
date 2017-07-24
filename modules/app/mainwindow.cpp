@@ -1174,11 +1174,8 @@ void MainWindow::slot_comboBoxCategoryActivated(const QString &_text)
 
 void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
 {
-    unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
-    unsigned long num_bboxes = static_cast<unsigned long>(this->singleton->frames[nextFrameId - 1].getBoxes().size());
-    unsigned int largest_key = this->singleton->frames[nextFrameId - 1].getLargestKey();
-
-    this->singleton->frames[nextFrameId - 1].addBox(largest_key + 1, _box);
+    unsigned int nextFrameId = static_cast<unsigned int>(this->manager->getFrameId());
+    this->singleton->frames[nextFrameId - 1].addBox(_box);
     this->updateFrame(nextFrameId - 1);
 }
 
