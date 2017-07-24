@@ -62,6 +62,12 @@ public:
     ///
     void deleteBBox();
 
+    ///
+    /// \brief bboxSelected return selected BBoxes
+    /// \return an array containig bboxes keys
+    ///
+    vector<unsigned int> selectedBBox();
+
 protected:
     ///
     /// \brief mousePressEvent When mouse button is pressed
@@ -107,18 +113,23 @@ signals:
     void signal_addBoundingBoxToCore(const Rect _box);
 
     ///
+    /// \brief signal_editBoundingBoxInCore signal to open dialogboundingbox and edit bbox
+    ///
+    void signal_editBoundingBoxInCore(const unsigned int _bboxKey);
+
+    ///
     /// \brief signal_moveBoundingBoxInCore signal to update core with new bbox position
     /// \param _frameId frame which bbox will be updated
     /// \param _bboxId  id of bounding box that will be updated
     ///
-    void signal_moveBoundingBoxInCore(const unsigned int _bboxId, const Rect _box);
+    void signal_moveBoundingBoxInCore(const unsigned int _bboxKey, const Rect _box);
 
     ///
     /// \brief signal_removeBoundingBoxFromCore signal to remove bbox from core
     /// \param _frameId frame which bbox will be removed from
     /// \param _bboxId  id of bounding box that will be deleted
     ///
-    void signal_removeBoundingBoxFromCore(const unsigned int _frameId, const unsigned int _bboxId);
+    void signal_removeBoundingBoxFromCore(const unsigned int _bboxKey);
 };
 
 #endif // SCENE_H

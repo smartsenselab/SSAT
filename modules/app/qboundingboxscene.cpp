@@ -11,13 +11,26 @@ QBoundingBoxScene::QBoundingBoxScene(QObject* parent): QGraphicsScene(parent)
     this->widthD = 0;
 }
 
-void QBoundingBoxScene::deleteBBox()
+//void QBoundingBoxScene::deleteBBox()
+//{
+//    foreach(QGraphicsItem *item, this->selectedItems())
+//    {
+//        this->removeItem(item);
+//        delete item;
+//    }
+//}
+
+vector<unsigned int> QBoundingBoxScene::selectedBBox()
 {
+    vector<unsigned int> bboxKeys;
+
     foreach(QGraphicsItem *item, this->selectedItems())
     {
-        this->removeItem(item);
-        delete item;
+        QBoundingBoxRectangle *bbox = static_cast<QBoundingBoxRectangle*>(item);
+        bboxKeys.push_back(bbox->getKey());
     }
+
+    return bboxKeys;
 }
 
 void QBoundingBoxScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -211,11 +224,21 @@ void QBoundingBoxScene::slot_enableDraw()
     this->drawEnabled = true;
 }
 
-void QBoundingBoxScene ::keyPressEvent(QKeyEvent* e)
+void QBoundingBoxScene::keyPressEvent(QKeyEvent* e)
 {
     switch(e->key())
     {
+    case Qt::Key_Escape:
+        this->drawEnabled = false;
+        break;
+
     case Qt::Key_Delete:
-        this->removeItem(selectedItems().front());
+        if (this->selectedItems().size() == 1)
+        {
+            QBoundingBoxRectangle *bbox = static_cast<QBoundingBoxRectangle*>(this->selectedItems().first());
+            this->removeItem(selectedItems().front());
+            emit this->signal_removeBoundingBoxFromCore(bbox->getKey());
+        }
+        break;
     }
 }

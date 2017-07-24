@@ -62,6 +62,17 @@ bool Frame::addBox(const Rect &_box)
     return false;
 }
 
+bool Frame::remBox(const unsigned int &_key)
+{
+    if(this->boxes.find(_key) != this->boxes.end())
+    {
+        this->boxes.erase(_key);
+        return true;
+    }
+
+    return false;
+}
+
 unsigned int Frame::getLargestKey()
 {
     if(this->boxes.size() == 0)
@@ -103,6 +114,7 @@ void Frame::setBox(const unsigned int _key, const Rect &_box)
 void Frame::operator=(const Frame &_frame)
 {    
     this->id = _frame.id;
+    this->key = _frame.key;
     this->category = _frame.category;
     this->info = _frame.info;
     this->label = _frame.label;

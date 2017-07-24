@@ -35,6 +35,7 @@ public:
 
     bool addBox(const BoundingBox &_box);
     bool addBox(const Rect &_box);
+    bool remBox(const unsigned int &_key);
     unsigned int getLargestKey();
 
     BoundingBox getBoxes(const unsigned int _key) const;

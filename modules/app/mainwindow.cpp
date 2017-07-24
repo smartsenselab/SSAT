@@ -278,9 +278,9 @@ void MainWindow::connectSignalSlots()
                   );
 
     this->connect(this->frameScene,
-                  SIGNAL(signal_removeBoundingBoxFromCore(const unsigned int, const unsigned int)),
+                  SIGNAL(signal_removeBoundingBoxFromCore(const unsigned int)),
                   this,
-                  SLOT(slot_removeBoundingBoxFromCore(const unsigned int, const unsigned int))
+                  SLOT(slot_removeBoundingBoxFromCore(const unsigned int))
                   );
 
     this->connect(this,
@@ -662,9 +662,9 @@ void MainWindow::slot_openFile()
                       );
 
         this->connect(this->frameScene,
-                      SIGNAL(signal_removeBoundingBoxFromCore(const unsigned int, const unsigned int)),
+                      SIGNAL(signal_removeBoundingBoxFromCore(const unsigned int)),
                       this,
-                      SLOT(slot_removeBoundingBoxFromCore(const unsigned int, const unsigned int))
+                      SLOT(slot_removeBoundingBoxFromCore(const unsigned int))
                       );
 
         this->connect(this,
@@ -942,7 +942,10 @@ void MainWindow::slot_viewFrameContextMenu(const QPoint &_point)
     {
         contextMenu.addAction("New Bounding box\tCtrl+B", this, SLOT(slot_viewFrameNewBoxMenu()));
         contextMenu.addAction("New Frame box\tCtrl+F", this, SLOT(slot_viewFrameNewFrameMenu()));
-        contextMenu.addAction("Remove Bounding box", this, SLOT(slot_viewFrameRemoveBoxMenu()));
+        if(this->frameScene->selectedBBox().size() == 1)
+        {
+            contextMenu.addAction("Remove Bounding box", this, SLOT(slot_viewFrameRemoveBoxMenu()));
+        }
         contextMenu.exec(position);
     }
 }
@@ -995,7 +998,11 @@ void MainWindow::slot_viewFrameNewFrameMenu()
 
 void MainWindow::slot_viewFrameRemoveBoxMenu()
 {
-    this->frameScene->deleteBBox();
+    vector<unsigned int> bboxKeys = this->frameScene->selectedBBox();
+    for(int index = 0; index < bboxKeys.size(); index++)
+    {
+        this->slot_removeBoundingBoxFromCore(bboxKeys[index]);
+    }
 }
 
 void MainWindow::slot_tableViewContextMenu(const QPoint &_point)
@@ -1179,14 +1186,18 @@ void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
     this->updateFrame(nextFrameId - 1);
 }
 
-void MainWindow::slot_moveBoundingBoxInCore(const unsigned int _bboxId, const Rect _box)
+void MainWindow::slot_moveBoundingBoxInCore(const unsigned int _bboxKey, const Rect _box)
 {
     unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
-    this->singleton->frames[nextFrameId - 1].setBox(_bboxId, _box);
+    this->singleton->frames[nextFrameId - 1].setBox(_bboxKey, _box);
 }
 
-void MainWindow::slot_removeBoundingBoxFromCore(const unsigned int _frameId, const unsigned int _bboxId)
+void MainWindow::slot_removeBoundingBoxFromCore(const unsigned int _bboxKey)
 {
-    qDebug() << "slot_removeBoundingBoxFromCore >> Frame Id: " << _frameId << " - Bounding-box Id: " << _bboxId;
+    unsigned int nextFrameId = static_cast<unsigned int>(this->manager->getFrameId());
+    this->singleton->frames[nextFrameId - 1].remBox(_bboxKey);
+    this->updateFrame(nextFrameId - 1);
+    qDebug() << "slot_removeBoundingBoxFromCore >> Frame Id: "
+             << nextFrameId - 1 << " - Bounding-box Id: " << _bboxKey;
 }
 
