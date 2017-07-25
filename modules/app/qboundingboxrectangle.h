@@ -22,6 +22,7 @@ private:
 public:
     QBoundingBoxRectangle();
     QBoundingBoxRectangle(unsigned int _id);
+    QBoundingBoxRectangle(unsigned int _id, unsigned int _key);
 
     int getId();
     int getKey();

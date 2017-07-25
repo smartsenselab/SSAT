@@ -749,6 +749,15 @@ void MainWindow::slot_openAttributes()
     this->annotationDialog->show();
 }
 
+void MainWindow::slot_openBoundingBox(const unsigned int _frameKey)
+{
+    unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
+
+    this->boundingBoxDialog = new DialogBoundingBox(this);
+    this->boundingBoxDialog->setModal(true);
+    this->boundingBoxDialog->show();
+}
+
 void MainWindow::slot_slideVideo(int _frameId)
 {
     std::cout << _frameId << std::endl;
@@ -1184,6 +1193,11 @@ void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
     unsigned int nextFrameId = static_cast<unsigned int>(this->manager->getFrameId());
     this->singleton->frames[nextFrameId - 1].addBox(_box);
     this->updateFrame(nextFrameId - 1);
+}
+
+void MainWindow::slot_editBoundingBoxInCore(const BoundingBox _bbox)
+{
+    unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
 }
 
 void MainWindow::slot_moveBoundingBoxInCore(const unsigned int _bboxKey, const Rect _box)

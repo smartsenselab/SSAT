@@ -11,14 +11,24 @@ QBoundingBoxScene::QBoundingBoxScene(QObject* parent): QGraphicsScene(parent)
     this->widthD = 0;
 }
 
-//void QBoundingBoxScene::deleteBBox()
-//{
-//    foreach(QGraphicsItem *item, this->selectedItems())
-//    {
-//        this->removeItem(item);
-//        delete item;
-//    }
-//}
+void QBoundingBoxScene::keyPressEvent(QKeyEvent* e)
+{
+    switch(e->key())
+    {
+    case Qt::Key_Escape:
+        this->drawEnabled = false;
+        break;
+
+    case Qt::Key_Delete:
+        if (this->selectedItems().size() == 1)
+        {
+            QBoundingBoxRectangle *bbox = static_cast<QBoundingBoxRectangle*>(this->selectedItems().first());
+            this->removeItem(selectedItems().front());
+            emit this->signal_removeBoundingBoxFromCore(bbox->getKey());
+        }
+        break;
+    }
+}
 
 vector<unsigned int> QBoundingBoxScene::selectedBBox()
 {
@@ -45,7 +55,16 @@ void QBoundingBoxScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
     qDebug() << "DOUBLE CLICK WORKS";
     if (this->selectedItems().size() == 1)
     {
-        qDebug() << "ONE BOUNDING BOX SELECTED";
+        QBoundingBoxRectangle *bbox = static_cast<QBoundingBoxRectangle*>(this->selectedItems().first());
+
+        this->box.x = static_cast<int>(bbox->sceneBoundingRect().x());
+        this->box.y = static_cast<int>(bbox->sceneBoundingRect().y());
+        this->box.width = static_cast<int>(bbox->sceneBoundingRect().width());
+        this->box.height = static_cast<int>(bbox->sceneBoundingRect().height());
+
+        qDebug() << "ONE BOUNDING BOX SELECTED: " << bbox->getId() << " - " << bbox->getKey();
+
+        emit this->signal_editBoundingBoxInCore(bbox->getKey());
     }
 }
 
@@ -172,9 +191,9 @@ void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             this->box.width = static_cast<int>(bbox->sceneBoundingRect().width());
             this->box.height = static_cast<int>(bbox->sceneBoundingRect().height());
 
-            emit this->signal_moveBoundingBoxInCore(bbox->getId(), this->box);
+            emit this->signal_moveBoundingBoxInCore(bbox->getKey(), this->box);
 
-            qDebug() << "Clicked Box " << bbox->getId()
+            qDebug() << "Clicked Box " << bbox->getId() << " : " << bbox->getKey()
                      << "=" << bbox->sceneBoundingRect().x()
                      << ":" << bbox->sceneBoundingRect().y()
                      << ":" << bbox->sceneBoundingRect().width()
@@ -196,12 +215,14 @@ void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 void QBoundingBoxScene::slot_drawFrameBboxes(const Frame &_frame)
 {
     map<unsigned int, BoundingBox> bboxes = _frame.getBoxes();
-    for(map<unsigned int, BoundingBox>::iterator it = bboxes.begin(); it != bboxes.end(); it++)
-    {       
+    map<unsigned int, BoundingBox>::iterator it;
+
+    for(it = bboxes.begin(); it != bboxes.end(); it++)
+    {
         int id = it->second.getId();
         int key = it->second.getKey();
 
-        this->itemToDraw = new QBoundingBoxRectangle(id);
+        this->itemToDraw = new QBoundingBoxRectangle(id, key);
         this->itemToDraw->setPen(QPen(Qt::yellow, 0, Qt::SolidLine));
         this->itemToDraw->setBrush(QBrush(QColor(255, 255, 0, 50)));
         this->itemToDraw->setRect(it->second.getX(),
@@ -222,23 +243,4 @@ void QBoundingBoxScene::slot_enableDraw()
 {
     this->itemToDraw = 0;
     this->drawEnabled = true;
-}
-
-void QBoundingBoxScene::keyPressEvent(QKeyEvent* e)
-{
-    switch(e->key())
-    {
-    case Qt::Key_Escape:
-        this->drawEnabled = false;
-        break;
-
-    case Qt::Key_Delete:
-        if (this->selectedItems().size() == 1)
-        {
-            QBoundingBoxRectangle *bbox = static_cast<QBoundingBoxRectangle*>(this->selectedItems().first());
-            this->removeItem(selectedItems().front());
-            emit this->signal_removeBoundingBoxFromCore(bbox->getKey());
-        }
-        break;
-    }
 }

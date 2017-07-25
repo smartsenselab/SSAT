@@ -38,7 +38,7 @@ public:
     bool remBox(const unsigned int &_key);
     unsigned int getLargestKey();
 
-    BoundingBox getBoxes(const unsigned int _key) const;
+    BoundingBox getBox(const unsigned int _key) const;
     map<unsigned int, BoundingBox> getBoxes() const;
 
     void setBox(const map<unsigned int, BoundingBox> &_boxes);

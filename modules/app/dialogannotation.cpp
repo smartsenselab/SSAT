@@ -69,11 +69,6 @@ void DialogAnnotation::enableWidgets(const bool _enable)
     this->ui->pushButtonRemove->setEnabled(_enable);
 }
 
-void DialogAnnotation::updateCoreContent()
-{
-    return;
-}
-
 void DialogAnnotation::slot_initializeDialog(Core &_singleton)
 {
     this->singleton = &_singleton;

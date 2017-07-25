@@ -58,11 +58,6 @@ public:
     void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
 
     ///
-    /// \brief deleteBBox Removes a bbox
-    ///
-    void deleteBBox();
-
-    ///
     /// \brief bboxSelected return selected BBoxes
     /// \return an array containig bboxes keys
     ///
@@ -114,13 +109,14 @@ signals:
 
     ///
     /// \brief signal_editBoundingBoxInCore signal to open dialogboundingbox and edit bbox
+    /// \param _bboxKey  key of bounding box that will be updated
     ///
     void signal_editBoundingBoxInCore(const unsigned int _bboxKey);
 
     ///
     /// \brief signal_moveBoundingBoxInCore signal to update core with new bbox position
     /// \param _frameId frame which bbox will be updated
-    /// \param _bboxId  id of bounding box that will be updated
+    /// \param _bboxKey  key of bounding box that will be updated
     ///
     void signal_moveBoundingBoxInCore(const unsigned int _bboxKey, const Rect _box);
 

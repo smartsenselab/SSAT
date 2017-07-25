@@ -83,7 +83,7 @@ unsigned int Frame::getLargestKey()
     return this->boxes.rbegin()->first;
 }
 
-BoundingBox Frame::getBoxes(const unsigned int _key) const
+BoundingBox Frame::getBox(const unsigned int _key) const
 {
     if(this->boxes.find(_key) != this->boxes.end())
     {

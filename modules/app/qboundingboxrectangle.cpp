@@ -9,6 +9,12 @@ QBoundingBoxRectangle::QBoundingBoxRectangle(unsigned int _id) : QGraphicsRectIt
     this->setId(_id);
 }
 
+QBoundingBoxRectangle::QBoundingBoxRectangle(unsigned int _id, unsigned int _key)
+{
+    this->setId(_id);
+    this->setKey(_key);
+}
+
 int QBoundingBoxRectangle::getId()
 {
     return this->id;
