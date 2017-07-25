@@ -145,7 +145,7 @@ void MainWindow::connectSignalSlots()
     this->connect(this->ui->actionAttributes,
                   &QAction::triggered,
                   this,
-                  &MainWindow::slot_openAttributes
+                  &MainWindow::slot_openAttributesDialog
                   );
 
     // Connecting PLAYER SIGNALS to SLOTS
@@ -264,7 +264,26 @@ void MainWindow::connectSignalSlots()
                   SLOT(slot_backupJson())
                   );
 
-    // Connecting custom SIGNALS to SLOTS
+    // Connecting custom frame-based SIGNALS to SLOTS
+    this->connect(this,
+                  SIGNAL(signal_frameBasedInsertAccepted(FrameBasedData)),
+                  this,
+                  SLOT(slot_frameBasedInsertAccepted(const FrameBasedData))
+                  );
+
+    this->connect(this,
+                  SIGNAL(signal_frameBasedAlterAccepted(const FrameBasedData, const int)),
+                  this,
+                  SLOT(slot_frameBasedAlterAccepted(const FrameBasedData, const int))
+                  );
+
+    // Connecting custom boundingbox-based SIGNALS to SLOTS
+    this->connect(this->frameScene,
+                  SIGNAL(signal_openBoundingBoxDialog(const unsigned int)),
+                  this,
+                  SLOT(slot_openBoundingBoxDialog(const unsigned int))
+                  );
+
     this->connect(this->frameScene,
                   SIGNAL(signal_addBoundingBoxToCore(const Rect)),
                   this,
@@ -287,18 +306,6 @@ void MainWindow::connectSignalSlots()
                   SIGNAL(signal_drawFrameBboxes(const Frame)),
                   this->frameScene,
                   SLOT(slot_drawFrameBboxes(const Frame))
-                  );
-
-    this->connect(this,
-                  SIGNAL(signal_frameBasedInsertAccepted(FrameBasedData)),
-                  this,
-                  SLOT(slot_frameBasedInsertAccepted(const FrameBasedData))
-                  );
-
-    this->connect(this,
-                  SIGNAL(signal_frameBasedAlterAccepted(const FrameBasedData, const int)),
-                  this,
-                  SLOT(slot_frameBasedAlterAccepted(const FrameBasedData, const int))
                   );
 }
 
@@ -598,7 +605,7 @@ void MainWindow::slot_Fshortcut()
 
 void MainWindow::slot_Ashortcut()
 {
-    this->slot_openAttributes();
+    this->slot_openAttributesDialog();
 }
 
 void MainWindow::slot_Oshortcut()
@@ -649,6 +656,13 @@ void MainWindow::slot_openFile()
 
         // Re-instantiating frameScene and its Signal/Slot connections
         this->frameScene = new QBoundingBoxScene(this);
+
+        this->connect(this->frameScene,
+                      SIGNAL(signal_openBoundingBoxDialog(const unsigned int)),
+                      this,
+                      SLOT(slot_openBoundingBoxDialog(const unsigned int))
+                      );
+
         this->connect(this->frameScene,
                       SIGNAL(signal_addBoundingBoxToCore(const Rect)),
                       this,
@@ -741,7 +755,7 @@ void MainWindow::slot_closeApplitacion()
     QCoreApplication::quit();
 }
 
-void MainWindow::slot_openAttributes()
+void MainWindow::slot_openAttributesDialog()
 {
     this->annotationDialog = new DialogAnnotation(this);
     this->annotationDialog->slot_initializeDialog(*(this->singleton));
@@ -749,12 +763,13 @@ void MainWindow::slot_openAttributes()
     this->annotationDialog->show();
 }
 
-void MainWindow::slot_openBoundingBox(const unsigned int _frameKey)
+void MainWindow::slot_openBoundingBoxDialog(const unsigned int _bboxKey)
 {
     unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
 
     this->boundingBoxDialog = new DialogBoundingBox(this);
     this->boundingBoxDialog->setModal(true);
+    this->boundingBoxDialog->slot_initializeDialog(*(this->singleton), nextFrameId - 1, _bboxKey);
     this->boundingBoxDialog->show();
 }
 

@@ -102,16 +102,16 @@ public slots:
 
 signals:
     ///
+    /// \brief signal_editBoundingBoxInCore signal to open dialogboundingbox and edit bbox
+    /// \param _bboxKey  key of bounding box that will be updated
+    ///
+    void signal_openBoundingBoxDialog(const unsigned int _bboxKey);
+
+    ///
     /// \brief signal_addBoundingBoxToCore signal to add the bbox to core
     /// \param newBox bbox to add
     ///
     void signal_addBoundingBoxToCore(const Rect _box);
-
-    ///
-    /// \brief signal_editBoundingBoxInCore signal to open dialogboundingbox and edit bbox
-    /// \param _bboxKey  key of bounding box that will be updated
-    ///
-    void signal_editBoundingBoxInCore(const unsigned int _bboxKey);
 
     ///
     /// \brief signal_moveBoundingBoxInCore signal to update core with new bbox position

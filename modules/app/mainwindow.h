@@ -285,12 +285,12 @@ public slots:
     ///
     /// \brief slot_openAttributes  Open the annotation attributes dialog window window
     ///
-    void slot_openAttributes();
+    void slot_openAttributesDialog();
 
     ///
     /// \brief slot_openBoundingBox  Open the bounding box dialog window
     ///
-    void slot_openBoundingBox(const unsigned int _frameKey);
+    void slot_openBoundingBoxDialog(const unsigned int _bboxKey);
 
     ///
     /// \brief slot_slideVideo  Change the actual frame of the video

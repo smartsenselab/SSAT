@@ -64,7 +64,7 @@ void QBoundingBoxScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 
         qDebug() << "ONE BOUNDING BOX SELECTED: " << bbox->getId() << " - " << bbox->getKey();
 
-        emit this->signal_editBoundingBoxInCore(bbox->getKey());
+        emit this->signal_openBoundingBoxDialog(bbox->getKey());
     }
 }
 
