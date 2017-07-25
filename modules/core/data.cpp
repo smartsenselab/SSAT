@@ -3,12 +3,21 @@
 Data::Data()
 {
     this->setId(0);
+    this->setKey(0);
 }
 
 Data::Data(const unsigned int &_id)
 {
     this->setId(_id);
+    this->setKey(0);
 }
+
+Data::Data(const unsigned int &_id, const unsigned int &_key)
+{
+    this->setId(_id);
+    this->setKey(_key);
+}
+
 
 Data::Data(const string &_category,
            const string &_info,
@@ -16,6 +25,7 @@ Data::Data(const string &_category,
            const string &_name)
 {
     this->setId(0);
+    this->setKey(0);
     this->setCategory(_category);
     this->setInfo(_info);
     this->setLabel(_label);
@@ -29,6 +39,22 @@ Data::Data(const unsigned int &_id,
            const string &_name)
 {
     this->setId(_id);
+    this->setKey(0);
+    this->setCategory(_category);
+    this->setInfo(_info);
+    this->setLabel(_label);
+    this->setName(_name);
+}
+
+Data::Data(const unsigned int &_id,
+           const unsigned int &_key,
+           const string &_category,
+           const string &_info,
+           const string &_label,
+           const string &_name)
+{
+    this->setId(_id);
+    this->setKey(_key);
     this->setCategory(_category);
     this->setInfo(_info);
     this->setLabel(_label);
@@ -38,6 +64,11 @@ Data::Data(const unsigned int &_id,
 unsigned int Data::getId() const
 {
     return this->id;
+}
+
+unsigned int Data::getKey() const
+{
+    return this->key;
 }
 
 string Data::getCategory() const
@@ -65,6 +96,11 @@ void Data::setId(const unsigned int &_id)
     this->id = _id;
 }
 
+void Data::setKey(const unsigned int &_key)
+{
+    this->key = _key;
+}
+
 void Data::setCategory(const string &_category)
 {
     this->category = _category;
@@ -88,6 +124,7 @@ void Data::setName(const string &_name)
 void Data::operator=(const Data &_data)
 {
     this->id = _data.id;
+    this->key = _data.key;
     this->category = _data.category;
     this->info = _data.info;
     this->label = _data.label;

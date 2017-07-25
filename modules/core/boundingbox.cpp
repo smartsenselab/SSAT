@@ -21,22 +21,6 @@ BoundingBox::BoundingBox(const int &_x,
     this->setH(_h);
 }
 
-BoundingBox::BoundingBox(const string &_category,
-                         const string &_info,
-                         const string &_label,
-                         const string &_name,
-                         const int &_x,
-                         const int &_y,
-                         const int &_w,
-                         const int &_h) :
-    Data(_category, _info, _label, _name)
-{
-    this->setX(_x);
-    this->setY(_y);
-    this->setW(_w);
-    this->setH(_h);
-}
-
 BoundingBox::BoundingBox(const unsigned int &_id,
                          const string &_category,
                          const string &_info,
@@ -54,9 +38,27 @@ BoundingBox::BoundingBox(const unsigned int &_id,
     this->setH(_h);
 }
 
-BoundingBox::BoundingBox(const unsigned int _id, const Rect &_coordinates)
+BoundingBox::BoundingBox(const unsigned int &_id,
+                         const unsigned int &_key,
+                         const string &_category,
+                         const string &_info,
+                         const string &_label,
+                         const string &_name,
+                         const int &_x,
+                         const int &_y,
+                         const int &_w,
+                         const int &_h) :
+    Data(_id, _key, _category, _info, _label, _name)
 {
-    this->id = _id;
+    this->setX(_x);
+    this->setY(_y);
+    this->setW(_w);
+    this->setH(_h);
+}
+
+BoundingBox::BoundingBox(const unsigned int _key, const Rect &_coordinates)
+{
+    this->setKey(_key);
     this->coordinates = _coordinates;
 }
 
@@ -120,6 +122,7 @@ void BoundingBox::setH(const int _h)
 void BoundingBox::operator=(const BoundingBox &_box)
 {
     this->id = _box.id;
+    this->key = _box.key;
     this->category = _box.category;
     this->info = _box.info;
     this->label = _box.label;

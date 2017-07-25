@@ -53,11 +53,6 @@ private:
     ///
     void enableWidgets(const bool _enable);
 
-    ///
-    /// \brief updateCoreContent Does nothing
-    ///
-    void updateCoreContent();
-
 public slots:
     ///
     /// \brief slot_initializeDialog Load information from core and initialize tree

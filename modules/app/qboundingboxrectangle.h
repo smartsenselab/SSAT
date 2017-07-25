@@ -15,16 +15,19 @@ class QBoundingBoxRectangle : public QObject, public QGraphicsRectItem
     Q_OBJECT
 
 private:
-    unsigned int identifier, resizeMode;
+    unsigned int id, key, resizeMode;
     qreal mouseX, mouseY;
     qreal pointXa, pointXb, pointYa, pointYb;
 
 public:
     QBoundingBoxRectangle();
     QBoundingBoxRectangle(unsigned int _id);
+    QBoundingBoxRectangle(unsigned int _id, unsigned int _key);
 
-    unsigned int getIdentifier();
-    void setIdentifier(unsigned int _id);
+    int getId();
+    int getKey();
+    void setId(int _id);
+    void setKey(int _key);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);

@@ -58,9 +58,10 @@ public:
     void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
 
     ///
-    /// \brief deleteBBox Removes a bbox
+    /// \brief bboxSelected return selected BBoxes
+    /// \return an array containig bboxes keys
     ///
-    void deleteBBox();
+    vector<unsigned int> selectedBBox();
 
 protected:
     ///
@@ -68,6 +69,12 @@ protected:
     /// \param event Event sent by mouse
     ///
     void mousePressEvent(QGraphicsSceneMouseEvent *event) Q_DECL_OVERRIDE;
+
+    ///
+    /// \brief mouseDoubleClickEvent When mouse button is doubly clicked
+    /// \param event Event sent by mouse
+    ///
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) Q_DECL_OVERRIDE;
 
     ///
     /// \brief mouseMoveEvent When mouse is moved
@@ -95,6 +102,12 @@ public slots:
 
 signals:
     ///
+    /// \brief signal_editBoundingBoxInCore signal to open dialogboundingbox and edit bbox
+    /// \param _bboxKey  key of bounding box that will be updated
+    ///
+    void signal_openBoundingBoxDialog(const unsigned int _bboxKey);
+
+    ///
     /// \brief signal_addBoundingBoxToCore signal to add the bbox to core
     /// \param newBox bbox to add
     ///
@@ -103,16 +116,16 @@ signals:
     ///
     /// \brief signal_moveBoundingBoxInCore signal to update core with new bbox position
     /// \param _frameId frame which bbox will be updated
-    /// \param _bboxId  id of bounding box that will be updated
+    /// \param _bboxKey  key of bounding box that will be updated
     ///
-    void signal_moveBoundingBoxInCore(const unsigned int _bboxId, const Rect _box);
+    void signal_moveBoundingBoxInCore(const unsigned int _bboxKey, const Rect _box);
 
     ///
     /// \brief signal_removeBoundingBoxFromCore signal to remove bbox from core
     /// \param _frameId frame which bbox will be removed from
     /// \param _bboxId  id of bounding box that will be deleted
     ///
-    void signal_removeBoundingBoxFromCore(const unsigned int _frameId, const unsigned int _bboxId);
+    void signal_removeBoundingBoxFromCore(const unsigned int _bboxKey);
 };
 
 #endif // SCENE_H

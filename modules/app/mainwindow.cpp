@@ -145,7 +145,7 @@ void MainWindow::connectSignalSlots()
     this->connect(this->ui->actionAttributes,
                   &QAction::triggered,
                   this,
-                  &MainWindow::slot_openAttributes
+                  &MainWindow::slot_openAttributesDialog
                   );
 
     // Connecting PLAYER SIGNALS to SLOTS
@@ -264,7 +264,26 @@ void MainWindow::connectSignalSlots()
                   SLOT(slot_backupJson())
                   );
 
-    // Connecting custom SIGNALS to SLOTS
+    // Connecting custom frame-based SIGNALS to SLOTS
+    this->connect(this,
+                  SIGNAL(signal_frameBasedInsertAccepted(FrameBasedData)),
+                  this,
+                  SLOT(slot_frameBasedInsertAccepted(const FrameBasedData))
+                  );
+
+    this->connect(this,
+                  SIGNAL(signal_frameBasedAlterAccepted(const FrameBasedData, const int)),
+                  this,
+                  SLOT(slot_frameBasedAlterAccepted(const FrameBasedData, const int))
+                  );
+
+    // Connecting custom boundingbox-based SIGNALS to SLOTS
+    this->connect(this->frameScene,
+                  SIGNAL(signal_openBoundingBoxDialog(const unsigned int)),
+                  this,
+                  SLOT(slot_openBoundingBoxDialog(const unsigned int))
+                  );
+
     this->connect(this->frameScene,
                   SIGNAL(signal_addBoundingBoxToCore(const Rect)),
                   this,
@@ -278,27 +297,15 @@ void MainWindow::connectSignalSlots()
                   );
 
     this->connect(this->frameScene,
-                  SIGNAL(signal_removeBoundingBoxFromCore(const unsigned int, const unsigned int)),
+                  SIGNAL(signal_removeBoundingBoxFromCore(const unsigned int)),
                   this,
-                  SLOT(slot_removeBoundingBoxFromCore(const unsigned int, const unsigned int))
+                  SLOT(slot_removeBoundingBoxFromCore(const unsigned int))
                   );
 
     this->connect(this,
                   SIGNAL(signal_drawFrameBboxes(const Frame)),
                   this->frameScene,
                   SLOT(slot_drawFrameBboxes(const Frame))
-                  );
-
-    this->connect(this,
-                  SIGNAL(signal_frameBasedInsertAccepted(FrameBasedData)),
-                  this,
-                  SLOT(slot_frameBasedInsertAccepted(const FrameBasedData))
-                  );
-
-    this->connect(this,
-                  SIGNAL(signal_frameBasedAlterAccepted(const FrameBasedData, const int)),
-                  this,
-                  SLOT(slot_frameBasedAlterAccepted(const FrameBasedData, const int))
                   );
 }
 
@@ -598,7 +605,7 @@ void MainWindow::slot_Fshortcut()
 
 void MainWindow::slot_Ashortcut()
 {
-    this->slot_openAttributes();
+    this->slot_openAttributesDialog();
 }
 
 void MainWindow::slot_Oshortcut()
@@ -649,6 +656,13 @@ void MainWindow::slot_openFile()
 
         // Re-instantiating frameScene and its Signal/Slot connections
         this->frameScene = new QBoundingBoxScene(this);
+
+        this->connect(this->frameScene,
+                      SIGNAL(signal_openBoundingBoxDialog(const unsigned int)),
+                      this,
+                      SLOT(slot_openBoundingBoxDialog(const unsigned int))
+                      );
+
         this->connect(this->frameScene,
                       SIGNAL(signal_addBoundingBoxToCore(const Rect)),
                       this,
@@ -662,9 +676,9 @@ void MainWindow::slot_openFile()
                       );
 
         this->connect(this->frameScene,
-                      SIGNAL(signal_removeBoundingBoxFromCore(const unsigned int, const unsigned int)),
+                      SIGNAL(signal_removeBoundingBoxFromCore(const unsigned int)),
                       this,
-                      SLOT(slot_removeBoundingBoxFromCore(const unsigned int, const unsigned int))
+                      SLOT(slot_removeBoundingBoxFromCore(const unsigned int))
                       );
 
         this->connect(this,
@@ -741,12 +755,22 @@ void MainWindow::slot_closeApplitacion()
     QCoreApplication::quit();
 }
 
-void MainWindow::slot_openAttributes()
+void MainWindow::slot_openAttributesDialog()
 {
     this->annotationDialog = new DialogAnnotation(this);
     this->annotationDialog->slot_initializeDialog(*(this->singleton));
     this->annotationDialog->setModal(true);
     this->annotationDialog->show();
+}
+
+void MainWindow::slot_openBoundingBoxDialog(const unsigned int _bboxKey)
+{
+    unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
+
+    this->boundingBoxDialog = new DialogBoundingBox(this);
+    this->boundingBoxDialog->setModal(true);
+    this->boundingBoxDialog->slot_initializeDialog(*(this->singleton), nextFrameId - 1, _bboxKey);
+    this->boundingBoxDialog->show();
 }
 
 void MainWindow::slot_slideVideo(int _frameId)
@@ -942,7 +966,10 @@ void MainWindow::slot_viewFrameContextMenu(const QPoint &_point)
     {
         contextMenu.addAction("New Bounding box\tCtrl+B", this, SLOT(slot_viewFrameNewBoxMenu()));
         contextMenu.addAction("New Frame box\tCtrl+F", this, SLOT(slot_viewFrameNewFrameMenu()));
-        contextMenu.addAction("Remove Bounding box", this, SLOT(slot_viewFrameRemoveBoxMenu()));
+        if(this->frameScene->selectedBBox().size() == 1)
+        {
+            contextMenu.addAction("Remove Bounding box", this, SLOT(slot_viewFrameRemoveBoxMenu()));
+        }
         contextMenu.exec(position);
     }
 }
@@ -995,7 +1022,11 @@ void MainWindow::slot_viewFrameNewFrameMenu()
 
 void MainWindow::slot_viewFrameRemoveBoxMenu()
 {
-    this->frameScene->deleteBBox();
+    vector<unsigned int> bboxKeys = this->frameScene->selectedBBox();
+    for(int index = 0; index < bboxKeys.size(); index++)
+    {
+        this->slot_removeBoundingBoxFromCore(bboxKeys[index]);
+    }
 }
 
 void MainWindow::slot_tableViewContextMenu(const QPoint &_point)
@@ -1162,7 +1193,9 @@ void MainWindow::slot_comboBoxCategoryActivated(const QString &_text)
     // populate comboBoxLabel
     string category = _text.toStdString();
     multimap<string, string>::iterator it;
-    for(it = this->singleton->attributes.lower_bound(category); it != this->singleton->attributes.upper_bound(category); it++)
+    for(it = this->singleton->attributes.lower_bound(category);
+        it != this->singleton->attributes.upper_bound(category);
+        it++)
     {
         labelSet.insert(QString::fromStdString(it->second));
     }
@@ -1174,22 +1207,28 @@ void MainWindow::slot_comboBoxCategoryActivated(const QString &_text)
 
 void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
 {
-    unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
-    unsigned long num_bboxes = static_cast<unsigned long>(this->singleton->frames[nextFrameId - 1].getBoxes().size());
-    unsigned int largest_key = this->singleton->frames[nextFrameId - 1].getLargestKey();
-
-    this->singleton->frames[nextFrameId - 1].addBox(largest_key + 1, _box);
+    unsigned int nextFrameId = static_cast<unsigned int>(this->manager->getFrameId());
+    this->singleton->frames[nextFrameId - 1].addBox(_box);
     this->updateFrame(nextFrameId - 1);
 }
 
-void MainWindow::slot_moveBoundingBoxInCore(const unsigned int _bboxId, const Rect _box)
+void MainWindow::slot_editBoundingBoxInCore(const BoundingBox _bbox)
 {
     unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
-    this->singleton->frames[nextFrameId - 1].setBox(_bboxId, _box);
 }
 
-void MainWindow::slot_removeBoundingBoxFromCore(const unsigned int _frameId, const unsigned int _bboxId)
+void MainWindow::slot_moveBoundingBoxInCore(const unsigned int _bboxKey, const Rect _box)
 {
-    qDebug() << "slot_removeBoundingBoxFromCore >> Frame Id: " << _frameId << " - Bounding-box Id: " << _bboxId;
+    unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
+    this->singleton->frames[nextFrameId - 1].setBox(_bboxKey, _box);
+}
+
+void MainWindow::slot_removeBoundingBoxFromCore(const unsigned int _bboxKey)
+{
+    unsigned int nextFrameId = static_cast<unsigned int>(this->manager->getFrameId());
+    this->singleton->frames[nextFrameId - 1].remBox(_bboxKey);
+    this->updateFrame(nextFrameId - 1);
+    qDebug() << "slot_removeBoundingBoxFromCore >> Frame Id: "
+             << nextFrameId - 1 << " - Bounding-box Id: " << _bboxKey;
 }
 

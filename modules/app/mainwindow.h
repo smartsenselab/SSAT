@@ -19,6 +19,7 @@
 #include "core.h"
 
 #include "dialogannotation.h"
+#include "dialogboundingbox.h"
 #include "framebaseddata.h"
 #include "qboundingboxscene.h"
 #include "qframebasedtablemodel.h"
@@ -60,6 +61,7 @@ private:
 
     Core *singleton = NULL;
     DialogAnnotation *annotationDialog = NULL;
+    DialogBoundingBox *boundingBoxDialog = NULL;
     QBoundingBoxScene *frameScene = NULL;
     QFrameBasedTableModel *tableModel = NULL;
     QGraphicsRectItem *rectangle = NULL;
@@ -281,9 +283,14 @@ public slots:
     void slot_closeApplitacion();
 
     ///
-    /// \brief slot_openAttributes  Open the annotation attributes window
+    /// \brief slot_openAttributes  Open the annotation attributes dialog window window
     ///
-    void slot_openAttributes();
+    void slot_openAttributesDialog();
+
+    ///
+    /// \brief slot_openBoundingBox  Open the bounding box dialog window
+    ///
+    void slot_openBoundingBoxDialog(const unsigned int _bboxKey);
 
     ///
     /// \brief slot_slideVideo  Change the actual frame of the video
@@ -436,7 +443,7 @@ public slots:
     void slot_buttonBoxAccepted();
 
     ///
-    /// \brief slot_buttonBoxRejected   Insert or Change annotation didn't succeed
+    /// \brief slot_buttonBoxRejected   Insert or Change annotation canceled
     ///
     void slot_buttonBoxRejected();
 
@@ -475,18 +482,24 @@ public slots:
     void slot_addBoundingBoxToCore(const Rect _box);
 
     ///
+    /// \brief slot_editBoundingBoxInCore Slot to open dialogboundingbox and edit bbox
+    /// \param _bboxKey key of bounding box that will be updated
+    ///
+    void slot_editBoundingBoxInCore(const BoundingBox _bbox);
+
+    ///
     /// \brief signal_moveBoundingBoxInCore Update core with new bbox position
     /// \param _frameId frame which bbox will be updated
     /// \param _bboxId  id of bounding box that will be updated
     ///
-    void slot_moveBoundingBoxInCore(const unsigned int _bboxId, const Rect _box);
+    void slot_moveBoundingBoxInCore(const unsigned int _bboxKey, const Rect _box);
 
     ///
     /// \brief slot_removeBoundingBoxFromCore Remove bbox from core
     /// \param _frameId frame which bbox will be removed from
     /// \param _bboxId  id of bounding box that will be deleted
     ///
-    void slot_removeBoundingBoxFromCore(const unsigned int _frameId, const unsigned int _bboxId);
+    void slot_removeBoundingBoxFromCore(const unsigned int _bboxKey);
 
 signals:
     ///

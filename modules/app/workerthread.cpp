@@ -304,7 +304,9 @@ void WorkerThread::importJSON(Core &_singleton, QFrameBasedTableModel *_tableMod
             int bHint = std::stoi(bHstr);
 
             BoundingBox tempBox(bIdInt, bCategoryStr, bInfoStr, bLabelStr, bNameStr, bXint, bYint, bWint, bHint);
-            tempFrame.addBox(bIdInt, tempBox);
+            tempFrame.addBox(tempBox);
+
+            _singleton.tracklets.insert(bIdInt);
         }
 
         _singleton.frames[idInt] = tempFrame;

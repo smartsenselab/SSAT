@@ -34,6 +34,15 @@ public:
                    const unsigned int &_ini,
                    const unsigned int &_end);
 
+    FrameBasedData(const unsigned int &_id,
+                   const unsigned int &_key,
+                   const string &_category,
+                   const string &_info,
+                   const string &_label,
+                   const string &_name,
+                   const unsigned int &_ini,
+                   const unsigned int &_end);
+
     unsigned int getInitialFrameId() const;
     unsigned int getFinalFrameId() const;
 

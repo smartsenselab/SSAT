@@ -37,6 +37,20 @@ FrameBasedData::FrameBasedData(const unsigned int &_id,
     this->setFinalFrameId(_end);
 }
 
+FrameBasedData::FrameBasedData(const unsigned int &_id,
+                               const unsigned int &_key,
+                               const string &_category,
+                               const string &_info,
+                               const string &_label,
+                               const string &_name,
+                               const unsigned int &_ini = 0,
+                               const unsigned int &_end = 0) :
+    Data(_id, _key, _category, _info, _label, _name)
+{
+    this->setInitialFrameId(_ini);
+    this->setFinalFrameId(_end);
+}
+
 unsigned int FrameBasedData::getInitialFrameId() const
 {
     return this->initialFrameId;
@@ -60,6 +74,7 @@ void FrameBasedData::setFinalFrameId(const unsigned int _end)
 void FrameBasedData::operator=(const FrameBasedData &_frameBasedData)
 {
     this->id = _frameBasedData.id;
+    this->key = _frameBasedData.key;
     this->category = _frameBasedData.category;
     this->info = _frameBasedData.info;
     this->label = _frameBasedData.label;

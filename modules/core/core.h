@@ -34,6 +34,8 @@ public:
     void reset(const unsigned int _frames, unsigned int _cores);
     void runTracker(const string  &_videoName, const unsigned int _frameId,
                     const string &_boxName, int identifier, int status);
+
+    int getLargestTracklet();
     void updateFrameId();
 
 public:
@@ -42,8 +44,11 @@ public:
     multimap<string, string> attributes;
     vector<FrameBasedData> frameData;
     vector<Frame> frames;
+    set<unsigned int> tracklets;
 
-    unsigned int bboxCounter;
+    string latestCategory;
+    string latestLabel;
+    unsigned int latestId;
 };
 
 #endif // CORE_H

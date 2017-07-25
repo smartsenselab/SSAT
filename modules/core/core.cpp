@@ -66,6 +66,16 @@ void Core::reset(const unsigned int _frames, unsigned int _cores)
     this->pool = new ThreadPool(_cores);
 }
 
+int Core::getLargestTracklet()
+{
+    if(this->tracklets.size() == 0)
+    {
+        return 0;
+    }
+
+    return *(this->tracklets.rbegin());
+}
+
 void Core::updateFrameId()
 {
     for(unsigned int index = 0; index < this->frames.size(); index++)
