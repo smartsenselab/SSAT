@@ -74,6 +74,7 @@ void DialogBoundingBox::initializeComboboxes()
     this->ui->spinBoxId->setMinimum(1);
     this->ui->spinBoxId->setMaximum(1000);
 
+    // populate combobox and spinbox
     if(bbox.getId() > 0)
     {
         this->ui->comboBoxCategory->setCurrentText(QString::fromStdString(bbox.getCategory()));
@@ -83,10 +84,22 @@ void DialogBoundingBox::initializeComboboxes()
     }
     else
     {
-        this->ui->comboBoxCategory->setCurrentIndex(0);
-        emit this->ui->comboBoxCategory->activated(0);
-        this->ui->comboBoxLabel->setCurrentIndex(0);
-        this->ui->spinBoxId->setValue(maxId);
+        unsigned int idValue = this->singleton->frames[this->frameId].getBoxes().size();
+
+        if(this->singleton->latestCategory.empty())
+        {
+            this->ui->comboBoxCategory->setCurrentIndex(0);
+            emit this->ui->comboBoxCategory->activated(0);
+            this->ui->comboBoxLabel->setCurrentIndex(0);
+            this->ui->spinBoxId->setValue(idValue);
+        }
+        else
+        {
+            this->ui->comboBoxCategory->setCurrentText(QString::fromStdString(this->singleton->latestCategory));
+            emit this->ui->comboBoxCategory->activated(QString::fromStdString(this->singleton->latestCategory));
+            this->ui->comboBoxLabel->setCurrentText(QString::fromStdString(this->singleton->latestLabel));
+            this->ui->spinBoxId->setValue(this->singleton->latestId);
+        }
     }
 
     this->ui->spinBoxX->setValue(bbox.getX());
@@ -171,7 +184,7 @@ void DialogBoundingBox::slot_buttonBoxAccepted()
                                    this->ui->comboBoxLabel->currentText().toStdString(),
                                    std::string(),
                                    this->ui->spinBoxX->value(),
-                                   this->ui->spinBoxH->value(),
+                                   this->ui->spinBoxY->value(),
                                    this->ui->spinBoxW->value(),
                                    this->ui->spinBoxH->value()
                                    );

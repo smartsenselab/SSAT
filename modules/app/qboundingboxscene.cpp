@@ -48,6 +48,7 @@ void QBoundingBoxScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     this->pointXa = event->scenePos().x();
     this->pointYa = event->scenePos().y();
     QGraphicsScene::mousePressEvent(event);
+    qDebug() << this->sceneRect();
 }
 
 void QBoundingBoxScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
@@ -164,8 +165,15 @@ void QBoundingBoxScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     }
     else
     {
-        this->mouseMoveX = this->pointXa - event->scenePos().x(); // Init position - End position  X - Shift to the left
-        this->mouseMoveY = this->pointYa - event->scenePos().y(); // Init position - End position  Y
+        if (this->selectedItems().size() == 1)
+        {
+            QBoundingBoxRectangle *bbox = static_cast<QBoundingBoxRectangle*>(this->selectedItems().first());
+            qDebug() << bbox->sceneBoundingRect() << bbox->boundingRect() << bbox->rect();
+
+            QRectF box = bbox->sceneBoundingRect();
+            if(box.x() < 0) bbox->sceneBoundingRect().setRect(0.0, box.y(), box.width(), box.height());
+            if(box.y() < 0) bbox->sceneBoundingRect().setRect(box.x(), 0.0, box.width(), box.height());
+        }
 
         QGraphicsScene::mouseMoveEvent(event);
     }
