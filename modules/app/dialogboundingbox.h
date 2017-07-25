@@ -22,6 +22,7 @@ private:
 
     unsigned int bboxKey;
     unsigned int frameId;
+    unsigned int maxId;
 
     Core *singleton = NULL;
 
@@ -62,6 +63,16 @@ public slots:
     /// \param _text
     ///
     void slot_comboBoxCategoryActivated(const QString &_text);
+
+    ///
+    /// \brief slot_buttonBoxAccepted Insert or Change bounding box succeed
+    ///
+    void slot_buttonBoxAccepted();
+
+    ///
+    /// \brief slot_buttonBoxRejected Insert or Change bounding box canceled
+    ///
+    void slot_buttonBoxRejected();
 };
 
 #endif // DIALOGBOUNDINGBOX_H

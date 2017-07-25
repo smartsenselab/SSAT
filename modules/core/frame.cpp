@@ -111,6 +111,15 @@ void Frame::setBox(const unsigned int _key, const Rect &_box)
     this->boxes.at(_key).setH(_box.height);
 }
 
+void Frame::setBox(const unsigned int _key, const BoundingBox &_bbox)
+{
+    this->boxes.at(_key) = _bbox;
+//    this->boxes.at(_key).setX(_bbox.getX());
+//    this->boxes.at(_key).setY(_bbox.getY());
+//    this->boxes.at(_key).setW(_bbox.getW());
+//    this->boxes.at(_key).setH(_bbox.getH());
+}
+
 void Frame::operator=(const Frame &_frame)
 {    
     this->id = _frame.id;

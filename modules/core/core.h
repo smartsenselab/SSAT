@@ -46,7 +46,9 @@ public:
     vector<Frame> frames;
     set<unsigned int> tracklets;
 
-    unsigned int bboxCounter;
+    string latestCategory;
+    string latestLabel;
+    unsigned int latestId;
 };
 
 #endif // CORE_H

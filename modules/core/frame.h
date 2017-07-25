@@ -43,6 +43,7 @@ public:
 
     void setBox(const map<unsigned int, BoundingBox> &_boxes);
     void setBox(const unsigned int _key, const Rect &_box);
+    void setBox(const unsigned int _key, const BoundingBox &_bbox);
 
     void operator=(const Frame &_frame);
 

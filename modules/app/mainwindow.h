@@ -443,7 +443,7 @@ public slots:
     void slot_buttonBoxAccepted();
 
     ///
-    /// \brief slot_buttonBoxRejected   Insert or Change annotation didn't succeed
+    /// \brief slot_buttonBoxRejected   Insert or Change annotation canceled
     ///
     void slot_buttonBoxRejected();
 
