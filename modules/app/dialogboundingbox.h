@@ -56,6 +56,12 @@ public slots:
     /// \param _bbox
     ///
     void slot_initializeDialog(Core &_core, const unsigned int _frameId, const unsigned int _bboxKey);
+
+    ///
+    /// \brief slot_comboBoxCategoryActivated   Insert a new category
+    /// \param _text
+    ///
+    void slot_comboBoxCategoryActivated(const QString &_text);
 };
 
 #endif // DIALOGBOUNDINGBOX_H

@@ -1193,7 +1193,9 @@ void MainWindow::slot_comboBoxCategoryActivated(const QString &_text)
     // populate comboBoxLabel
     string category = _text.toStdString();
     multimap<string, string>::iterator it;
-    for(it = this->singleton->attributes.lower_bound(category); it != this->singleton->attributes.upper_bound(category); it++)
+    for(it = this->singleton->attributes.lower_bound(category);
+        it != this->singleton->attributes.upper_bound(category);
+        it++)
     {
         labelSet.insert(QString::fromStdString(it->second));
     }
