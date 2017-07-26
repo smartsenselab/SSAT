@@ -21,7 +21,22 @@ using cv::VideoCapture;
  *  Design Pattern: SINGLETON
  */
 
-class Core {
+class Core
+{
+private:
+    string latestCategory;
+    string latestLabel;
+    unsigned int latestId;
+    unsigned int latestAddedKey;
+
+public:
+    ThreadPool *pool;
+
+    multimap<string, string> attributes;
+    vector<FrameBasedData> frameData;
+    vector<Frame> frames;
+    set<unsigned int> tracklets;
+
 private:
     Core(unsigned int _frames, unsigned int _cores);
     ~Core();
@@ -35,20 +50,18 @@ public:
     void runTracker(const string  &_videoName, const unsigned int _frameId,
                     const string &_boxName, int identifier, int status);
 
-    int getLargestTracklet();
+    string getLatestCategory();
+    string getLatestLabel();
+    unsigned int getLatestId();
+    unsigned int getLatestAddedKey();
+    unsigned int getLargestTracklet();
+
+    void setLatestCategory(string _category);
+    void setLatestLabel(string _label);
+    void setLatestId(unsigned int _id);
+    void setLatestAddedKey(unsigned int _key);
+
     void updateFrameId();
-
-public:
-    ThreadPool *pool;
-
-    multimap<string, string> attributes;
-    vector<FrameBasedData> frameData;
-    vector<Frame> frames;
-    set<unsigned int> tracklets;
-
-    string latestCategory;
-    string latestLabel;
-    unsigned int latestId;
 };
 
 #endif // CORE_H

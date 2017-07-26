@@ -19,6 +19,7 @@
 #include <opencv2/core.hpp>
 using cv::Rect;
 
+#include "core.h"
 #include "frame.h"
 #include "qboundingboxrectangle.h"
 
@@ -31,10 +32,11 @@ private:
 
     /// \brief drawEnabled Bool to indicate if the user can draw a bbox
     /// \brief moveEnabled Bool to indicate if teh user can move a bbox
-    bool drawEnabled, moveEnabled;
+    bool drawEnabled, moveEnabled, openDialog;
     double heightD, widthD;
     double mouseMoveX, mouseMoveY;
 
+    Core *singleton = NULL;
     QGraphicsRectItem *itemToDraw = NULL;
 
     qreal height;
@@ -52,6 +54,13 @@ public:
     QBoundingBoxScene(QObject* parent = 0);
 
     ///
+    /// \brief QBoundingBoxScene Constructor for a new bbox
+    /// \param _singleton Pointer to Core
+    /// \param parent
+    ///
+    QBoundingBoxScene(Core &_singleton, QObject* parent = 0);
+
+    ///
     /// \brief keyPressEvent
     /// \param e
     ///
@@ -62,6 +71,12 @@ public:
     /// \return an array containig bboxes keys
     ///
     vector<unsigned int> selectedBBox();
+
+    ///
+    /// \brief setSingleton Set a pointer to Core within GraphicsScene
+    /// \param _singleton Pointer to Core
+    ///
+    void setSingleton(Core &_singleton);
 
 protected:
     ///

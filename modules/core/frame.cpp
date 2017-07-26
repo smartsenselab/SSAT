@@ -33,7 +33,7 @@ Frame::Frame(const unsigned int &_id,
 
 }
 
-bool Frame::addBox(const BoundingBox &_box)
+unsigned int Frame::addBox(const BoundingBox &_box)
 {
     unsigned int key = this->getLargestKey() + 1;
     if(this->boxes.find(key) == this->boxes.end())
@@ -42,24 +42,23 @@ bool Frame::addBox(const BoundingBox &_box)
         bbox.setKey(key);
 
         this->boxes.insert(pair<unsigned int, BoundingBox>(key, bbox));
-        return true;
+        return key;
     }
 
-    return false;
+    return 0;
 }
 
-bool Frame::addBox(const Rect &_box)
+unsigned int Frame::addBox(const Rect &_box)
 {
     unsigned int key = this->getLargestKey() + 1;
     if(this->boxes.find(key) == this->boxes.end())
     {
         BoundingBox bbox(key, _box);
         this->boxes.insert(pair<unsigned int, BoundingBox>(key, bbox));
-
-        return true;
+        return key;
     }
 
-    return false;
+    return 0;
 }
 
 bool Frame::remBox(const unsigned int &_key)

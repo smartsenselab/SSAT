@@ -4,11 +4,26 @@ QBoundingBoxScene::QBoundingBoxScene(QObject* parent): QGraphicsScene(parent)
 {
     this->itemToDraw = 0;
 
-    this->moveEnabled = false;
+    this->openDialog = false;
     this->drawEnabled = false;
+    this->moveEnabled = false;
 
     this->heightD = 0;
     this->widthD = 0;
+}
+
+QBoundingBoxScene::QBoundingBoxScene(Core &_singleton, QObject* parent): QGraphicsScene(parent)
+{
+    this->itemToDraw = 0;
+
+    this->drawEnabled = false;
+    this->moveEnabled = false;
+    this->openDialog = false;
+
+    this->heightD = 0;
+    this->widthD = 0;
+
+    this->singleton = &(_singleton);
 }
 
 void QBoundingBoxScene::keyPressEvent(QKeyEvent* e)
@@ -43,17 +58,22 @@ vector<unsigned int> QBoundingBoxScene::selectedBBox()
     return bboxKeys;
 }
 
+void QBoundingBoxScene::setSingleton(Core &_singleton)
+{
+    this->singleton = &(_singleton);
+}
+
 void QBoundingBoxScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     this->pointXa = event->scenePos().x();
     this->pointYa = event->scenePos().y();
+    this->openDialog = false;
+
     QGraphicsScene::mousePressEvent(event);
-    qDebug() << this->sceneRect();
 }
 
 void QBoundingBoxScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
-    qDebug() << "DOUBLE CLICK WORKS";
     if (this->selectedItems().size() == 1)
     {
         QBoundingBoxRectangle *bbox = static_cast<QBoundingBoxRectangle*>(this->selectedItems().first());
@@ -63,10 +83,11 @@ void QBoundingBoxScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
         this->box.width = static_cast<int>(bbox->sceneBoundingRect().width());
         this->box.height = static_cast<int>(bbox->sceneBoundingRect().height());
 
-        qDebug() << "ONE BOUNDING BOX SELECTED: " << bbox->getId() << " - " << bbox->getKey();
-
+        this->openDialog = true;
         emit this->signal_openBoundingBoxDialog(bbox->getKey());
     }
+
+    QGraphicsScene::mouseDoubleClickEvent(event);
 }
 
 void QBoundingBoxScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -86,7 +107,8 @@ void QBoundingBoxScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         }
 
         // the initial point must be inside the video resolution
-        if((this->pointXa >= 0) && (this->pointYa >= 0) && (this->pointXa <= this->widthD) && (this->pointYa <= this->heightD))
+        if((this->pointXa >= 0) && (this->pointYa >= 0) &&
+                (this->pointXa <= this->widthD) && (this->pointYa <= this->heightD))
         {
             delete(this->itemToDraw);
             this->itemToDraw = NULL;
@@ -186,7 +208,9 @@ void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         this->drawEnabled = false;
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsSelectable, true);
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsMovable, true);
+
         emit this->signal_addBoundingBoxToCore(this->box);
+        this->signal_openBoundingBoxDialog(this->singleton->getLatestAddedKey());
     }
     else
     {
@@ -201,11 +225,17 @@ void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
             emit this->signal_moveBoundingBoxInCore(bbox->getKey(), this->box);
 
-            qDebug() << "Clicked Box " << bbox->getId() << " : " << bbox->getKey()
-                     << "=" << bbox->sceneBoundingRect().x()
-                     << ":" << bbox->sceneBoundingRect().y()
-                     << ":" << bbox->sceneBoundingRect().width()
-                     << ":" << bbox->sceneBoundingRect().height();
+            if(this->openDialog)
+            {
+                emit this->signal_openBoundingBoxDialog(bbox->getKey());
+                this->openDialog = false;
+            }
+
+//            qDebug() << "Clicked Box " << bbox->getId() << " : " << bbox->getKey()
+//                     << "=" << bbox->sceneBoundingRect().x()
+//                     << ":" << bbox->sceneBoundingRect().y()
+//                     << ":" << bbox->sceneBoundingRect().width()
+//                     << ":" << bbox->sceneBoundingRect().height();
         }
         else if (this->selectedItems().size() > 1)
         {
@@ -237,8 +267,6 @@ void QBoundingBoxScene::slot_drawFrameBboxes(const Frame &_frame)
                                   it->second.getY(),
                                   it->second.getW(),
                                   it->second.getH());
-
-        qDebug() << "Drawing BBOX: " << id << " : " << key;
 
         // when going back to a frame, is possible to select and move the BBox already created
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsSelectable, true);

@@ -479,7 +479,7 @@ public slots:
     /// \brief slot_addBoundingBoxToCore    Save the x,y,w,h of the BBox on core
     /// \param _box
     ///
-    void slot_addBoundingBoxToCore(const Rect _box);
+    unsigned int slot_addBoundingBoxToCore(const Rect _box);
 
     ///
     /// \brief slot_editBoundingBoxInCore Slot to open dialogboundingbox and edit bbox
