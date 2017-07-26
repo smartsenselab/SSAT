@@ -33,8 +33,8 @@ public:
           const string &_label,
           const string &_name);
 
-    bool addBox(const BoundingBox &_box);
-    bool addBox(const Rect &_box);
+    unsigned int addBox(const BoundingBox &_box);
+    unsigned int addBox(const Rect &_box);
     bool remBox(const unsigned int &_key);
     unsigned int getLargestKey();
 

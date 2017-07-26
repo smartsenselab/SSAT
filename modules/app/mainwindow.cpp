@@ -706,6 +706,7 @@ void MainWindow::slot_openFile()
             this->singleton->reset(static_cast<unsigned int>(this->totalFrames));
             this->singleton->updateFrameId();
         }
+        this->frameScene->setSingleton(*(this->singleton));
 
         // Displaying Frame and Core information on Interface
         this->tableModel->setFrameBasedData(this->singleton->frameData);
@@ -1205,11 +1206,14 @@ void MainWindow::slot_comboBoxCategoryActivated(const QString &_text)
     this->ui->comboBoxLabel->setModel(this->labelModel);
 }
 
-void MainWindow::slot_addBoundingBoxToCore(const Rect _box)
+unsigned int MainWindow::slot_addBoundingBoxToCore(const Rect _box)
 {
     unsigned int nextFrameId = static_cast<unsigned int>(this->manager->getFrameId());
-    this->singleton->frames[nextFrameId - 1].addBox(_box);
+    unsigned int latestKey = this->singleton->frames[nextFrameId - 1].addBox(_box);
     this->updateFrame(nextFrameId - 1);
+    this->singleton->setLatestAddedKey(latestKey);
+
+    return latestKey;
 }
 
 void MainWindow::slot_editBoundingBoxInCore(const BoundingBox _bbox)
@@ -1228,7 +1232,5 @@ void MainWindow::slot_removeBoundingBoxFromCore(const unsigned int _bboxKey)
     unsigned int nextFrameId = static_cast<unsigned int>(this->manager->getFrameId());
     this->singleton->frames[nextFrameId - 1].remBox(_bboxKey);
     this->updateFrame(nextFrameId - 1);
-    qDebug() << "slot_removeBoundingBoxFromCore >> Frame Id: "
-             << nextFrameId - 1 << " - Bounding-box Id: " << _bboxKey;
 }
 

@@ -66,7 +66,27 @@ void Core::reset(const unsigned int _frames, unsigned int _cores)
     this->pool = new ThreadPool(_cores);
 }
 
-int Core::getLargestTracklet()
+string Core::getLatestCategory()
+{
+    return this->latestCategory;
+}
+
+string Core::getLatestLabel()
+{
+    return this->latestLabel;
+}
+
+unsigned int Core::getLatestId()
+{
+    return this->latestId;
+}
+
+unsigned int Core::getLatestAddedKey()
+{
+    return this->latestAddedKey;
+}
+
+unsigned int Core::getLargestTracklet()
 {
     if(this->tracklets.size() == 0)
     {
@@ -74,6 +94,26 @@ int Core::getLargestTracklet()
     }
 
     return *(this->tracklets.rbegin());
+}
+
+void Core::setLatestCategory(string _category)
+{
+    this->latestCategory = _category;
+}
+
+void Core::setLatestLabel(string _label)
+{
+    this->latestLabel = _label;
+}
+
+void Core::setLatestId(unsigned int _id)
+{
+    this->latestId = _id;
+}
+
+void Core::setLatestAddedKey(unsigned int _key)
+{
+    this->latestAddedKey = _key;
 }
 
 void Core::updateFrameId()
