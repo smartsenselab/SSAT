@@ -187,22 +187,38 @@ void QBoundingBoxScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     }
     else
     {
+        QGraphicsScene::mouseMoveEvent(event);
+
         if (this->selectedItems().size() == 1)
         {
             QBoundingBoxRectangle *bbox = static_cast<QBoundingBoxRectangle*>(this->selectedItems().first());
-            qDebug() << bbox->sceneBoundingRect() << bbox->boundingRect() << bbox->rect();
 
             QRectF box = bbox->sceneBoundingRect();
-            if(box.x() < 0) bbox->sceneBoundingRect().setRect(0.0, box.y(), box.width(), box.height());
-            if(box.y() < 0) bbox->sceneBoundingRect().setRect(box.x(), 0.0, box.width(), box.height());
+            if(box.x() < 0.0)
+            {
+                //bbox->sceneBoundingRect().setRect(0.0, box.y(), box.width(), box.height());
+                //bbox->setX(0.0);
+                //bbox->boundingRect().setX(0.0);
+                //bbox->sceneBoundingRect().setX(0.0);
+                //bbox->setPos(0.0, bbox->y());
+                bbox->update();
+            }
+            if(box.y() < 0)
+            {
+                bbox->sceneBoundingRect().setRect(box.x(), 0.0, box.width(), box.height());
+            }
         }
-
-        QGraphicsScene::mouseMoveEvent(event);
     }
 }
 
 void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
+    //qDebug() << event->pos().toPoint();
+    qDebug() << event->scenePos().toPoint();
+    //qDebug() << event->screenPos();
+
+    qDebug() << this->sceneRect();
+
     if((this->drawEnabled) && (this->itemToDraw != NULL))
     {
         this->drawEnabled = false;
@@ -217,6 +233,7 @@ void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         if (this->selectedItems().size() == 1)
         {
             QBoundingBoxRectangle *bbox = static_cast<QBoundingBoxRectangle*>(this->selectedItems().first());
+            qDebug() << bbox->sceneBoundingRect() << bbox->boundingRect() << bbox->rect();
 
             this->box.x = static_cast<int>(bbox->sceneBoundingRect().x());
             this->box.y = static_cast<int>(bbox->sceneBoundingRect().y());
