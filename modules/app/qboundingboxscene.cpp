@@ -285,6 +285,26 @@ void QBoundingBoxScene::slot_drawFrameBboxes(const Frame &_frame)
                                   it->second.getW(),
                                   it->second.getH());
 
+        // Going beyond HORIZONTAL limit
+        if(it->second.getX() + it->second.getW() > this->sceneRect().width())
+        {
+            int width = static_cast<int>(this->sceneRect().width() - it->second.getX()) - 1;
+            this->itemToDraw->setRect(it->second.getX(),
+                                      it->second.getY(),
+                                      width,
+                                      it->second.getH());
+        }
+
+        // Going beyond VERTICAl limit
+        if(it->second.getY() + it->second.getH() > this->sceneRect().height())
+        {
+            int height = static_cast<int>(this->sceneRect().height() - it->second.getY()) - 1;
+            this->itemToDraw->setRect(it->second.getX(),
+                                      it->second.getY(),
+                                      it->second.getW(),
+                                      height);
+        }
+
         // when going back to a frame, is possible to select and move the BBox already created
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsSelectable, true);
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsMovable, true);
