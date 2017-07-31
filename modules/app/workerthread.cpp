@@ -232,84 +232,91 @@ void WorkerThread::importJSON(Core &_singleton, QFrameBasedTableModel *_tableMod
     {
         QJsonObject frameObj = frameValue.toObject();
 
-        // Category
-        category = frameObj.value("Category").toString();
-        categoryStr = category.toString().toUtf8().constData();
-
         // Id
         id = frameObj.value("Id").toString();
         idStr = id.toString().toUtf8().constData();
         int idInt = std::stoi(idStr);
 
-        // Info
-        info = frameObj.value("Info").toString();
-        infoStr = info.toString().toUtf8().constData();
-
-        // Label
-        label = frameObj.value("Label").toString();
-        labelStr = label.toString().toUtf8().constData();
-
-        // Name
-        name = frameObj.value("Name").toString();
-        nameStr = name.toString().toUtf8().constData();
-
-        Frame tempFrame(idInt, categoryStr, infoStr, labelStr, nameStr);
-        QJsonValue bCategory, bId, bInfo, bLabel, bName, bX, bY, bW, bH;
-        std::string bCategoryStr, bIdStr, bInfoStr, bLabelStr, bNameStr, bXstr, bYstr, bWstr, bHstr;
-
-        QJsonArray Boxes = frameObj["Boxes"].toArray();
-        foreach (const QJsonValue & boxValue, Boxes)
+        if (idInt < _singleton.frames.size())
         {
-            QJsonObject boxObj = boxValue.toObject();
-
             // Category
-            bCategory = boxObj.value("Category").toString();
-            bCategoryStr = bCategory.toString().toUtf8().constData();
-
-            // Id
-            bId = boxObj.value("Id").toString();
-            bIdStr = bId.toString().toUtf8().constData();
-            int bIdInt = std::stoi(bIdStr);
+            category = frameObj.value("Category").toString();
+            categoryStr = category.toString().toUtf8().constData();
 
             // Info
-            bInfo = boxObj.value("Info").toString();
-            bInfoStr = bInfo.toString().toUtf8().constData();
+            info = frameObj.value("Info").toString();
+            infoStr = info.toString().toUtf8().constData();
 
             // Label
-            bLabel = boxObj.value("Label").toString();
-            bLabelStr = bLabel.toString().toUtf8().constData();
+            label = frameObj.value("Label").toString();
+            labelStr = label.toString().toUtf8().constData();
 
             // Name
-            bName = boxObj.value("Name").toString();
-            bNameStr = bName.toString().toUtf8().constData();
+            name = frameObj.value("Name").toString();
+            nameStr = name.toString().toUtf8().constData();
 
-            // X coordinate
-            bX = boxObj.value("X").toString();
-            bXstr = bX.toString().toUtf8().constData();
-            int bXint = std::stoi(bXstr);
+            Frame tempFrame(idInt, categoryStr, infoStr, labelStr, nameStr);
+            QJsonValue bCategory, bId, bInfo, bLabel, bName, bX, bY, bW, bH;
+            std::string bCategoryStr, bIdStr, bInfoStr, bLabelStr, bNameStr, bXstr, bYstr, bWstr, bHstr;
 
-            // Y coordinate
-            bY = boxObj.value("Y").toString();
-            bYstr = bY.toString().toUtf8().constData();
-            int bYint = std::stoi(bYstr);
+            QJsonArray Boxes = frameObj["Boxes"].toArray();
+            foreach (const QJsonValue & boxValue, Boxes)
+            {
+                QJsonObject boxObj = boxValue.toObject();
 
-            // W coordinate
-            bW = boxObj.value("W").toString();
-            bWstr = bW.toString().toUtf8().constData();
-            int bWint = std::stoi(bWstr);
+                // Category
+                bCategory = boxObj.value("Category").toString();
+                bCategoryStr = bCategory.toString().toUtf8().constData();
 
-            // H coordinate
-            bH = boxObj.value("H").toString();
-            bHstr = bH.toString().toUtf8().constData();
-            int bHint = std::stoi(bHstr);
+                // Id
+                bId = boxObj.value("Id").toString();
+                bIdStr = bId.toString().toUtf8().constData();
+                int bIdInt = std::stoi(bIdStr);
 
-            BoundingBox tempBox(bIdInt, bCategoryStr, bInfoStr, bLabelStr, bNameStr, bXint, bYint, bWint, bHint);
-            tempFrame.addBox(tempBox);
+                // Info
+                bInfo = boxObj.value("Info").toString();
+                bInfoStr = bInfo.toString().toUtf8().constData();
 
-            _singleton.tracklets.insert(bIdInt);
+                // Label
+                bLabel = boxObj.value("Label").toString();
+                bLabelStr = bLabel.toString().toUtf8().constData();
+
+                // Name
+                bName = boxObj.value("Name").toString();
+                bNameStr = bName.toString().toUtf8().constData();
+
+                // X coordinate
+                bX = boxObj.value("X").toString();
+                bXstr = bX.toString().toUtf8().constData();
+                int bXint = std::stoi(bXstr);
+
+                // Y coordinate
+                bY = boxObj.value("Y").toString();
+                bYstr = bY.toString().toUtf8().constData();
+                int bYint = std::stoi(bYstr);
+
+                // W coordinate
+                bW = boxObj.value("W").toString();
+                bWstr = bW.toString().toUtf8().constData();
+                int bWint = std::stoi(bWstr);
+
+                // H coordinate
+                bH = boxObj.value("H").toString();
+                bHstr = bH.toString().toUtf8().constData();
+                int bHint = std::stoi(bHstr);
+
+                BoundingBox tempBox(bIdInt, bCategoryStr, bInfoStr, bLabelStr, bNameStr, bXint, bYint, bWint, bHint);
+                tempFrame.addBox(tempBox);
+
+                _singleton.tracklets.insert(bIdInt);
+            }
+
+            _singleton.frames[idInt] = tempFrame;
         }
-
-        _singleton.frames[idInt] = tempFrame;
+        else
+        {
+            std::cerr << "JSON frame id " << idInt << " is greater than video length.";
+        }
     }
 }
 
