@@ -193,20 +193,18 @@ void QBoundingBoxScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         {
             QBoundingBoxRectangle *bbox = static_cast<QBoundingBoxRectangle*>(this->selectedItems().first());
 
-            QRectF box = bbox->sceneBoundingRect();
-            if(box.x() < 0.0)
+            QRectF oldBoxPos = bbox->boundingRect();
+            QRectF newBoxPos = bbox->sceneBoundingRect();
+
+            if(newBoxPos.x() < 0.0)
             {
-                //bbox->sceneBoundingRect().setRect(0.0, box.y(), box.width(), box.height());
-                //bbox->setX(0.0);
-                //bbox->boundingRect().setX(0.0);
-                //bbox->sceneBoundingRect().setX(0.0);
-                //bbox->setPos(0.0, bbox->y());
-                bbox->update();
+                bbox->setX(-1.0 * oldBoxPos.x());
             }
-            if(box.y() < 0)
+            if(newBoxPos.y() < 0)
             {
-                bbox->sceneBoundingRect().setRect(box.x(), 0.0, box.width(), box.height());
+                bbox->setY(-1.0 * oldBoxPos.y());
             }
+
         }
     }
 }
