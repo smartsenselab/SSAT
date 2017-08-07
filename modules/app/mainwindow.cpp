@@ -474,6 +474,7 @@ void MainWindow::updateFrame(const int _frameId)
 
         this->frameQImage = this->manager->matToQimage(frameMat);
         this->frameScene->addPixmap(QPixmap::fromImage(frameQImage));
+        this->frameScene->updateSceneSize();
 
         this->ui->viewFrame->setScene((this->frameScene));
         this->ui->viewFrame->fitInView(this->frameScene->sceneRect(), Qt::KeepAspectRatio);
@@ -716,7 +717,7 @@ void MainWindow::slot_openFile()
         this->updateFrame(1);
 
         this->messageRestoreJson();
-        this->saveTimer->start(15000);
+        this->saveTimer->start(20000);
     }
 }
 

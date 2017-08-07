@@ -63,6 +63,11 @@ void QBoundingBoxScene::setSingleton(Core &_singleton)
     this->singleton = &(_singleton);
 }
 
+void QBoundingBoxScene::updateSceneSize()
+{
+    this->sceneSize = this->sceneRect();
+}
+
 void QBoundingBoxScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     this->pointXa = event->scenePos().x();
@@ -198,13 +203,21 @@ void QBoundingBoxScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
             if(newBoxPos.x() < 0.0)
             {
-                bbox->setX(-1.0 * oldBoxPos.x());
+                bbox->setX((-1.0 * oldBoxPos.x()) + 1);
             }
             if(newBoxPos.y() < 0)
             {
-                bbox->setY(-1.0 * oldBoxPos.y());
+                bbox->setY((-1.0 * oldBoxPos.y()) + 1);
             }
 
+            if(newBoxPos.x() + newBoxPos.width() > this->sceneSize.width())
+            {
+                bbox->setX(this->sceneSize.width() - oldBoxPos.width() - oldBoxPos.x() - 1);
+            }
+            if(newBoxPos.y() + newBoxPos.height() > this->sceneSize.height())
+            {
+                bbox->setY(this->sceneSize.height() - oldBoxPos.height() - oldBoxPos.y() - 1);
+            }
         }
     }
 }
