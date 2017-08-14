@@ -72,6 +72,7 @@ bool Frame::removeBoxById(const unsigned int &_id)
         {
             this->boxes.erase(it);
             isErased = true;
+            break;
         }
     }
 
