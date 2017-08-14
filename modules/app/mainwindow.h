@@ -392,6 +392,18 @@ public slots:
     void slot_viewFrameNewFrameMenu();
 
     ///
+    /// \brief slot_viewFrameReplicateBoxMenu Replicate a bounding box for 10 frames
+    /// \param _sequence
+    ///
+    void slot_viewFrameReplicateBoxMenu10();
+
+    ///
+    /// \brief slot_viewFrameReplicateBoxMenu Replicate a bounding box for 100 frames
+    /// \param _sequence
+    ///
+    void slot_viewFrameReplicateBoxMenu100();
+
+    ///
     /// \brief slot_viewFrameRemoveBoxMenu  Remove a BBox
     ///
     void slot_viewFrameRemoveBoxMenu();

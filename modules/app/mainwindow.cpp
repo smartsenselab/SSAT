@@ -971,10 +971,10 @@ void MainWindow::slot_viewFrameContextMenu(const QPoint &_point)
             contextMenu.addAction("New Bounding box\tCtrl+B", this, SLOT(slot_viewFrameNewBoxMenu()));
             contextMenu.addAction("New Frame box\tCtrl+F", this, SLOT(slot_viewFrameNewFrameMenu()));
         }
-        if(this->frameScene->selectedBBox().size() == 1)
+        else if(this->frameScene->selectedBBox().size() == 1)
         {
-            contextMenu.addAction("Replicate Bounding box 10x");
-            contextMenu.addAction("Replicate Bounding box 100x");
+            contextMenu.addAction("Replicate Bounding box 10x", this, SLOT(slot_viewFrameReplicateBoxMenu10()));
+            contextMenu.addAction("Replicate Bounding box 100x", this, SLOT(slot_viewFrameReplicateBoxMenu100()));
             contextMenu.addAction("Remove Bounding box", this, SLOT(slot_viewFrameRemoveBoxMenu()));
         }
         contextMenu.exec(position);
@@ -1009,6 +1009,16 @@ void MainWindow::slot_viewFrameNewFrameMenu()
 
     this->ui->spinBoxInitialFrame->setValue(this->frameId);
     this->ui->spinBoxFinalFrame->setValue(this->frameId);
+}
+
+void MainWindow::slot_viewFrameReplicateBoxMenu10()
+{
+    qDebug() << "Repeat for " << 10 << " frames";
+}
+
+void MainWindow::slot_viewFrameReplicateBoxMenu100()
+{
+    qDebug() << "Repeat for " << 100 << " frames";
 }
 
 void MainWindow::slot_viewFrameRemoveBoxMenu()
