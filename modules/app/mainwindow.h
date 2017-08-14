@@ -392,6 +392,18 @@ public slots:
     void slot_viewFrameNewFrameMenu();
 
     ///
+    /// \brief slot_viewFrameReplicateBoxMenu Replicate a bounding box for 10 frames
+    /// \param _sequence
+    ///
+    void slot_viewFrameReplicateBoxMenu10();
+
+    ///
+    /// \brief slot_viewFrameReplicateBoxMenu Replicate a bounding box for 100 frames
+    /// \param _sequence
+    ///
+    void slot_viewFrameReplicateBoxMenu100();
+
+    ///
     /// \brief slot_viewFrameRemoveBoxMenu  Remove a BBox
     ///
     void slot_viewFrameRemoveBoxMenu();
@@ -496,7 +508,13 @@ public slots:
 
     ///
     /// \brief slot_removeBoundingBoxFromCore Remove bbox from core
-    /// \param _frameId frame which bbox will be removed from
+    /// \param _bboxId  id of bounding box that will be deleted
+    /// \param _numFrames number of frames bbox will be replicated
+    ///
+    void slot_replicateBoundingBoxFromCore(const unsigned int _bboxKey, const unsigned int _numFrames);
+
+    ///
+    /// \brief slot_removeBoundingBoxFromCore Remove bbox from core
     /// \param _bboxId  id of bounding box that will be deleted
     ///
     void slot_removeBoundingBoxFromCore(const unsigned int _bboxKey);

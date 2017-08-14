@@ -488,14 +488,13 @@ void MainWindow::messageRestoreJson()
     std::ifstream file(this->corePath.toStdString());
     if (file.good())
     {
-        int response;
         QMessageBox message;
         message.setIcon(QMessageBox::Warning);
         message.setText("There is a backup file in your directory.");
         message.setInformativeText("Do you want to restore previous settings");
         message.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 
-        response = message.exec();
+        int response = message.exec();
 
         switch(response)
         {
@@ -971,10 +970,10 @@ void MainWindow::slot_viewFrameContextMenu(const QPoint &_point)
             contextMenu.addAction("New Bounding box\tCtrl+B", this, SLOT(slot_viewFrameNewBoxMenu()));
             contextMenu.addAction("New Frame box\tCtrl+F", this, SLOT(slot_viewFrameNewFrameMenu()));
         }
-        if(this->frameScene->selectedBBox().size() == 1)
+        else if(this->frameScene->selectedBBox().size() == 1)
         {
-            contextMenu.addAction("Replicate Bounding box 10x");
-            contextMenu.addAction("Replicate Bounding box 100x");
+            contextMenu.addAction("Replicate Bounding box 10x", this, SLOT(slot_viewFrameReplicateBoxMenu10()));
+            contextMenu.addAction("Replicate Bounding box 100x", this, SLOT(slot_viewFrameReplicateBoxMenu100()));
             contextMenu.addAction("Remove Bounding box", this, SLOT(slot_viewFrameRemoveBoxMenu()));
         }
         contextMenu.exec(position);
@@ -1011,12 +1010,44 @@ void MainWindow::slot_viewFrameNewFrameMenu()
     this->ui->spinBoxFinalFrame->setValue(this->frameId);
 }
 
-void MainWindow::slot_viewFrameRemoveBoxMenu()
+void MainWindow::slot_viewFrameReplicateBoxMenu10()
 {
+    qDebug() << "Repeat for " << 10 << " frames";
     vector<unsigned int> bboxKeys = this->frameScene->selectedBBox();
     for(int index = 0; index < bboxKeys.size(); index++)
     {
-        this->slot_removeBoundingBoxFromCore(bboxKeys[index]);
+        this->slot_replicateBoundingBoxFromCore(bboxKeys[index], 10);
+    }
+}
+
+void MainWindow::slot_viewFrameReplicateBoxMenu100()
+{
+    qDebug() << "Repeat for " << 100 << " frames";
+    vector<unsigned int> bboxKeys = this->frameScene->selectedBBox();
+    for(int index = 0; index < bboxKeys.size(); index++)
+    {
+        this->slot_replicateBoundingBoxFromCore(bboxKeys[index], 100);
+    }
+}
+
+void MainWindow::slot_viewFrameRemoveBoxMenu()
+{
+    QMessageBox message;
+    message.setIcon(QMessageBox::Warning);
+    message.setText("Any occurence of this bounding box in the following frames is going to be removed.");
+    message.setInformativeText("Are you sure you want to continue?");
+    message.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+
+    int response = message.exec();
+
+    switch(response)
+    {
+    case QMessageBox::Yes:
+        vector<unsigned int> bboxKeys = this->frameScene->selectedBBox();
+        for(int index = 0; index < bboxKeys.size(); index++)
+        {
+            this->slot_removeBoundingBoxFromCore(bboxKeys[index]);
+        }
     }
 }
 
@@ -1217,10 +1248,36 @@ void MainWindow::slot_moveBoundingBoxInCore(const unsigned int _bboxKey, const R
     this->singleton->frames[nextFrameId - 1].setBox(_bboxKey, _box);
 }
 
-void MainWindow::slot_removeBoundingBoxFromCore(const unsigned int _bboxKey)
+void MainWindow::slot_replicateBoundingBoxFromCore(const unsigned int _bboxKey, const unsigned int _numFrames)
 {
     unsigned int nextFrameId = static_cast<unsigned int>(this->manager->getFrameId());
-    this->singleton->frames[nextFrameId - 1].remBox(_bboxKey);
-    this->updateFrame(nextFrameId - 1);
+    unsigned int frameLimit = std::min(nextFrameId + _numFrames, static_cast<unsigned int>(this->singleton->frames.size()));
+
+    BoundingBox bbox = this->singleton->frames[nextFrameId - 1].getBox(_bboxKey);
+    for(unsigned int frameIndex = nextFrameId; frameIndex < frameLimit; frameIndex++)
+    {
+        this->singleton->frames[frameIndex].addBox(bbox);
+    }
+
+    this->updateFrame(frameLimit - 1);
+}
+
+void MainWindow::slot_removeBoundingBoxFromCore(const unsigned int _bboxKey)
+{
+    bool isErased = false;
+    unsigned int currentFrameId = static_cast<unsigned int>(this->manager->getFrameId()) - 1;
+
+    BoundingBox bbox = this->singleton->frames[currentFrameId].getBox(_bboxKey);
+    for(unsigned int frameIndex = (currentFrameId); frameIndex < this->singleton->frames.size(); frameIndex++)
+    {
+        isErased = this->singleton->frames[frameIndex].removeBoxById(bbox.getId());
+
+        if(!isErased)
+        {
+            break;
+        }
+    }
+
+    this->updateFrame(currentFrameId);
 }
 

@@ -61,7 +61,25 @@ unsigned int Frame::addBox(const Rect &_box)
     return 0;
 }
 
-bool Frame::remBox(const unsigned int &_key)
+bool Frame::removeBoxById(const unsigned int &_id)
+{
+    bool isErased = false;
+
+    map<unsigned int, BoundingBox>::iterator it;
+    for(it = this->boxes.begin(); it != this->boxes.end(); it++)
+    {
+        if(it->second.getId() == _id)
+        {
+            this->boxes.erase(it);
+            isErased = true;
+            break;
+        }
+    }
+
+    return isErased;
+}
+
+bool Frame::removeBoxByKey(const unsigned int &_key)
 {
     if(this->boxes.find(_key) != this->boxes.end())
     {
