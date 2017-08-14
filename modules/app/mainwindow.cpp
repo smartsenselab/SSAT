@@ -474,6 +474,7 @@ void MainWindow::updateFrame(const int _frameId)
 
         this->frameQImage = this->manager->matToQimage(frameMat);
         this->frameScene->addPixmap(QPixmap::fromImage(frameQImage));
+        this->frameScene->updateSceneSize();
 
         this->ui->viewFrame->setScene((this->frameScene));
         this->ui->viewFrame->fitInView(this->frameScene->sceneRect(), Qt::KeepAspectRatio);
@@ -716,7 +717,7 @@ void MainWindow::slot_openFile()
         this->updateFrame(1);
 
         this->messageRestoreJson();
-        this->saveTimer->start(15000);
+        this->saveTimer->start(20000);
     }
 }
 
@@ -965,10 +966,15 @@ void MainWindow::slot_viewFrameContextMenu(const QPoint &_point)
     QMenu contextMenu;
     if (!this->isPlaying())
     {
-        contextMenu.addAction("New Bounding box\tCtrl+B", this, SLOT(slot_viewFrameNewBoxMenu()));
-        contextMenu.addAction("New Frame box\tCtrl+F", this, SLOT(slot_viewFrameNewFrameMenu()));
+        if(this->frameScene->selectedBBox().size() == 0)
+        {
+            contextMenu.addAction("New Bounding box\tCtrl+B", this, SLOT(slot_viewFrameNewBoxMenu()));
+            contextMenu.addAction("New Frame box\tCtrl+F", this, SLOT(slot_viewFrameNewFrameMenu()));
+        }
         if(this->frameScene->selectedBBox().size() == 1)
         {
+            contextMenu.addAction("Replicate Bounding box 10x");
+            contextMenu.addAction("Replicate Bounding box 100x");
             contextMenu.addAction("Remove Bounding box", this, SLOT(slot_viewFrameRemoveBoxMenu()));
         }
         contextMenu.exec(position);
@@ -981,22 +987,6 @@ void MainWindow::slot_viewFrameNewBoxMenu()
     {
         this->frameScene->slot_enableDraw();
     }
-
-    //    // CheckBox
-    //    QTableWidgetItem *checkBoxItem = new QTableWidgetItem();
-    //    checkBoxItem->setCheckState(Qt::Unchecked);
-
-    //    // Cancel Button
-    //    QPushButton* btn_cancel = new QPushButton();
-    //    btn_cancel = new QPushButton();
-    //    btn_cancel->setText("Cancel");
-    //    //btn_cancel->setIcon(QIcon("https://t4.ftcdn.net/jpg/00/08/30/29/500_F_8302961_GVoPsXWcNsfvVygwE2sri9m9aISpJgYQ.jpg"));
-
-    //    // Table row
-    //    int row = this->ui->tableWidget->rowCount() - 1;
-    //    this->ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-    //    this->ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 0, checkBoxItem);
-    //    this->ui->tableWidget->setCellWidget(row, 3, btn_cancel);
 }
 
 void MainWindow::slot_viewFrameNewFrameMenu()

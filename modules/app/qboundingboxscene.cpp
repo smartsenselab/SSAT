@@ -63,6 +63,11 @@ void QBoundingBoxScene::setSingleton(Core &_singleton)
     this->singleton = &(_singleton);
 }
 
+void QBoundingBoxScene::updateSceneSize()
+{
+    this->sceneSize = this->sceneRect();
+}
+
 void QBoundingBoxScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     this->pointXa = event->scenePos().x();
@@ -187,17 +192,33 @@ void QBoundingBoxScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     }
     else
     {
+        QGraphicsScene::mouseMoveEvent(event);
+
         if (this->selectedItems().size() == 1)
         {
             QBoundingBoxRectangle *bbox = static_cast<QBoundingBoxRectangle*>(this->selectedItems().first());
-            qDebug() << bbox->sceneBoundingRect() << bbox->boundingRect() << bbox->rect();
 
-            QRectF box = bbox->sceneBoundingRect();
-            if(box.x() < 0) bbox->sceneBoundingRect().setRect(0.0, box.y(), box.width(), box.height());
-            if(box.y() < 0) bbox->sceneBoundingRect().setRect(box.x(), 0.0, box.width(), box.height());
+            QRectF oldBoxPos = bbox->boundingRect();
+            QRectF newBoxPos = bbox->sceneBoundingRect();
+
+            if(newBoxPos.x() < 0.0)
+            {
+                bbox->setX((-1.0 * oldBoxPos.x()) + 1);
+            }
+            if(newBoxPos.y() < 0)
+            {
+                bbox->setY((-1.0 * oldBoxPos.y()) + 1);
+            }
+
+            if(newBoxPos.x() + newBoxPos.width() > this->sceneSize.width())
+            {
+                bbox->setX(this->sceneSize.width() - oldBoxPos.width() - oldBoxPos.x() - 1);
+            }
+            if(newBoxPos.y() + newBoxPos.height() > this->sceneSize.height())
+            {
+                bbox->setY(this->sceneSize.height() - oldBoxPos.height() - oldBoxPos.y() - 1);
+            }
         }
-
-        QGraphicsScene::mouseMoveEvent(event);
     }
 }
 
@@ -267,6 +288,26 @@ void QBoundingBoxScene::slot_drawFrameBboxes(const Frame &_frame)
                                   it->second.getY(),
                                   it->second.getW(),
                                   it->second.getH());
+
+        // Going beyond HORIZONTAL limit
+        if(it->second.getX() + it->second.getW() > this->sceneRect().width())
+        {
+            int width = static_cast<int>(this->sceneRect().width() - it->second.getX()) - 1;
+            this->itemToDraw->setRect(it->second.getX(),
+                                      it->second.getY(),
+                                      width,
+                                      it->second.getH());
+        }
+
+        // Going beyond VERTICAl limit
+        if(it->second.getY() + it->second.getH() > this->sceneRect().height())
+        {
+            int height = static_cast<int>(this->sceneRect().height() - it->second.getY()) - 1;
+            this->itemToDraw->setRect(it->second.getX(),
+                                      it->second.getY(),
+                                      it->second.getW(),
+                                      height);
+        }
 
         // when going back to a frame, is possible to select and move the BBox already created
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsSelectable, true);

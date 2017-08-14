@@ -44,6 +44,8 @@ private:
     qreal pointYa, pointYb;
     qreal width;
 
+    QRectF sceneSize;
+
     Rect box;
 
 public:
@@ -77,6 +79,11 @@ public:
     /// \param _singleton Pointer to Core
     ///
     void setSingleton(Core &_singleton);
+
+    ///
+    /// \brief updateSceneSize keep record of original scene size
+    ///
+    void updateSceneSize();
 
 protected:
     ///

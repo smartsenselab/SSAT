@@ -173,12 +173,18 @@ void QBoundingBoxRectangle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         }
     }
 
-    this->update();
     QGraphicsItem::mouseMoveEvent(event);
 }
 
 void QBoundingBoxRectangle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
+    QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
+    QGraphicsItem::mouseReleaseEvent(event);
+
+    this->prepareGeometryChange();
+    this->setFlag(QGraphicsItem::ItemIsMovable, true);
+    this->update();
+
     QRectF bbox = this->boundingRect();
     this->pointXa = bbox.x();
     this->pointYa = bbox.y();
@@ -186,17 +192,15 @@ void QBoundingBoxRectangle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     this->pointYb = bbox.y() + bbox.height();
     this->resizeMode = 0;
 
-    this->prepareGeometryChange();
-    this->setFlag(QGraphicsItem::ItemIsMovable, true);
-    this->update();
+        qDebug() << event->pos().toPoint();
+        qDebug() << event->scenePos().toPoint();
+        qDebug() << event->screenPos();
 
-    qDebug() << event->pos().toPoint();
-    qDebug() << event->pos().toPoint();
-    qDebug() << this->rect();
-    qDebug() << this->boundingRect();
-    qDebug() << this->boundingRect();
+        qDebug() << this->pos().toPoint();
+        qDebug() << this->x() << ":" << this->y();
 
-    QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
-    QGraphicsItem::mouseReleaseEvent(event);
+        qDebug() << this->rect();
+        qDebug() << this->boundingRect();
+        qDebug() << this->sceneBoundingRect();
 }
 
