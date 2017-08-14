@@ -488,14 +488,13 @@ void MainWindow::messageRestoreJson()
     std::ifstream file(this->corePath.toStdString());
     if (file.good())
     {
-        int response;
         QMessageBox message;
         message.setIcon(QMessageBox::Warning);
         message.setText("There is a backup file in your directory.");
         message.setInformativeText("Do you want to restore previous settings");
         message.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 
-        response = message.exec();
+        int response = message.exec();
 
         switch(response)
         {
@@ -1033,10 +1032,22 @@ void MainWindow::slot_viewFrameReplicateBoxMenu100()
 
 void MainWindow::slot_viewFrameRemoveBoxMenu()
 {
-    vector<unsigned int> bboxKeys = this->frameScene->selectedBBox();
-    for(int index = 0; index < bboxKeys.size(); index++)
+    QMessageBox message;
+    message.setIcon(QMessageBox::Warning);
+    message.setText("Any occurence of this bounding box in the following frames is going to be removed.");
+    message.setInformativeText("Are you sure you want to continue?");
+    message.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+
+    int response = message.exec();
+
+    switch(response)
     {
-        this->slot_removeBoundingBoxFromCore(bboxKeys[index]);
+    case QMessageBox::Yes:
+        vector<unsigned int> bboxKeys = this->frameScene->selectedBBox();
+        for(int index = 0; index < bboxKeys.size(); index++)
+        {
+            this->slot_removeBoundingBoxFromCore(bboxKeys[index]);
+        }
     }
 }
 
@@ -1253,8 +1264,20 @@ void MainWindow::slot_replicateBoundingBoxFromCore(const unsigned int _bboxKey, 
 
 void MainWindow::slot_removeBoundingBoxFromCore(const unsigned int _bboxKey)
 {
-    unsigned int nextFrameId = static_cast<unsigned int>(this->manager->getFrameId());
-    this->singleton->frames[nextFrameId - 1].remBox(_bboxKey);
-    this->updateFrame(nextFrameId - 1);
+    bool isErased = false;
+    unsigned int currentFrameId = static_cast<unsigned int>(this->manager->getFrameId()) - 1;
+
+    BoundingBox bbox = this->singleton->frames[currentFrameId].getBox(_bboxKey);
+    for(unsigned int frameIndex = (currentFrameId); frameIndex < this->singleton->frames.size(); frameIndex++)
+    {
+        isErased = this->singleton->frames[frameIndex].removeBoxById(bbox.getId());
+
+        if(!isErased)
+        {
+            break;
+        }
+    }
+
+    this->updateFrame(currentFrameId);
 }
 
