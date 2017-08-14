@@ -1014,11 +1014,21 @@ void MainWindow::slot_viewFrameNewFrameMenu()
 void MainWindow::slot_viewFrameReplicateBoxMenu10()
 {
     qDebug() << "Repeat for " << 10 << " frames";
+    vector<unsigned int> bboxKeys = this->frameScene->selectedBBox();
+    for(int index = 0; index < bboxKeys.size(); index++)
+    {
+        this->slot_replicateBoundingBoxFromCore(bboxKeys[index], 10);
+    }
 }
 
 void MainWindow::slot_viewFrameReplicateBoxMenu100()
 {
     qDebug() << "Repeat for " << 100 << " frames";
+    vector<unsigned int> bboxKeys = this->frameScene->selectedBBox();
+    for(int index = 0; index < bboxKeys.size(); index++)
+    {
+        this->slot_replicateBoundingBoxFromCore(bboxKeys[index], 100);
+    }
 }
 
 void MainWindow::slot_viewFrameRemoveBoxMenu()
@@ -1225,6 +1235,20 @@ void MainWindow::slot_moveBoundingBoxInCore(const unsigned int _bboxKey, const R
 {
     unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
     this->singleton->frames[nextFrameId - 1].setBox(_bboxKey, _box);
+}
+
+void MainWindow::slot_replicateBoundingBoxFromCore(const unsigned int _bboxKey, const unsigned int _numFrames)
+{
+    unsigned int nextFrameId = static_cast<unsigned int>(this->manager->getFrameId());
+    unsigned int frameLimit = std::min(nextFrameId + _numFrames, static_cast<unsigned int>(this->singleton->frames.size()));
+
+    BoundingBox bbox = this->singleton->frames[nextFrameId - 1].getBox(_bboxKey);
+    for(unsigned int frameIndex = nextFrameId; frameIndex < frameLimit; frameIndex++)
+    {
+        this->singleton->frames[frameIndex].addBox(bbox);
+    }
+
+    this->updateFrame(frameLimit - 1);
 }
 
 void MainWindow::slot_removeBoundingBoxFromCore(const unsigned int _bboxKey)
