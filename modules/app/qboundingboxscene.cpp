@@ -224,12 +224,6 @@ void QBoundingBoxScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    //qDebug() << event->pos().toPoint();
-    qDebug() << event->scenePos().toPoint();
-    //qDebug() << event->screenPos();
-
-    qDebug() << this->sceneRect();
-
     if((this->drawEnabled) && (this->itemToDraw != NULL))
     {
         this->drawEnabled = false;
@@ -244,7 +238,6 @@ void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         if (this->selectedItems().size() == 1)
         {
             QBoundingBoxRectangle *bbox = static_cast<QBoundingBoxRectangle*>(this->selectedItems().first());
-            qDebug() << bbox->sceneBoundingRect() << bbox->boundingRect() << bbox->rect();
 
             this->box.x = static_cast<int>(bbox->sceneBoundingRect().x());
             this->box.y = static_cast<int>(bbox->sceneBoundingRect().y());
