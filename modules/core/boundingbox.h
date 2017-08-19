@@ -80,10 +80,17 @@ public:
                 const int &_h);
 
     ///
-    /// \param _id  An identifier for the bounding-box
+    /// \param _id An identifier for the bounding-box
+    /// \param _key A frame-inner identifer for the bounding-box
     /// \param _box A struct holding X,Y,W and H values
     ///
-    BoundingBox(const unsigned int &_id, const Rect &_box);
+    BoundingBox(const unsigned int &_id, const unsigned int &_key, const Rect &_coordinates);
+
+    ///
+    /// \param _key A frame-inner identifer for the bounding-box
+    /// \param _box A struct holding X,Y,W and H values
+    ///
+    BoundingBox(const unsigned int &_key, const Rect &_coordinates);
 
     ///
     /// \brief BoundingBox BoundingBox copy constructor

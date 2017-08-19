@@ -61,33 +61,33 @@ unsigned int Frame::addBox(const Rect &_box)
     return 0;
 }
 
-bool Frame::removeBoxById(const unsigned int &_id)
+unsigned int Frame::addBox(const unsigned int _id, const BoundingBox &_box)
 {
-    bool isErased = false;
-
-    map<unsigned int, BoundingBox>::iterator it;
-    for(it = this->boxes.begin(); it != this->boxes.end(); it++)
+    unsigned int key = this->getLargestKey() + 1;
+    if(this->boxes.find(key) == this->boxes.end())
     {
-        if(it->second.getId() == _id)
-        {
-            this->boxes.erase(it);
-            isErased = true;
-            break;
-        }
+        BoundingBox bbox(_box);
+        bbox.setId(_id);
+        bbox.setKey(key);
+
+        this->boxes.insert(pair<unsigned int, BoundingBox>(key, bbox));
+        return key;
     }
 
-    return isErased;
+    return 0;
 }
 
-bool Frame::removeBoxByKey(const unsigned int &_key)
+unsigned int Frame::addBox(const unsigned int _id, const Rect &_box)
 {
-    if(this->boxes.find(_key) != this->boxes.end())
+    unsigned int key = this->getLargestKey() + 1;
+    if(this->boxes.find(key) == this->boxes.end())
     {
-        this->boxes.erase(_key);
-        return true;
+        BoundingBox bbox(_id, key, _box);
+        this->boxes.insert(pair<unsigned int, BoundingBox>(key, bbox));
+        return key;
     }
 
-    return false;
+    return 0;
 }
 
 unsigned int Frame::getLargestKey()
@@ -131,10 +131,35 @@ void Frame::setBox(const unsigned int _key, const Rect &_box)
 void Frame::setBox(const unsigned int _key, const BoundingBox &_bbox)
 {
     this->boxes.at(_key) = _bbox;
-//    this->boxes.at(_key).setX(_bbox.getX());
-//    this->boxes.at(_key).setY(_bbox.getY());
-//    this->boxes.at(_key).setW(_bbox.getW());
-//    this->boxes.at(_key).setH(_bbox.getH());
+}
+
+bool Frame::removeBoxById(const unsigned int &_id)
+{
+    bool isErased = false;
+
+    map<unsigned int, BoundingBox>::iterator it;
+    for(it = this->boxes.begin(); it != this->boxes.end(); it++)
+    {
+        if(it->second.getId() == _id)
+        {
+            this->boxes.erase(it);
+            isErased = true;
+            break;
+        }
+    }
+
+    return isErased;
+}
+
+bool Frame::removeBoxByKey(const unsigned int &_key)
+{
+    if(this->boxes.find(_key) != this->boxes.end())
+    {
+        this->boxes.erase(_key);
+        return true;
+    }
+
+    return false;
 }
 
 void Frame::operator=(const Frame &_frame)

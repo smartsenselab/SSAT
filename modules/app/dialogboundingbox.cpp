@@ -72,7 +72,7 @@ void DialogBoundingBox::initializeComboboxes()
     BoundingBox bbox = this->singleton->frames[this->frameId].getBox(this->bboxKey);
 
     this->ui->spinBoxId->setMinimum(1);
-    this->ui->spinBoxId->setMaximum(1000);
+    this->ui->spinBoxId->setMaximum(100000);
 
     // populate combobox and spinbox
     if(bbox.getId() > 0)

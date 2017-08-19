@@ -76,17 +76,17 @@ string Core::getLatestLabel()
     return this->latestLabel;
 }
 
+unsigned int Core::getLatestKey()
+{
+    return this->latestKey;
+}
+
 unsigned int Core::getLatestId()
 {
     return this->latestId;
 }
 
-unsigned int Core::getLatestAddedKey()
-{
-    return this->latestAddedKey;
-}
-
-unsigned int Core::getLargestTracklet()
+unsigned int Core::getLargestId()
 {
     if(this->tracklets.size() == 0)
     {
@@ -106,14 +106,25 @@ void Core::setLatestLabel(string _label)
     this->latestLabel = _label;
 }
 
+void Core::setLatestKey(unsigned int _key)
+{
+    this->latestKey = _key;
+}
+
 void Core::setLatestId(unsigned int _id)
 {
     this->latestId = _id;
 }
 
-void Core::setLatestAddedKey(unsigned int _key)
+bool Core::setLargestId(unsigned int _id)
 {
-    this->latestAddedKey = _key;
+    if(this->tracklets.find(_id) == this->tracklets.end())
+    {
+        this->tracklets.insert(_id);
+        return true;
+    }
+
+    return false;
 }
 
 void Core::updateFrameId()

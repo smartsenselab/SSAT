@@ -56,6 +56,13 @@ BoundingBox::BoundingBox(const unsigned int &_id,
     this->setH(_h);
 }
 
+BoundingBox::BoundingBox(const unsigned int &_id, const unsigned int &_key, const Rect &_coordinates)
+{
+    this->setId(_id);
+    this->setKey(_key);
+    this->coordinates = _coordinates;
+}
+
 BoundingBox::BoundingBox(const unsigned int &_key, const Rect &_coordinates)
 {
     this->setKey(_key);

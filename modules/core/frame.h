@@ -35,8 +35,8 @@ public:
 
     unsigned int addBox(const BoundingBox &_box);
     unsigned int addBox(const Rect &_box);
-    bool removeBoxById(const unsigned int &_id);
-    bool removeBoxByKey(const unsigned int &_key);
+    unsigned int addBox(const unsigned int _id, const BoundingBox &_box);
+    unsigned int addBox(const unsigned int _id, const Rect &_box);
     unsigned int getLargestKey();
 
     BoundingBox getBox(const unsigned int _key) const;
@@ -45,6 +45,9 @@ public:
     void setBox(const map<unsigned int, BoundingBox> &_boxes);
     void setBox(const unsigned int _key, const Rect &_box);
     void setBox(const unsigned int _key, const BoundingBox &_bbox);
+
+    bool removeBoxById(const unsigned int &_id);
+    bool removeBoxByKey(const unsigned int &_key);
 
     void operator=(const Frame &_frame);
 

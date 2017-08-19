@@ -766,11 +766,11 @@ void MainWindow::slot_openAttributesDialog()
 
 void MainWindow::slot_openBoundingBoxDialog(const unsigned int _bboxKey)
 {
-    unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
+    unsigned long currentFrameId = static_cast<unsigned long>(this->manager->getFrameId() - 1);
 
     this->boundingBoxDialog = new DialogBoundingBox(this);
     this->boundingBoxDialog->setModal(true);
-    this->boundingBoxDialog->slot_initializeDialog(*(this->singleton), nextFrameId - 1, _bboxKey);
+    this->boundingBoxDialog->slot_initializeDialog(*(this->singleton), currentFrameId, _bboxKey);
     this->boundingBoxDialog->show();
 }
 
@@ -1229,10 +1229,16 @@ void MainWindow::slot_comboBoxCategoryActivated(const QString &_text)
 
 unsigned int MainWindow::slot_addBoundingBoxToCore(const Rect _box)
 {
-    unsigned int nextFrameId = static_cast<unsigned int>(this->manager->getFrameId());
-    unsigned int latestKey = this->singleton->frames[nextFrameId - 1].addBox(_box);
-    this->updateFrame(nextFrameId - 1);
-    this->singleton->setLatestAddedKey(latestKey);
+    unsigned int currentFrameId = static_cast<unsigned int>(this->manager->getFrameId() - 1);
+    unsigned int largestId = this->singleton->getLargestId() + 1;
+
+    unsigned int latestKey = this->singleton->frames[currentFrameId].addBox(largestId, _box);
+
+    this->singleton->setLatestKey(latestKey);
+    this->singleton->setLatestId(largestId);
+    this->singleton->setLargestId(largestId);
+
+    this->updateFrame(currentFrameId);
 
     return latestKey;
 }

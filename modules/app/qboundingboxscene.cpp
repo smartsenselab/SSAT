@@ -231,7 +231,7 @@ void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsMovable, true);
 
         emit this->signal_addBoundingBoxToCore(this->box);
-        this->signal_openBoundingBoxDialog(this->singleton->getLatestAddedKey());
+        this->signal_openBoundingBoxDialog(this->singleton->getLatestKey());
     }
     else
     {
