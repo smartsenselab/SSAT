@@ -115,6 +115,24 @@ map<unsigned int, BoundingBox> Frame::getBoxes() const
     return this->boxes;
 }
 
+map<unsigned int, unsigned int> Frame::countIdOccurence() const
+{
+    map<unsigned int, unsigned int> idCounter;
+    map<unsigned int, BoundingBox>::iterator it;
+    map<unsigned int, BoundingBox> tempBox = this->getBoxes();
+
+    for(it = tempBox.begin(); it != tempBox.end(); it++)
+    {
+        idCounter.insert(pair<unsigned int, unsigned int>(it->second.getId(), 0));
+    }
+    for(it = tempBox.begin(); it != tempBox.end(); it++)
+    {
+        idCounter[it->second.getId()]++;
+    }
+
+    return idCounter;
+}
+
 void Frame::setBox(const map<unsigned int, BoundingBox> &_boxes)
 {
     this->boxes = _boxes;

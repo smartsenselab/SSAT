@@ -273,6 +273,7 @@ void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 void QBoundingBoxScene::slot_drawFrameBboxes(const Frame &_frame)
 {
+    map<unsigned int, unsigned int> idCounter = _frame.countIdOccurence();
     map<unsigned int, BoundingBox> bboxes = _frame.getBoxes();
     map<unsigned int, BoundingBox>::iterator it;
 
@@ -282,8 +283,16 @@ void QBoundingBoxScene::slot_drawFrameBboxes(const Frame &_frame)
         int key = it->second.getKey();
 
         this->itemToDraw = new QBoundingBoxRectangle(id, key);
-        this->itemToDraw->setPen(QPen(Qt::yellow, 0, Qt::SolidLine));
-        this->itemToDraw->setBrush(QBrush(QColor(255, 255, 0, 50)));
+        if(idCounter[id] == 1)
+        {
+            this->itemToDraw->setPen(QPen(Qt::black, 0, Qt::SolidLine));
+            this->itemToDraw->setBrush(QBrush(QColor(255, 255, 0, 50)));
+        }
+        else
+        {
+            this->itemToDraw->setPen(QPen(Qt::black, 0, Qt::SolidLine));
+            this->itemToDraw->setBrush(QBrush(QColor(255, 0, 0, 50)));
+        }
         this->itemToDraw->setRect(it->second.getX(),
                                   it->second.getY(),
                                   it->second.getW(),

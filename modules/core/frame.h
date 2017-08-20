@@ -41,6 +41,7 @@ public:
 
     BoundingBox getBox(const unsigned int _key) const;
     map<unsigned int, BoundingBox> getBoxes() const;
+    map<unsigned int, unsigned int> countIdOccurence() const;
 
     void setBox(const map<unsigned int, BoundingBox> &_boxes);
     void setBox(const unsigned int _key, const Rect &_box);
