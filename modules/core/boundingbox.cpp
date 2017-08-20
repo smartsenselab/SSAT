@@ -126,6 +126,14 @@ void BoundingBox::setH(const int _h)
     }
 }
 
+void BoundingBox::setCoordinates(const int _x, const int _y, const int _w, const int _h)
+{
+    this->setX(_x);
+    this->setY(_y);
+    this->setW(_w);
+    this->setH(_h);
+}
+
 void BoundingBox::operator=(const BoundingBox &_box)
 {
     this->id = _box.id;

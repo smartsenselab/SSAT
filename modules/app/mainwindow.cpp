@@ -1250,8 +1250,12 @@ void MainWindow::slot_editBoundingBoxInCore(const BoundingBox _bbox)
 
 void MainWindow::slot_moveBoundingBoxInCore(const unsigned int _bboxKey, const Rect _box)
 {
-    unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
-    this->singleton->frames[nextFrameId - 1].setBox(_bboxKey, _box);
+    unsigned long currentFrameId = static_cast<unsigned long>(this->manager->getFrameId() - 1);
+    this->singleton->frames[currentFrameId].setBox(_bboxKey, _box);
+
+    BoundingBox focusBox = this->singleton->frames[currentFrameId].getBox(_bboxKey);
+    std::cout << "this->singleton->exponentialForget(focusBox, currentFrameId);" << std::endl;
+    this->singleton->exponentialForget(focusBox, currentFrameId);
 }
 
 void MainWindow::slot_replicateBoundingBoxFromCore(const unsigned int _bboxKey, const unsigned int _numFrames)

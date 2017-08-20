@@ -143,6 +143,15 @@ public:
     void setH(const int _h);
 
     ///
+    /// \brief setCoordinates
+    /// \param _x New value of x
+    /// \param _y New value of y
+    /// \param _w New value of w
+    /// \param _h New value of h
+    ///
+    void setCoordinates(const int _x, const int _y, const int _w, const int _h);
+
+    ///
     /// \brief operator = Update boundingbox values(attributes, cordinates, comments, id, name)
     /// \param _box Updated BoudingBox values
     ///

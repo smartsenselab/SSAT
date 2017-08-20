@@ -13,6 +13,7 @@ using std::vector;
 using cv::Rect;
 using cv::VideoCapture;
 
+#include "boundingbox.h"
 #include "frame.h"
 #include "framebaseddata.h"
 #include "threadpool.h"
@@ -62,6 +63,9 @@ public:
     void setLatestId(unsigned int _id);
     bool setLargestId(unsigned int _id);
 
+    void exponentialForget(const BoundingBox _focusBox,
+                           const unsigned int _frameId,
+                           const unsigned int _numFrames = 10);
     void updateFrameId();
 };
 
