@@ -124,13 +124,20 @@ public:
     void alterFrameBasedSegment(Core &_singleton, const FrameBasedData &_data, const int _index);
 
     ///
-    /// \brief exponentialForget
+    /// \brief exponentialForget Smoothes a BBox throughtout following whenever the user moves or resizes it
     /// \param _singleton Core that contains all the annotation information
     /// \param _focusBox BBox that must be replicated in the following frames
     /// \param _frameId Frame corresponding to the focused bounding box
     /// \param _numFrames Number of frames that muste include the transformation
     ///
     void exponentialForget(Core &_singleton, const BoundingBox _focusBox, const unsigned int _frameId, const unsigned int _numFrames = 25);
+
+    ///
+    /// \brief removeBoxSequenceFromCore
+    /// \param _singleton Core that contains all the annotation information
+    /// \param _bboxKey key indicating the correct bounding box
+    ///
+    void removeBoxSequenceFromCore(Core &_singleton, const unsigned int _bboxKey);
 
 signals:
     ///

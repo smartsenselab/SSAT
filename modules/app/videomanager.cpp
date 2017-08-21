@@ -97,3 +97,8 @@ void VideoManager::exponentialForget(Core &_singleton, const BoundingBox _focusB
 {
     this->worker->exponentialForget(_singleton, _focusBox, _frameId, _numFrames);
 }
+
+void VideoManager::removeBoxSequenceFromCore(Core &_singleton, const unsigned int _bboxKey)
+{
+    this->worker->removeBoxSequenceFromCore(_singleton, _bboxKey);
+}

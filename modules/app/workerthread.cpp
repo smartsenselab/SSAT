@@ -371,3 +371,20 @@ void WorkerThread::exponentialForget(Core &_singleton, const BoundingBox _focusB
     }
 }
 
+void WorkerThread::removeBoxSequenceFromCore(Core &_singleton, const unsigned int _bboxKey)
+{
+    bool isErased = false;
+    unsigned int currentFrameId = static_cast<unsigned int>(this->getFrameId()) - 1;
+
+    BoundingBox bbox = _singleton.frames[currentFrameId].getBox(_bboxKey);
+    for(unsigned int frameIndex = (currentFrameId); frameIndex < _singleton.frames.size(); frameIndex++)
+    {
+        isErased = _singleton.frames[frameIndex].removeBoxById(bbox.getId());
+
+        if(!isErased)
+        {
+            break;
+        }
+    }
+}
+

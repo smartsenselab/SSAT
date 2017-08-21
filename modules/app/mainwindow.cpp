@@ -1273,20 +1273,8 @@ void MainWindow::slot_replicateBoundingBoxFromCore(const unsigned int _bboxKey, 
 
 void MainWindow::slot_removeBoundingBoxFromCore(const unsigned int _bboxKey)
 {
-    bool isErased = false;
     unsigned int currentFrameId = static_cast<unsigned int>(this->manager->getFrameId()) - 1;
-
-    BoundingBox bbox = this->singleton->frames[currentFrameId].getBox(_bboxKey);
-    for(unsigned int frameIndex = (currentFrameId); frameIndex < this->singleton->frames.size(); frameIndex++)
-    {
-        isErased = this->singleton->frames[frameIndex].removeBoxById(bbox.getId());
-
-        if(!isErased)
-        {
-            break;
-        }
-    }
-
+    this->manager->removeBoxSequenceFromCore(*(this->singleton), _bboxKey);
     this->updateFrame(currentFrameId);
 }
 
