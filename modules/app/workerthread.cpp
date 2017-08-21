@@ -347,8 +347,6 @@ void WorkerThread::alterFrameBasedSegment(Core &_singleton, const FrameBasedData
 
 void WorkerThread::exponentialForget(Core &_singleton, const BoundingBox _focusBox, const unsigned int _frameId, const unsigned int _numFrames)
 {
-    std::cout << "Exponential Forget running: ";
-
     double holder = 1.0;
     double step = 1.0 / _numFrames;
     int newX, newY, newW, newH;
@@ -369,24 +367,7 @@ void WorkerThread::exponentialForget(Core &_singleton, const BoundingBox _focusB
             holder -= step;
         }
         else break;
-
-//        map<unsigned int, BoundingBox> currentBoxes = _singleton.frames[frameIndex].getBoxes();
-//        map<unsigned int, BoundingBox>::iterator it = currentBoxes.find(_focusBox.getId());
-//        std::cout << _focusBox.getId() << ":";
-//        if(it != currentBoxes.end())
-//        {
-//            std::cout << frameIndex << " ";
-//            newX = (holder * _focusBox.getX()) + ((1 - holder) * it->second.getX());
-//            newY = (holder * _focusBox.getY()) + ((1 - holder) * it->second.getY());
-//            newW = (holder * _focusBox.getW()) + ((1 - holder) * it->second.getW());
-//            newH = (holder * _focusBox.getH()) + ((1 - holder) * it->second.getH());
-
-//            _singleton.frames[frameIndex].setBox(it->second.getKey(), newX, newY, newW, newH);
-//            holder -= step;
-//        }
-//        else break;
     }
-    std::cout << std::endl;
 }
 
 void WorkerThread::replicateBoundingBoxFromCore(Core &_singleton, const unsigned int _bboxKey, const unsigned int _numFrames)
