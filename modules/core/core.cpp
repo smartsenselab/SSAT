@@ -124,16 +124,10 @@ void Core::exponentialForget(const BoundingBox _focusBox, const unsigned int _fr
             newW = (holder * _focusBox.getW()) + ((1 - holder) * it->second.getW());
             newH = (holder * _focusBox.getH()) + ((1 - holder) * it->second.getH());
 
-            std::cout << newX << ":"<< newY << ":" << newW << ":"<< newH << std::endl;
-
             this->frames[frameIndex].setBox(it->second.getKey(), newX, newY, newW, newH);
-//            it->second.setCoordinates(newX, newY, newW, newH);
             holder -= step;
         }
-        else
-        {
-            break;
-        }
+        else break;
     }
 }
 
