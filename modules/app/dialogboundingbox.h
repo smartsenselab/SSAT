@@ -65,6 +65,11 @@ public slots:
     void slot_comboBoxCategoryActivated(const QString &_text);
 
     ///
+    /// \brief slot_spinBoxIdChanged Changing bounding bod id check
+    ///
+    void slot_spinBoxIdChanged(int _value);
+
+    ///
     /// \brief slot_buttonBoxAccepted Insert or Change bounding box succeed
     ///
     void slot_buttonBoxAccepted();
