@@ -345,3 +345,57 @@ void WorkerThread::alterFrameBasedSegment(Core &_singleton, const FrameBasedData
     _singleton.frameData[static_cast<unsigned long>(_index)] = _data;
 }
 
+void WorkerThread::exponentialForget(Core &_singleton, const BoundingBox _focusBox, const unsigned int _frameId, const unsigned int _numFrames)
+{
+    double holder = 1.0;
+    double step = 1.0 / _numFrames;
+    int newX, newY, newW, newH;
+
+    for(unsigned int frameIndex = _frameId;
+        (frameIndex < _singleton.frames.size()) && (frameIndex <= _frameId + _numFrames);
+        frameIndex++)
+    {
+        BoundingBox bbox = _singleton.frames[frameIndex].getBoxById(_focusBox.getId());
+        if ((bbox.getW() > 0) && (bbox.getH() > 0))
+        {
+            newX = (holder * _focusBox.getX()) + ((1 - holder) * bbox.getX());
+            newY = (holder * _focusBox.getY()) + ((1 - holder) * bbox.getY());
+            newW = (holder * _focusBox.getW()) + ((1 - holder) * bbox.getW());
+            newH = (holder * _focusBox.getH()) + ((1 - holder) * bbox.getH());
+
+            _singleton.frames[frameIndex].setBox(bbox.getKey(), newX, newY, newW, newH);
+            holder -= step;
+        }
+        else break;
+    }
+}
+
+void WorkerThread::replicateBoundingBoxFromCore(Core &_singleton, const unsigned int _bboxKey, const unsigned int _numFrames)
+{
+    unsigned int nextFrameId = static_cast<unsigned int>(this->getFrameId());
+    unsigned int frameLimit = std::min(nextFrameId + _numFrames, static_cast<unsigned int>(_singleton.frames.size()));
+
+    BoundingBox bbox = _singleton.frames[nextFrameId - 1].getBoxByKey(_bboxKey);
+    for(unsigned int frameIndex = nextFrameId; frameIndex < frameLimit; frameIndex++)
+    {
+        _singleton.frames[frameIndex].addBox(bbox);
+    }
+}
+
+void WorkerThread::removeBoxSequenceFromCore(Core &_singleton, const unsigned int _bboxKey)
+{
+    bool isErased = false;
+    unsigned int currentFrameId = static_cast<unsigned int>(this->getFrameId()) - 1;
+
+    BoundingBox bbox = _singleton.frames[currentFrameId].getBoxByKey(_bboxKey);
+    for(unsigned int frameIndex = (currentFrameId); frameIndex < _singleton.frames.size(); frameIndex++)
+    {
+        isErased = _singleton.frames[frameIndex].removeBoxById(bbox.getId());
+
+        if(!isErased)
+        {
+            break;
+        }
+    }
+}
+

@@ -192,15 +192,15 @@ void QBoundingBoxRectangle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     this->pointYb = bbox.y() + bbox.height();
     this->resizeMode = 0;
 
-        qDebug() << event->pos().toPoint();
-        qDebug() << event->scenePos().toPoint();
-        qDebug() << event->screenPos();
+//    qDebug() << event->pos().toPoint();
+//    qDebug() << event->scenePos().toPoint();
+//    qDebug() << event->screenPos();
 
-        qDebug() << this->pos().toPoint();
-        qDebug() << this->x() << ":" << this->y();
+//    qDebug() << this->pos().toPoint();
+//    qDebug() << this->x() << ":" << this->y();
 
-        qDebug() << this->rect();
-        qDebug() << this->boundingRect();
-        qDebug() << this->sceneBoundingRect();
+//    qDebug() << this->rect();
+//    qDebug() << this->boundingRect();
+//    qDebug() << this->sceneBoundingRect();
 }
 

@@ -13,6 +13,7 @@ using std::vector;
 using cv::Rect;
 using cv::VideoCapture;
 
+#include "boundingbox.h"
 #include "frame.h"
 #include "framebaseddata.h"
 #include "threadpool.h"
@@ -27,7 +28,7 @@ private:
     string latestCategory;
     string latestLabel;
     unsigned int latestId;
-    unsigned int latestAddedKey;
+    unsigned int latestKey;
 
 public:
     ThreadPool *pool;
@@ -52,14 +53,15 @@ public:
 
     string getLatestCategory();
     string getLatestLabel();
+    unsigned int getLatestKey();
     unsigned int getLatestId();
-    unsigned int getLatestAddedKey();
-    unsigned int getLargestTracklet();
+    unsigned int getLargestId();
 
     void setLatestCategory(string _category);
     void setLatestLabel(string _label);
+    void setLatestKey(unsigned int _key);
     void setLatestId(unsigned int _id);
-    void setLatestAddedKey(unsigned int _key);
+    bool setLargestId(unsigned int _id);
 
     void updateFrameId();
 };

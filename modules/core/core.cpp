@@ -4,28 +4,6 @@ Core::Core(unsigned int _frames, unsigned int _cores)
 {
     this->frames.resize(_frames);
     this->pool = new ThreadPool(_cores);
-
-//    this->attributes.insert(std::pair<string, string>("Object_recognition", "Table"));
-//    this->attributes.insert(std::pair<string, string>("Object_recognition", "Tennis"));
-//    this->attributes.insert(std::pair<string, string>("Object_recognition", "Desk"));
-//    this->attributes.insert(std::pair<string, string>("Object_recognition", "Television"));
-
-//    this->attributes.insert(std::pair<string, string>("Person_identification", "Breno"));
-//    this->attributes.insert(std::pair<string, string>("Person_identification", "Danilo"));
-//    this->attributes.insert(std::pair<string, string>("Person_identification", "Davi"));
-//    this->attributes.insert(std::pair<string, string>("Person_identification", "Rafael"));
-
-
-//    std::multimap<string,string>::iterator it;
-//    for(it = this->attributes.begin(); it != this->attributes.end(); it++)
-//    {
-//        for(int index = 0; index < 10; index++)
-//        {
-//            string sIndex = std::to_string(index);
-//            FrameBasedData temp = FrameBasedData(index, index * 4, it->first, it->second, it->second + " " + sIndex);
-//            this->frameData.push_back(temp);
-//        }
-//    }
 }
 
 Core::~Core()
@@ -76,17 +54,17 @@ string Core::getLatestLabel()
     return this->latestLabel;
 }
 
+unsigned int Core::getLatestKey()
+{
+    return this->latestKey;
+}
+
 unsigned int Core::getLatestId()
 {
     return this->latestId;
 }
 
-unsigned int Core::getLatestAddedKey()
-{
-    return this->latestAddedKey;
-}
-
-unsigned int Core::getLargestTracklet()
+unsigned int Core::getLargestId()
 {
     if(this->tracklets.size() == 0)
     {
@@ -106,14 +84,25 @@ void Core::setLatestLabel(string _label)
     this->latestLabel = _label;
 }
 
+void Core::setLatestKey(unsigned int _key)
+{
+    this->latestKey = _key;
+}
+
 void Core::setLatestId(unsigned int _id)
 {
     this->latestId = _id;
 }
 
-void Core::setLatestAddedKey(unsigned int _key)
+bool Core::setLargestId(unsigned int _id)
 {
-    this->latestAddedKey = _key;
+    if(this->tracklets.find(_id) == this->tracklets.end())
+    {
+        this->tracklets.insert(_id);
+        return true;
+    }
+
+    return false;
 }
 
 void Core::updateFrameId()

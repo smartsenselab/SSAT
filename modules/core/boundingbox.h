@@ -80,10 +80,17 @@ public:
                 const int &_h);
 
     ///
-    /// \param _id  An identifier for the bounding-box
+    /// \param _id An identifier for the bounding-box
+    /// \param _key A frame-inner identifer for the bounding-box
     /// \param _box A struct holding X,Y,W and H values
     ///
-    BoundingBox(const unsigned int &_id, const Rect &_box);
+    BoundingBox(const unsigned int &_id, const unsigned int &_key, const Rect &_coordinates);
+
+    ///
+    /// \param _key A frame-inner identifer for the bounding-box
+    /// \param _box A struct holding X,Y,W and H values
+    ///
+    BoundingBox(const unsigned int &_key, const Rect &_coordinates);
 
     ///
     /// \brief BoundingBox BoundingBox copy constructor
@@ -134,6 +141,15 @@ public:
     /// \param _h New value of heigth
     ///
     void setH(const int _h);
+
+    ///
+    /// \brief setCoordinates
+    /// \param _x New value of x
+    /// \param _y New value of y
+    /// \param _w New value of w
+    /// \param _h New value of h
+    ///
+    void setCoordinates(const int _x, const int _y, const int _w, const int _h);
 
     ///
     /// \brief operator = Update boundingbox values(attributes, cordinates, comments, id, name)

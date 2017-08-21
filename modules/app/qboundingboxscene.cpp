@@ -231,7 +231,7 @@ void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         this->itemToDraw->setFlag(QGraphicsItem::ItemIsMovable, true);
 
         emit this->signal_addBoundingBoxToCore(this->box);
-        this->signal_openBoundingBoxDialog(this->singleton->getLatestAddedKey());
+        this->signal_openBoundingBoxDialog(this->singleton->getLatestKey());
     }
     else
     {
@@ -258,13 +258,6 @@ void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 //                     << ":" << bbox->sceneBoundingRect().width()
 //                     << ":" << bbox->sceneBoundingRect().height();
         }
-        else if (this->selectedItems().size() > 1)
-        {
-            foreach(QGraphicsItem *item, this->selectedItems())
-            {
-                QBoundingBoxRectangle *conv = static_cast<QBoundingBoxRectangle*>(item);
-            }
-        }
     }
 
     QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
@@ -273,6 +266,7 @@ void QBoundingBoxScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 void QBoundingBoxScene::slot_drawFrameBboxes(const Frame &_frame)
 {
+    map<unsigned int, unsigned int> idCounter = _frame.countIdOccurence();
     map<unsigned int, BoundingBox> bboxes = _frame.getBoxes();
     map<unsigned int, BoundingBox>::iterator it;
 
@@ -282,12 +276,25 @@ void QBoundingBoxScene::slot_drawFrameBboxes(const Frame &_frame)
         int key = it->second.getKey();
 
         this->itemToDraw = new QBoundingBoxRectangle(id, key);
-        this->itemToDraw->setPen(QPen(Qt::yellow, 0, Qt::SolidLine));
-        this->itemToDraw->setBrush(QBrush(QColor(255, 255, 0, 50)));
-        this->itemToDraw->setRect(it->second.getX(),
-                                  it->second.getY(),
-                                  it->second.getW(),
-                                  it->second.getH());
+        // Paint with different colors when frame has conflicting bbox ids
+        if(idCounter[id] == 1)
+        {
+            this->itemToDraw->setPen(QPen(Qt::black, 0, Qt::SolidLine));
+            this->itemToDraw->setBrush(QBrush(QColor(255, 255, 0, 50)));
+            this->itemToDraw->setRect(it->second.getX(),
+                                      it->second.getY(),
+                                      it->second.getW(),
+                                      it->second.getH());
+        }
+        else
+        {
+            this->itemToDraw->setPen(QPen(Qt::black, 0, Qt::SolidLine));
+            this->itemToDraw->setBrush(QBrush(QColor(255, 0, 0, 50)));
+            this->itemToDraw->setRect(it->second.getX(),
+                                      it->second.getY(),
+                                      it->second.getW(),
+                                      it->second.getH());
+        }
 
         // Going beyond HORIZONTAL limit
         if(it->second.getX() + it->second.getW() > this->sceneRect().width())
