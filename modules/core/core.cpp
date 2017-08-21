@@ -105,32 +105,6 @@ bool Core::setLargestId(unsigned int _id)
     return false;
 }
 
-void Core::exponentialForget(const BoundingBox _focusBox, const unsigned int _frameId, const unsigned int _numFrames)
-{
-    double holder = 1.0;
-    double step = 1.0 / _numFrames;
-    int newX, newY, newW, newH;
-
-    for(unsigned int frameIndex = _frameId;
-        (frameIndex < this->frames.size()) && (frameIndex <= _frameId + _numFrames);
-        frameIndex++)
-    {
-        map<unsigned int, BoundingBox> currentBoxes = this->frames[frameIndex].getBoxes();
-        map<unsigned int, BoundingBox>::iterator it = currentBoxes.find(_focusBox.getId());
-        if(it != currentBoxes.end())
-        {
-            newX = (holder * _focusBox.getX()) + ((1 - holder) * it->second.getX());
-            newY = (holder * _focusBox.getY()) + ((1 - holder) * it->second.getY());
-            newW = (holder * _focusBox.getW()) + ((1 - holder) * it->second.getW());
-            newH = (holder * _focusBox.getH()) + ((1 - holder) * it->second.getH());
-
-            this->frames[frameIndex].setBox(it->second.getKey(), newX, newY, newW, newH);
-            holder -= step;
-        }
-        else break;
-    }
-}
-
 void Core::updateFrameId()
 {
     for(unsigned int index = 0; index < this->frames.size(); index++)

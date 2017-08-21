@@ -92,3 +92,8 @@ void VideoManager::alterFrameBasedSegment(Core &_singleton, const FrameBasedData
 {
     this->worker->alterFrameBasedSegment(_singleton, _data, _index);
 }
+
+void VideoManager::exponentialForget(Core &_singleton, const BoundingBox _focusBox, const unsigned int _frameId, const unsigned int _numFrames)
+{
+    this->worker->exponentialForget(_singleton, _focusBox, _frameId, _numFrames);
+}

@@ -57,6 +57,7 @@ public:
 
     void insertFrameBasedSegment(Core &_singleton, const FrameBasedData &_data);
     void alterFrameBasedSegment(Core &_singleton, const FrameBasedData &_data, const int _index);
+    void exponentialForget(Core &_singleton, const BoundingBox _focusBox, const unsigned int _frameId, const unsigned int _numFrames = 10);
 };
 
 #endif // VIDEOMANAGEMENT_H

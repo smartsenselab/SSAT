@@ -63,9 +63,6 @@ public:
     void setLatestId(unsigned int _id);
     bool setLargestId(unsigned int _id);
 
-    void exponentialForget(const BoundingBox _focusBox,
-                           const unsigned int _frameId,
-                           const unsigned int _numFrames = 10);
     void updateFrameId();
 };
 

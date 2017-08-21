@@ -88,14 +88,14 @@ public:
 
     ///
     /// \brief exportJSON Export work done to a json file
-    /// \param _singleton Singleton containing annotation info
+    /// \param _singleton Core that contains all the annotation information
     /// \param _jsonName Name of the json that will receive the info
     ///
     void exportJSON(Core &_singleton, const QString &_jsonName);
 
     ///
     /// \brief importJSON Import a file from disk
-    /// \param _singleton singleton that will receive the info
+    /// \param _singleton Core that contains all the annotation information
     /// \param _tableModel Table of mainwindow that show the data
     /// \param _jsonName name of file to be imported
     ///
@@ -110,18 +110,27 @@ public:
 
     ///
     /// \brief insertFrameBasedSegment Create a new frame based segment
-    /// \param _singleton Object to strore the new segment
+    /// \param _singleton Core that contains all the annotation information
     /// \param _data data to be inserted
     ///
     void insertFrameBasedSegment(Core &_singleton, const FrameBasedData &_data);
 
     ///
     /// \brief alterFrameBasedSegment Modify an existing frame based segment
-    /// \param _singleton Object that contains the segment to be modified
+    /// \param _singleton Core that contains all the annotation information
     /// \param _data New data
     /// \param _index Index of data to be modified
     ///
     void alterFrameBasedSegment(Core &_singleton, const FrameBasedData &_data, const int _index);
+
+    ///
+    /// \brief exponentialForget
+    /// \param _singleton Core that contains all the annotation information
+    /// \param _focusBox BBox that must be replicated in the following frames
+    /// \param _frameId Frame corresponding to the focused bounding box
+    /// \param _numFrames Number of frames that muste include the transformation
+    ///
+    void exponentialForget(Core &_singleton, const BoundingBox _focusBox, const unsigned int _frameId, const unsigned int _numFrames = 25);
 
 signals:
     ///

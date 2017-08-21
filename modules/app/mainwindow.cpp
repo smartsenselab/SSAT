@@ -1254,7 +1254,7 @@ void MainWindow::slot_moveBoundingBoxInCore(const unsigned int _bboxKey, const R
     this->singleton->frames[currentFrameId].setBox(_bboxKey, _box);
 
     BoundingBox focusBox = this->singleton->frames[currentFrameId].getBox(_bboxKey);
-    this->singleton->exponentialForget(focusBox, currentFrameId, 20);
+    this->manager->exponentialForget(*(this->singleton), focusBox, currentFrameId, 25);
 }
 
 void MainWindow::slot_replicateBoundingBoxFromCore(const unsigned int _bboxKey, const unsigned int _numFrames)
