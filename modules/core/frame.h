@@ -39,7 +39,8 @@ public:
     unsigned int addBox(const unsigned int _id, const Rect &_box);
     unsigned int getLargestKey();
 
-    BoundingBox getBox(const unsigned int _key) const;
+    BoundingBox getBoxById(const unsigned int _id) const;
+    BoundingBox getBoxByKey(const unsigned int _key) const;
     map<unsigned int, BoundingBox> getBoxes() const;
     map<unsigned int, unsigned int> countIdOccurence() const;
 

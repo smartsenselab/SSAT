@@ -57,7 +57,8 @@ public:
 
     void insertFrameBasedSegment(Core &_singleton, const FrameBasedData &_data);
     void alterFrameBasedSegment(Core &_singleton, const FrameBasedData &_data, const int _index);
-    void exponentialForget(Core &_singleton, const BoundingBox _focusBox, const unsigned int _frameId, const unsigned int _numFrames = 10);
+    void exponentialForget(Core &_singleton, const BoundingBox _focusBox, const unsigned int _frameId, const unsigned int _numFrames);
+    void replicateBoundingBoxFromCore(Core &_singleton, const unsigned int _bboxKey, const unsigned int _numFrames);
     void removeBoxSequenceFromCore(Core &_singleton, const unsigned int _bboxKey);
 };
 

@@ -347,6 +347,8 @@ void WorkerThread::alterFrameBasedSegment(Core &_singleton, const FrameBasedData
 
 void WorkerThread::exponentialForget(Core &_singleton, const BoundingBox _focusBox, const unsigned int _frameId, const unsigned int _numFrames)
 {
+    std::cout << "Exponential Forget running: ";
+
     double holder = 1.0;
     double step = 1.0 / _numFrames;
     int newX, newY, newW, newH;
@@ -355,19 +357,47 @@ void WorkerThread::exponentialForget(Core &_singleton, const BoundingBox _focusB
         (frameIndex < _singleton.frames.size()) && (frameIndex <= _frameId + _numFrames);
         frameIndex++)
     {
-        map<unsigned int, BoundingBox> currentBoxes = _singleton.frames[frameIndex].getBoxes();
-        map<unsigned int, BoundingBox>::iterator it = currentBoxes.find(_focusBox.getId());
-        if(it != currentBoxes.end())
+        BoundingBox bbox = _singleton.frames[frameIndex].getBoxById(_focusBox.getId());
+        if ((bbox.getW() > 0) && (bbox.getH() > 0))
         {
-            newX = (holder * _focusBox.getX()) + ((1 - holder) * it->second.getX());
-            newY = (holder * _focusBox.getY()) + ((1 - holder) * it->second.getY());
-            newW = (holder * _focusBox.getW()) + ((1 - holder) * it->second.getW());
-            newH = (holder * _focusBox.getH()) + ((1 - holder) * it->second.getH());
+            newX = (holder * _focusBox.getX()) + ((1 - holder) * bbox.getX());
+            newY = (holder * _focusBox.getY()) + ((1 - holder) * bbox.getY());
+            newW = (holder * _focusBox.getW()) + ((1 - holder) * bbox.getW());
+            newH = (holder * _focusBox.getH()) + ((1 - holder) * bbox.getH());
 
-            _singleton.frames[frameIndex].setBox(it->second.getKey(), newX, newY, newW, newH);
+            _singleton.frames[frameIndex].setBox(bbox.getKey(), newX, newY, newW, newH);
             holder -= step;
         }
         else break;
+
+//        map<unsigned int, BoundingBox> currentBoxes = _singleton.frames[frameIndex].getBoxes();
+//        map<unsigned int, BoundingBox>::iterator it = currentBoxes.find(_focusBox.getId());
+//        std::cout << _focusBox.getId() << ":";
+//        if(it != currentBoxes.end())
+//        {
+//            std::cout << frameIndex << " ";
+//            newX = (holder * _focusBox.getX()) + ((1 - holder) * it->second.getX());
+//            newY = (holder * _focusBox.getY()) + ((1 - holder) * it->second.getY());
+//            newW = (holder * _focusBox.getW()) + ((1 - holder) * it->second.getW());
+//            newH = (holder * _focusBox.getH()) + ((1 - holder) * it->second.getH());
+
+//            _singleton.frames[frameIndex].setBox(it->second.getKey(), newX, newY, newW, newH);
+//            holder -= step;
+//        }
+//        else break;
+    }
+    std::cout << std::endl;
+}
+
+void WorkerThread::replicateBoundingBoxFromCore(Core &_singleton, const unsigned int _bboxKey, const unsigned int _numFrames)
+{
+    unsigned int nextFrameId = static_cast<unsigned int>(this->getFrameId());
+    unsigned int frameLimit = std::min(nextFrameId + _numFrames, static_cast<unsigned int>(_singleton.frames.size()));
+
+    BoundingBox bbox = _singleton.frames[nextFrameId - 1].getBoxByKey(_bboxKey);
+    for(unsigned int frameIndex = nextFrameId; frameIndex < frameLimit; frameIndex++)
+    {
+        _singleton.frames[frameIndex].addBox(bbox);
     }
 }
 
@@ -376,7 +406,7 @@ void WorkerThread::removeBoxSequenceFromCore(Core &_singleton, const unsigned in
     bool isErased = false;
     unsigned int currentFrameId = static_cast<unsigned int>(this->getFrameId()) - 1;
 
-    BoundingBox bbox = _singleton.frames[currentFrameId].getBox(_bboxKey);
+    BoundingBox bbox = _singleton.frames[currentFrameId].getBoxByKey(_bboxKey);
     for(unsigned int frameIndex = (currentFrameId); frameIndex < _singleton.frames.size(); frameIndex++)
     {
         isErased = _singleton.frames[frameIndex].removeBoxById(bbox.getId());

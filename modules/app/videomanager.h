@@ -128,12 +128,20 @@ public:
     /// \param _singleton Core that contains all the annotation information
     /// \param _focusBox BBox that must be replicated in the following frames
     /// \param _frameId Frame corresponding to the focused bounding box
-    /// \param _numFrames Number of frames that muste include the transformation
+    /// \param _numFrames Number of frames that must include the transformation
     ///
     void exponentialForget(Core &_singleton, const BoundingBox _focusBox, const unsigned int _frameId, const unsigned int _numFrames = 25);
 
     ///
-    /// \brief removeBoxSequenceFromCore
+    /// \brief replicateBoundingBoxFromCore Replicate current bounding box in the following frames
+    /// \param _singleton Core that contains all the annotation information
+    /// \param _bboxKey key indicating the correct bounding box
+    /// \param _numFrames Number of frames that will receive the bounding box
+    ///
+    void replicateBoundingBoxFromCore(Core &_singleton, const unsigned int _bboxKey, const unsigned int _numFrames = 10);
+
+    ///
+    /// \brief removeBoxSequenceFromCore Delete a BBox from current and following frames
     /// \param _singleton Core that contains all the annotation information
     /// \param _bboxKey key indicating the correct bounding box
     ///

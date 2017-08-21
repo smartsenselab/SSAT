@@ -100,7 +100,22 @@ unsigned int Frame::getLargestKey()
     return this->boxes.rbegin()->first;
 }
 
-BoundingBox Frame::getBox(const unsigned int _key) const
+BoundingBox Frame::getBoxById(const unsigned int _id) const
+{
+    map<unsigned int, BoundingBox> bboxes = this->boxes;
+    map<unsigned int, BoundingBox>::iterator it;
+    for(it = bboxes.begin(); it != bboxes.end(); it++)
+    {
+        if(it->second.getId() == _id)
+        {
+            return it->second;
+        }
+    }
+
+    return BoundingBox();
+}
+
+BoundingBox Frame::getBoxByKey(const unsigned int _key) const
 {
     if(this->boxes.find(_key) != this->boxes.end())
     {

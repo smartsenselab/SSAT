@@ -1253,21 +1253,16 @@ void MainWindow::slot_moveBoundingBoxInCore(const unsigned int _bboxKey, const R
     unsigned long currentFrameId = static_cast<unsigned long>(this->manager->getFrameId() - 1);
     this->singleton->frames[currentFrameId].setBox(_bboxKey, _box);
 
-    BoundingBox focusBox = this->singleton->frames[currentFrameId].getBox(_bboxKey);
+    BoundingBox focusBox = this->singleton->frames[currentFrameId].getBoxByKey(_bboxKey);
     this->manager->exponentialForget(*(this->singleton), focusBox, currentFrameId, 25);
 }
 
 void MainWindow::slot_replicateBoundingBoxFromCore(const unsigned int _bboxKey, const unsigned int _numFrames)
 {
-    unsigned int nextFrameId = static_cast<unsigned int>(this->manager->getFrameId());
-    unsigned int frameLimit = std::min(nextFrameId + _numFrames, static_cast<unsigned int>(this->singleton->frames.size()));
+    unsigned int frameLimit = std::min(static_cast<unsigned int>(this->manager->getFrameId() + _numFrames),
+                                       static_cast<unsigned int>(this->singleton->frames.size()));
 
-    BoundingBox bbox = this->singleton->frames[nextFrameId - 1].getBox(_bboxKey);
-    for(unsigned int frameIndex = nextFrameId; frameIndex < frameLimit; frameIndex++)
-    {
-        this->singleton->frames[frameIndex].addBox(bbox);
-    }
-
+    this->manager->replicateBoundingBoxFromCore(*(this->singleton), _bboxKey, _numFrames);
     this->updateFrame(frameLimit - 1);
 }
 
