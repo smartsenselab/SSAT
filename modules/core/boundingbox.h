@@ -152,6 +152,12 @@ public:
     void setCoordinates(const int _x, const int _y, const int _w, const int _h);
 
     ///
+    /// \brief validCoordinates Determines whether its coordinates are valid
+    /// \return True or False
+    ///
+    bool isValid();
+
+    ///
     /// \brief operator = Update boundingbox values(attributes, cordinates, comments, id, name)
     /// \param _box Updated BoudingBox values
     ///

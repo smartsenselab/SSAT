@@ -22,6 +22,12 @@ void DialogBoundingBox::connectSignalSlots()
                   SLOT(slot_comboBoxCategoryActivated(QString))
                   );
 
+    this->connect(this->ui->spinBoxId,
+                  SIGNAL(valueChanged(int)),
+                  this,
+                  SLOT(slot_spinBoxIdChanged(int))
+                  );
+
     this->connect(this->ui->buttonBoxOKcancel,
                   SIGNAL(accepted()),
                   this,
@@ -173,6 +179,19 @@ void DialogBoundingBox::slot_comboBoxCategoryActivated(const QString &_text)
 
     this->labelModel->setStringList(labelList);
     this->ui->comboBoxLabel->setModel(this->labelModel);
+}
+
+void DialogBoundingBox::slot_spinBoxIdChanged(int _value)
+{
+    BoundingBox bbox = this->singleton->frames[this->frameId].getBoxById(_value);
+    if(bbox.isValid() && (this->bboxKey != bbox.getKey()))
+    {
+        this->ui->buttonBoxOKcancel->setEnabled(false);
+    }
+    else
+    {
+        this->ui->buttonBoxOKcancel->setEnabled(true);
+    }
 }
 
 void DialogBoundingBox::slot_buttonBoxAccepted()

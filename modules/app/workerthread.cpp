@@ -356,7 +356,7 @@ void WorkerThread::exponentialForget(Core &_singleton, const BoundingBox _focusB
         frameIndex++)
     {
         BoundingBox bbox = _singleton.frames[frameIndex].getBoxById(_focusBox.getId());
-        if ((bbox.getW() > 0) && (bbox.getH() > 0))
+        if (bbox.isValid())
         {
             newX = (holder * _focusBox.getX()) + ((1 - holder) * bbox.getX());
             newY = (holder * _focusBox.getY()) + ((1 - holder) * bbox.getY());

@@ -5,8 +5,8 @@ BoundingBox::BoundingBox() :
 {
     this->setX(-1);
     this->setY(-1);
-    this->setW(0);
-    this->setH(0);
+    this->setW(-1);
+    this->setH(-1);
 }
 
 BoundingBox::BoundingBox(const int &_x,
@@ -132,6 +132,16 @@ void BoundingBox::setCoordinates(const int _x, const int _y, const int _w, const
     this->setY(_y);
     this->setW(_w);
     this->setH(_h);
+}
+
+bool BoundingBox::isValid()
+{
+    if ((this->getX() > 0) && (this->getY() > 0) && (this->getW() > 0) && (this->getH() > 0))
+    {
+        return true;
+    }
+
+    return false;
 }
 
 void BoundingBox::operator=(const BoundingBox &_box)
