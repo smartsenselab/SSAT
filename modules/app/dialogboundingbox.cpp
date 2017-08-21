@@ -211,9 +211,9 @@ void DialogBoundingBox::slot_buttonBoxAccepted()
     this->singleton->frames[this->frameId].setBox(this->bboxKey, bbox);
 
     this->singleton->setLatestCategory(bbox.getCategory());
+    this->singleton->setLargestId(bbox.getKey());
     this->singleton->setLatestId(bbox.getId());
     this->singleton->setLatestLabel(bbox.getLabel());
-    this->singleton->tracklets.insert(bbox.getKey());
 
     this->accept();
 }

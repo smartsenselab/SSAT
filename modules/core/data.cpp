@@ -10,12 +10,22 @@ Data::Data(const unsigned int &_id)
 {
     this->setId(_id);
     this->setKey(0);
+
+    this->setCategory("");
+    this->setInfo("");
+    this->setLabel("");
+    this->setName("");
 }
 
 Data::Data(const unsigned int &_id, const unsigned int &_key)
 {
     this->setId(_id);
     this->setKey(_key);
+
+    this->setCategory("");
+    this->setInfo("");
+    this->setLabel("");
+    this->setName("");
 }
 
 
@@ -26,6 +36,7 @@ Data::Data(const string &_category,
 {
     this->setId(0);
     this->setKey(0);
+
     this->setCategory(_category);
     this->setInfo(_info);
     this->setLabel(_label);
@@ -40,6 +51,7 @@ Data::Data(const unsigned int &_id,
 {
     this->setId(_id);
     this->setKey(0);
+
     this->setCategory(_category);
     this->setInfo(_info);
     this->setLabel(_label);
@@ -55,6 +67,7 @@ Data::Data(const unsigned int &_id,
 {
     this->setId(_id);
     this->setKey(_key);
+
     this->setCategory(_category);
     this->setInfo(_info);
     this->setLabel(_label);
