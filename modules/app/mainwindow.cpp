@@ -958,6 +958,12 @@ void MainWindow::slot_keepVideoRunning()
     }
 }
 
+void MainWindow::slot_updateFrame()
+{
+    int currentFrameId = static_cast<int>(this->manager->getFrameId() - 1);
+    this->updateFrame(currentFrameId);
+}
+
 void MainWindow::slot_viewFrameContextMenu(const QPoint &_point)
 {
     QPoint position = this->ui->viewFrame->mapToGlobal(_point);

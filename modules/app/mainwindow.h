@@ -376,6 +376,12 @@ public slots:
     void slot_keepVideoRunning();
 
     ///
+    /// \brief slot_updateFrame Slot that updates the frame and time when it has changed
+    /// \param frameId          The number of the frame that will be the next frame
+    ///
+    void slot_updateFrame();
+
+    ///
     /// \brief slot_viewFrameContextMenu    A new menu appears when right mouse button is pressed
     /// \param _point
     ///
