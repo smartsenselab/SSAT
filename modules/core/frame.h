@@ -46,6 +46,7 @@ public:
     void setBox(const map<unsigned int, BoundingBox> &_boxes);
     void setBox(const unsigned int _key, const Rect &_box);
     void setBox(const unsigned int _key, const BoundingBox &_bbox);
+    void setBox(const unsigned int _key, const int _x, const int _y, const int _w, const int _h);
 
     bool removeBoxById(const unsigned int &_id);
     bool removeBoxByKey(const unsigned int &_key);

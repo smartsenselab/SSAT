@@ -112,7 +112,7 @@ void Core::exponentialForget(const BoundingBox _focusBox, const unsigned int _fr
     int newX, newY, newW, newH;
 
     for(unsigned int frameIndex = _frameId;
-        frameIndex < this->frames.size() && frameIndex <= _frameId + _numFrames;
+        (frameIndex < this->frames.size()) && (frameIndex <= _frameId + _numFrames);
         frameIndex++)
     {
         map<unsigned int, BoundingBox> currentBoxes = this->frames[frameIndex].getBoxes();
@@ -126,7 +126,8 @@ void Core::exponentialForget(const BoundingBox _focusBox, const unsigned int _fr
 
             std::cout << newX << ":"<< newY << ":" << newW << ":"<< newH << std::endl;
 
-            it->second.setCoordinates(newX, newY, newW, newH);
+            this->frames[frameIndex].setBox(it->second.getKey(), newX, newY, newW, newH);
+//            it->second.setCoordinates(newX, newY, newW, newH);
             holder -= step;
         }
         else

@@ -151,6 +151,14 @@ void Frame::setBox(const unsigned int _key, const BoundingBox &_bbox)
     this->boxes.at(_key) = _bbox;
 }
 
+void Frame::setBox(const unsigned int _key, const int _x, const int _y, const int _w, const int _h)
+{
+    this->boxes.at(_key).setX(_x);
+    this->boxes.at(_key).setY(_y);
+    this->boxes.at(_key).setW(_w);
+    this->boxes.at(_key).setH(_h);
+}
+
 bool Frame::removeBoxById(const unsigned int &_id)
 {
     bool isErased = false;
