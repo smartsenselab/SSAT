@@ -38,15 +38,10 @@ private:
     QScopedPointer<Ui::MainWindow> ui;
 
     ///
-    /// \brief crtX Shortcut for all actions
+    /// \brief crtX Shortcut for all context-menu actions
     ///
-    QAction *crta = NULL;
     QAction *crtb = NULL;
-    QAction *crte = NULL;
     QAction *crtf = NULL;
-    QAction *crti = NULL;
-    QAction *crto = NULL;
-    QAction *crtw = NULL;
 
     bool loaded;
     bool playing;
