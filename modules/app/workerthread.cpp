@@ -351,6 +351,26 @@ void WorkerThread::exponentialForget(Core &_singleton, const BoundingBox _focusB
     double step = 1.0 / _numFrames;
     int newX, newY, newW, newH;
 
+    holder = 1.0;
+    for(unsigned int frameIndex = _frameId;
+        (frameIndex > 0) && (frameIndex >= _frameId - _numFrames);
+        frameIndex--)
+    {
+        BoundingBox bbox = _singleton.frames[frameIndex].getBoxById(_focusBox.getId());
+        if (bbox.isValid())
+        {
+            newX = (holder * _focusBox.getX()) + ((1 - holder) * bbox.getX());
+            newY = (holder * _focusBox.getY()) + ((1 - holder) * bbox.getY());
+            newW = (holder * _focusBox.getW()) + ((1 - holder) * bbox.getW());
+            newH = (holder * _focusBox.getH()) + ((1 - holder) * bbox.getH());
+
+            _singleton.frames[frameIndex].setBox(bbox.getKey(), newX, newY, newW, newH);
+            holder -= step;
+        }
+        else break;
+    }
+
+    holder = 1.0;
     for(unsigned int frameIndex = _frameId;
         (frameIndex < _singleton.frames.size()) && (frameIndex <= _frameId + _numFrames);
         frameIndex++)
