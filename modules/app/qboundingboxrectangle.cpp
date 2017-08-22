@@ -42,7 +42,7 @@ void QBoundingBoxRectangle::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     if( (this->isSelected()) && (event->button() == Qt::LeftButton) )
     {
-        qreal adjust = 15.0;
+        qreal adjust = 25.0;
 
         QRectF bbox = this->boundingRect();
         this->pointXa = bbox.x();
