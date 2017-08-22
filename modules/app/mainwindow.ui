@@ -345,6 +345,9 @@
      <string>Annotation</string>
     </property>
     <addaction name="actionAttributes"/>
+    <addaction name="actionBoundingBox_Overview"/>
+    <addaction name="separator"/>
+    <addaction name="actionInterpolation"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -353,33 +356,57 @@
     <addaction name="actionBounding_box_Perspective"/>
     <addaction name="actionFrame_Perspective"/>
    </widget>
+   <widget class="QMenu" name="menuTracker">
+    <property name="title">
+     <string>Tracker</string>
+    </property>
+    <addaction name="actionANT"/>
+    <addaction name="actionCMT"/>
+    <addaction name="actionTLD"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuAnnotation"/>
+   <addaction name="menuTracker"/>
    <addaction name="menuView"/>
   </widget>
   <action name="actionOpen">
    <property name="text">
-    <string>Open                    Ctrl+O</string>
+    <string>Open</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="actionAttributes">
    <property name="text">
-    <string>Attributes          Ctrl+A</string>
+    <string>Attributes</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
    </property>
   </action>
   <action name="actionExport_JSON">
    <property name="text">
-    <string>Export JSON         Ctrl+E</string>
+    <string>Export JSON</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
    </property>
   </action>
   <action name="actionImport_JSON">
    <property name="text">
-    <string>Import JSON         Ctrl+I</string>
+    <string>Import JSON</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
    </property>
   </action>
   <action name="actionExit">
    <property name="text">
-    <string>Exit                      Ctrl+W</string>
+    <string>Quit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
    </property>
   </action>
   <action name="actionNew">
@@ -391,16 +418,80 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
-    <string>Bounding-box Perspective</string>
+    <string>BBox Perspective</string>
    </property>
   </action>
   <action name="actionFrame_Perspective">
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Frame Perspective</string>
+   </property>
+  </action>
+  <action name="actionBoundingBox_Overview">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>BBox Overview</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+  </action>
+  <action name="actionInterpolation">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>BBox Interpolation</string>
+   </property>
+  </action>
+  <action name="actionCMT">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>CMT</string>
+   </property>
+  </action>
+  <action name="actionTLD">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>TLD</string>
+   </property>
+  </action>
+  <action name="actionANT">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>ANT</string>
    </property>
   </action>
  </widget>
