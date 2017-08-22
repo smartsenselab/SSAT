@@ -215,6 +215,7 @@ void DialogBoundingBox::slot_buttonBoxAccepted()
     this->singleton->setLatestId(bbox.getId());
     this->singleton->setLatestLabel(bbox.getLabel());
 
+    emit this->signal_updateFrame();
     this->accept();
 }
 

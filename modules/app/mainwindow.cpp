@@ -766,9 +766,14 @@ void MainWindow::slot_openAttributesDialog()
 
 void MainWindow::slot_openBoundingBoxDialog(const unsigned int _bboxKey)
 {
-    unsigned long currentFrameId = static_cast<unsigned long>(this->manager->getFrameId() - 1);
-
     this->boundingBoxDialog = new DialogBoundingBox(this);
+    this->connect(this->boundingBoxDialog,
+                  SIGNAL(signal_updateFrame()),
+                  this,
+                  SLOT(slot_updateFrame())
+                );
+
+    unsigned long currentFrameId = static_cast<unsigned long>(this->manager->getFrameId() - 1);
     this->boundingBoxDialog->setModal(true);
     this->boundingBoxDialog->slot_initializeDialog(*(this->singleton), currentFrameId, _bboxKey);
     this->boundingBoxDialog->show();
