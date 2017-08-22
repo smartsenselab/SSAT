@@ -78,6 +78,12 @@ public slots:
     /// \brief slot_buttonBoxRejected Insert or Change bounding box canceled
     ///
     void slot_buttonBoxRejected();
+
+signals:
+    ///
+    /// \brief signal_updateFrame Signal to call MainWindows::slot_updateFrame
+    ///
+    void signal_updateFrame();
 };
 
 #endif // DIALOGBOUNDINGBOX_H
