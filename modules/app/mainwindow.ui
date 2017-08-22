@@ -454,8 +454,11 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="text">
-    <string>Interpolation</string>
+    <string>BBox Interpolation</string>
    </property>
   </action>
   <action name="actionCMT">
