@@ -964,6 +964,7 @@ void MainWindow::slot_viewFrameContextMenu(const QPoint &_point)
         {
             contextMenu.addAction("Replicate Bounding box 10x", this, SLOT(slot_viewFrameReplicateBoxMenu10()));
             contextMenu.addAction("Replicate Bounding box 100x", this, SLOT(slot_viewFrameReplicateBoxMenu100()));
+            contextMenu.addAction("Replicate Bounding box 10x back", this, SLOT(slot_viewFrameReplicateBoxMenu10back()));
             contextMenu.addAction("Remove Bounding box", this, SLOT(slot_viewFrameRemoveBoxMenu()));
         }
         contextMenu.exec(position);
@@ -1007,6 +1008,16 @@ void MainWindow::slot_viewFrameReplicateBoxMenu10()
     for(int index = 0; index < bboxKeys.size(); index++)
     {
         this->slot_replicateBoundingBoxFromCore(bboxKeys[index], 10);
+    }
+}
+
+void MainWindow::slot_viewFrameReplicateBoxMenu10back()
+{
+    qDebug() << "Repeat backwards for " << 10 << " frames";
+    vector<unsigned int> bboxKeys = this->frameScene->selectedBBox();
+    for(int index = 0; index < bboxKeys.size(); index++)
+    {
+        this->slot_replicateBoundingBoxFromCoreBackwards(bboxKeys[index], 10);
     }
 }
 
@@ -1246,7 +1257,7 @@ void MainWindow::slot_moveBoundingBoxInCore(const unsigned int _bboxKey, const R
     BoundingBox focusBox = this->singleton->frames[currentFrameId].getBoxByKey(_bboxKey);
     if (this->ui->actionInterpolation->isChecked())
     {
-        this->manager->exponentialForget(*(this->singleton), focusBox, currentFrameId, 25);
+        this->manager->exponentialForget(*(this->singleton), focusBox, currentFrameId, 10);
     }
 }
 
@@ -1257,6 +1268,14 @@ void MainWindow::slot_replicateBoundingBoxFromCore(const unsigned int _bboxKey, 
 
     this->manager->replicateBoundingBoxFromCore(*(this->singleton), _bboxKey, _numFrames);
     this->updateFrame(frameLimit - 1);
+}
+
+void MainWindow::slot_replicateBoundingBoxFromCoreBackwards(const unsigned int _bboxKey, const unsigned int _numFrames)
+{
+    unsigned int frameLimit = std::max(static_cast<int>(this->manager->getFrameId() - _numFrames), 1);
+
+    this->manager->replicateBoundingBoxFromCoreBackwards(*(this->singleton), _bboxKey, _numFrames);
+    this->updateFrame(frameLimit);
 }
 
 void MainWindow::slot_removeBoundingBoxFromCore(const unsigned int _bboxKey)

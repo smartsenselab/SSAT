@@ -103,6 +103,11 @@ void VideoManager::replicateBoundingBoxFromCore(Core &_singleton, const unsigned
     this->worker->replicateBoundingBoxFromCore(_singleton, _bboxKey, _numFrames);
 }
 
+void VideoManager::replicateBoundingBoxFromCoreBackwards(Core &_singleton, const unsigned int _bboxKey, const unsigned int _numFrames)
+{
+    this->worker->replicateBoundingBoxFromCoreBackwards(_singleton, _bboxKey, _numFrames);
+}
+
 void VideoManager::removeBoxSequenceFromCore(Core &_singleton, const unsigned int _bboxKey)
 {
     this->worker->removeBoxSequenceFromCore(_singleton, _bboxKey);

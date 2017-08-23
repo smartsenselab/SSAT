@@ -393,13 +393,19 @@ public slots:
     void slot_viewFrameNewFrameMenu();
 
     ///
-    /// \brief slot_viewFrameReplicateBoxMenu Replicate a bounding box for 10 frames
+    /// \brief slot_viewFrameReplicateBoxMenu10 Replicate a bounding box for 10 frames
     /// \param _sequence
     ///
     void slot_viewFrameReplicateBoxMenu10();
 
     ///
-    /// \brief slot_viewFrameReplicateBoxMenu Replicate a bounding box for 100 frames
+    /// \brief slot_viewFrameReplicateBoxMenu10back Replicate a bounding box for 10 frames backwards
+    /// \param _sequence
+    ///
+    void slot_viewFrameReplicateBoxMenu10back();
+
+    ///
+    /// \brief slot_viewFrameReplicateBoxMenu100 Replicate a bounding box for 100 frames
     /// \param _sequence
     ///
     void slot_viewFrameReplicateBoxMenu100();
@@ -508,11 +514,18 @@ public slots:
     void slot_moveBoundingBoxInCore(const unsigned int _bboxKey, const Rect _box);
 
     ///
-    /// \brief slot_removeBoundingBoxFromCore Remove bbox from core
-    /// \param _bboxId  id of bounding box that will be deleted
+    /// \brief slot_replicateBoundingBoxFromCore Replicate an specific bbox from core
+    /// \param _bboxId  id of bounding box that will be replicated
     /// \param _numFrames number of frames bbox will be replicated
     ///
     void slot_replicateBoundingBoxFromCore(const unsigned int _bboxKey, const unsigned int _numFrames);
+
+    ///
+    /// \brief slot_replicateBoundingBoxFromCoreBackwards Replicate an specific bbox from core in a backward manner
+    /// \param _bboxId  id of bounding box that will be replicated
+    /// \param _numFrames number of frames bbox will be replicated
+    ///
+    void slot_replicateBoundingBoxFromCoreBackwards(const unsigned int _bboxKey, const unsigned int _numFrames);
 
     ///
     /// \brief slot_removeBoundingBoxFromCore Remove bbox from core
