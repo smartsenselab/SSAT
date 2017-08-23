@@ -364,10 +364,16 @@
     <addaction name="actionCMT"/>
     <addaction name="actionTLD"/>
    </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuAnnotation"/>
    <addaction name="menuTracker"/>
    <addaction name="menuView"/>
+   <addaction name="menuHelp"/>
   </widget>
   <action name="actionOpen">
    <property name="text">

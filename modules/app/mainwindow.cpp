@@ -1257,7 +1257,7 @@ void MainWindow::slot_moveBoundingBoxInCore(const unsigned int _bboxKey, const R
     BoundingBox focusBox = this->singleton->frames[currentFrameId].getBoxByKey(_bboxKey);
     if (this->ui->actionInterpolation->isChecked())
     {
-        this->manager->exponentialForget(*(this->singleton), focusBox, currentFrameId, 25);
+        this->manager->exponentialForget(*(this->singleton), focusBox, currentFrameId, 10);
     }
 }
 
