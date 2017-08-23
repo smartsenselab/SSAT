@@ -406,6 +406,22 @@ void WorkerThread::replicateBoundingBoxFromCore(Core &_singleton, const unsigned
     }
 }
 
+void WorkerThread::replicateBoundingBoxFromCoreBackwards(Core &_singleton, const unsigned int _bboxKey, const unsigned int _numFrames)
+{
+    unsigned int currentFrameId = static_cast<unsigned int>(this->getFrameId() - 1);
+    unsigned int frameLimit = std::max(static_cast<int>(currentFrameId - _numFrames), 0);
+
+    BoundingBox bbox = _singleton.frames[currentFrameId].getBoxByKey(_bboxKey);
+    for(unsigned int frameIndex = currentFrameId; frameIndex > frameLimit; frameIndex--)
+    {
+        BoundingBox repBox = _singleton.frames[frameIndex].getBoxById(bbox.getId());
+        if(!repBox.isValid())
+        {
+            _singleton.frames[frameIndex].addBox(bbox);
+        }
+    }
+}
+
 void WorkerThread::removeBoxSequenceFromCore(Core &_singleton, const unsigned int _bboxKey)
 {
     bool isErased = false;

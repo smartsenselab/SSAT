@@ -141,6 +141,14 @@ public:
     void replicateBoundingBoxFromCore(Core &_singleton, const unsigned int _bboxKey, const unsigned int _numFrames = 10);
 
     ///
+    /// \brief replicateBoundingBoxFromCoreBackwards Replicate current bounding box in the previous frames
+    /// \param _singleton Core that contains all the annotation information
+    /// \param _bboxKey key indicating the correct bounding box
+    /// \param _numFrames Number of frames that will receive the bounding box
+    ///
+    void replicateBoundingBoxFromCoreBackwards(Core &_singleton, const unsigned int _bboxKey, const unsigned int _numFrames);
+
+    ///
     /// \brief removeBoxSequenceFromCore Delete a BBox from current and following frames
     /// \param _singleton Core that contains all the annotation information
     /// \param _bboxKey key indicating the correct bounding box
