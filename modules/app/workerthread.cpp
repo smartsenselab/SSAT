@@ -398,7 +398,11 @@ void WorkerThread::replicateBoundingBoxFromCore(Core &_singleton, const unsigned
     BoundingBox bbox = _singleton.frames[nextFrameId - 1].getBoxByKey(_bboxKey);
     for(unsigned int frameIndex = nextFrameId; frameIndex < frameLimit; frameIndex++)
     {
-        _singleton.frames[frameIndex].addBox(bbox);
+        BoundingBox repBox = _singleton.frames[frameIndex].getBoxById(bbox.getId());
+        if(!repBox.isValid())
+        {
+            _singleton.frames[frameIndex].addBox(bbox);
+        }
     }
 }
 
