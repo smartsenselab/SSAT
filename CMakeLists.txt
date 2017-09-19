@@ -7,7 +7,8 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD 11)
-set(OpenCV_DIR "C:/opencv-3.1.0/opencv/build")
+set(Qt5Widgets_DIR "C:/Qt/Qt5.6.2/5.6/msvc2013_64/lib/cmake/Qt5Widgets/")
+set(OpenCV_DIR "C:/opencv/build/")
 
 # Include qt basic functions
 include(QtCommon)
@@ -18,7 +19,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/modules/app)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/modules/cores)
 
 # Basic info about project
-project(SSAT VERSION 1.0)
+project(SSAT VERSION 1.1)
 
 # Set PROJECT_VERSION_PATCH and PROJECT_VERSION_TWEAK to 0 if not present, needed by add_project_meta
 fix_project_version()
@@ -34,7 +35,7 @@ add_project_meta(META_FILES_TO_INCLUDE)
 
 set(RESOURCE_FILES ssat.qrc)
 
-find_package(OpenCV 3.0.0 REQUIRED)
+find_package(OpenCV REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(OpenCV COMPONENTS opencv_core opencv_imgproc opencv_highgui REQUIRED)
 find_path(OpenCV_INCLUDE_DIR "opencv/cv.h" PATHS "${OpenCV_DIR}" PATH_SUFFIXES "include" DOC "")
@@ -65,7 +66,7 @@ add_executable(${PROJECT_NAME} ${OS_BUNDLE} # Expands to WIN32 or MACOS_BUNDLE d
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
 target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_CORE)
 target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_CMT)
-target_link_libraries(${PROJECT_NAME} pthread)
+#target_link_libraries(${PROJECT_NAME} pthread)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${OpenCV_INCLUDE_DIR})
 
