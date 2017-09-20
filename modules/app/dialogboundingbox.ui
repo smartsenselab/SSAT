@@ -10,6 +10,12 @@
     <height>172</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>Bounding Box Adjust</string>
   </property>
@@ -18,7 +24,7 @@
     <rect>
      <x>12</x>
      <y>10</y>
-     <width>501</width>
+     <width>505</width>
      <height>151</height>
     </rect>
    </property>
@@ -33,7 +39,14 @@
        </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="comboBoxCategory"/>
+       <widget class="QComboBox" name="comboBoxCategory">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QLabel" name="labelLabel">
@@ -43,7 +56,14 @@
        </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="comboBoxLabel"/>
+       <widget class="QComboBox" name="comboBoxLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QLabel" name="labelId">
