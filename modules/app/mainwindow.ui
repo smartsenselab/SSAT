@@ -213,23 +213,49 @@
             <layout class="QHBoxLayout" name="horizontalLayout_5">
              <item>
               <widget class="QLabel" name="labelCategory">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="text">
                 <string>Category: </string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="comboBoxCategory"/>
+              <widget class="QComboBox" name="comboBoxCategory">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QLabel" name="labelLabel">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="text">
                 <string>Label: </string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="comboBoxLabel"/>
+              <widget class="QComboBox" name="comboBoxLabel">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -237,6 +263,12 @@
             <layout class="QHBoxLayout" name="horizontalLayout_6">
              <item>
               <widget class="QLabel" name="labelInitialFrame">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="text">
                 <string>Initial Frame: </string>
                </property>
@@ -244,6 +276,12 @@
              </item>
              <item>
               <widget class="QSpinBox" name="spinBoxInitialFrame">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="maximum">
                 <number>999999999</number>
                </property>
@@ -251,6 +289,12 @@
              </item>
              <item>
               <widget class="QLabel" name="labelFinalFrame">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="text">
                 <string>Final Frame: </string>
                </property>
@@ -258,6 +302,12 @@
              </item>
              <item>
               <widget class="QSpinBox" name="spinBoxFinalFrame">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="maximum">
                 <number>999999999</number>
                </property>
@@ -325,7 +375,7 @@
      <x>0</x>
      <y>0</y>
      <width>1262</width>
-     <height>25</height>
+     <height>18</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
