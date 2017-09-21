@@ -13,6 +13,7 @@
 #include <QProgressDialog>
 #include <QScopedPointer>
 #include <QShortcut>
+#include <QStandardPaths>
 #include <QTime>
 #include <QTimer>
 

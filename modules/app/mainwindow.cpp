@@ -625,7 +625,7 @@ void MainWindow::slot_openFile()
 {
     QString videoName = QFileDialog::getOpenFileName(this,
                                                      tr("Open Video..."),
-                                                     tr("/home"),
+                                                     tr(QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString().c_str()),
                                                      tr("Video Files (*.avi *.mp4 *.mov)"));
 
     if(!videoName.isEmpty())
@@ -711,7 +711,7 @@ void MainWindow::slot_importJson()
     {
         QString jsonName = QFileDialog::getOpenFileName(this,
                                                         tr("Import JSON..."),
-                                                        tr("/home"),
+                                                        tr(QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString().c_str()),
                                                         tr("JSON file (*.json)"));
         this->manager->importJSON(*(this->singleton), this->tableModel, jsonName);
     }
@@ -724,7 +724,7 @@ void MainWindow::slot_exportJson()
     {
         QString jsonName = QFileDialog::getSaveFileName(this,
                                                         tr("Export JSON..."),
-                                                        tr("/home"),
+                                                        tr(QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString().c_str()),
                                                         tr("JSON file (*.json)"));
         this->manager->exportJSON(*(this->singleton), jsonName);
     }
