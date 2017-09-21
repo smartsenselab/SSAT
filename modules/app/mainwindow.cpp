@@ -669,7 +669,7 @@ void MainWindow::slot_openFile()
         // Loading name from file
         string stdName = videoName.toStdString();
         size_t slashFound = stdName.find_last_of("/");
-        this->corePath = QString::fromStdString("./temp_" + stdName.substr(slashFound).substr(1) +".json");
+        this->corePath = QString::fromStdString(QDir::homePath().toStdString() + "/temp_" + stdName.substr(slashFound).substr(1) +".json");
         this->loaded = true;
         this->manager->loadVideo(videoName);
         this->totalFrames = std::round(+this->manager->getTotalFrames());
@@ -702,7 +702,7 @@ void MainWindow::slot_openFile()
 void MainWindow::slot_backupJson()
 {
     this->manager->exportJSON(*(this->singleton), this->corePath);
-    std::cout << "User modifications were saved to file." << std::endl;
+    std::cout << "User modifications were saved to file " << this->corePath.toStdString() << std::endl;
 }
 
 void MainWindow::slot_importJson()
@@ -711,7 +711,7 @@ void MainWindow::slot_importJson()
     {
         QString jsonName = QFileDialog::getOpenFileName(this,
                                                         tr("Import JSON..."),
-                                                        tr(QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString().c_str()),
+                                                        tr(QDir::homePath().toStdString().c_str()),
                                                         tr("JSON file (*.json)"));
         this->manager->importJSON(*(this->singleton), this->tableModel, jsonName);
     }
@@ -724,7 +724,7 @@ void MainWindow::slot_exportJson()
     {
         QString jsonName = QFileDialog::getSaveFileName(this,
                                                         tr("Export JSON..."),
-                                                        tr(QStandardPaths::writableLocation(QStandardPaths::HomeLocation).toStdString().c_str()),
+                                                        tr(QDir::homePath().toStdString().c_str()),
                                                         tr("JSON file (*.json)"));
         this->manager->exportJSON(*(this->singleton), jsonName);
     }
