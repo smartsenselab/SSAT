@@ -7,6 +7,7 @@ DialogBoundingBox::DialogBoundingBox(QWidget *parent) :
 {
     this->ui->setupUi(this);
     this->ui->buttonTracker->setEnabled(false);
+    this->setFixedSize(this->width(), this->height());
 }
 
 DialogBoundingBox::~DialogBoundingBox()
