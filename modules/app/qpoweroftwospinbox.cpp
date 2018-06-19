@@ -11,25 +11,11 @@ void QPowerOfTwoSpinBox::stepBy(int steps)
 {
     if(steps == 1)
     {
-        if (this->value() < 10)
-        {
-            this->setValue(this->value() + 1);
-        }
-        else
-        {
-            this->setValue(this->value() + 10);
-        }
+        this->setValue(this->value() * 2);
     }
     else if(steps == -1)
     {
-        if (this->value() <= 10)
-        {
-            this->setValue(this->value() - 1);
-        }
-        else
-        {
-            this->setValue(this->value() - 10);
-        }
+        this->setValue(this->value() / 2);
     }
     else
     {
