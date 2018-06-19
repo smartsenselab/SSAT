@@ -2,13 +2,22 @@
 <ui version="4.0">
  <class>DialogBoundingBox</class>
  <widget class="QDialog" name="DialogBoundingBox">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>525</width>
-    <height>172</height>
+    <width>680</width>
+    <height>150</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Bounding Box Adjust</string>
@@ -18,8 +27,8 @@
     <rect>
      <x>12</x>
      <y>10</y>
-     <width>501</width>
-     <height>151</height>
+     <width>655</width>
+     <height>130</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -33,7 +42,17 @@
        </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="comboBoxCategory"/>
+       <widget class="QComboBox" name="comboBoxCategory">
+        <property name="maximumSize">
+         <size>
+          <width>102</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="sizeAdjustPolicy">
+         <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QLabel" name="labelLabel">
@@ -43,12 +62,19 @@
        </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="comboBoxLabel"/>
+       <widget class="QComboBox" name="comboBoxLabel">
+        <property name="maximumSize">
+         <size>
+          <width>102</width>
+          <height>16777215</height>
+         </size>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QLabel" name="labelId">
         <property name="text">
-         <string>Id:</string>
+         <string>Tracklet:</string>
         </property>
        </widget>
       </item>

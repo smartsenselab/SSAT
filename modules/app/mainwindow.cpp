@@ -436,7 +436,7 @@ void MainWindow::updateFrame()
 
 void MainWindow::updateFrame(const int _frameId)
 {
-    cv::Mat frameMat = this->manager->getFrame(_frameId + this->speed);
+    cv::Mat frameMat = this->manager->getFrame(_frameId);
     unsigned long nextFrameId = static_cast<unsigned long>(this->manager->getFrameId());
 
     if(frameMat.data)
@@ -796,7 +796,7 @@ void MainWindow::slot_rewindButtonPressed()
 
 void MainWindow::slot_rewindButtonPressed(const int _frameId)
 {
-    int nextFrameId = static_cast<int>(_frameId - std::round(+this->manager->getTotalFrames() / 100.0));
+    int nextFrameId = static_cast<int>(_frameId - std::round(+this->manager->getTotalFrames() / 100.0) - 1);
     if(nextFrameId < 1)
     {
         nextFrameId = 1;
@@ -880,7 +880,7 @@ void MainWindow::slot_fastfButtonPressed()
 
 void MainWindow::slot_fastfButtonPressed(const int _frameId)
 {
-    int nextFrameId = static_cast<int>(_frameId + std::round(+this->manager->getTotalFrames() / 100.0));
+    int nextFrameId = static_cast<int>(_frameId + std::round(+this->manager->getTotalFrames() / 100.0) - 1);
     if(nextFrameId > this->manager->getTotalFrames())
     {
         nextFrameId = static_cast<int>(this->manager->getTotalFrames());
@@ -932,7 +932,7 @@ void MainWindow::slot_keepVideoRunning()
         }
         else
         {
-            this->updateFrame(nextFrameId);
+            this->updateFrame(nextFrameId + this->speed);
         }
     }
 
