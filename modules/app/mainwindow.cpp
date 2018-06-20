@@ -680,6 +680,7 @@ void MainWindow::slot_openFile()
         this->loaded = true;
         this->manager->loadVideo(videoName);
         this->totalFrames = std::round(+this->manager->getTotalFrames());
+        this->skipFrame = static_cast<int>(std::round(this->totalFrames / 100.0));
 
         // Lazy instantiation of SSAT Core
         if(this->singleton == NULL)
@@ -697,6 +698,8 @@ void MainWindow::slot_openFile()
         // Displaying Frame and Core information on Interface
         this->tableModel->setFrameBasedData(this->singleton->frameData);
         this->ui->sliderFrame->setRange(1, static_cast<int>(this->totalFrames));
+        this->ui->spinBoxSkip->setMaximum(this->skipFrame * 10);
+        this->ui->spinBoxSkip->setValue(this->skipFrame);
         this->ui->tableViewFrame->setModel(this->tableModel);
         this->enableWidgets(true);
         this->updateFrame(1);
@@ -803,7 +806,9 @@ void MainWindow::slot_rewindButtonPressed()
 
 void MainWindow::slot_rewindButtonPressed(const int _frameId)
 {
-    int nextFrameId = static_cast<int>(_frameId - std::round(+this->manager->getTotalFrames() / 100.0) - 1);
+    //int nextFrameId = static_cast<int>(_frameId - std::round(+this->manager->getTotalFrames() / 100.0) - 1);
+    int nextFrameId = static_cast<int>(_frameId - this->skipFrame - 1);
+
     if(nextFrameId < 1)
     {
         nextFrameId = 1;
@@ -887,7 +892,9 @@ void MainWindow::slot_fastfButtonPressed()
 
 void MainWindow::slot_fastfButtonPressed(const int _frameId)
 {
-    int nextFrameId = static_cast<int>(_frameId + std::round(+this->manager->getTotalFrames() / 100.0) - 1);
+    //int nextFrameId = static_cast<int>(_frameId + std::round(+this->manager->getTotalFrames() / 100.0) - 1);
+    int nextFrameId = static_cast<int>(_frameId + this->skipFrame - 1);
+
     if(nextFrameId > this->manager->getTotalFrames())
     {
         nextFrameId = static_cast<int>(this->manager->getTotalFrames());
