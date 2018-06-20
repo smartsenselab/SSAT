@@ -47,6 +47,7 @@ private:
     bool playing;
     bool frameBasedIsEnable;
     double totalFrames;
+    int skipFrame;
     int speed;
 
     QImage frameQImage;
@@ -137,12 +138,6 @@ private:
     /// \param _enable
     ///
     void isPlaying(const bool _enable);
-
-    ///
-    /// \brief changeSpeed  Controls video speed
-    /// \param _speed
-    ///
-    void changeSpeed(const int _speed);
 
     ///
     /// \brief pauseVideo   Pauses the video
@@ -346,6 +341,12 @@ public slots:
     /// \brief slot_stopButtonPressed   Stops the video
     ///
     void slot_stopButtonPressed();
+
+    ///
+    /// \brief slot_spinBoxSkipFrameValueChanged    Change the number of dropped frames
+    /// \param _value   The number of frames skipped
+    ///
+    void slot_spinBoxSkipFrameValueChanged(int _value);
 
     ///
     /// \brief slot_spinBoxSpeedValueChanged    Change the speed of the video

@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->manager = new VideoManager;
     this->playing = false;
     this->saveTimer = new QTimer(this);
+    this->skipFrame = 50;
     this->speed = 0;
 
     this->enableWidgets(false);
@@ -65,9 +66,11 @@ void MainWindow::enableWidgets(const bool _enable)
     this->ui->labelFrameId->setEnabled(_enable);
     this->ui->labelTime->setEnabled(_enable);
     this->ui->sliderFrame->setEnabled(_enable);
+    this->ui->spinBoxSkip->setEnabled(_enable);
     this->ui->spinBoxSpeed->setEnabled(_enable);
     this->ui->tableViewFrame->setEnabled(_enable);
     this->ui->viewFrame->setEnabled(_enable);
+    this->ui->labelSkip->setEnabled(_enable);
     this->ui->labelSpeed->setEnabled(_enable);
     this->ui->buttonTool->setEnabled(_enable);
 }
@@ -197,6 +200,12 @@ void MainWindow::connectSignalSlots()
                   SIGNAL(pressed()),
                   this,
                   SLOT(slot_stopButtonPressed())
+                  );
+
+    this->connect(this->ui->spinBoxSkip,
+                  SIGNAL(valueChanged(int)),
+                  this,
+                  SLOT(slot_spinBoxSkipFrameValueChanged(int))
                   );
 
     this->connect(this->ui->spinBoxSpeed,
@@ -356,11 +365,6 @@ void MainWindow::isPlaying(const bool _enable)
     {
         this->ui->buttonPlay->setText("Play");
     }
-}
-
-void MainWindow::changeSpeed(const int _speed)
-{
-    this->speed = (_speed - 1) * 5;
 }
 
 void MainWindow::pauseVideo()
@@ -903,9 +907,14 @@ void MainWindow::slot_stopButtonPressed()
     this->stopVideo();
 }
 
+void MainWindow::slot_spinBoxSkipFrameValueChanged(int _value)
+{
+    this->skipFrame = _value;
+}
+
 void MainWindow::slot_spinBoxSpeedValueChanged(int _value)
 {
-    this->changeSpeed(_value);
+    this->speed = _value;
 }
 
 void MainWindow::slot_tableviewFrameSingleClicked(const QModelIndex _index){
