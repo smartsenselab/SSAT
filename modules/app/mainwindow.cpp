@@ -71,8 +71,8 @@ void MainWindow::enableWidgets(const bool _enable)
     this->ui->tableViewFrame->setEnabled(_enable);
     this->ui->viewFrame->setEnabled(_enable);
     this->ui->labelSkip->setEnabled(_enable);
+    this->ui->buttonSetup->setEnabled(_enable);
     this->ui->labelSpeed->setEnabled(_enable);
-    this->ui->buttonTool->setEnabled(_enable);
 }
 
 void MainWindow::enableFrameBased(const bool _enable)
@@ -213,6 +213,12 @@ void MainWindow::connectSignalSlots()
                   this,
                   SLOT(slot_spinBoxSpeedValueChanged(int))
                   );
+
+    this->connect(this->ui->buttonSetup,
+                  SIGNAL(pressed()),
+                  this,
+                  SLOT(slot_setupButtonPressed())
+                );
 
     // Connecting TABLE_VIEW_FRAME SIGNALS to SLOTS
     this->connect(this->ui->tableViewFrame,
@@ -766,6 +772,13 @@ void MainWindow::slot_openBoundingBoxDialog(const unsigned int _bboxKey)
     this->boundingBoxDialog->setModal(true);
     this->boundingBoxDialog->slot_initializeDialog(*(this->singleton), currentFrameId, _bboxKey);
     this->boundingBoxDialog->show();
+}
+
+void MainWindow::slot_setupButtonPressed()
+{
+    // this->settingsDialog = new DialogSetup(this);
+    // this->settingsDialog->setModal(true);
+    // this->settingsDialog->show();
 }
 
 void MainWindow::slot_slideVideo(int _frameId)

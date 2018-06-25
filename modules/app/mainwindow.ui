@@ -251,7 +251,7 @@
      </widget>
     </item>
     <item row="2" column="14">
-     <widget class="QToolButton" name="buttonTool">
+     <widget class="QToolButton" name="buttonSetup">
       <property name="text">
        <string>...</string>
       </property>
@@ -541,7 +541,7 @@
   <tabstop>buttonStop</tabstop>
   <tabstop>buttonNewBox</tabstop>
   <tabstop>spinBoxSpeed</tabstop>
-  <tabstop>buttonTool</tabstop>
+  <tabstop>buttonSetup</tabstop>
   <tabstop>comboBoxCategory</tabstop>
   <tabstop>comboBoxLabel</tabstop>
   <tabstop>spinBoxInitialFrame</tabstop>
