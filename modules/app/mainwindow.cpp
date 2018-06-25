@@ -68,7 +68,7 @@ void MainWindow::enableWidgets(const bool _enable)
     this->ui->buttonRewindF->setEnabled(_enable);
     this->ui->buttonStop->setEnabled(_enable);
     this->ui->buttonNewBox->setEnabled(_enable);
-    // this->ui->buttonSetup->setEnabled(_enable);
+    this->ui->buttonSetup->setEnabled(false);
 
     this->ui->labelFrameId->setEnabled(_enable);
     this->ui->labelSkip->setEnabled(_enable);
@@ -98,17 +98,17 @@ void MainWindow::enableFrameBased(const bool _enable)
     }
     this->ui->lineEditInfo->clear();
 
+    this->ui->buttonBoxOKcancel->setEnabled(_enable);
     this->ui->comboBoxCategory->setEnabled(_enable);
     this->ui->comboBoxLabel->setEnabled(_enable);
-    this->ui->spinBoxFinalFrame->setEnabled(_enable);
-    this->ui->spinBoxInitialFrame->setEnabled(_enable);
-    this->ui->lineEditInfo->setEnabled(_enable);
-    this->ui->buttonBoxOKcancel->setEnabled(_enable);
     this->ui->labelCategory->setEnabled(_enable);
-    this->ui->labelLabel->setEnabled(_enable);
     this->ui->labelInitialFrame->setEnabled(_enable);
     this->ui->labelFinalFrame->setEnabled(_enable);
     this->ui->labelInfo->setEnabled(_enable);
+    this->ui->labelLabel->setEnabled(_enable);
+    this->ui->lineEditInfo->setEnabled(_enable);
+    this->ui->spinBoxFinalFrame->setEnabled(_enable);
+    this->ui->spinBoxInitialFrame->setEnabled(_enable);
 }
 
 void MainWindow::connectSignalSlots()
