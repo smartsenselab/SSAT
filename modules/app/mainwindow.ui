@@ -252,6 +252,9 @@
     </item>
     <item row="2" column="14">
      <widget class="QToolButton" name="buttonSetup">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="text">
        <string>...</string>
       </property>
@@ -392,9 +395,26 @@
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionAbout_SSAT"/>
+    <addaction name="actionAbout_SSIG"/>
+   </widget>
+   <widget class="QMenu" name="menuNavigation">
+    <property name="title">
+     <string>Navigation</string>
+    </property>
+    <addaction name="actionPlay_Pause"/>
+    <addaction name="actionFast_Rewind"/>
+    <addaction name="actionRewind"/>
+    <addaction name="actionForward"/>
+    <addaction name="actionFast_Forward"/>
+    <addaction name="actionStop"/>
+    <addaction name="separator"/>
+    <addaction name="actionSpeedPlus"/>
+    <addaction name="actionSpeedLess"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuAnnotation"/>
+   <addaction name="menuNavigation"/>
    <addaction name="menuTracker"/>
    <addaction name="menuView"/>
    <addaction name="menuHelp"/>
@@ -441,7 +461,7 @@
   </action>
   <action name="actionNew">
    <property name="text">
-    <string>New              ctrl + N</string>
+    <string>New</string>
    </property>
   </action>
   <action name="actionBounding_box_Perspective">
@@ -522,6 +542,80 @@
    </property>
    <property name="text">
     <string>ANT</string>
+   </property>
+  </action>
+  <action name="actionPlay_Pause">
+   <property name="text">
+    <string>Play / Pause</string>
+   </property>
+   <property name="shortcut">
+    <string>Space</string>
+   </property>
+  </action>
+  <action name="actionFast_Rewind">
+   <property name="text">
+    <string>Fast Rewind</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Left</string>
+   </property>
+  </action>
+  <action name="actionRewind">
+   <property name="text">
+    <string>Rewind</string>
+   </property>
+   <property name="shortcut">
+    <string>Left</string>
+   </property>
+  </action>
+  <action name="actionForward">
+   <property name="text">
+    <string>Forward</string>
+   </property>
+   <property name="shortcut">
+    <string>Right</string>
+   </property>
+  </action>
+  <action name="actionFast_Forward">
+   <property name="text">
+    <string>Fast Forward</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Right</string>
+   </property>
+  </action>
+  <action name="actionStop">
+   <property name="text">
+    <string>Stop</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Space</string>
+   </property>
+  </action>
+  <action name="actionSpeedPlus">
+   <property name="text">
+    <string>Speed +</string>
+   </property>
+   <property name="shortcut">
+    <string>Up</string>
+   </property>
+  </action>
+  <action name="actionSpeedLess">
+   <property name="text">
+    <string>Speed -</string>
+   </property>
+   <property name="shortcut">
+    <string>Down</string>
+   </property>
+  </action>
+  <action name="actionAbout_SSIG">
+   <property name="text">
+    <string>About SSIG</string>
+   </property>
+  </action>
+  <action name="actionAbout_SSAT">
+   <property name="text">
+    <string>About SSAT</string>
    </property>
   </action>
  </widget>

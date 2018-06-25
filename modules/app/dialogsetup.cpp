@@ -6,6 +6,8 @@ DialogSetup::DialogSetup(QWidget *parent) :
     ui(new Ui::DialogSetup)
 {
     ui->setupUi(this);
+
+    this->setFixedSize(this->width(), this->height());
 }
 
 DialogSetup::~DialogSetup()

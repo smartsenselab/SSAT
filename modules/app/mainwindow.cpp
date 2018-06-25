@@ -7,7 +7,6 @@ MainWindow::MainWindow(QWidget *parent)
     this->ui->setupUi(this);
     this->setWindowTitle("Smart Surveillance Annotation Tool");
 
-
     this->frameScene = new QBoundingBoxScene(this);
     this->loaded = false;
     this->manager = new VideoManager;
@@ -16,16 +15,15 @@ MainWindow::MainWindow(QWidget *parent)
     this->skipFrame = 50;
     this->speed = 0;
 
+    this->ui->splitterHorizontal->setStretchFactor(0,1);
+    this->ui->splitterVertical->setStretchFactor(0,1);
+    this->ui->viewFrame->setWindowFlags(Qt::SubWindow);
+
     this->enableWidgets(false);
     this->enableFrameBased(false);
     this->connectSignalSlots();
     this->setShortcuts();
     this->setTableModel();
-
-    this->ui->splitterHorizontal->setStretchFactor(0,1);
-    this->ui->splitterVertical->setStretchFactor(0,1);
-
-    this->ui->viewFrame->setWindowFlags(Qt::SubWindow);
 }
 
 MainWindow::~MainWindow()
@@ -51,9 +49,17 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 
 void MainWindow::enableWidgets(const bool _enable)
 {
-    this->ui->actionAttributes->setEnabled(_enable);
-    this->ui->actionExport_JSON->setEnabled(_enable);
     this->ui->actionImport_JSON->setEnabled(_enable);
+    this->ui->actionExport_JSON->setEnabled(_enable);
+    this->ui->actionAttributes->setEnabled(_enable);
+    this->ui->actionPlay_Pause->setEnabled(_enable);
+    this->ui->actionFast_Rewind->setEnabled(_enable);
+    this->ui->actionRewind->setEnabled(_enable);
+    this->ui->actionForward->setEnabled(_enable);
+    this->ui->actionFast_Forward->setEnabled(_enable);
+    this->ui->actionStop->setEnabled(_enable);
+    this->ui->actionSpeedPlus->setEnabled(_enable);
+    this->ui->actionSpeedLess->setEnabled(_enable);
 
     this->ui->buttonForward->setEnabled(_enable);
     this->ui->buttonForwardF->setEnabled(_enable);
@@ -62,17 +68,17 @@ void MainWindow::enableWidgets(const bool _enable)
     this->ui->buttonRewindF->setEnabled(_enable);
     this->ui->buttonStop->setEnabled(_enable);
     this->ui->buttonNewBox->setEnabled(_enable);
+    // this->ui->buttonSetup->setEnabled(_enable);
 
     this->ui->labelFrameId->setEnabled(_enable);
+    this->ui->labelSkip->setEnabled(_enable);
+    this->ui->labelSpeed->setEnabled(_enable);
     this->ui->labelTime->setEnabled(_enable);
     this->ui->sliderFrame->setEnabled(_enable);
     this->ui->spinBoxSkip->setEnabled(_enable);
     this->ui->spinBoxSpeed->setEnabled(_enable);
     this->ui->tableViewFrame->setEnabled(_enable);
     this->ui->viewFrame->setEnabled(_enable);
-    this->ui->labelSkip->setEnabled(_enable);
-    this->ui->buttonSetup->setEnabled(_enable);
-    this->ui->labelSpeed->setEnabled(_enable);
 }
 
 void MainWindow::enableFrameBased(const bool _enable)
@@ -124,34 +130,74 @@ void MainWindow::connectSignalSlots()
                   );
 
     // Connecting ACTIONS to SLOTS
+    // File Menu
     this->connect(this->ui->actionOpen,
-                  &QAction::triggered,
+                  SIGNAL(triggered()),
                   this,
-                  &MainWindow::slot_openFile
+                  SLOT(slot_openFile())
                   );
     this->connect(this->ui->actionImport_JSON,
-                  &QAction::triggered,
+                  SIGNAL(triggered()),
                   this,
-                  &MainWindow::slot_importJson
+                  SLOT(slot_importJson())
                   );
 
     this->connect(this->ui->actionExport_JSON,
-                  &QAction::triggered,
+                  SIGNAL(triggered()),
                   this,
-                  &MainWindow::slot_exportJson
+                  SLOT(slot_exportJson())
                   );
 
     this->connect(this->ui->actionExit,
-                  &QAction::triggered,
+                  SIGNAL(triggered()),
                   this,
-                  &MainWindow::slot_closeApplitacion
+                  SLOT(slot_closeApplitacion())
                   );
 
+    // Annotation Menu
     this->connect(this->ui->actionAttributes,
-                  &QAction::triggered,
+                  SIGNAL(triggered()),
                   this,
-                  &MainWindow::slot_openAttributesDialog
+                  SLOT(slot_openAttributesDialog())
                   );
+
+    // Navigation Menu
+    this->connect(this->ui->actionPlay_Pause,
+                  SIGNAL(triggered()),
+                  this,
+                  SLOT(slot_playButtonPressed())
+                );
+
+    this->connect(this->ui->actionFast_Rewind,
+                  SIGNAL(triggered()),
+                  this,
+                  SLOT(slot_rewindButtonPressed())
+                );
+
+    this->connect(this->ui->actionRewind,
+                  SIGNAL(triggered()),
+                  this,
+                  SLOT(slot_backButtonPressed())
+                );
+
+    this->connect(this->ui->actionForward,
+                  SIGNAL(triggered()),
+                  this,
+                  SLOT(slot_forwardButtonPressed())
+                );
+
+    this->connect(this->ui->actionFast_Forward,
+                  SIGNAL(triggered()),
+                  this,
+                  SLOT(slot_fastfButtonPressed())
+                );
+
+    this->connect(this->ui->actionStop,
+                  SIGNAL(triggered()),
+                  this,
+                  SLOT(slot_stopButtonPressed())
+                );
+
 
     // Connecting PLAYER SIGNALS to SLOTS
     this->connect(this->ui->sliderFrame,
@@ -337,8 +383,15 @@ void MainWindow::setShortcuts()
     this->addAction(crtf);
 
     // Connecting SHORTCUTS to SLOTS
-    this->connect(this->crtb, SIGNAL(triggered()), SLOT(slot_Bshortcut()));
-    this->connect(this->crtf, SIGNAL(triggered()), SLOT(slot_Fshortcut()));
+    this->connect(this->crtb,
+                  SIGNAL(triggered()),
+                  SLOT(slot_Bshortcut())
+                  );
+
+    this->connect(this->crtf,
+                  SIGNAL(triggered()),
+                  SLOT(slot_Fshortcut())
+                  );
 }
 
 void MainWindow::setTableModel()
@@ -776,9 +829,9 @@ void MainWindow::slot_openBoundingBoxDialog(const unsigned int _bboxKey)
 
 void MainWindow::slot_setupButtonPressed()
 {
-    // this->settingsDialog = new DialogSetup(this);
-    // this->settingsDialog->setModal(true);
-    // this->settingsDialog->show();
+    this->settingsDialog = new DialogSetup(this);
+    this->settingsDialog->setModal(true);
+    this->settingsDialog->show();
 }
 
 void MainWindow::slot_slideVideo(int _frameId)
