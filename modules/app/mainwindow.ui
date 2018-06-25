@@ -629,16 +629,25 @@
    </property>
   </action>
   <action name="actionAbout_SSIG">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>About SSIG</string>
    </property>
   </action>
   <action name="actionAbout_SSAT">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>About SSAT</string>
    </property>
   </action>
   <action name="actionUser_s_Guide">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>User's Guide</string>
    </property>

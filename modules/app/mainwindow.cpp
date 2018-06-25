@@ -5,7 +5,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     this->ui->setupUi(this);
-    this->setWindowTitle("Smart Surveillance Annotation Tool");
+    this->setWindowTitle("Smart Surveillance Annotation Tool - BETA");
 
     this->frameScene = new QBoundingBoxScene(this);
     this->loaded = false;
@@ -732,7 +732,7 @@ void MainWindow::slot_openFile()
                       );
 
         // Loading name from file
-        this->setWindowTitle("SSAT [" + videoName + "]");
+        this->setWindowTitle("SSAT [" + videoName + "] - BETA");
         string stdName = videoName.toStdString();
         size_t slashFound = stdName.find_last_of("/");
         this->corePath = QString::fromStdString("./temp_" + stdName.substr(slashFound).substr(1) + ".json");
