@@ -58,8 +58,8 @@ void MainWindow::enableWidgets(const bool _enable)
     this->ui->actionForward->setEnabled(_enable);
     this->ui->actionFast_Forward->setEnabled(_enable);
     this->ui->actionStop->setEnabled(_enable);
-    this->ui->actionSpeedPlus->setEnabled(_enable);
-    this->ui->actionSpeedLess->setEnabled(_enable);
+    this->ui->actionSpeedPlus->setEnabled(false);
+    this->ui->actionSpeedLess->setEnabled(false);
 
     this->ui->buttonForward->setEnabled(_enable);
     this->ui->buttonForwardF->setEnabled(_enable);
