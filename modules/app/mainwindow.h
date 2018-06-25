@@ -20,6 +20,7 @@
 
 #include "dialogannotation.h"
 #include "dialogboundingbox.h"
+#include "dialogsetup.h"
 #include "framebaseddata.h"
 #include "qboundingboxscene.h"
 #include "qframebasedtablemodel.h"
@@ -58,6 +59,7 @@ private:
     Core *singleton = NULL;
     DialogAnnotation *annotationDialog = NULL;
     DialogBoundingBox *boundingBoxDialog = NULL;
+    DialogSetup *settingsDialog = NULL;
     QBoundingBoxScene *frameScene = NULL;
     QFrameBasedTableModel *tableModel = NULL;
     QGraphicsRectItem *rectangle = NULL;
@@ -281,6 +283,11 @@ public slots:
     /// \brief slot_openBoundingBox  Open the bounding box dialog window
     ///
     void slot_openBoundingBoxDialog(const unsigned int _bboxKey);
+
+    ///
+    /// \brief slot_openSetupDialog Open the settings/setup dialog window
+    ///
+    void slot_setupButtonPressed();
 
     ///
     /// \brief slot_slideVideo  Change the actual frame of the video

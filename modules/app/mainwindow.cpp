@@ -7,7 +7,6 @@ MainWindow::MainWindow(QWidget *parent)
     this->ui->setupUi(this);
     this->setWindowTitle("Smart Surveillance Annotation Tool");
 
-
     this->frameScene = new QBoundingBoxScene(this);
     this->loaded = false;
     this->manager = new VideoManager;
@@ -16,16 +15,15 @@ MainWindow::MainWindow(QWidget *parent)
     this->skipFrame = 50;
     this->speed = 0;
 
+    this->ui->splitterHorizontal->setStretchFactor(0,1);
+    this->ui->splitterVertical->setStretchFactor(0,1);
+    this->ui->viewFrame->setWindowFlags(Qt::SubWindow);
+
     this->enableWidgets(false);
     this->enableFrameBased(false);
     this->connectSignalSlots();
     this->setShortcuts();
     this->setTableModel();
-
-    this->ui->splitterHorizontal->setStretchFactor(0,1);
-    this->ui->splitterVertical->setStretchFactor(0,1);
-
-    this->ui->viewFrame->setWindowFlags(Qt::SubWindow);
 }
 
 MainWindow::~MainWindow()
@@ -51,9 +49,17 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 
 void MainWindow::enableWidgets(const bool _enable)
 {
-    this->ui->actionAttributes->setEnabled(_enable);
-    this->ui->actionExport_JSON->setEnabled(_enable);
     this->ui->actionImport_JSON->setEnabled(_enable);
+    this->ui->actionExport_JSON->setEnabled(_enable);
+    this->ui->actionAttributes->setEnabled(_enable);
+    this->ui->actionPlay_Pause->setEnabled(_enable);
+    this->ui->actionFast_Rewind->setEnabled(_enable);
+    this->ui->actionRewind->setEnabled(_enable);
+    this->ui->actionForward->setEnabled(_enable);
+    this->ui->actionFast_Forward->setEnabled(_enable);
+    this->ui->actionStop->setEnabled(_enable);
+    this->ui->actionSpeedPlus->setEnabled(false);
+    this->ui->actionSpeedLess->setEnabled(false);
 
     this->ui->buttonForward->setEnabled(_enable);
     this->ui->buttonForwardF->setEnabled(_enable);
@@ -62,17 +68,17 @@ void MainWindow::enableWidgets(const bool _enable)
     this->ui->buttonRewindF->setEnabled(_enable);
     this->ui->buttonStop->setEnabled(_enable);
     this->ui->buttonNewBox->setEnabled(_enable);
+    this->ui->buttonSetup->setEnabled(false);
 
     this->ui->labelFrameId->setEnabled(_enable);
+    this->ui->labelSkip->setEnabled(_enable);
+    this->ui->labelSpeed->setEnabled(_enable);
     this->ui->labelTime->setEnabled(_enable);
     this->ui->sliderFrame->setEnabled(_enable);
     this->ui->spinBoxSkip->setEnabled(_enable);
     this->ui->spinBoxSpeed->setEnabled(_enable);
     this->ui->tableViewFrame->setEnabled(_enable);
     this->ui->viewFrame->setEnabled(_enable);
-    this->ui->labelSkip->setEnabled(_enable);
-    this->ui->labelSpeed->setEnabled(_enable);
-    this->ui->buttonTool->setEnabled(_enable);
 }
 
 void MainWindow::enableFrameBased(const bool _enable)
@@ -92,17 +98,17 @@ void MainWindow::enableFrameBased(const bool _enable)
     }
     this->ui->lineEditInfo->clear();
 
+    this->ui->buttonBoxOKcancel->setEnabled(_enable);
     this->ui->comboBoxCategory->setEnabled(_enable);
     this->ui->comboBoxLabel->setEnabled(_enable);
-    this->ui->spinBoxFinalFrame->setEnabled(_enable);
-    this->ui->spinBoxInitialFrame->setEnabled(_enable);
-    this->ui->lineEditInfo->setEnabled(_enable);
-    this->ui->buttonBoxOKcancel->setEnabled(_enable);
     this->ui->labelCategory->setEnabled(_enable);
-    this->ui->labelLabel->setEnabled(_enable);
     this->ui->labelInitialFrame->setEnabled(_enable);
     this->ui->labelFinalFrame->setEnabled(_enable);
     this->ui->labelInfo->setEnabled(_enable);
+    this->ui->labelLabel->setEnabled(_enable);
+    this->ui->lineEditInfo->setEnabled(_enable);
+    this->ui->spinBoxFinalFrame->setEnabled(_enable);
+    this->ui->spinBoxInitialFrame->setEnabled(_enable);
 }
 
 void MainWindow::connectSignalSlots()
@@ -124,34 +130,74 @@ void MainWindow::connectSignalSlots()
                   );
 
     // Connecting ACTIONS to SLOTS
+    // File Menu
     this->connect(this->ui->actionOpen,
-                  &QAction::triggered,
+                  SIGNAL(triggered()),
                   this,
-                  &MainWindow::slot_openFile
+                  SLOT(slot_openFile())
                   );
     this->connect(this->ui->actionImport_JSON,
-                  &QAction::triggered,
+                  SIGNAL(triggered()),
                   this,
-                  &MainWindow::slot_importJson
+                  SLOT(slot_importJson())
                   );
 
     this->connect(this->ui->actionExport_JSON,
-                  &QAction::triggered,
+                  SIGNAL(triggered()),
                   this,
-                  &MainWindow::slot_exportJson
+                  SLOT(slot_exportJson())
                   );
 
     this->connect(this->ui->actionExit,
-                  &QAction::triggered,
+                  SIGNAL(triggered()),
                   this,
-                  &MainWindow::slot_closeApplitacion
+                  SLOT(slot_closeApplitacion())
                   );
 
+    // Annotation Menu
     this->connect(this->ui->actionAttributes,
-                  &QAction::triggered,
+                  SIGNAL(triggered()),
                   this,
-                  &MainWindow::slot_openAttributesDialog
+                  SLOT(slot_openAttributesDialog())
                   );
+
+    // Navigation Menu
+    this->connect(this->ui->actionPlay_Pause,
+                  SIGNAL(triggered()),
+                  this,
+                  SLOT(slot_playButtonPressed())
+                );
+
+    this->connect(this->ui->actionFast_Rewind,
+                  SIGNAL(triggered()),
+                  this,
+                  SLOT(slot_rewindButtonPressed())
+                );
+
+    this->connect(this->ui->actionRewind,
+                  SIGNAL(triggered()),
+                  this,
+                  SLOT(slot_backButtonPressed())
+                );
+
+    this->connect(this->ui->actionForward,
+                  SIGNAL(triggered()),
+                  this,
+                  SLOT(slot_forwardButtonPressed())
+                );
+
+    this->connect(this->ui->actionFast_Forward,
+                  SIGNAL(triggered()),
+                  this,
+                  SLOT(slot_fastfButtonPressed())
+                );
+
+    this->connect(this->ui->actionStop,
+                  SIGNAL(triggered()),
+                  this,
+                  SLOT(slot_stopButtonPressed())
+                );
+
 
     // Connecting PLAYER SIGNALS to SLOTS
     this->connect(this->ui->sliderFrame,
@@ -213,6 +259,12 @@ void MainWindow::connectSignalSlots()
                   this,
                   SLOT(slot_spinBoxSpeedValueChanged(int))
                   );
+
+    this->connect(this->ui->buttonSetup,
+                  SIGNAL(pressed()),
+                  this,
+                  SLOT(slot_setupButtonPressed())
+                );
 
     // Connecting TABLE_VIEW_FRAME SIGNALS to SLOTS
     this->connect(this->ui->tableViewFrame,
@@ -331,8 +383,15 @@ void MainWindow::setShortcuts()
     this->addAction(crtf);
 
     // Connecting SHORTCUTS to SLOTS
-    this->connect(this->crtb, SIGNAL(triggered()), SLOT(slot_Bshortcut()));
-    this->connect(this->crtf, SIGNAL(triggered()), SLOT(slot_Fshortcut()));
+    this->connect(this->crtb,
+                  SIGNAL(triggered()),
+                  SLOT(slot_Bshortcut())
+                  );
+
+    this->connect(this->crtf,
+                  SIGNAL(triggered()),
+                  SLOT(slot_Fshortcut())
+                  );
 }
 
 void MainWindow::setTableModel()
@@ -768,6 +827,13 @@ void MainWindow::slot_openBoundingBoxDialog(const unsigned int _bboxKey)
     this->boundingBoxDialog->show();
 }
 
+void MainWindow::slot_setupButtonPressed()
+{
+    this->settingsDialog = new DialogSetup(this);
+    this->settingsDialog->setModal(true);
+    this->settingsDialog->show();
+}
+
 void MainWindow::slot_slideVideo(int _frameId)
 {
     std::cout << _frameId << std::endl;
@@ -981,9 +1047,9 @@ void MainWindow::slot_viewFrameContextMenu(const QPoint &_point)
         }
         else if(this->frameScene->selectedBBox().size() == 1)
         {
-            contextMenu.addAction("Replicate Bounding box 10x", this, SLOT(slot_viewFrameReplicateBoxMenu10()));
-            contextMenu.addAction("Replicate Bounding box 100x", this, SLOT(slot_viewFrameReplicateBoxMenu100()));
-            contextMenu.addAction("Replicate Bounding box 10x back", this, SLOT(slot_viewFrameReplicateBoxMenu10back()));
+            contextMenu.addAction("Clone Bounding box 10x", this, SLOT(slot_viewFrameReplicateBoxMenu10()));
+            contextMenu.addAction("Clone Bounding box 100x", this, SLOT(slot_viewFrameReplicateBoxMenu100()));
+            contextMenu.addAction("Clone Bounding box 10x back", this, SLOT(slot_viewFrameReplicateBoxMenu10back()));
             contextMenu.addAction("Remove Bounding box", this, SLOT(slot_viewFrameRemoveBoxMenu()));
         }
         contextMenu.exec(position);
