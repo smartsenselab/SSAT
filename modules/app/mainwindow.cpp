@@ -1047,9 +1047,9 @@ void MainWindow::slot_viewFrameContextMenu(const QPoint &_point)
         }
         else if(this->frameScene->selectedBBox().size() == 1)
         {
-            contextMenu.addAction("Replicate Bounding box 10x", this, SLOT(slot_viewFrameReplicateBoxMenu10()));
-            contextMenu.addAction("Replicate Bounding box 100x", this, SLOT(slot_viewFrameReplicateBoxMenu100()));
-            contextMenu.addAction("Replicate Bounding box 10x back", this, SLOT(slot_viewFrameReplicateBoxMenu10back()));
+            contextMenu.addAction("Clone Bounding box 10x", this, SLOT(slot_viewFrameReplicateBoxMenu10()));
+            contextMenu.addAction("Clone Bounding box 100x", this, SLOT(slot_viewFrameReplicateBoxMenu100()));
+            contextMenu.addAction("Clone Bounding box 10x back", this, SLOT(slot_viewFrameReplicateBoxMenu10back()));
             contextMenu.addAction("Remove Bounding box", this, SLOT(slot_viewFrameRemoveBoxMenu()));
         }
         contextMenu.exec(position);

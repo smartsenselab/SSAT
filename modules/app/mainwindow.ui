@@ -170,6 +170,9 @@
         <bold>true</bold>
        </font>
       </property>
+      <property name="toolTip">
+       <string>Ctrl + Left arrow key</string>
+      </property>
       <property name="text">
        <string>&lt;&lt;</string>
       </property>
@@ -183,6 +186,9 @@
         <bold>true</bold>
        </font>
       </property>
+      <property name="toolTip">
+       <string>Ctrl + Space key</string>
+      </property>
       <property name="text">
        <string>Stop</string>
       </property>
@@ -195,6 +201,9 @@
         <weight>75</weight>
         <bold>true</bold>
        </font>
+      </property>
+      <property name="toolTip">
+       <string>Space key</string>
       </property>
       <property name="text">
        <string>Play</string>
@@ -245,6 +254,9 @@
         <bold>true</bold>
        </font>
       </property>
+      <property name="toolTip">
+       <string>Ctrl + Right arrow key</string>
+      </property>
       <property name="text">
        <string>&gt;&gt;</string>
       </property>
@@ -283,6 +295,9 @@
         <weight>75</weight>
         <bold>true</bold>
        </font>
+      </property>
+      <property name="toolTip">
+       <string>Right arrow key</string>
       </property>
       <property name="text">
        <string>&gt;</string>
@@ -328,6 +343,9 @@
         <weight>75</weight>
         <bold>true</bold>
        </font>
+      </property>
+      <property name="toolTip">
+       <string>Left arrow key</string>
       </property>
       <property name="text">
        <string>&lt;</string>
