@@ -5,12 +5,15 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     this->ui->setupUi(this);
+    this->setWindowTitle("Smart Surveillance Annotation Tool");
+
 
     this->frameScene = new QBoundingBoxScene(this);
     this->loaded = false;
     this->manager = new VideoManager;
     this->playing = false;
     this->saveTimer = new QTimer(this);
+    this->skipFrame = 50;
     this->speed = 0;
 
     this->enableWidgets(false);
@@ -63,9 +66,11 @@ void MainWindow::enableWidgets(const bool _enable)
     this->ui->labelFrameId->setEnabled(_enable);
     this->ui->labelTime->setEnabled(_enable);
     this->ui->sliderFrame->setEnabled(_enable);
+    this->ui->spinBoxSkip->setEnabled(_enable);
     this->ui->spinBoxSpeed->setEnabled(_enable);
     this->ui->tableViewFrame->setEnabled(_enable);
     this->ui->viewFrame->setEnabled(_enable);
+    this->ui->labelSkip->setEnabled(_enable);
     this->ui->labelSpeed->setEnabled(_enable);
     this->ui->buttonTool->setEnabled(_enable);
 }
@@ -195,6 +200,12 @@ void MainWindow::connectSignalSlots()
                   SIGNAL(pressed()),
                   this,
                   SLOT(slot_stopButtonPressed())
+                  );
+
+    this->connect(this->ui->spinBoxSkip,
+                  SIGNAL(valueChanged(int)),
+                  this,
+                  SLOT(slot_spinBoxSkipFrameValueChanged(int))
                   );
 
     this->connect(this->ui->spinBoxSpeed,
@@ -354,11 +365,6 @@ void MainWindow::isPlaying(const bool _enable)
     {
         this->ui->buttonPlay->setText("Play");
     }
-}
-
-void MainWindow::changeSpeed(const int _speed)
-{
-    this->speed = (_speed - 1) * 5;
 }
 
 void MainWindow::pauseVideo()
@@ -667,12 +673,14 @@ void MainWindow::slot_openFile()
                       );
 
         // Loading name from file
+        this->setWindowTitle("SSAT [" + videoName + "]");
         string stdName = videoName.toStdString();
         size_t slashFound = stdName.find_last_of("/");
-        this->corePath = QString::fromStdString("./temp_" + stdName.substr(slashFound).substr(1) +".json");
+        this->corePath = QString::fromStdString("./temp_" + stdName.substr(slashFound).substr(1) + ".json");
         this->loaded = true;
         this->manager->loadVideo(videoName);
         this->totalFrames = std::round(+this->manager->getTotalFrames());
+        this->skipFrame = static_cast<int>(std::round(this->totalFrames / 100.0));
 
         // Lazy instantiation of SSAT Core
         if(this->singleton == NULL)
@@ -690,6 +698,8 @@ void MainWindow::slot_openFile()
         // Displaying Frame and Core information on Interface
         this->tableModel->setFrameBasedData(this->singleton->frameData);
         this->ui->sliderFrame->setRange(1, static_cast<int>(this->totalFrames));
+        this->ui->spinBoxSkip->setMaximum(this->skipFrame * 10);
+        this->ui->spinBoxSkip->setValue(this->skipFrame);
         this->ui->tableViewFrame->setModel(this->tableModel);
         this->enableWidgets(true);
         this->updateFrame(1);
@@ -796,7 +806,9 @@ void MainWindow::slot_rewindButtonPressed()
 
 void MainWindow::slot_rewindButtonPressed(const int _frameId)
 {
-    int nextFrameId = static_cast<int>(_frameId - std::round(+this->manager->getTotalFrames() / 100.0) - 1);
+    //int nextFrameId = static_cast<int>(_frameId - std::round(+this->manager->getTotalFrames() / 100.0) - 1);
+    int nextFrameId = static_cast<int>(_frameId - this->skipFrame - 1);
+
     if(nextFrameId < 1)
     {
         nextFrameId = 1;
@@ -880,7 +892,9 @@ void MainWindow::slot_fastfButtonPressed()
 
 void MainWindow::slot_fastfButtonPressed(const int _frameId)
 {
-    int nextFrameId = static_cast<int>(_frameId + std::round(+this->manager->getTotalFrames() / 100.0) - 1);
+    //int nextFrameId = static_cast<int>(_frameId + std::round(+this->manager->getTotalFrames() / 100.0) - 1);
+    int nextFrameId = static_cast<int>(_frameId + this->skipFrame - 1);
+
     if(nextFrameId > this->manager->getTotalFrames())
     {
         nextFrameId = static_cast<int>(this->manager->getTotalFrames());
@@ -900,9 +914,14 @@ void MainWindow::slot_stopButtonPressed()
     this->stopVideo();
 }
 
+void MainWindow::slot_spinBoxSkipFrameValueChanged(int _value)
+{
+    this->skipFrame = _value;
+}
+
 void MainWindow::slot_spinBoxSpeedValueChanged(int _value)
 {
-    this->changeSpeed(_value);
+    this->speed = _value;
 }
 
 void MainWindow::slot_tableviewFrameSingleClicked(const QModelIndex _index){
