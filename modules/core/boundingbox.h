@@ -31,7 +31,8 @@ public:
     BoundingBox(const int &_x,
                 const int &_y,
                 const int &_w,
-                const int &_h);
+                const int &_h,
+                const bool _mod = true);
 
     ///
     /// \brief BoundingBox BoundingBox constructor
@@ -53,7 +54,8 @@ public:
                 const int &_x,
                 const int &_y,
                 const int &_w,
-                const int &_h);
+                const int &_h,
+                const bool _mod = true);
 
     ///
     /// \brief BoundingBox BoundingBox constructor
@@ -77,20 +79,21 @@ public:
                 const int &_x,
                 const int &_y,
                 const int &_w,
-                const int &_h);
+                const int &_h,
+                const bool _mod = true);
 
     ///
     /// \param _id An identifier for the bounding-box
     /// \param _key A frame-inner identifer for the bounding-box
     /// \param _box A struct holding X,Y,W and H values
     ///
-    BoundingBox(const unsigned int &_id, const unsigned int &_key, const Rect &_coordinates);
+    BoundingBox(const unsigned int &_id, const unsigned int &_key, const Rect &_coordinates, const bool _mod = true);
 
     ///
     /// \param _key A frame-inner identifer for the bounding-box
     /// \param _box A struct holding X,Y,W and H values
     ///
-    BoundingBox(const unsigned int &_key, const Rect &_coordinates);
+    BoundingBox(const unsigned int &_key, const Rect &_coordinates, const bool _mod = true);
 
     ///
     /// \brief BoundingBox BoundingBox copy constructor
@@ -119,6 +122,11 @@ public:
     int getH() const;
 
     ///
+    /// \brief getModify Get the toModify bool value
+    ///
+    int getModify() const;
+
+    ///
     /// \brief setX Set the boundingbox's x cordinate
     /// \param _x New value of x
     ///
@@ -143,6 +151,12 @@ public:
     void setH(const int _h);
 
     ///
+    /// \brief setModify Set the toModify flag
+    /// \param _mod New bool value for toModify
+    ///
+    void setModify(const bool _mod);
+
+    ///
     /// \brief setCoordinates
     /// \param _x New value of x
     /// \param _y New value of y
@@ -165,6 +179,7 @@ public:
 
 
 private:
+    bool toModify;
     Rect coordinates; //boundingbox coordinates(x, y, width, heigth)
 };
 

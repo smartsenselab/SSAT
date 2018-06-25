@@ -305,7 +305,7 @@ void WorkerThread::importJSON(Core &_singleton, QFrameBasedTableModel *_tableMod
                 bHstr = bH.toString().toUtf8().constData();
                 int bHint = std::stoi(bHstr);
 
-                BoundingBox tempBox(bIdInt, bCategoryStr, bInfoStr, bLabelStr, bNameStr, bXint, bYint, bWint, bHint);
+                BoundingBox tempBox(bIdInt, bCategoryStr, bInfoStr, bLabelStr, bNameStr, bXint, bYint, bWint, bHint, true);
                 tempFrame.addBox(tempBox);
 
                 _singleton.tracklets.insert(bIdInt);
@@ -345,19 +345,20 @@ void WorkerThread::alterFrameBasedSegment(Core &_singleton, const FrameBasedData
     _singleton.frameData[static_cast<unsigned long>(_index)] = _data;
 }
 
-void WorkerThread::exponentialForget(Core &_singleton, const BoundingBox _focusBox, const unsigned int _frameId, const unsigned int _numFrames)
+void WorkerThread::exponentialForget(Core &_singleton, BoundingBox _focusBox, const unsigned int _frameId, const unsigned int _numFrames)
 {
     double holder = 1.0;
     double step = 1.0 / _numFrames;
     int newX, newY, newW, newH;
 
+    // Moving backwards
     holder = 1.0;
     for(unsigned int frameIndex = _frameId;
         (frameIndex > 0) && (frameIndex >= _frameId - _numFrames);
         frameIndex--)
     {
         BoundingBox bbox = _singleton.frames[frameIndex].getBoxById(_focusBox.getId());
-        if (bbox.isValid())
+        if (bbox.isValid() && (bbox.getModify()))
         {
             newX = (holder * _focusBox.getX()) + ((1 - holder) * bbox.getX());
             newY = (holder * _focusBox.getY()) + ((1 - holder) * bbox.getY());
@@ -370,13 +371,14 @@ void WorkerThread::exponentialForget(Core &_singleton, const BoundingBox _focusB
         else break;
     }
 
+    // Moving forward
     holder = 1.0;
     for(unsigned int frameIndex = _frameId;
         (frameIndex < _singleton.frames.size()) && (frameIndex <= _frameId + _numFrames);
         frameIndex++)
     {
         BoundingBox bbox = _singleton.frames[frameIndex].getBoxById(_focusBox.getId());
-        if (bbox.isValid())
+        if (bbox.isValid() && (bbox.getModify()))
         {
             newX = (holder * _focusBox.getX()) + ((1 - holder) * bbox.getX());
             newY = (holder * _focusBox.getY()) + ((1 - holder) * bbox.getY());
@@ -388,6 +390,9 @@ void WorkerThread::exponentialForget(Core &_singleton, const BoundingBox _focusB
         }
         else break;
     }
+
+    _focusBox.setModify(false);
+    _singleton.frames[_frameId].setBox(_focusBox.getKey(), _focusBox);
 }
 
 void WorkerThread::replicateBoundingBoxFromCore(Core &_singleton, const unsigned int _bboxKey, const unsigned int _numFrames)
@@ -396,6 +401,7 @@ void WorkerThread::replicateBoundingBoxFromCore(Core &_singleton, const unsigned
     unsigned int frameLimit = std::min(nextFrameId + _numFrames, static_cast<unsigned int>(_singleton.frames.size()));
 
     BoundingBox bbox = _singleton.frames[nextFrameId - 1].getBoxByKey(_bboxKey);
+    bbox.setModify(true);
     for(unsigned int frameIndex = nextFrameId; frameIndex < frameLimit; frameIndex++)
     {
         BoundingBox repBox = _singleton.frames[frameIndex].getBoxById(bbox.getId());

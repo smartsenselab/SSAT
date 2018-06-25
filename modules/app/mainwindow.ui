@@ -413,6 +413,8 @@
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionUser_s_Guide"/>
+    <addaction name="separator"/>
     <addaction name="actionAbout_SSAT"/>
     <addaction name="actionAbout_SSIG"/>
    </widget>
@@ -634,6 +636,11 @@
   <action name="actionAbout_SSAT">
    <property name="text">
     <string>About SSAT</string>
+   </property>
+  </action>
+  <action name="actionUser_s_Guide">
+   <property name="text">
+    <string>User's Guide</string>
    </property>
   </action>
  </widget>
