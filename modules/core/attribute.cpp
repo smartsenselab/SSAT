@@ -85,6 +85,19 @@ vector<Attribute*> Attribute::findChildren(const string _name)
     return children;
 }
 
+vector<Attribute*> Attribute::getChildren()
+{
+    vector<Attribute*> children;
+    vector<Attribute*>::iterator childIt;
+    for(childIt = this->children.begin(); childIt != this->children.end(); childIt++)
+    {
+        children.push_back(*childIt);
+    }
+
+    return children;
+}
+
+
 bool Attribute::isBranch()
 {
     return ((this->children.size() > 0) && (this->parent != NULL));

@@ -34,6 +34,7 @@ void Core::reset(const unsigned int _frames)
     this->frameData.clear();
     this->frames.clear();
     this->frames.resize(_frames);
+    // this->tagTree->clear();
 }
 
 void Core::reset(const unsigned int _frames, unsigned int _cores)
@@ -41,9 +42,13 @@ void Core::reset(const unsigned int _frames, unsigned int _cores)
     this->frameData.clear();
     this->frames.clear();
     this->frames.resize(_frames);
+    // this->tagTree->clear();
 
     delete(this->pool);
     this->pool = new ThreadPool(_cores);
+
+    // delete(this->tagTree);
+    // this->tagTree = new Attribute("root");
 }
 
 string Core::getLatestCategory()
