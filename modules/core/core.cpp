@@ -4,7 +4,8 @@ Core::Core(unsigned int _frames, unsigned int _cores)
 {
     this->frames.resize(_frames);
     this->pool = new ThreadPool(_cores);
-    this->tagTree = new Attribute("root");
+    // this->tagTree = new Attribute("ROOT");
+    this->tagTree = new Attribute();
 }
 
 Core::~Core()

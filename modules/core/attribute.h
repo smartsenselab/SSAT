@@ -9,6 +9,7 @@ using std::vector;
 class Attribute
 {
 public:
+    Attribute();
     Attribute(string);
     ~Attribute();
     void clear();

@@ -1,5 +1,14 @@
 #include "attribute.h"
 
+Attribute::Attribute()
+{
+    this->name = "ROOT";
+    this->parent = NULL;
+
+    this->addChild("Rafael")->addChild("Henrique")->addChild("Vareto");
+    this->addChild("Luisa")->addChild("Aimee")->addChild("Vargas")->addChild("Quirino");
+}
+
 Attribute::Attribute(string _name)
 {
     this->name = _name;
