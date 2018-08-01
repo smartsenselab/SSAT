@@ -27,15 +27,15 @@ class DialogAnnotation : public QDialog
 private:
     Ui::DialogAnnotation *ui = NULL;
 
-    QAction *enterPressed = NULL;
+    QAction* enterPressed = NULL;
     QMultiMap<QString, QString> qAttributes;
 
-    QStandardItemModel *qStandardModel = NULL;
+    QStandardItemModel* qStandardModel = NULL;
 
     QString selectedCategory;
     QString selectedLabel;
 
-    Core *singleton = NULL;
+    Core* singleton = NULL;
 
 public:
     explicit DialogAnnotation(QWidget *parent = 0);
@@ -52,6 +52,15 @@ private:
     /// \param _enable true or false
     ///
     void enableWidgets(const bool _enable);
+
+    ///
+    /// \brief stlToModel
+    /// \param tag
+    /// \return
+    ///
+    void stlToModel(QStandardItem*, Attribute*);
+
+    void modelToStl();
 
 public slots:
     ///

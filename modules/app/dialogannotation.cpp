@@ -69,27 +69,37 @@ void DialogAnnotation::enableWidgets(const bool _enable)
     this->ui->pushButtonRemove->setEnabled(_enable);
 }
 
+void DialogAnnotation::stlToModel(QStandardItem* _qParentTag, Attribute* _nodeAtt)
+{
+    if(_nodeAtt != NULL)
+    {
+        QStandardItem* qNodeTag = new QStandardItem(QString::fromStdString((*_nodeAtt).getNodeName()));
+        vector<Attribute*> nodeChildren = ((*_nodeAtt).getChildren());
+
+        vector<Attribute*>::iterator childIt;
+        for(childIt = nodeChildren.begin(); childIt != nodeChildren.end(); childIt++)
+        {
+            this->stlToModel(qNodeTag, *childIt);
+        }
+        _qParentTag->appendRow(qNodeTag);
+    }
+}
+
 void DialogAnnotation::slot_initializeDialog(Core &_singleton)
 {
     this->singleton = &_singleton;
     this->qStandardModel = new QStandardItemModel(this);
 
-    for(multimap<string, string>::iterator itOuter = _singleton.attributes.begin();
-        itOuter != _singleton.attributes.end();
-        itOuter = _singleton.attributes.upper_bound(itOuter->first))
-    {
-        QStandardItem *qCategoryItem = new QStandardItem(QString::fromStdString(itOuter->first));
+    vector<Attribute*> rootChildren = this->singleton->tagTree->getChildren();
+    QStandardItem *qRootTag = new QStandardItem(QString::fromStdString(this->singleton->tagTree->getNodeName()));
 
-        for(multimap<string, string>::iterator itInner = _singleton.attributes.lower_bound(itOuter->first);
-            itInner != _singleton.attributes.upper_bound(itOuter->first);
-            itInner++)
-        {
-            QStandardItem *qLabelItem = new QStandardItem(QString::fromStdString(itInner->second));
-            qCategoryItem->appendRow(qLabelItem);
-        }
-        this->qStandardModel->appendRow(qCategoryItem);
+    vector<Attribute*>::iterator childIt;
+    for(childIt = rootChildren.begin(); childIt != rootChildren.end(); childIt++)
+    {
+        this->stlToModel(qRootTag, *childIt);
     }
 
+    this->qStandardModel->appendRow(qRootTag);
     this->ui->treeViewAttributes->setModel(this->qStandardModel);
     this->ui->treeViewAttributes->setEditTriggers(QAbstractItemView::EditKeyPressed |
                                                   QAbstractItemView::DoubleClicked);
