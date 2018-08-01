@@ -4,6 +4,7 @@ Core::Core(unsigned int _frames, unsigned int _cores)
 {
     this->frames.resize(_frames);
     this->pool = new ThreadPool(_cores);
+    this->tagTree = new Attribute("root");
 }
 
 Core::~Core()
@@ -12,6 +13,7 @@ Core::~Core()
     this->frameData.clear();
     this->frames.clear();
     delete(this->pool);
+    delete(this->tagTree);
 }
 
 Core* Core::getInstance(unsigned int _frames)
