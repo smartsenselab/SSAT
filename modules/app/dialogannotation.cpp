@@ -91,18 +91,17 @@ void DialogAnnotation::modelToStl(Attribute* _parentTag, QAbstractItemModel* _qI
     {
         QModelIndex qIndex = _qItemModel->index(outer, 0, _qParentIndex);
         QVariant qName = _qItemModel->data(qIndex);
-        _parentTag->setNodeName(qName.toString().toStdString());
-
-        qDebug() << qName << _qItemModel->hasChildren(qIndex);
+        Attribute* nodeTag = new Attribute(qName.toString().toStdString());
 
         if(_qItemModel->hasChildren(qIndex))
         {
-            Attribute* nodeTag = new Attribute("childTag", false);
-            _parentTag->addChild(nodeTag);
             this->modelToStl(nodeTag, _qItemModel, qIndex);
         }
+
+        _parentTag->addChild(nodeTag);
     }
 }
+
 
 void DialogAnnotation::slot_initializeDialog(Core &_singleton)
 {
@@ -229,7 +228,8 @@ void DialogAnnotation::slot_accept()
     this->singleton->attributes = newAttributes;
 
     Attribute* newTagTree = new Attribute("ROOT", true);
-    this->modelToStl(newTagTree, this->qStandardModel);
+    QModelIndex qIndex = this->qStandardModel->index(0, 0, QModelIndex());
+    this->modelToStl(newTagTree, this->qStandardModel, qIndex);
     this->singleton->tagTree->clear();
     this->singleton->tagTree = newTagTree;
     this->accept();
