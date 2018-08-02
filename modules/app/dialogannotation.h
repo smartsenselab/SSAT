@@ -76,11 +76,6 @@ public slots:
 
 private slots:
     ///
-    /// \brief slot_insertCategoryPressed Insert new Category to the tree
-    ///
-    void slot_insertCategoryPressed();
-
-    ///
     /// \brief slot_insertLabelPressed Insert new Label to the tree
     ///
     void slot_insertLabelPressed();
@@ -106,15 +101,10 @@ private slots:
     void slot_enterShortcut();
 
     ///
-    /// \brief slot_ConsistencyCheckCategory Check if the new category wasn't used before
-    ///
-    void slot_ConsistencyCheckCategory();
-
-    ///
     /// \brief slot_ConsistencyCheckLabel Check if the new label wasn't used before
     /// \param node Category that the new label is contained
     ///
-    void slot_ConsistencyCheckLabel(QStandardItem *node);
+    void slot_ConsistencyCheck(QStandardItem *node);
 };
 
 #endif // DIALOGANNOTATION_H
