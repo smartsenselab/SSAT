@@ -22,7 +22,7 @@ public:
     Attribute* getParent();
     Attribute* getNode();
 
-    vector<Attribute*> findChildren(const string);
+    Attribute* findChild(const string);
     vector<Attribute*> getChildren();
 
     bool isBranch();

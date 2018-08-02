@@ -6,6 +6,7 @@ Attribute::Attribute()
     this->parent = NULL;
 
     this->addChild("Rafael")->addChild("Henrique")->addChild("Vareto");
+    this->addChild("Rafael")->addChild("Gomes")->addChild("Costa");
     this->addChild("Luisa")->addChild("Aimee")->addChild("Vargas")->addChild("Quirino");
 }
 
@@ -54,19 +55,36 @@ vector<string> Attribute::getChildrenNames()
 
 Attribute* Attribute::addChild(const std::string _name)
 {
-    Attribute* child = new Attribute(_name);
-    child->parent = this;
-    this->children.push_back(child);
+    Attribute* thisChild = this->findChild(_name);
 
-    return child;
+    if(thisChild == NULL)
+    {
+        Attribute* child = new Attribute(_name);
+        child->parent = this;
+        this->children.push_back(child);
+        return child;
+    }
+    else
+    {
+        return thisChild;
+    }
 }
 
 Attribute* Attribute::addChild(Attribute* _child)
 {
-    _child->parent = this;
-    this->children.push_back(_child);
+    Attribute* thisChild = this->findChild(_child->getNodeName());
 
-    return _child;
+    if(thisChild == NULL)
+    {
+        _child->parent = this;
+        this->children.push_back(_child);
+        return _child;
+    }
+    else
+    {
+        return thisChild;
+    }
+
 }
 
 Attribute* Attribute::getParent()
@@ -79,19 +97,18 @@ Attribute* Attribute::getNode()
     return this;
 }
 
-vector<Attribute*> Attribute::findChildren(const string _name)
+Attribute* Attribute::findChild(const string _name)
 {
-    vector<Attribute*> children;
     vector<Attribute*>::iterator childIt;
     for(childIt = this->children.begin(); childIt != this->children.end(); childIt++)
     {
         if (_name.compare((*childIt)->getNodeName()) == 0)
         {
-            children.push_back(*childIt);
+            return (*childIt);
         }
     }
 
-    return children;
+    return NULL;
 }
 
 vector<Attribute*> Attribute::getChildren()
