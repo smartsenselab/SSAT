@@ -4,16 +4,18 @@ Attribute::Attribute()
 {
     this->name = "ROOT";
     this->parent = NULL;
+    this->root = true;
 
     this->addChild("Rafael")->addChild("Henrique")->addChild("Vareto");
     this->addChild("Rafael")->addChild("Gomes")->addChild("Costa");
     this->addChild("Luisa")->addChild("Aimee")->addChild("Vargas")->addChild("Quirino");
 }
 
-Attribute::Attribute(string _name)
+Attribute::Attribute(string _name, bool _root)
 {
     this->name = _name;
     this->parent = NULL;
+    this->root = _root;
 }
 
 Attribute::~Attribute()
@@ -51,6 +53,11 @@ vector<string> Attribute::getChildrenNames()
     }
 
     return names;
+}
+
+void Attribute::setNodeName(const string _name)
+{
+    this->name = _name;
 }
 
 Attribute* Attribute::addChild(const std::string _name)

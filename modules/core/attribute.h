@@ -10,19 +10,21 @@ class Attribute
 {
 public:
     Attribute();
-    Attribute(string);
+    Attribute(string _name, bool _root = false);
     ~Attribute();
     void clear();
 
     string getNodeName();
     vector<string> getChildrenNames();
 
-    Attribute* addChild(const string);
-    Attribute* addChild(Attribute*);
+    void setNodeName(const string _name);
+
+    Attribute* addChild(const string _name);
+    Attribute* addChild(Attribute* _child);
     Attribute* getParent();
     Attribute* getNode();
 
-    Attribute* findChild(const string);
+    Attribute* findChild(const string _name);
     vector<Attribute*> getChildren();
 
     bool isBranch();
@@ -30,6 +32,7 @@ public:
     bool isRoot();
 
 protected:
+    bool root;
     string name;
     Attribute* parent;
     vector<Attribute*> children;
