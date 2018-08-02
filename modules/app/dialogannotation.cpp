@@ -69,7 +69,7 @@ void DialogAnnotation::enableWidgets(const bool _enable)
     this->ui->pushButtonRemove->setEnabled(_enable);
 }
 
-void DialogAnnotation::stlToModel(QStandardItem* _qParentTag, Attribute* _nodeAtt)
+void DialogAnnotation::stlToModel(Attribute* _nodeAtt, QStandardItem* _qParentItem)
 {
     if(_nodeAtt != NULL)
     {
@@ -79,9 +79,28 @@ void DialogAnnotation::stlToModel(QStandardItem* _qParentTag, Attribute* _nodeAt
         vector<Attribute*>::iterator childIt;
         for(childIt = nodeChildren.begin(); childIt != nodeChildren.end(); childIt++)
         {
-            this->stlToModel(qNodeTag, *childIt);
+            this->stlToModel(*childIt, qNodeTag);
         }
-        _qParentTag->appendRow(qNodeTag);
+        _qParentItem->appendRow(qNodeTag);
+    }
+}
+
+void DialogAnnotation::modelToStl(Attribute* _parentTag, QAbstractItemModel* _qItemModel, QModelIndex _qParentIndex)
+{
+    for(unsigned int outer = 0; outer < _qItemModel->rowCount(_qParentIndex); ++outer)
+    {
+        QModelIndex qIndex = _qItemModel->index(outer, 0, _qParentIndex);
+        QVariant qName = _qItemModel->data(qIndex);
+        _parentTag->setNodeName(qName.toString().toStdString());
+
+        qDebug() << qName << _qItemModel->hasChildren(qIndex);
+
+        if(_qItemModel->hasChildren(qIndex))
+        {
+            Attribute* nodeTag = new Attribute("childTag", false);
+            _parentTag->addChild(nodeTag);
+            this->modelToStl(nodeTag, _qItemModel, qIndex);
+        }
     }
 }
 
@@ -91,12 +110,12 @@ void DialogAnnotation::slot_initializeDialog(Core &_singleton)
     this->qStandardModel = new QStandardItemModel(this);
 
     vector<Attribute*> rootChildren = this->singleton->tagTree->getChildren();
-    QStandardItem *qRootTag = new QStandardItem(QString::fromStdString(this->singleton->tagTree->getNodeName()));
+    QStandardItem* qRootTag = new QStandardItem(QString::fromStdString(this->singleton->tagTree->getNodeName()));
 
     vector<Attribute*>::iterator childIt;
     for(childIt = rootChildren.begin(); childIt != rootChildren.end(); childIt++)
     {
-        this->stlToModel(qRootTag, *childIt);
+        this->stlToModel(*childIt, qRootTag);
     }
 
     this->qStandardModel->appendRow(qRootTag);
@@ -208,6 +227,11 @@ void DialogAnnotation::slot_accept()
     }
 
     this->singleton->attributes = newAttributes;
+
+    Attribute* newTagTree = new Attribute("ROOT", true);
+    this->modelToStl(newTagTree, this->qStandardModel);
+    this->singleton->tagTree->clear();
+    this->singleton->tagTree = newTagTree;
     this->accept();
 }
 

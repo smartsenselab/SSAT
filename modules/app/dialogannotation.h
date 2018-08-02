@@ -55,12 +55,17 @@ private:
 
     ///
     /// \brief stlToModel
-    /// \param tag
-    /// \return
+    /// \param _nodeAtt
+    /// \param _qParentItem
     ///
-    void stlToModel(QStandardItem*, Attribute*);
+    void stlToModel(Attribute* _nodeAtt, QStandardItem* _qParentItem);
 
-    void modelToStl();
+    ///
+    /// \brief modelToStl
+    /// \param _qItemModel
+    /// \param _qParentIndex
+    ///
+    void modelToStl(Attribute* _parentTag, QAbstractItemModel* _qItemModel, QModelIndex _qParentIndex = QModelIndex());
 
 public slots:
     ///
