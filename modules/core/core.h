@@ -13,6 +13,7 @@ using std::vector;
 using cv::Rect;
 using cv::VideoCapture;
 
+#include "attribute.h"
 #include "boundingbox.h"
 #include "frame.h"
 #include "framebaseddata.h"
@@ -31,8 +32,8 @@ private:
     unsigned int latestKey;
 
 public:
+    Attribute *tagTree;
     ThreadPool *pool;
-
     multimap<string, string> attributes;
     vector<FrameBasedData> frameData;
     vector<Frame> frames;

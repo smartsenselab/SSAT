@@ -29,7 +29,7 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -45,16 +45,9 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QPushButton" name="pushButtonInsertCategory">
+       <widget class="QPushButton" name="pushButtonAdd">
         <property name="text">
-         <string>Insert Category</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButtonInsertLabel">
-        <property name="text">
-         <string>Insert Label</string>
+         <string>Add Node</string>
         </property>
        </widget>
       </item>

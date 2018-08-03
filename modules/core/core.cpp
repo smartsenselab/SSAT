@@ -4,6 +4,8 @@ Core::Core(unsigned int _frames, unsigned int _cores)
 {
     this->frames.resize(_frames);
     this->pool = new ThreadPool(_cores);
+    // this->tagTree = new Attribute("ROOT");
+    this->tagTree = new Attribute();
 }
 
 Core::~Core()
@@ -12,6 +14,7 @@ Core::~Core()
     this->frameData.clear();
     this->frames.clear();
     delete(this->pool);
+    delete(this->tagTree);
 }
 
 Core* Core::getInstance(unsigned int _frames)
@@ -32,6 +35,7 @@ void Core::reset(const unsigned int _frames)
     this->frameData.clear();
     this->frames.clear();
     this->frames.resize(_frames);
+    // this->tagTree->clear();
 }
 
 void Core::reset(const unsigned int _frames, unsigned int _cores)
@@ -39,9 +43,13 @@ void Core::reset(const unsigned int _frames, unsigned int _cores)
     this->frameData.clear();
     this->frames.clear();
     this->frames.resize(_frames);
+    // this->tagTree->clear();
 
     delete(this->pool);
     this->pool = new ThreadPool(_cores);
+
+    // delete(this->tagTree);
+    // this->tagTree = new Attribute("root");
 }
 
 string Core::getLatestCategory()

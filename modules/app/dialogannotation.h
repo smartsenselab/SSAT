@@ -27,15 +27,15 @@ class DialogAnnotation : public QDialog
 private:
     Ui::DialogAnnotation *ui = NULL;
 
-    QAction *enterPressed = NULL;
+    QAction* enterPressed = NULL;
     QMultiMap<QString, QString> qAttributes;
 
-    QStandardItemModel *qStandardModel = NULL;
+    QStandardItemModel* qStandardModel = NULL;
 
     QString selectedCategory;
     QString selectedLabel;
 
-    Core *singleton = NULL;
+    Core* singleton = NULL;
 
 public:
     explicit DialogAnnotation(QWidget *parent = 0);
@@ -53,6 +53,20 @@ private:
     ///
     void enableWidgets(const bool _enable);
 
+    ///
+    /// \brief stlToModel
+    /// \param _nodeAtt
+    /// \param _qParentItem
+    ///
+    void stlToModel(Attribute* _nodeAtt, QStandardItem* _qParentItem);
+
+    ///
+    /// \brief modelToStl
+    /// \param _qItemModel
+    /// \param _qParentIndex
+    ///
+    void modelToStl(Attribute* _parentTag, QAbstractItemModel* _qItemModel, QModelIndex _qParentIndex = QModelIndex());
+
 public slots:
     ///
     /// \brief slot_initializeDialog Load information from core and initialize tree
@@ -62,14 +76,9 @@ public slots:
 
 private slots:
     ///
-    /// \brief slot_insertCategoryPressed Insert new Category to the tree
-    ///
-    void slot_insertCategoryPressed();
-
-    ///
     /// \brief slot_insertLabelPressed Insert new Label to the tree
     ///
-    void slot_insertLabelPressed();
+    void slot_addNodePressed();
 
     ///
     /// \brief slot_removePressed Remove Category or Label
@@ -92,15 +101,10 @@ private slots:
     void slot_enterShortcut();
 
     ///
-    /// \brief slot_ConsistencyCheckCategory Check if the new category wasn't used before
-    ///
-    void slot_ConsistencyCheckCategory();
-
-    ///
     /// \brief slot_ConsistencyCheckLabel Check if the new label wasn't used before
     /// \param node Category that the new label is contained
     ///
-    void slot_ConsistencyCheckLabel(QStandardItem *node);
+    void slot_ConsistencyCheck(QStandardItem *node);
 };
 
 #endif // DIALOGANNOTATION_H
