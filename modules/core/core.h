@@ -57,6 +57,7 @@ public:
     unsigned int getLatestKey();
     unsigned int getLatestId();
     unsigned int getLargestId();
+    vector<string> getTagTreeNames();
 
     void setLatestCategory(string _category);
     void setLatestLabel(string _label);
@@ -65,6 +66,9 @@ public:
     bool setLargestId(unsigned int _id);
 
     void updateFrameId();
+
+private:
+    void tagTreeToString(Attribute* _nodeAtt, vector<string> &_nodeNames);
 };
 
 #endif // CORE_H

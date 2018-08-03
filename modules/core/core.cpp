@@ -4,7 +4,6 @@ Core::Core(unsigned int _frames, unsigned int _cores)
 {
     this->frames.resize(_frames);
     this->pool = new ThreadPool(_cores);
-    // this->tagTree = new Attribute("ROOT");
     this->tagTree = new Attribute();
 }
 
@@ -47,9 +46,6 @@ void Core::reset(const unsigned int _frames, unsigned int _cores)
 
     delete(this->pool);
     this->pool = new ThreadPool(_cores);
-
-    // delete(this->tagTree);
-    // this->tagTree = new Attribute("root");
 }
 
 string Core::getLatestCategory()
@@ -80,6 +76,18 @@ unsigned int Core::getLargestId()
     }
 
     return *(this->tracklets.rbegin());
+}
+
+vector<string> Core::getTagTreeNames()
+{
+    vector<string> nodeNames;
+    vector<Attribute*> rootChildren = this->tagTree->getChildren();
+
+    vector<Attribute*>::iterator childIt;
+    for(childIt = rootChildren.begin(); childIt != rootChildren.end(); childIt++)
+    {
+        this->tagTreeToString(*childIt, nodeNames);
+    }
 }
 
 void Core::setLatestCategory(string _category)
@@ -118,5 +126,20 @@ void Core::updateFrameId()
     for(unsigned int index = 0; index < this->frames.size(); index++)
     {
         this->frames[index].setId(index);
+    }
+}
+
+void Core::tagTreeToString(Attribute* _nodeAtt, vector<std::string> &_nodeNames)
+{
+    if(_nodeAtt != NULL)
+    {
+        // qDebug() << _nodeAtt->getNodeName();
+
+        vector<Attribute*>::iterator childIt;
+        vector<Attribute*> nodeChildren = ((*_nodeAtt).getChildren());
+        for(childIt = nodeChildren.begin(); childIt != nodeChildren.end(); childIt++)
+        {
+            this->tagTreeToString(*childIt, _nodeNames);
+        }
     }
 }

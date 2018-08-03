@@ -130,7 +130,6 @@ vector<Attribute*> Attribute::getChildren()
     return children;
 }
 
-
 bool Attribute::isBranch()
 {
     return ((this->children.size() > 0) && (this->parent != NULL));
