@@ -35,7 +35,7 @@ void DialogAnnotation::connectSignalSlots()
     this->connect(this->ui->pushButtonAdd,
                   SIGNAL(pressed()),
                   this,
-                  SLOT(slot_insertLabelPressed())
+                  SLOT(slot_addNodePressed())
                   );
 
     this->connect(this->ui->pushButtonRemove,
@@ -77,6 +77,12 @@ void DialogAnnotation::stlToModel(Attribute* _nodeAtt, QStandardItem* _qParentIt
         }
         _qParentItem->appendRow(qNodeTag);
     }
+
+    this->connect(this->qStandardModel,
+                  SIGNAL(itemChanged(QStandardItem*)),
+                  this,
+                  SLOT(slot_ConsistencyCheck(QStandardItem*))
+                  );
 }
 
 void DialogAnnotation::modelToStl(Attribute* _parentTag, QAbstractItemModel* _qItemModel, QModelIndex _qParentIndex)
@@ -128,20 +134,14 @@ void DialogAnnotation::slot_initializeDialog(Core &_singleton)
     }
 }
 
-void DialogAnnotation::slot_insertLabelPressed()
+void DialogAnnotation::slot_addNodePressed()
 {
-    QStandardItem* node = this->qStandardModel->itemFromIndex(ui->treeViewAttributes->currentIndex());
+    QStandardItem* node = this->qStandardModel->itemFromIndex(this->ui->treeViewAttributes->currentIndex());
     QStandardItem* label = new QStandardItem("New label");
     node->appendRow(label);
 
     this->ui->treeViewAttributes->setCurrentIndex(label->index());
     this->ui->treeViewAttributes->edit(label->index());
-
-    this->connect(qStandardModel,
-                  SIGNAL(itemChanged(QStandardItem*)),
-                  this,
-                  SLOT(slot_ConsistencyCheck(QStandardItem*))
-                  );
 }
 
 void DialogAnnotation::slot_removePressed()
@@ -181,41 +181,44 @@ void DialogAnnotation::slot_enterShortcut()
 
 void DialogAnnotation::slot_ConsistencyCheck(QStandardItem *node)
 {
-    int flag = 0;
-    int row = node->parent()->row();
-    QModelIndex categoryIndex = this->qStandardModel->index(row, 0);
+    // ERROR: Consistency Check does not work for all same-hierarchy nodes
+    bool identicalFlag = false;
+    int parentRow = node->parent()->row();
+    int parentCol = node->parent()->column();
+    QModelIndex qParentIndex = this->qStandardModel->index(parentRow, parentCol);
 
-    for(int outer = 0; outer < this->qStandardModel->rowCount(categoryIndex); outer++)
+    for(unsigned int outer = 0; outer < this->qStandardModel->rowCount(qParentIndex); ++outer)
     {
-        QModelIndex labelIndex = this->qStandardModel->index(outer, 0, categoryIndex);
-        QVariant labelName = this->qStandardModel->data(labelIndex);
+        QModelIndex qIndex1 = this->qStandardModel->index(outer, 0, qParentIndex);
+        QVariant qName1 = this->qStandardModel->data(qIndex1);
 
-        for(int outer2 = 0; outer2 < this->qStandardModel->rowCount(categoryIndex); outer2++)
+        for(unsigned int inner = 0; inner != outer, inner < this->qStandardModel->rowCount(qParentIndex); ++inner)
         {
-            QModelIndex labelIndex2 = this->qStandardModel->index(outer2, 0, categoryIndex);
-            QVariant labelName2 = this->qStandardModel->data(labelIndex2);
-            QString str1 = labelName.toString();
-            QString str2 = labelName2.toString();
-            QByteArray ba1 = str1.toLatin1();
-            QByteArray ba2 = str2.toLatin1();
-            const char *c_str1 = ba1.data();
-            const char *c_str2 = ba2.data();
-            if(strcmp(c_str1, c_str2) == 0 && outer != outer2)
+            if(outer != inner)
             {
-                flag = 1;
+                QModelIndex qIndex2 = this->qStandardModel->index(inner, 0, qParentIndex);
+                QVariant qName2 = this->qStandardModel->data(qIndex2);
+
+                string name1 = qName1.toString().toStdString();
+                string name2 = qName2.toString().toStdString();
+                if(name1.compare(name2) == 0)
+                {
+                    identicalFlag = true;
+                }
             }
         }
     }
-    if(flag == 0)
-    {
-        this->ui->buttonBox->setEnabled(true);
-        this->ui->pushButtonAdd->setEnabled(true);
-        this->ui->pushButtonRemove->setEnabled(true);
-    }
-    else
+
+    if(identicalFlag)
     {
         this->ui->buttonBox->setEnabled(false);
         this->ui->pushButtonAdd->setEnabled(false);
         this->ui->pushButtonRemove->setEnabled(false);
+    }
+    else
+    {
+        this->ui->buttonBox->setEnabled(true);
+        this->ui->pushButtonAdd->setEnabled(true);
+        this->ui->pushButtonRemove->setEnabled(true);
     }
 }

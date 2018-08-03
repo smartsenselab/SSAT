@@ -78,7 +78,7 @@ private slots:
     ///
     /// \brief slot_insertLabelPressed Insert new Label to the tree
     ///
-    void slot_insertLabelPressed();
+    void slot_addNodePressed();
 
     ///
     /// \brief slot_removePressed Remove Category or Label
