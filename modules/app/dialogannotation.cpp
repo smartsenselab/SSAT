@@ -152,7 +152,9 @@ void DialogAnnotation::slot_removePressed()
         int row = this->ui->treeViewAttributes->currentIndex().row();
         int col = this->ui->treeViewAttributes->currentIndex().column();
         QModelIndex parent = this->ui->treeViewAttributes->currentIndex().parent();
+        QStandardItem* node = this->qStandardModel->itemFromIndex(this->ui->treeViewAttributes->currentIndex());
 
+        node->setText("To Remove");
         this->qStandardModel->removeRows(row, 1, parent);
 
         if(this->qStandardModel->rowCount() == 0)
@@ -226,12 +228,10 @@ void DialogAnnotation::slot_ConsistencyCheck(QStandardItem *node)
     {
         this->ui->buttonBox->setEnabled(false);
         this->ui->pushButtonAdd->setEnabled(false);
-        this->ui->pushButtonRemove->setEnabled(false);
     }
     else
     {
         this->ui->buttonBox->setEnabled(true);
         this->ui->pushButtonAdd->setEnabled(true);
-        this->ui->pushButtonRemove->setEnabled(true);
     }
 }
