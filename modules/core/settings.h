@@ -13,15 +13,20 @@ class Settings
 public:
     Settings();
 
+    unsigned int getLargestId();
     string getLatestCategory();
     string getLatestLabel();
     unsigned int getLatestKey();
     unsigned int getLatestId();
 
+    bool setLargestId(unsigned int _id);
     void setLatestCategory(string _category);
     void setLatestLabel(string _label);
     void setLatestKey(unsigned int _key);
     void setLatestId(unsigned int _id);
+
+public:
+    set<unsigned int> tracklets;
 
 private:
     string latestCategory;

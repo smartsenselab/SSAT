@@ -1316,13 +1316,13 @@ void MainWindow::slot_comboBoxCategoryActivated(const QString &_text)
 unsigned int MainWindow::slot_addBoundingBoxToCore(const Rect _box)
 {
     unsigned int currentFrameId = static_cast<unsigned int>(this->manager->getFrameId() - 1);
-    unsigned int largestId = this->singleton->getLargestId() + 1;
+    unsigned int largestId = this->singleton->setup.getLargestId() + 1;
 
     unsigned int latestKey = this->singleton->frames[currentFrameId].addBox(largestId, _box);
 
     this->singleton->setup.setLatestKey(latestKey);
     this->singleton->setup.setLatestId(largestId);
-    this->singleton->setLargestId(largestId);
+    this->singleton->setup.setLargestId(largestId);
 
     this->updateFrame(currentFrameId);
 

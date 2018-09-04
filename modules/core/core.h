@@ -39,7 +39,6 @@ public:
     multimap<string, string> attributes;
     vector<FrameBasedData> frameData;
     vector<Frame> frames;
-    set<unsigned int> tracklets;
 
 private:
     Core(unsigned int _frames, unsigned int _cores);
@@ -54,10 +53,7 @@ public:
     void runTracker(const string  &_videoName, const unsigned int _frameId,
                     const string &_boxName, int identifier, int status);
 
-    unsigned int getLargestId();
     vector<string> getTagTreeNames();
-    bool setLargestId(unsigned int _id);
-
     void updateFrameId();
 
 private:
