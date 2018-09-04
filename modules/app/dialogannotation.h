@@ -10,9 +10,9 @@ using std::multimap;
 #include <QDialog>
 #include <QMessageBox>
 #include <QModelIndex>
+#include <QStandardItemModel>
 #include <QtCore>
 #include <QtGui>
-#include <QStandardItemModel>
 
 #include "core.h"
 

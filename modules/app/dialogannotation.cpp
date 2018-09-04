@@ -8,11 +8,10 @@ DialogAnnotation::DialogAnnotation(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    this->enterPressed = new QAction(tr("id1"),this);
+    this->enterPressed = new QAction(tr("id1"), this);
     this->enterPressed->setShortcuts(QList<QKeySequence>() << Qt::EnterKeyDefault);
     this->addAction(enterPressed);
 
-    this->connectSignalSlots();
     this->enableWidgets(true);
     this->setFixedSize(this->width(), this->height());
 
@@ -54,6 +53,12 @@ void DialogAnnotation::connectSignalSlots()
                   SIGNAL(rejected()),
                   this,
                   SLOT(slot_reject())
+                  );
+
+    this->connect(this->qStandardModel,
+                  SIGNAL(itemChanged(QStandardItem*)),
+                  this,
+                  SLOT(slot_ConsistencyCheck(QStandardItem*))
                   );
 }
 
@@ -110,25 +115,23 @@ void DialogAnnotation::slot_initializeDialog(Core &_singleton)
         this->stlToModel(*childIt, qRootTag);
     }
     this->qStandardModel->appendRow(qRootTag);
-    this->ui->treeViewAttributes->setModel(this->qStandardModel);
-    this->ui->treeViewAttributes->setEditTriggers(QAbstractItemView::EditKeyPressed |
-                                                  QAbstractItemView::DoubleClicked);
 
     QModelIndex first = this->qStandardModel->index(0, 0, QModelIndex());
+
+    this->ui->treeViewAttributes->setModel(this->qStandardModel);
     this->ui->treeViewAttributes->setCurrentIndex(first);
+    this->ui->treeViewAttributes->expandAll();
+    this->ui->treeViewAttributes->setEditTriggers(QAbstractItemView::EditKeyPressed |
+                                                  QAbstractItemView::DoubleClicked);
 
     // disable insert button and remove if there are no categories
     if(this->qStandardModel->rowCount() == 0)
     {
-        // this->ui->pushButtonAdd->setDisabled(true);
+        this->ui->pushButtonAdd->setDisabled(false);
         this->ui->pushButtonRemove->setDisabled(true);
     }
 
-    this->connect(this->qStandardModel,
-                  SIGNAL(itemChanged(QStandardItem*)),
-                  this,
-                  SLOT(slot_ConsistencyCheck(QStandardItem*))
-                  );
+    this->connectSignalSlots();
 }
 
 void DialogAnnotation::slot_addNodePressed()

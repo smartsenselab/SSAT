@@ -76,7 +76,7 @@ void WorkerThread::exportJSON(Core &_singleton, const QString &_jsonName)
     // Exporting Header
     headerObject["Date"] = QDate::currentDate().toString();
     headerObject["Tracker"] = QString::fromStdString("CMT");
-    headerObject["Version"] = QString::fromStdString("1.0.1");
+    headerObject["Version"] = QString::fromStdString("1.0.2");
     final["Header"] = headerObject;
 
     // Exporting Attributes

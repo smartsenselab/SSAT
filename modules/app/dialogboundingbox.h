@@ -2,6 +2,9 @@
 #define DIALOGBOUNDINGBOX_H
 
 #include <QDialog>
+#include <QMessageBox>
+#include <QModelIndex>
+#include <QStandardItemModel>
 #include <QtCore>
 #include <QtGui>
 
@@ -24,10 +27,12 @@ private:
     unsigned int frameId;
     unsigned int maxId;
 
-    Core *singleton = NULL;
+    QStandardItemModel* qStandardModel = NULL;
 
     QStringListModel *categoryModel = NULL;
     QStringListModel *labelModel = NULL;
+
+    Core *singleton = NULL;
 
 public:
     explicit DialogBoundingBox(QWidget *parent = 0);
@@ -49,6 +54,13 @@ private:
     /// \param _category    The QString (name) that will represent the category
     ///
     void initializeComboboxes(const QString _category);
+
+    ///
+    /// \brief stlToModel
+    /// \param _nodeAtt
+    /// \param _qParentItem
+    ///
+    void stlToModel(Attribute* _nodeAtt, QStandardItem* _qParentItem);
 
 public slots:
     ///
