@@ -77,12 +77,6 @@ void DialogAnnotation::stlToModel(Attribute* _nodeAtt, QStandardItem* _qParentIt
         }
         _qParentItem->appendRow(qNodeTag);
     }
-
-    this->connect(this->qStandardModel,
-                  SIGNAL(itemChanged(QStandardItem*)),
-                  this,
-                  SLOT(slot_ConsistencyCheck(QStandardItem*))
-                  );
 }
 
 void DialogAnnotation::modelToStl(Attribute* _parentTag, QAbstractItemModel* _qItemModel, QModelIndex _qParentIndex)
@@ -115,7 +109,6 @@ void DialogAnnotation::slot_initializeDialog(Core &_singleton)
     {
         this->stlToModel(*childIt, qRootTag);
     }
-
     this->qStandardModel->appendRow(qRootTag);
     this->ui->treeViewAttributes->setModel(this->qStandardModel);
     this->ui->treeViewAttributes->setEditTriggers(QAbstractItemView::EditKeyPressed |
@@ -124,14 +117,18 @@ void DialogAnnotation::slot_initializeDialog(Core &_singleton)
     QModelIndex first = this->qStandardModel->index(0, 0, QModelIndex());
     this->ui->treeViewAttributes->setCurrentIndex(first);
 
-    int rowCount = this->qStandardModel->rowCount();
-
     // disable insert button and remove if there are no categories
-    if(rowCount == 0)
+    if(this->qStandardModel->rowCount() == 0)
     {
-        this->ui->pushButtonAdd->setDisabled(true);
+        // this->ui->pushButtonAdd->setDisabled(true);
         this->ui->pushButtonRemove->setDisabled(true);
     }
+
+    this->connect(this->qStandardModel,
+                  SIGNAL(itemChanged(QStandardItem*)),
+                  this,
+                  SLOT(slot_ConsistencyCheck(QStandardItem*))
+                  );
 }
 
 void DialogAnnotation::slot_addNodePressed()
@@ -146,15 +143,33 @@ void DialogAnnotation::slot_addNodePressed()
 
 void DialogAnnotation::slot_removePressed()
 {
-    int row = this->ui->treeViewAttributes->currentIndex().row();
-    QModelIndex parent = this->ui->treeViewAttributes->currentIndex().parent();
+    QModelIndex currentIndex = this->ui->treeViewAttributes->currentIndex();
+    QVariant qNodeName = this->qStandardModel->data(currentIndex);
+    string nodeName = qNodeName.toString().toStdString();
 
-    this->qStandardModel->removeRows(row, 1, parent);
-
-    if(this->qStandardModel->rowCount() == 0)
+    if(nodeName.compare("ROOT") != 0)
     {
-        this->ui->pushButtonAdd->setDisabled(true);
-        this->ui->pushButtonRemove->setDisabled(true);
+        int row = this->ui->treeViewAttributes->currentIndex().row();
+        int col = this->ui->treeViewAttributes->currentIndex().column();
+        QModelIndex parent = this->ui->treeViewAttributes->currentIndex().parent();
+        QStandardItem* node = this->qStandardModel->itemFromIndex(this->ui->treeViewAttributes->currentIndex());
+
+        node->setText("To Remove");
+        this->qStandardModel->removeRows(row, 1, parent);
+
+        if(this->qStandardModel->rowCount() == 0)
+        {
+            this->ui->pushButtonAdd->setDisabled(true);
+            this->ui->pushButtonRemove->setDisabled(true);
+        }
+    }
+    else
+    {
+        QMessageBox message;
+        message.setIcon(QMessageBox::Warning);
+        message.setText("Attribute Warning");
+        message.setInformativeText("You cannot remove the ROOT node");
+        message.exec();
     }
 }
 
@@ -213,12 +228,10 @@ void DialogAnnotation::slot_ConsistencyCheck(QStandardItem *node)
     {
         this->ui->buttonBox->setEnabled(false);
         this->ui->pushButtonAdd->setEnabled(false);
-        this->ui->pushButtonRemove->setEnabled(false);
     }
     else
     {
         this->ui->buttonBox->setEnabled(true);
         this->ui->pushButtonAdd->setEnabled(true);
-        this->ui->pushButtonRemove->setEnabled(true);
     }
 }

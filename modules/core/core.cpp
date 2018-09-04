@@ -4,7 +4,6 @@ Core::Core(unsigned int _frames, unsigned int _cores)
 {
     this->frames.resize(_frames);
     this->pool = new ThreadPool(_cores);
-    // this->tagTree = new Attribute("ROOT");
     this->tagTree = new Attribute();
 }
 
@@ -47,70 +46,18 @@ void Core::reset(const unsigned int _frames, unsigned int _cores)
 
     delete(this->pool);
     this->pool = new ThreadPool(_cores);
-
-    // delete(this->tagTree);
-    // this->tagTree = new Attribute("root");
 }
 
-string Core::getLatestCategory()
+vector<string> Core::getTagTreeNames()
 {
-    return this->latestCategory;
-}
+    vector<string> nodeNames;
+    vector<Attribute*> rootChildren = this->tagTree->getChildren();
 
-string Core::getLatestLabel()
-{
-    return this->latestLabel;
-}
-
-unsigned int Core::getLatestKey()
-{
-    return this->latestKey;
-}
-
-unsigned int Core::getLatestId()
-{
-    return this->latestId;
-}
-
-unsigned int Core::getLargestId()
-{
-    if(this->tracklets.size() == 0)
+    vector<Attribute*>::iterator childIt;
+    for(childIt = rootChildren.begin(); childIt != rootChildren.end(); childIt++)
     {
-        return 0;
+        this->tagTreeToString(*childIt, nodeNames);
     }
-
-    return *(this->tracklets.rbegin());
-}
-
-void Core::setLatestCategory(string _category)
-{
-    this->latestCategory = _category;
-}
-
-void Core::setLatestLabel(string _label)
-{
-    this->latestLabel = _label;
-}
-
-void Core::setLatestKey(unsigned int _key)
-{
-    this->latestKey = _key;
-}
-
-void Core::setLatestId(unsigned int _id)
-{
-    this->latestId = _id;
-}
-
-bool Core::setLargestId(unsigned int _id)
-{
-    if(this->tracklets.find(_id) == this->tracklets.end())
-    {
-        this->tracklets.insert(_id);
-        return true;
-    }
-
-    return false;
 }
 
 void Core::updateFrameId()
@@ -118,5 +65,20 @@ void Core::updateFrameId()
     for(unsigned int index = 0; index < this->frames.size(); index++)
     {
         this->frames[index].setId(index);
+    }
+}
+
+void Core::tagTreeToString(Attribute* _nodeAtt, vector<std::string> &_nodeNames)
+{
+    if(_nodeAtt != NULL)
+    {
+        // qDebug() << _nodeAtt->getNodeName();
+
+        vector<Attribute*>::iterator childIt;
+        vector<Attribute*> nodeChildren = ((*_nodeAtt).getChildren());
+        for(childIt = nodeChildren.begin(); childIt != nodeChildren.end(); childIt++)
+        {
+            this->tagTreeToString(*childIt, _nodeNames);
+        }
     }
 }

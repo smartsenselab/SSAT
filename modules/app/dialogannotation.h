@@ -8,6 +8,7 @@ using std::string;
 using std::multimap;
 
 #include <QDialog>
+#include <QMessageBox>
 #include <QModelIndex>
 #include <QtCore>
 #include <QtGui>

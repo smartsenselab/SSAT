@@ -17,6 +17,7 @@ using cv::VideoCapture;
 #include "boundingbox.h"
 #include "frame.h"
 #include "framebaseddata.h"
+#include "settings.h"
 #include "threadpool.h"
 
 /*
@@ -33,11 +34,11 @@ private:
 
 public:
     Attribute *tagTree;
+    Settings setup;
     ThreadPool *pool;
     multimap<string, string> attributes;
     vector<FrameBasedData> frameData;
     vector<Frame> frames;
-    set<unsigned int> tracklets;
 
 private:
     Core(unsigned int _frames, unsigned int _cores);
@@ -52,19 +53,11 @@ public:
     void runTracker(const string  &_videoName, const unsigned int _frameId,
                     const string &_boxName, int identifier, int status);
 
-    string getLatestCategory();
-    string getLatestLabel();
-    unsigned int getLatestKey();
-    unsigned int getLatestId();
-    unsigned int getLargestId();
-
-    void setLatestCategory(string _category);
-    void setLatestLabel(string _label);
-    void setLatestKey(unsigned int _key);
-    void setLatestId(unsigned int _id);
-    bool setLargestId(unsigned int _id);
-
+    vector<string> getTagTreeNames();
     void updateFrameId();
+
+private:
+    void tagTreeToString(Attribute* _nodeAtt, vector<string> &_nodeNames);
 };
 
 #endif // CORE_H
