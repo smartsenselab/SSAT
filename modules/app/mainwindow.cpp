@@ -1320,8 +1320,8 @@ unsigned int MainWindow::slot_addBoundingBoxToCore(const Rect _box)
 
     unsigned int latestKey = this->singleton->frames[currentFrameId].addBox(largestId, _box);
 
-    this->singleton->setLatestKey(latestKey);
-    this->singleton->setLatestId(largestId);
+    this->singleton->setup.setLatestKey(latestKey);
+    this->singleton->setup.setLatestId(largestId);
     this->singleton->setLargestId(largestId);
 
     this->updateFrame(currentFrameId);

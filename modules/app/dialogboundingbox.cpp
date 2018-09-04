@@ -93,7 +93,7 @@ void DialogBoundingBox::initializeComboboxes()
     {
         unsigned int idValue = this->singleton->frames[this->frameId].getBoxes().size();
 
-        if(this->singleton->getLatestCategory().empty())
+        if(this->singleton->setup.getLatestCategory().empty())
         {
             this->ui->comboBoxCategory->setCurrentIndex(0);
             emit this->ui->comboBoxCategory->activated(0);
@@ -102,10 +102,10 @@ void DialogBoundingBox::initializeComboboxes()
         }
         else
         {
-            this->ui->comboBoxCategory->setCurrentText(QString::fromStdString(this->singleton->getLatestCategory()));
-            emit this->ui->comboBoxCategory->activated(QString::fromStdString(this->singleton->getLatestCategory()));
-            this->ui->comboBoxLabel->setCurrentText(QString::fromStdString(this->singleton->getLatestLabel()));
-            this->ui->spinBoxId->setValue(this->singleton->getLatestId());
+            this->ui->comboBoxCategory->setCurrentText(QString::fromStdString(this->singleton->setup.getLatestCategory()));
+            emit this->ui->comboBoxCategory->activated(QString::fromStdString(this->singleton->setup.getLatestCategory()));
+            this->ui->comboBoxLabel->setCurrentText(QString::fromStdString(this->singleton->setup.getLatestLabel()));
+            this->ui->spinBoxId->setValue(this->singleton->setup.getLatestId());
         }
     }
 
@@ -212,9 +212,9 @@ void DialogBoundingBox::slot_buttonBoxAccepted()
     this->singleton->frames[this->frameId].setBox(this->bboxKey, bbox);
 
     this->singleton->setLargestId(bbox.getId());
-    this->singleton->setLatestCategory(bbox.getCategory());
-    this->singleton->setLatestId(bbox.getId());
-    this->singleton->setLatestLabel(bbox.getLabel());
+    this->singleton->setup.setLatestCategory(bbox.getCategory());
+    this->singleton->setup.setLatestId(bbox.getId());
+    this->singleton->setup.setLatestLabel(bbox.getLabel());
 
     emit this->signal_updateFrame();
     this->accept();

@@ -48,26 +48,6 @@ void Core::reset(const unsigned int _frames, unsigned int _cores)
     this->pool = new ThreadPool(_cores);
 }
 
-string Core::getLatestCategory()
-{
-    return this->latestCategory;
-}
-
-string Core::getLatestLabel()
-{
-    return this->latestLabel;
-}
-
-unsigned int Core::getLatestKey()
-{
-    return this->latestKey;
-}
-
-unsigned int Core::getLatestId()
-{
-    return this->latestId;
-}
-
 unsigned int Core::getLargestId()
 {
     if(this->tracklets.size() == 0)
@@ -88,26 +68,6 @@ vector<string> Core::getTagTreeNames()
     {
         this->tagTreeToString(*childIt, nodeNames);
     }
-}
-
-void Core::setLatestCategory(string _category)
-{
-    this->latestCategory = _category;
-}
-
-void Core::setLatestLabel(string _label)
-{
-    this->latestLabel = _label;
-}
-
-void Core::setLatestKey(unsigned int _key)
-{
-    this->latestKey = _key;
-}
-
-void Core::setLatestId(unsigned int _id)
-{
-    this->latestId = _id;
 }
 
 bool Core::setLargestId(unsigned int _id)
