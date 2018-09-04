@@ -106,8 +106,8 @@ void DialogAnnotation::slot_initializeDialog(Core &_singleton)
     this->singleton = &_singleton;
     this->qStandardModel = new QStandardItemModel(this);
 
-    vector<Attribute*> rootChildren = this->singleton->tagTree->getChildren();
-    QStandardItem* qRootTag = new QStandardItem(QString::fromStdString(this->singleton->tagTree->getNodeName()));
+    vector<Attribute*> rootChildren = this->singleton->labelTree->getChildren();
+    QStandardItem* qRootTag = new QStandardItem(QString::fromStdString(this->singleton->labelTree->getNodeName()));
 
     vector<Attribute*>::iterator childIt;
     for(childIt = rootChildren.begin(); childIt != rootChildren.end(); childIt++)
@@ -178,11 +178,11 @@ void DialogAnnotation::slot_removePressed()
 
 void DialogAnnotation::slot_accept()
 {
-    Attribute* newTagTree = new Attribute("ROOT", true);
+    Attribute* newLabelTree = new Attribute("ROOT", true);
     QModelIndex qIndex = this->qStandardModel->index(0, 0, QModelIndex());
-    this->modelToStl(newTagTree, this->qStandardModel, qIndex);
-    this->singleton->tagTree->clear();
-    this->singleton->tagTree = newTagTree;
+    this->modelToStl(newLabelTree, this->qStandardModel, qIndex);
+    this->singleton->labelTree->clear();
+    this->singleton->labelTree = newLabelTree;
 
     this->accept();
 }

@@ -4,7 +4,7 @@ Core::Core(unsigned int _frames, unsigned int _cores)
 {
     this->frames.resize(_frames);
     this->pool = new ThreadPool(_cores);
-    this->tagTree = new Attribute();
+    this->labelTree = new Attribute();
 }
 
 Core::~Core()
@@ -13,7 +13,7 @@ Core::~Core()
     this->frameData.clear();
     this->frames.clear();
     delete(this->pool);
-    delete(this->tagTree);
+    delete(this->labelTree);
 }
 
 Core* Core::getInstance(unsigned int _frames)
@@ -51,7 +51,7 @@ void Core::reset(const unsigned int _frames, unsigned int _cores)
 vector<string> Core::getTagTreeNames()
 {
     vector<string> nodeNames;
-    vector<Attribute*> rootChildren = this->tagTree->getChildren();
+    vector<Attribute*> rootChildren = this->labelTree->getChildren();
 
     vector<Attribute*>::iterator childIt;
     for(childIt = rootChildren.begin(); childIt != rootChildren.end(); childIt++)

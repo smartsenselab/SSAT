@@ -33,7 +33,7 @@ private:
     unsigned int latestKey;
 
 public:
-    Attribute *tagTree;
+    Attribute *labelTree;
     Settings setup;
     ThreadPool *pool;
     multimap<string, string> attributes;

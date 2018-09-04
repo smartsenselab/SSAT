@@ -6,8 +6,6 @@ DialogBoundingBox::DialogBoundingBox(QWidget *parent) :
     ui(new Ui::DialogBoundingBox)
 {
     this->ui->setupUi(this);
-
-//    this->enableWidgets(true);
     this->setFixedSize(this->width(), this->height());
 }
 
@@ -77,10 +75,10 @@ void DialogBoundingBox::initializeComboboxes()
 //    this->ui->comboBoxLabel->setModel(this->labelModel);
 
 //    // change widgets values
-//    BoundingBox bbox = this->singleton->frames[this->frameId].getBoxByKey(this->bboxKey);
+    BoundingBox bbox = this->singleton->frames[this->frameId].getBoxByKey(this->bboxKey);
 
-//    this->ui->spinBoxId->setMinimum(1);
-//    this->ui->spinBoxId->setMaximum(100000);
+    this->ui->spinBoxId->setMinimum(1);
+    this->ui->spinBoxId->setMaximum(100000);
 
 //    // populate combobox and spinbox
 //    if(bbox.getId() > 0)
@@ -110,12 +108,13 @@ void DialogBoundingBox::initializeComboboxes()
 //        }
 //    }
 
-//    this->ui->spinBoxX->setValue(bbox.getX());
-//    this->ui->spinBoxY->setValue(bbox.getY());
-//    this->ui->spinBoxW->setValue(bbox.getW());
-//    this->ui->spinBoxH->setValue(bbox.getH());
+    this->ui->spinBoxX->setValue(bbox.getX());
+    this->ui->spinBoxY->setValue(bbox.getY());
+    this->ui->spinBoxW->setValue(bbox.getW());
+    this->ui->spinBoxH->setValue(bbox.getH());
 
-//    this->ui->lineEditInfo->setText(QString::fromStdString(bbox.getInfo()));
+    this->ui->plainTextEditInfo->clear();
+    this->ui->plainTextEditInfo->appendPlainText(QString::fromStdString(bbox.getInfo()));
 }
 
 void DialogBoundingBox::initializeComboboxes(const QString _category)
@@ -175,8 +174,8 @@ void DialogBoundingBox::slot_initializeDialog(Core &_singleton, const unsigned i
     this->frameId = _frameId;
     this->qStandardModel = new QStandardItemModel(this);
 
-    vector<Attribute*> rootChildren = this->singleton->tagTree->getChildren();
-    QStandardItem* qRootTag = new QStandardItem(QString::fromStdString(this->singleton->tagTree->getNodeName()));
+    vector<Attribute*> rootChildren = this->singleton->labelTree->getChildren();
+    QStandardItem* qRootTag = new QStandardItem(QString::fromStdString(this->singleton->labelTree->getNodeName()));
 
     vector<Attribute*>::iterator childIt;
     for(childIt = rootChildren.begin(); childIt != rootChildren.end(); childIt++)
@@ -224,24 +223,24 @@ void DialogBoundingBox::slot_spinBoxIdChanged(int _value)
 
 void DialogBoundingBox::slot_buttonBoxAccepted()
 {
-//    BoundingBox bbox = BoundingBox(this->ui->spinBoxId->value(),
-//                                   this->bboxKey,
-//                                   this->ui->comboBoxCategory->currentText().toStdString(),
-//                                   this->ui->lineEditInfo->text().toStdString(),
-//                                   this->ui->comboBoxLabel->currentText().toStdString(),
-//                                   std::string(),
-//                                   this->ui->spinBoxX->value(),
-//                                   this->ui->spinBoxY->value(),
-//                                   this->ui->spinBoxW->value(),
-//                                   this->ui->spinBoxH->value()
-//                                   );
+    BoundingBox bbox = BoundingBox(this->ui->spinBoxId->value(),
+                                   this->bboxKey,
+                                   std::string(),
+                                   this->ui->plainTextEditInfo->toPlainText().toStdString(),
+                                   this->ui->lineEditLabel->text().toStdString(),
+                                   std::string(),
+                                   this->ui->spinBoxX->value(),
+                                   this->ui->spinBoxY->value(),
+                                   this->ui->spinBoxW->value(),
+                                   this->ui->spinBoxH->value()
+                                   );
 
-//    this->singleton->frames[this->frameId].setBox(this->bboxKey, bbox);
+    this->singleton->frames[this->frameId].setBox(this->bboxKey, bbox);
 
-//    this->singleton->setup.setLargestId(bbox.getId());
-//    this->singleton->setup.setLatestCategory(bbox.getCategory());
-//    this->singleton->setup.setLatestId(bbox.getId());
-//    this->singleton->setup.setLatestLabel(bbox.getLabel());
+    this->singleton->setup.setLargestId(bbox.getId());
+    this->singleton->setup.setLatestCategory(bbox.getCategory());
+    this->singleton->setup.setLatestId(bbox.getId());
+    this->singleton->setup.setLatestLabel(bbox.getLabel());
 
     emit this->signal_updateFrame();
     this->accept();

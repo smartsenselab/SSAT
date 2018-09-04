@@ -44,7 +44,7 @@
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
       <item>
-       <widget class="QLabel" name="labelCategory">
+       <widget class="QLabel" name="labelLabel">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -57,7 +57,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEditCategory"/>
+       <widget class="QLineEdit" name="lineEditLabel"/>
       </item>
      </layout>
     </item>
