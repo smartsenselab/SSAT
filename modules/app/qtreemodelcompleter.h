@@ -3,14 +3,14 @@
 
 #include <QCompleter>
 
-class TreeModelCompleter : public QCompleter
+class QTreeModelCompleter : public QCompleter
 {    
     Q_OBJECT
     Q_PROPERTY(QString separator READ separator WRITE setSeparator)
 
 public:
-    explicit TreeModelCompleter(QObject *parent = 0);
-    explicit TreeModelCompleter(QAbstractItemModel *model, QObject *parent = 0);
+    explicit QTreeModelCompleter(QObject *parent = 0);
+    explicit QTreeModelCompleter(QAbstractItemModel *model, QObject *parent = 0);
 
     QString separator() const;
 public slots:

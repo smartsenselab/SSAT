@@ -1,29 +1,29 @@
-#include "treemodelcompleter.h"
+#include "qtreemodelcompleter.h"
 #include <QStringList>
 
-TreeModelCompleter::TreeModelCompleter(QObject *parent)
+QTreeModelCompleter::QTreeModelCompleter(QObject *parent)
     : QCompleter(parent)
 {
     this->setCaseSensitivity(Qt::CaseInsensitive);
-    this->setSeparator(QLatin1String("."));
+    this->setSeparator(QLatin1String("->"));
 }
 
-TreeModelCompleter::TreeModelCompleter(QAbstractItemModel *model, QObject *parent)
+QTreeModelCompleter::QTreeModelCompleter(QAbstractItemModel *model, QObject *parent)
     : QCompleter(model, parent)
 {
 }
 
-void TreeModelCompleter::setSeparator(const QString &separator)
+void QTreeModelCompleter::setSeparator(const QString &separator)
 {
     this->sep = separator;
 }
 
-QString TreeModelCompleter::separator() const
+QString QTreeModelCompleter::separator() const
 {
     return this->sep;
 }
 
-QStringList TreeModelCompleter::splitPath(const QString &path) const
+QStringList QTreeModelCompleter::splitPath(const QString &path) const
 {
     if (this->sep.isNull()) {
         return QCompleter::splitPath(path);
@@ -32,7 +32,7 @@ QStringList TreeModelCompleter::splitPath(const QString &path) const
     return path.split(this->sep);
 }
 
-QString TreeModelCompleter::pathFromIndex(const QModelIndex &index) const
+QString QTreeModelCompleter::pathFromIndex(const QModelIndex &index) const
 {
     if (this->sep.isNull()) {
         return QCompleter::pathFromIndex(index);

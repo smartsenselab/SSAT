@@ -1,24 +1,24 @@
-#include "workerthread.h"
+#include "qworkerthread.h"
 #include "qdebug.h"
 
-WorkerThread::WorkerThread()
+QWorkerThread::QWorkerThread()
 {
     this->playing = false;
 }
 
-WorkerThread::~WorkerThread()
+QWorkerThread::~QWorkerThread()
 {
     this->clearVideo();
 }
 
-Mat WorkerThread::getFrame()
+Mat QWorkerThread::getFrame()
 {
     Mat frame;
     this->video >> frame;
     return frame;
 }
 
-Mat WorkerThread::getFrame(double _frameId)
+Mat QWorkerThread::getFrame(double _frameId)
 {
     Mat frame;
     this->video.set(CV_CAP_PROP_POS_FRAMES, _frameId);
@@ -26,42 +26,42 @@ Mat WorkerThread::getFrame(double _frameId)
     return frame;
 }
 
-double WorkerThread::getFrameId()
+double QWorkerThread::getFrameId()
 {
     return this->video.get(CV_CAP_PROP_POS_FRAMES);
 }
 
-double WorkerThread::getTotalFrames()
+double QWorkerThread::getTotalFrames()
 {
     return this->video.get(CV_CAP_PROP_FRAME_COUNT);
 }
 
-double WorkerThread::getVideoFPS()
+double QWorkerThread::getVideoFPS()
 {
     return this->video.get(CV_CAP_PROP_FPS);
 }
 
-bool WorkerThread::isPlaying()
+bool QWorkerThread::isPlaying()
 {
     return this->playing;
 }
 
-void WorkerThread::isPlaying(bool _condition)
+void QWorkerThread::isPlaying(bool _condition)
 {
     this->playing = _condition;
 }
 
-void WorkerThread::clearVideo()
+void QWorkerThread::clearVideo()
 {
     this->video.release();
 }
 
-void WorkerThread::loadVideo(QString _path)
+void QWorkerThread::loadVideo(QString _path)
 {
     this->video.open(_path.toStdString());
 }
 
-void WorkerThread::exportJSON(Core &_singleton, const QString &_jsonName)
+void QWorkerThread::exportJSON(Core &_singleton, const QString &_jsonName)
 {
     QFile file;
     QJsonArray attributeArray, frameArray, frameDataArray;
@@ -141,7 +141,7 @@ void WorkerThread::exportJSON(Core &_singleton, const QString &_jsonName)
     file.write(output.toJson());
 }
 
-void WorkerThread::importJSON(Core &_singleton, QFrameBasedTableModel *_tableModel, const QString &_jsonName)
+void QWorkerThread::importJSON(Core &_singleton, QFrameBasedTableModel *_tableModel, const QString &_jsonName)
 {
     _tableModel->clear();
     _singleton.attributes.clear();
@@ -320,7 +320,7 @@ void WorkerThread::importJSON(Core &_singleton, QFrameBasedTableModel *_tableMod
     }
 }
 
-QImage WorkerThread::matToQimage(const Mat &_frameId)
+QImage QWorkerThread::matToQimage(const Mat &_frameId)
 {
     if (_frameId.type() == CV_8UC3)
     {
@@ -335,17 +335,17 @@ QImage WorkerThread::matToQimage(const Mat &_frameId)
     }
 }
 
-void WorkerThread::insertFrameBasedSegment(Core &_singleton, const FrameBasedData &_data)
+void QWorkerThread::insertFrameBasedSegment(Core &_singleton, const FrameBasedData &_data)
 {
     _singleton.frameData.push_back(_data);
 }
 
-void WorkerThread::alterFrameBasedSegment(Core &_singleton, const FrameBasedData &_data, const int _index)
+void QWorkerThread::alterFrameBasedSegment(Core &_singleton, const FrameBasedData &_data, const int _index)
 {
     _singleton.frameData[static_cast<unsigned long>(_index)] = _data;
 }
 
-void WorkerThread::exponentialForget(Core &_singleton, BoundingBox _focusBox, const unsigned int _frameId, const unsigned int _numFrames)
+void QWorkerThread::exponentialForget(Core &_singleton, BoundingBox _focusBox, const unsigned int _frameId, const unsigned int _numFrames)
 {
     double holder = 1.0;
     double step = 1.0 / _numFrames;
@@ -395,7 +395,7 @@ void WorkerThread::exponentialForget(Core &_singleton, BoundingBox _focusBox, co
     _singleton.frames[_frameId].setBox(_focusBox.getKey(), _focusBox);
 }
 
-void WorkerThread::replicateBoundingBoxFromCore(Core &_singleton, const unsigned int _bboxKey, const unsigned int _numFrames)
+void QWorkerThread::replicateBoundingBoxFromCore(Core &_singleton, const unsigned int _bboxKey, const unsigned int _numFrames)
 {
     unsigned int nextFrameId = static_cast<unsigned int>(this->getFrameId());
     unsigned int frameLimit = std::min(nextFrameId + _numFrames, static_cast<unsigned int>(_singleton.frames.size()));
@@ -412,7 +412,7 @@ void WorkerThread::replicateBoundingBoxFromCore(Core &_singleton, const unsigned
     }
 }
 
-void WorkerThread::replicateBoundingBoxFromCoreBackwards(Core &_singleton, const unsigned int _bboxKey, const unsigned int _numFrames)
+void QWorkerThread::replicateBoundingBoxFromCoreBackwards(Core &_singleton, const unsigned int _bboxKey, const unsigned int _numFrames)
 {
     unsigned int currentFrameId = static_cast<unsigned int>(this->getFrameId() - 1);
     unsigned int frameLimit = std::max(static_cast<int>(currentFrameId - _numFrames), 0);
@@ -428,7 +428,7 @@ void WorkerThread::replicateBoundingBoxFromCoreBackwards(Core &_singleton, const
     }
 }
 
-void WorkerThread::removeBoxSequenceFromCore(Core &_singleton, const unsigned int _bboxKey)
+void QWorkerThread::removeBoxSequenceFromCore(Core &_singleton, const unsigned int _bboxKey)
 {
     bool isErased = false;
     unsigned int currentFrameId = static_cast<unsigned int>(this->getFrameId()) - 1;
@@ -444,4 +444,3 @@ void WorkerThread::removeBoxSequenceFromCore(Core &_singleton, const unsigned in
         }
     }
 }
-

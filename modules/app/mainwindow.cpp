@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->frameScene = new QBoundingBoxScene(this);
     this->loaded = false;
-    this->manager = new VideoManager;
+    this->manager = new QVideoManager;
     this->playing = false;
     this->saveTimer = new QTimer(this);
     this->skipFrame = 50;

@@ -25,7 +25,7 @@ using cv::VideoCapture;
 #include "framebaseddata.h"
 #include "qframebasedtablemodel.h"
 
-class WorkerThread : public QObject
+class QWorkerThread : public QObject
 {
     Q_OBJECT
 
@@ -34,8 +34,8 @@ private:
     VideoCapture video;
 
 public:
-    WorkerThread();
-    ~WorkerThread();
+    QWorkerThread();
+    ~QWorkerThread();
 
     Mat getFrame();
     Mat getFrame(double _frameId);

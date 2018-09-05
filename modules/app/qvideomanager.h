@@ -1,24 +1,24 @@
 #ifndef VIDEOMANAGER_H
 #define VIDEOMANAGER_H
 
-#include "workerthread.h"
+#include "qworkerthread.h"
 
-class VideoManager : public QObject
+class QVideoManager : public QObject
 {
 private:
     QThread thread;
-    WorkerThread *worker;
+    QWorkerThread *worker;
 
 public:
     ///
     /// \brief VideoManager Default constructor
     ///
-    VideoManager();
+    QVideoManager();
 
     ///
     /// \brief ~VideoManager Default destructor
     ///
-    ~VideoManager();
+    ~QVideoManager();
 
     ///
     /// \brief getFrame Get the next frame from video

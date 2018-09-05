@@ -24,7 +24,7 @@
 #include "framebaseddata.h"
 #include "qboundingboxscene.h"
 #include "qframebasedtablemodel.h"
-#include "videomanager.h"
+#include "qvideomanager.h"
 
 namespace Ui
 {
@@ -70,7 +70,7 @@ private:
     QStringListModel *categoryModel = NULL;
     QStringListModel *labelModel = NULL;
 
-    VideoManager *manager = NULL;
+    QVideoManager *manager = NULL;
 
     // FrameBased:
     int frameId, indexId;
