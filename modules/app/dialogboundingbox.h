@@ -28,6 +28,7 @@ private:
     unsigned int frameId;
     unsigned int maxId;
 
+    QAction* enterPressed = NULL;
     QStandardItemModel* qStandardModel = NULL;
     QTreeModelCompleter *qTreeCompleter = NULL;
 
@@ -52,12 +53,6 @@ private:
     void initializeComboboxes();
 
     ///
-    /// \brief initializeComboboxes Add a new category
-    /// \param _category    The QString (name) that will represent the category
-    ///
-    void initializeComboboxes(const QString _category);
-
-    ///
     /// \brief stlToModel
     /// \param _nodeAtt
     /// \param _qParentItem
@@ -71,12 +66,6 @@ public slots:
     /// \param _bbox
     ///
     void slot_initializeDialog(Core &_core, const unsigned int _frameId, const unsigned int _bboxKey);
-
-    ///
-    /// \brief slot_comboBoxCategoryActivated   Insert a new category
-    /// \param _text
-    ///
-    void slot_comboBoxCategoryActivated(const QString &_text);
 
     ///
     /// \brief slot_spinBoxIdChanged Changing bounding bod id check

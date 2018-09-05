@@ -6,14 +6,15 @@ DialogAnnotation::DialogAnnotation(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogAnnotation)
 {
-    ui->setupUi(this);
+    this->ui->setupUi(this);
+    this->setFixedSize(this->width(), this->height());
 
-    this->enterPressed = new QAction(tr("id1"), this);
+    this->enterPressed = new QAction(tr("enter"), this);
     this->enterPressed->setShortcuts(QList<QKeySequence>() << Qt::EnterKeyDefault);
     this->addAction(enterPressed);
 
     this->enableWidgets(true);
-    this->setFixedSize(this->width(), this->height());
+
 
     this->ui->treeViewAttributes->setHeaderHidden(true);
 }

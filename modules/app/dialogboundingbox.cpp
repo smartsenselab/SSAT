@@ -7,6 +7,13 @@ DialogBoundingBox::DialogBoundingBox(QWidget *parent) :
 {
     this->ui->setupUi(this);
     this->setFixedSize(this->width(), this->height());
+
+    this->enterPressed = new QAction(tr("enter"), this);
+    this->enterPressed->setShortcuts(QList<QKeySequence>() << Qt::EnterKeyDefault);
+    this->addAction(enterPressed);
+
+    this->qStandardModel = new QStandardItemModel(this);
+    this->qTreeCompleter = new QTreeModelCompleter(this);
 }
 
 DialogBoundingBox::~DialogBoundingBox()
@@ -43,112 +50,41 @@ void DialogBoundingBox::connectSignalSlots()
 
 void DialogBoundingBox::initializeComboboxes()
 {
-//    QStringList categoryList, labelList;
-//    QSet<QString> categorySet, labelSet;
-
-//    // populate comboBoxCategory
-//    multimap<string, string>::iterator it;
-//    for(it = this->singleton->attributes.begin();
-//        it != this->singleton->attributes.end();
-//        it++)
-//    {
-//        categorySet.insert(QString::fromStdString(it->first));
-//    }
-//    categoryList.append(categorySet.toList());
-
-//    this->categoryModel = new QStringListModel(this);
-//    this->categoryModel->setStringList(categoryList);
-//    this->ui->comboBoxCategory->setModel(this->categoryModel);
-
-//    // populate comboBoxLabel
-//    string category = this->ui->comboBoxCategory->currentText().toStdString();
-//    for(it = this->singleton->attributes.lower_bound(category);
-//        it != this->singleton->attributes.upper_bound(category);
-//        it++)
-//    {
-//        labelSet.insert(QString::fromStdString(it->second));
-//    }
-//    labelList.append(labelSet.toList());
-
-//    this->labelModel = new QStringListModel(this);
-//    this->labelModel->setStringList(labelList);
-//    this->ui->comboBoxLabel->setModel(this->labelModel);
-
-//    // change widgets values
+    // change widgets values
     BoundingBox bbox = this->singleton->frames[this->frameId].getBoxByKey(this->bboxKey);
 
     this->ui->spinBoxId->setMinimum(1);
     this->ui->spinBoxId->setMaximum(100000);
 
-//    // populate combobox and spinbox
-//    if(bbox.getId() > 0)
-//    {
-//        this->ui->comboBoxCategory->setCurrentText(QString::fromStdString(bbox.getCategory()));
-//        emit this->ui->comboBoxCategory->activated(QString::fromStdString(bbox.getCategory()));
-//        this->ui->comboBoxLabel->setCurrentText(QString::fromStdString(bbox.getLabel()));
-//        this->ui->spinBoxId->setValue(bbox.getId());
-//    }
-//    else
-//    {
-//        unsigned int idValue = this->singleton->frames[this->frameId].getBoxes().size();
+    // populate spinbox
+    if(bbox.getId() > 0)
+    {
+        this->ui->spinBoxId->setValue(bbox.getId());
+    }
+    else
+    {
+        unsigned int idValue = this->singleton->frames[this->frameId].getBoxes().size();
 
-//        if(this->singleton->setup.getLatestCategory().empty())
-//        {
-//            this->ui->comboBoxCategory->setCurrentIndex(0);
-//            emit this->ui->comboBoxCategory->activated(0);
-//            this->ui->comboBoxLabel->setCurrentIndex(0);
-//            this->ui->spinBoxId->setValue(idValue);
-//        }
-//        else
-//        {
-//            this->ui->comboBoxCategory->setCurrentText(QString::fromStdString(this->singleton->setup.getLatestCategory()));
-//            emit this->ui->comboBoxCategory->activated(QString::fromStdString(this->singleton->setup.getLatestCategory()));
-//            this->ui->comboBoxLabel->setCurrentText(QString::fromStdString(this->singleton->setup.getLatestLabel()));
-//            this->ui->spinBoxId->setValue(this->singleton->setup.getLatestId());
-//        }
-//    }
+        if(this->singleton->setup.getLatestCategory().empty())
+        {
+            this->ui->spinBoxId->setValue(idValue);
+        }
+        else
+        {
+            this->ui->spinBoxId->setValue(this->singleton->setup.getLatestId());
+        }
+    }
 
     this->ui->spinBoxX->setValue(bbox.getX());
     this->ui->spinBoxY->setValue(bbox.getY());
     this->ui->spinBoxW->setValue(bbox.getW());
     this->ui->spinBoxH->setValue(bbox.getH());
 
+    this->ui->lineEditLabel->clear();
+    this->ui->lineEditLabel->setText(QString::fromStdString(bbox.getLabel()));
+
     this->ui->plainTextEditInfo->clear();
     this->ui->plainTextEditInfo->appendPlainText(QString::fromStdString(bbox.getInfo()));
-}
-
-void DialogBoundingBox::initializeComboboxes(const QString _category)
-{
-//    QStringList categoryList, labelList;
-//    QSet<QString> categorySet, labelSet;
-//    string category = _category.toStdString();
-
-//    // populate comboBoxCategory
-//    multimap<string, string>::iterator it;
-//    for(it = this->singleton->attributes.begin();
-//        it != this->singleton->attributes.end();
-//        it++)
-//    {
-//        categorySet.insert(QString::fromStdString(it->first));
-//    }
-//    categoryList.append(categorySet.toList());
-
-//    this->categoryModel = new QStringListModel(this);
-//    this->categoryModel->setStringList(categoryList);
-//    this->ui->comboBoxCategory->setModel(this->categoryModel);
-
-//    // populate comboBoxLabel
-//    for(it = this->singleton->attributes.lower_bound(category);
-//        it != this->singleton->attributes.upper_bound(category);
-//        it++)
-//    {
-//        labelSet.insert(QString::fromStdString(it->second));
-//    }
-//    labelList.append(labelSet.toList());
-
-//    this->labelModel = new QStringListModel(this);
-//    this->labelModel->setStringList(labelList);
-//    this->ui->comboBoxLabel->setModel(this->labelModel);
 }
 
 void DialogBoundingBox::stlToModel(Attribute* _nodeAtt, QStandardItem* _qParentItem)
@@ -172,8 +108,6 @@ void DialogBoundingBox::slot_initializeDialog(Core &_singleton, const unsigned i
     this->singleton = &_singleton;
     this->bboxKey = _bboxKey;
     this->frameId = _frameId;
-    this->qStandardModel = new QStandardItemModel(this);
-    this->qTreeCompleter = new QTreeModelCompleter(this);
 
     vector<Attribute*> rootChildren = this->singleton->labelTree->getChildren();
     QStandardItem* qRootTag = new QStandardItem(QString::fromStdString(this->singleton->labelTree->getNodeName()));
@@ -188,27 +122,7 @@ void DialogBoundingBox::slot_initializeDialog(Core &_singleton, const unsigned i
 
     this->connectSignalSlots();
     this->ui->lineEditLabel->setCompleter(this->qTreeCompleter);
-//    this->initializeComboboxes();
-}
-
-void DialogBoundingBox::slot_comboBoxCategoryActivated(const QString &_text)
-{
-//    QStringList labelList;
-//    QSet<QString> labelSet;
-
-//    // populate comboBoxLabel
-//    string category = _text.toStdString();
-//    multimap<string, string>::iterator it;
-//    for(it = this->singleton->attributes.lower_bound(category);
-//        it != this->singleton->attributes.upper_bound(category);
-//        it++)
-//    {
-//        labelSet.insert(QString::fromStdString(it->second));
-//    }
-//    labelList.append(labelSet.toList());
-
-//    this->labelModel->setStringList(labelList);
-//    this->ui->comboBoxLabel->setModel(this->labelModel);
+    this->initializeComboboxes();
 }
 
 void DialogBoundingBox::slot_spinBoxIdChanged(int _value)
@@ -251,5 +165,6 @@ void DialogBoundingBox::slot_buttonBoxAccepted()
 
 void DialogBoundingBox::slot_buttonBoxRejected()
 {
+    emit this->signal_updateFrame();
     this->reject();
 }
