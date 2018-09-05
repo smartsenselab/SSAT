@@ -173,6 +173,7 @@ void DialogBoundingBox::slot_initializeDialog(Core &_singleton, const unsigned i
     this->bboxKey = _bboxKey;
     this->frameId = _frameId;
     this->qStandardModel = new QStandardItemModel(this);
+    this->qTreeCompleter = new TreeModelCompleter(this);
 
     vector<Attribute*> rootChildren = this->singleton->labelTree->getChildren();
     QStandardItem* qRootTag = new QStandardItem(QString::fromStdString(this->singleton->labelTree->getNodeName()));
@@ -183,8 +184,10 @@ void DialogBoundingBox::slot_initializeDialog(Core &_singleton, const unsigned i
         this->stlToModel(*childIt, qRootTag);
     }
     this->qStandardModel->appendRow(qRootTag);
+    this->qTreeCompleter->setModel(this->qStandardModel);
 
     this->connectSignalSlots();
+    this->ui->lineEditLabel->setCompleter(this->qTreeCompleter);
 //    this->initializeComboboxes();
 }
 

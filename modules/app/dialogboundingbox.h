@@ -10,6 +10,7 @@
 
 #include "boundingbox.h"
 #include "core.h"
+#include "treemodelcompleter.h"
 
 namespace Ui
 {
@@ -28,6 +29,7 @@ private:
     unsigned int maxId;
 
     QStandardItemModel* qStandardModel = NULL;
+    TreeModelCompleter *qTreeCompleter = NULL;
 
     QStringListModel *categoryModel = NULL;
     QStringListModel *labelModel = NULL;

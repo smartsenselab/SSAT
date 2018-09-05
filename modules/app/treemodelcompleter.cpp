@@ -4,6 +4,8 @@
 TreeModelCompleter::TreeModelCompleter(QObject *parent)
     : QCompleter(parent)
 {
+    this->setCaseSensitivity(Qt::CaseInsensitive);
+    this->setSeparator(QLatin1String("."));
 }
 
 TreeModelCompleter::TreeModelCompleter(QAbstractItemModel *model, QObject *parent)
