@@ -2,11 +2,33 @@
 
 Settings::Settings()
 {
-    this->latestId = 0;
-    this->latestKey = 0;
+    this->setCurrentSeparator(".");
+    this->setFrameSkip(50);
+    this->setLargestId(0);
+    this->setLatestKey(0);
 }
 
-unsigned int Settings::getLargestId()
+string Settings::getCurrentSeparator() const
+{
+    return this->curretSeparator;
+}
+
+string Settings::getLatestCategory() const
+{
+    return this->latestCategory;
+}
+
+string Settings::getLatestLabel() const
+{
+    return this->latestLabel;
+}
+
+unsigned int Settings::getFrameSkip() const
+{
+    return frameSkip;
+}
+
+unsigned int Settings::getLargestId() const
 {
     if(this->tracklets.size() == 0)
     {
@@ -16,24 +38,34 @@ unsigned int Settings::getLargestId()
     return *(this->tracklets.rbegin());
 }
 
-string Settings::getLatestCategory()
-{
-    return this->latestCategory;
-}
-
-string Settings::getLatestLabel()
-{
-    return this->latestLabel;
-}
-
-unsigned int Settings::getLatestKey()
+unsigned int Settings::getLatestKey() const
 {
     return this->latestKey;
 }
 
-unsigned int Settings::getLatestId()
+unsigned int Settings::getLatestId() const
 {
     return this->latestId;
+}
+
+void Settings::setCurrentSeparator(string _separator)
+{
+    this->curretSeparator = _separator;
+}
+
+void Settings::setLatestCategory(string _category)
+{
+    this->latestCategory = _category;
+}
+
+void Settings::setLatestLabel(string _label)
+{
+    this->latestLabel = _label;
+}
+
+void Settings::setFrameSkip(unsigned int _frameSkip)
+{
+    frameSkip = _frameSkip;
 }
 
 bool Settings::setLargestId(unsigned int _id)
@@ -45,16 +77,6 @@ bool Settings::setLargestId(unsigned int _id)
     }
 
     return false;
-}
-
-void Settings::setLatestCategory(string _category)
-{
-    this->latestCategory = _category;
-}
-
-void Settings::setLatestLabel(string _label)
-{
-    this->latestLabel = _label;
 }
 
 void Settings::setLatestKey(unsigned int _key)

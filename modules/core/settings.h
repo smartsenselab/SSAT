@@ -13,15 +13,20 @@ class Settings
 public:
     Settings();
 
-    unsigned int getLargestId();
-    string getLatestCategory();
-    string getLatestLabel();
-    unsigned int getLatestKey();
-    unsigned int getLatestId();
+    string getCurrentSeparator() const;
+    string getLatestCategory() const;
+    string getLatestLabel() const;
+    unsigned int getFrameSkip() const;
+    unsigned int getLargestId() const;
+    unsigned int getLatestKey() const;
+    unsigned int getLatestId() const;
 
-    bool setLargestId(unsigned int _id);
+
+    void setCurrentSeparator(string _separator);
     void setLatestCategory(string _category);
     void setLatestLabel(string _label);
+    void setFrameSkip(unsigned int _frameSkip);
+    bool setLargestId(unsigned int _id);
     void setLatestKey(unsigned int _key);
     void setLatestId(unsigned int _id);
 
@@ -29,8 +34,10 @@ public:
     set<unsigned int> tracklets;
 
 private:
+    string curretSeparator;
     string latestCategory;
     string latestLabel;
+    unsigned int frameSkip;
     unsigned int latestId;
     unsigned int latestKey;
 };

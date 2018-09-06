@@ -143,3 +143,32 @@ void Data::operator=(const Data &_data)
     this->label = _data.label;
     this->name = _data.name;
 }
+
+vector<string> Data::splitIntoTokens(const string &_category, const string &_delimiter)
+{
+    size_t pos = 0;
+    string token, catRemain = _category;
+    vector<string> tokens;
+
+    while((pos = catRemain.find(_delimiter)) != string::npos)
+    {
+        token = catRemain.substr(0, pos);
+        tokens.push_back(token);
+        catRemain.erase(0, pos + _delimiter.length());
+    }
+    tokens.push_back(catRemain);
+
+    return tokens;
+}
+
+string Data::mergeIntoString(const vector<string> &_categories, const string &_delimiter) const
+{
+    string category;
+    for(size_t index = 0; index < _categories.size() - 1; index++)
+    {
+        category.append(_categories[index]);
+        category.append(_delimiter);
+    }
+    category.append(_categories.back());
+    return category;
+}

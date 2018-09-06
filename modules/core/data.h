@@ -3,12 +3,12 @@
 
 #include <iostream>
 #include <map>
+#include <sstream>
 #include <string>
-#include <unordered_map>
 #include <vector>
 using std::multimap;
-using std::unordered_multimap;
 using std::string;
+using std::stringstream;
 using std::vector;
 
 class Data
@@ -51,6 +51,10 @@ public:
     void setName(const string &_name);
 
     void operator=(const Data &_data);
+
+protected:
+    vector<string> splitIntoTokens(const string &_category, const string &_delimiter="->");
+    string mergeIntoString(const vector<string> &_category, const string &_delimiter="->") const;
 
 protected:
     unsigned int id;
