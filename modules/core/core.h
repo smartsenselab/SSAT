@@ -27,20 +27,6 @@ using cv::VideoCapture;
 class Core
 {
 private:
-    string latestCategory;
-    string latestLabel;
-    unsigned int latestId;
-    unsigned int latestKey;
-
-public:
-    Attribute *labelTree;
-    Settings setup;
-    ThreadPool *pool;
-    multimap<string, string> attributes;
-    vector<FrameBasedData> frameData;
-    vector<Frame> frames;
-
-private:
     Core(unsigned int _frames, unsigned int _cores);
     ~Core();
 
@@ -52,12 +38,15 @@ public:
     void reset(const unsigned int _frames, unsigned int _cores);
     void runTracker(const string  &_videoName, const unsigned int _frameId,
                     const string &_boxName, int identifier, int status);
-
-    vector<string> getTagTreeNames();
     void updateFrameId();
 
-private:
-    void tagTreeToString(Attribute* _nodeAtt, vector<string> &_nodeNames);
+public:
+    Attribute *labelTree;
+    Settings setup;
+    ThreadPool *pool;
+    multimap<string, string> attributes;
+    vector<FrameBasedData> frameData;
+    vector<Frame> frames;
 };
 
 #endif // CORE_H

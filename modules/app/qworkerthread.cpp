@@ -64,10 +64,12 @@ void QWorkerThread::loadVideo(QString _path)
 void QWorkerThread::exportJSON(Core &_singleton, const QString &_jsonName)
 {
     QFile file;
-    QJsonArray attributeArray, frameArray, frameDataArray;
+    QJsonArray attributeArrays, frameArray, frameDataArray;
     QJsonDocument output;
-    QJsonObject attributesObject, headerObject, frameDataObject, frameObject, final;
+    QJsonObject attributesObject, headerObject, frameDataObject, frameObject, settingsObject, final;
 
+    vector< vector<string> >::iterator attribute_out;
+    vector<string>::iterator attribute_in;
     multimap<string, string>::iterator attribute_it;
     vector<FrameBasedData>::iterator frameData_it;
     vector<Frame>::iterator frame_it;
@@ -79,14 +81,29 @@ void QWorkerThread::exportJSON(Core &_singleton, const QString &_jsonName)
     headerObject["Version"] = QString::fromStdString("1.0.2");
     final["Header"] = headerObject;
 
+    // Exporting Settings
+    settingsObject["currentSeparator"] = QString::fromStdString(_singleton.setup.getCurrentSeparator());
+    settingsObject["latestCategory"] = QString::fromStdString(_singleton.setup.getLatestCategory());
+    settingsObject["latestLabel"] = QString::fromStdString(_singleton.setup.getLatestLabel());
+    settingsObject["frameSkip"] = QString::fromStdString(std::to_string(_singleton.setup.getFrameSkip()));
+    settingsObject["largestId"] = QString::fromStdString(std::to_string(_singleton.setup.getLargestId()));
+    settingsObject["latestId"] = QString::fromStdString(std::to_string(_singleton.setup.getLatestId()));
+    settingsObject["latestKey"] = QString::fromStdString(std::to_string(_singleton.setup.getLatestKey()));
+    final["Settings"] = settingsObject;
+
     // Exporting Attributes
-    for(attribute_it = _singleton.attributes.begin(); attribute_it != _singleton.attributes.end(); attribute_it++)
+    vector< vector<string> > attributesPath = _singleton.labelTree->getAttributesPath();
+    for(attribute_out = attributesPath.begin(); attribute_out != attributesPath.end(); attribute_out++)
     {
-        attributesObject["Category"] = QString::fromStdString(attribute_it->first);
-        attributesObject["Label"] = QString::fromStdString(attribute_it->second);
-        attributeArray.append(attributesObject);
+        QJsonArray attributeArray;
+        for(attribute_in = attribute_out->begin(); attribute_in != attribute_out->end(); attribute_in++)
+        {
+            QString temp = QString::fromStdString(*attribute_in);
+            attributeArray.append(temp);
+        }
+        attributeArrays.append(attributeArray);
     }
-    final["Attributes"] = attributeArray;
+    final["Attributes"] = attributeArrays;
 
     // Exporting Frame annotation
     for(frameData_it = _singleton.frameData.begin(); frameData_it != _singleton.frameData.end(); frameData_it++)

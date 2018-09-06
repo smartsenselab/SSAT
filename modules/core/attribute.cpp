@@ -91,7 +91,6 @@ Attribute* Attribute::addChild(Attribute* _child)
     {
         return thisChild;
     }
-
 }
 
 Attribute* Attribute::getParent()
@@ -106,7 +105,7 @@ Attribute* Attribute::getNode()
 
 Attribute* Attribute::findChild(const string _name)
 {
-    vector<Attribute*>::iterator childIt;
+    vector<Attribute *>::iterator childIt;
     for(childIt = this->children.begin(); childIt != this->children.end(); childIt++)
     {
         if (_name.compare((*childIt)->getNodeName()) == 0)
@@ -130,6 +129,20 @@ vector<Attribute*> Attribute::getChildren()
     return children;
 }
 
+vector< vector<string> > Attribute::getAttributesPath()
+{
+    Attribute *mainNode = this;
+    vector<Attribute*> children = mainNode->getChildren();
+    vector< vector<string> > attribute_paths;
+
+    vector<Attribute*>::iterator childIt;
+    for(childIt = children.begin(); childIt != children.end(); childIt++)
+    {
+        this->scanTree(mainNode, *childIt, attribute_paths);
+    }
+    return attribute_paths;
+}
+
 bool Attribute::isBranch()
 {
     return ((this->children.size() > 0) && (this->parent != NULL));
@@ -143,4 +156,33 @@ bool Attribute::isLeaf()
 bool Attribute::isRoot()
 {
     return (this->parent == NULL);
+}
+
+void Attribute::scanTree(Attribute *_mainNode, Attribute *_currentNode, vector< vector<string> > &_paths)
+{
+    if(_currentNode != NULL)
+    {
+        if(_currentNode->isLeaf())
+        {
+            vector<string> path;
+            Attribute *rewindNode = _currentNode;
+            while( (rewindNode != NULL) && (rewindNode != _mainNode) )
+            {
+                path.push_back(rewindNode->getNodeName());
+                rewindNode = rewindNode->getParent();
+            }
+            std::reverse(std::begin(path), std::end(path));
+            _paths.push_back(path);
+        }
+        else
+        {
+            vector<Attribute*> children = _currentNode->getChildren();
+
+            vector<Attribute*>::iterator childIt;
+            for(childIt = children.begin(); childIt != children.end(); childIt++)
+            {
+                this->scanTree(_mainNode, *childIt, _paths);
+            }
+        }
+    }
 }
