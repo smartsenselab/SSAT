@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>772</width>
-    <height>215</height>
+    <width>677</width>
+    <height>198</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -30,8 +30,8 @@
     <rect>
      <x>12</x>
      <y>10</y>
-     <width>749</width>
-     <height>197</height>
+     <width>658</width>
+     <height>181</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -39,12 +39,12 @@
      <enum>QLayout::SetMinAndMaxSize</enum>
     </property>
     <item row="0" column="0">
-     <layout class="QHBoxLayout" name="horizontalLayout_1">
+     <layout class="QFormLayout" name="formLayout_1">
       <property name="sizeConstraint">
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
-      <item>
-       <widget class="QLabel" name="labelAttributes">
+      <item row="0" column="0">
+       <widget class="QLabel" name="labelCategory">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -56,8 +56,8 @@
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QLineEdit" name="lineEditAttributes">
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="lineEditCategory">
         <property name="text">
          <string>ROOT</string>
         </property>
@@ -223,20 +223,24 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QLabel" name="labelInfo">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Info</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPlainTextEdit" name="plainTextEditInfo"/>
+       <layout class="QFormLayout" name="formLayout_2">
+        <item row="0" column="0">
+         <widget class="QLabel" name="labelInfo">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Info</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QPlainTextEdit" name="plainTextEditInfo"/>
+        </item>
+       </layout>
       </item>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">

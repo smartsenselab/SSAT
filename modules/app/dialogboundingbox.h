@@ -48,9 +48,9 @@ private:
     void connectSignalSlots();
 
     ///
-    /// \brief initializeComboboxes Build the multimap of the category and label
+    /// \brief initializeWidgets populate window widgets with the corresponding bounding box values
     ///
-    void initializeComboboxes();
+    void initializeWidgets();
 
     ///
     /// \brief stlToModel

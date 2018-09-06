@@ -23,12 +23,6 @@ DialogBoundingBox::~DialogBoundingBox()
 
 void DialogBoundingBox::connectSignalSlots()
 {
-//    this->connect(this->ui->comboBoxCategory,
-//                  SIGNAL(activated(QString)),
-//                  this,
-//                  SLOT(slot_comboBoxCategoryActivated(QString))
-//                  );
-
     this->connect(this->ui->spinBoxId,
                   SIGNAL(valueChanged(int)),
                   this,
@@ -48,7 +42,7 @@ void DialogBoundingBox::connectSignalSlots()
                   );
 }
 
-void DialogBoundingBox::initializeComboboxes()
+void DialogBoundingBox::initializeWidgets()
 {
     // change widgets values
     BoundingBox bbox = this->singleton->frames[this->frameId].getBoxByKey(this->bboxKey);
@@ -80,8 +74,8 @@ void DialogBoundingBox::initializeComboboxes()
     this->ui->spinBoxW->setValue(bbox.getW());
     this->ui->spinBoxH->setValue(bbox.getH());
 
-    this->ui->lineEditAttributes->clear();
-    this->ui->lineEditAttributes->setText(QString::fromStdString(bbox.getLabel()));
+    this->ui->lineEditCategory->setCompleter(this->qTreeCompleter);
+    this->ui->lineEditCategory->setText(QString::fromStdString(bbox.getCategory()));
 
     this->ui->plainTextEditInfo->clear();
     this->ui->plainTextEditInfo->appendPlainText(QString::fromStdString(bbox.getInfo()));
@@ -121,8 +115,7 @@ void DialogBoundingBox::slot_initializeDialog(Core &_singleton, const unsigned i
     this->qTreeCompleter->setModel(this->qStandardModel);
 
     this->connectSignalSlots();
-    this->ui->lineEditAttributes->setCompleter(this->qTreeCompleter);
-    this->initializeComboboxes();
+    this->initializeWidgets();
 }
 
 void DialogBoundingBox::slot_spinBoxIdChanged(int _value)
@@ -142,9 +135,9 @@ void DialogBoundingBox::slot_buttonBoxAccepted()
 {
     BoundingBox bbox = BoundingBox(this->ui->spinBoxId->value(),
                                    this->bboxKey,
-                                   std::string(),
+                                   this->ui->lineEditCategory->text().toStdString(),
                                    this->ui->plainTextEditInfo->toPlainText().toStdString(),
-                                   this->ui->lineEditAttributes->text().toStdString(),
+                                   std::string(),
                                    std::string(),
                                    this->ui->spinBoxX->value(),
                                    this->ui->spinBoxY->value(),
