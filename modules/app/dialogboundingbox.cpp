@@ -80,8 +80,8 @@ void DialogBoundingBox::initializeComboboxes()
     this->ui->spinBoxW->setValue(bbox.getW());
     this->ui->spinBoxH->setValue(bbox.getH());
 
-    this->ui->lineEditLabel->clear();
-    this->ui->lineEditLabel->setText(QString::fromStdString(bbox.getLabel()));
+    this->ui->lineEditAttributes->clear();
+    this->ui->lineEditAttributes->setText(QString::fromStdString(bbox.getLabel()));
 
     this->ui->plainTextEditInfo->clear();
     this->ui->plainTextEditInfo->appendPlainText(QString::fromStdString(bbox.getInfo()));
@@ -121,7 +121,7 @@ void DialogBoundingBox::slot_initializeDialog(Core &_singleton, const unsigned i
     this->qTreeCompleter->setModel(this->qStandardModel);
 
     this->connectSignalSlots();
-    this->ui->lineEditLabel->setCompleter(this->qTreeCompleter);
+    this->ui->lineEditAttributes->setCompleter(this->qTreeCompleter);
     this->initializeComboboxes();
 }
 
@@ -144,7 +144,7 @@ void DialogBoundingBox::slot_buttonBoxAccepted()
                                    this->bboxKey,
                                    std::string(),
                                    this->ui->plainTextEditInfo->toPlainText().toStdString(),
-                                   this->ui->lineEditLabel->text().toStdString(),
+                                   this->ui->lineEditAttributes->text().toStdString(),
                                    std::string(),
                                    this->ui->spinBoxX->value(),
                                    this->ui->spinBoxY->value(),
