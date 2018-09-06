@@ -764,7 +764,7 @@ void MainWindow::slot_openFile()
         this->updateFrame(1);
 
         this->messageRestoreJson();
-        this->saveTimer->start(20000);
+        this->saveTimer->start(120000);
     }
 }
 
